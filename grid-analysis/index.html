@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国网数据分析</title>
+    <meta name="author" content="工商业业务">
+    <meta name="date" content="2026年2月">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+        }
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            background: #2563eb;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .logo-icon svg { width: 24px; height: 24px; color: white; }
+        .logo h1 { font-size: 18px; font-weight: 700; color: #111827; }
+        .logo p { font-size: 13px; color: #6b7280; }
+        .header-badges {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .badge { display: flex; align-items: center; gap: 6px; }
+        .badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .badge-dot.green { background: #22c55e; }
+        .badge-dot.blue { background: #3b82f6; }
+        .header-actions { display: flex; gap: 8px; }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #f9fafb; }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: #e5e7eb;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            background: transparent;
+            color: #4b5563;
+        }
+        .tab.active {
+            background: white;
+            color: #111827;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .tab:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 48px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+        }
+        .upload-area h3 {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        .upload-area p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        #file-input { display: none; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .price-item.sharp-peak .form-label { color: #dc2626; }
+        .price-item.peak .form-label { color: #ea580c; }
+        .price-item.flat .form-label { color: #2563eb; }
+        .price-item.valley .form-label { color: #16a34a; }
+        .price-item.deep-valley .form-label { color: #059669; }
+
+        .billing-mode {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .billing-option {
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .billing-option:hover { border-color: #d1d5db; }
+        .billing-option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        .billing-option.selected.demand { border-color: #3b82f6; background: #eff6ff; }
+        .billing-option.selected.capacity { border-color: #16a34a; background: #ecfdf5; }
+
+        .slider-container { margin-bottom: 16px; }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .data-table th {
+            background: #f9fafb;
+            font-weight: 500;
+            color: #374151;
+        }
+        .data-table tr:hover { background: #f9fafb; }
+        .data-table .text-right { text-align: right; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            padding: 16px;
+            border-radius: 8px;
+            color: white;
+        }
+        .stat-card.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .stat-card.green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .stat-card.purple { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .stat-card.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .stat-card.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .stat-label { font-size: 12px; opacity: 0.9; margin-bottom: 4px; }
+        .stat-value { font-size: 20px; font-weight: 700; }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 24px;
+        }
+
+        .period-section {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .period-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .period-title { font-weight: 600; }
+        .period-title.sharp-peak { color: #dc2626; }
+        .period-title.peak { color: #ea580c; }
+        .period-title.flat { color: #2563eb; }
+        .period-title.valley { color: #16a34a; }
+        .period-title.deep-valley { color: #059669; }
+
+        .period-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+        }
+        .period-row input[type="time"] {
+            width: 100px;
+            padding: 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+        .action-btn {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            background: white;
+        }
+        .action-btn.active.charge {
+            background: #dcfce7;
+            color: #16a34a;
+            border-color: #16a34a;
+        }
+        .action-btn.active.discharge {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+        .action-btn.active.standby {
+            background: #f3f4f6;
+            color: #6b7280;
+            border-color: #6b7280;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: auto;
+        }
+        .modal-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body { padding: 24px; }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .toast.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .toast.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .toast.info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 24px;
+            margin-top: 48px;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6b7280;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-4 { margin-top: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .flex { display: flex; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .text-sm { font-size: 13px; }
+        .text-gray { color: #6b7280; }
+        .font-medium { font-weight: 500; }
+
+        @media (max-width: 768px) {
+            .form-grid, .price-grid, .stats-grid { grid-template-columns: 1fr; }
+            .tabs { flex-wrap: wrap; }
+            .header-content { flex-direction: column; }
+            .billing-mode { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toast-container"></div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>国网数据分析</h1>
+                    <p>工商业业务 · 2026年2月</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <span class="badge"><span class="badge-dot green"></span>离线运行</span>
+                <span class="badge"><span class="badge-dot blue"></span>数据安全</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn" onclick="showTemplateModal()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    模板
+                </button>
+                <button class="btn" id="save-btn" onclick="showSaveModal()" disabled>
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                    </svg>
+                    保存
+                </button>
+                <button class="btn" onclick="showLoadModal()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                    </svg>
+                    打开
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="tabs">
+            <button class="tab active" data-tab="upload" onclick="switchTab('upload')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                </svg>
+                数据导入
+            </button>
+            <button class="tab" data-tab="manual" onclick="switchTab('manual')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+                手动输入
+            </button>
+            <button class="tab" data-tab="config" onclick="switchTab('config')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                参数配置
+            </button>
+            <button class="tab" data-tab="monthly" onclick="switchTab('monthly')" disabled id="tab-monthly-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                月度管理
+            </button>
+            <button class="tab" data-tab="visualization" onclick="switchTab('visualization')" disabled id="tab-viz-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                可视化
+            </button>
+            <button class="tab" data-tab="storage" onclick="switchTab('storage')" disabled id="tab-storage-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                储能优化
+            </button>
+            <button class="tab" data-tab="export" onclick="switchTab('export')" disabled id="tab-export-btn">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                结果导出
+            </button>
+        </div>
+
+        <!-- 数据导入 -->
+        <div class="tab-content active" id="tab-upload">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                    <h3>点击或拖拽上传用电数据文件</h3>
+                    <p>支持国网标准格式的Excel文件 (.xlsx, .xls) 或 CSV文件</p>
+                    <p style="margin-top: 8px; font-size: 12px;">最大支持 50MB</p>
+                </div>
+                <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(event)">
+                <div style="margin-top: 16px; font-size: 13px; color: #6b7280;">
+                    <p style="font-weight: 500; margin-bottom: 8px;">数据格式说明：</p>
+                    <ul style="padding-left: 16px; line-height: 1.8;">
+                        <li>文件应包含时间列和功率/电量列</li>
+                        <li>支持15分钟或1小时级别的用电数据</li>
+                        <li>时间格式支持：YYYY-MM-DD HH:mm:ss 或 Excel日期格式</li>
+                        <li>系统会自动识别计量倍率，也可手动设置</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="upload-info" class="hidden" style="max-width: 600px; margin: 16px auto;">
+                <div class="card" style="background: #f0fdf4; border: 1px solid #86efac;">
+                    <h3 style="color: #166534; margin-bottom: 12px;">数据已加载</h3>
+                    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div>
+                            <p class="text-sm text-gray">数据点数</p>
+                            <p class="font-medium" id="data-points">0</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray">月份数量</p>
+                            <p class="font-medium" id="month-count">0</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray">当前倍率</p>
+                            <p class="font-medium" id="current-ratio">1x</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 手动输入 -->
+        <div class="tab-content" id="tab-manual">
+            <div class="card">
+                <h3 class="card-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    手动输入用电数据
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">月份</label>
+                        <input type="month" class="form-input" id="manual-month" value="2026-01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">数据间隔</label>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn" id="btn-15min" onclick="setManualInterval(15)">15分钟</button>
+                            <button class="btn" id="btn-1hour" onclick="setManualInterval(60)">1小时</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 mt-4 mb-4">
+                    <button class="btn" onclick="generateManualTemplate()">生成模板</button>
+                    <button class="btn" onclick="clearManualData()">清空</button>
+                    <button class="btn btn-primary" onclick="submitManualData()">提交数据</button>
+                </div>
+                <div id="manual-data-container" style="max-height: 400px; overflow: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>日期</th>
+                                <th>时间</th>
+                                <th>功率(kW)</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manual-data-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 参数配置 -->
+        <div class="tab-content" id="tab-config">
+            <div class="card">
+                <h3 class="card-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    基础设置
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">计量倍率 (CT/PT)</label>
+                        <input type="number" class="form-input" id="config-ratio" value="1" min="1" step="1" onchange="updateConfig()">
+                        <p class="text-sm text-gray">电流互感器变比 x 电压互感器变比</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">数据间隔</label>
+                        <select class="form-select" id="config-interval" onchange="updateConfig()">
+                            <option value="15">15分钟</option>
+                            <option value="60">1小时</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">计费模式</h3>
+                <div class="billing-mode">
+                    <div class="billing-option selected demand" id="billing-demand" onclick="setBillingMode('demand')">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div class="radio-indicator" style="width: 16px; height: 16px; border: 2px solid #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;"></div>
+                            </div>
+                            <span style="font-weight: 500;">需量计费</span>
+                        </div>
+                        <p style="font-size: 13px; color: #6b7280;">按最大需量计算基本电费，适合负荷波动较大的用户</p>
+                    </div>
+                    <div class="billing-option" id="billing-capacity" onclick="setBillingMode('capacity')">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <div class="radio-indicator" style="width: 16px; height: 16px; border: 2px solid #d1d5db; border-radius: 50%;"></div>
+                            <span style="font-weight: 500;">容量计费</span>
+                        </div>
+                        <p style="font-size: 13px; color: #6b7280;">按变压器容量计算基本电费，适合负荷稳定的用户</p>
+                    </div>
+                </div>
+                <div id="demand-price-group" class="form-group">
+                    <label class="form-label">需量电价 (元/kW·月)</label>
+                    <input type="number" class="form-input" id="config-demand-price" value="40" step="0.1" onchange="updateConfig()">
+                </div>
+                <div id="capacity-price-group" class="form-group hidden">
+                    <label class="form-label">容量电价 (元/kVA·月)</label>
+                    <input type="number" class="form-input" id="config-capacity-price" value="30" step="0.1" onchange="updateConfig()">
+                </div>
+                <div id="transformer-capacity-group" class="form-group hidden">
+                    <label class="form-label">变压器容量 (kVA)</label>
+                    <input type="number" class="form-input" id="config-transformer" value="1000" step="10" onchange="updateConfig()">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">电价配置</h3>
+                <div class="price-grid">
+                    <div class="price-item sharp-peak">
+                        <label class="form-label">尖峰电价 (元/kWh)</label>
+                        <input type="number" class="form-input" id="price-sharp" value="1.2" step="0.01" onchange="updateConfig()">
+                    </div>
+                    <div class="price-item peak">
+                        <label class="form-label">高峰电价 (元/kWh)</label>
+                        <input type="number" class="form-input" id="price-peak" value="0.9" step="0.01" onchange="updateConfig()">
+                    </div>
+                    <div class="price-item flat">
+                        <label class="form-label">平段电价 (元/kWh)</label>
+                        <input type="number" class="form-input" id="price-flat" value="0.6" step="0.01" onchange="updateConfig()">
+                    </div>
+                    <div class="price-item valley">
+                        <label class="form-label">谷段电价 (元/kWh)</label>
+                        <input type="number" class="form-input" id="price-valley" value="0.3" step="0.01" onchange="updateConfig()">
+                    </div>
+                    <div class="price-item deep-valley">
+                        <label class="form-label">深谷电价 (元/kWh)</label>
+                        <input type="number" class="form-input" id="price-deep" value="0.2" step="0.01" onchange="updateConfig()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 月度管理 -->
+        <div class="tab-content" id="tab-monthly">
+            <div class="card">
+                <h3 class="card-title">月度数据概览</h3>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="monthly-overview-table">
+                        <thead>
+                            <tr>
+                                <th>月份</th>
+                                <th class="text-right">数据点数</th>
+                                <th class="text-right">最大负荷(kW)</th>
+                                <th class="text-right">总用电量(kWh)</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">时段配置</h3>
+                <div id="period-config-container"></div>
+            </div>
+        </div>
+
+        <!-- 可视化 -->
+        <div class="tab-content" id="tab-visualization">
+            <div class="card">
+                <h3 class="card-title">用电量分析</h3>
+                <div class="chart-container">
+                    <canvas id="chart-electricity"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">时段占比</h3>
+                <div class="chart-container">
+                    <canvas id="chart-ratio"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">负荷曲线</h3>
+                <div class="chart-container">
+                    <canvas id="chart-load"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">电费分析</h3>
+                <div class="chart-container">
+                    <canvas id="chart-cost"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 储能优化 -->
+        <div class="tab-content" id="tab-storage">
+            <div class="card">
+                <h3 class="card-title">储能配置参数</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">日充放电次数</label>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn" id="cycle-1" onclick="setStorageCycles(1)">1次</button>
+                            <button class="btn btn-primary" id="cycle-2" onclick="setStorageCycles(2)">2次</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">充电功率 (kW)</label>
+                        <input type="number" class="form-input" id="storage-charge-power" value="100" onchange="updateStorageConfig()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">放电功率 (kW)</label>
+                        <input type="number" class="form-input" id="storage-discharge-power" value="100" onchange="updateStorageConfig()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">初始装机容量 (kWh)</label>
+                        <input type="number" class="form-input" id="storage-capacity" value="200" onchange="updateStorageConfig()">
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>消纳比例</span>
+                        <span id="consumption-ratio-value">100%</span>
+                    </div>
+                    <input type="range" class="slider" id="consumption-ratio" min="1" max="100" value="100" oninput="updateStorageConfig()">
+                </div>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>充放电效率</span>
+                        <span id="efficiency-value">90%</span>
+                    </div>
+                    <input type="range" class="slider" id="efficiency" min="50" max="95" value="90" oninput="updateStorageConfig()">
+                </div>
+            </div>
+            <div id="storage-result"></div>
+        </div>
+
+        <!-- 结果导出 -->
+        <div class="tab-content" id="tab-export">
+            <div class="card">
+                <h3 class="card-title">导出分析结果</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <button class="btn" onclick="exportMonthlyStats()" style="padding: 24px; flex-direction: column; gap: 8px;">
+                        <svg width="32" height="32" fill="none" stroke="#16a34a" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span style="font-weight: 500;">月度统计</span>
+                        <span class="text-sm text-gray">导出各时段用电量、平均功率</span>
+                    </button>
+                    <button class="btn" onclick="exportDemandCalc()" style="padding: 24px; flex-direction: column; gap: 8px;">
+                        <svg width="32" height="32" fill="none" stroke="#2563eb" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span style="font-weight: 500;">需量计算</span>
+                        <span class="text-sm text-gray">导出每日需量计算明细</span>
+                    </button>
+                    <button class="btn" onclick="exportStorageResult()" style="padding: 24px; flex-direction: column; gap: 8px;">
+                        <svg width="32" height="32" fill="none" stroke="#a855f7" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        <span style="font-weight: 500;">储能优化</span>
+                        <span class="text-sm text-gray">导出储能配置优化结果</span>
+                    </button>
+                    <button class="btn" onclick="exportRawData()" style="padding: 24px; flex-direction: column; gap: 8px;">
+                        <svg width="32" height="32" fill="none" stroke="#6b7280" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span style="font-weight: 500;">原始数据</span>
+                        <span class="text-sm text-gray">导出处理后的原始用电数据</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>国网数据分析 - 工商业业务 · 2026年2月</p>
+            <p>数据仅在本地处理，不会上传到服务器</p>
+        </div>
+    </footer>
+
+    <!-- 模板生成模态框 -->
+    <div class="modal-overlay" id="template-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>标准国网数据模板</h3>
+                <button class="modal-close" onclick="closeModal('template-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">年份</label>
+                        <input type="number" class="form-input" id="template-year" value="2026" min="2020" max="2030">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">月份</label>
+                        <select class="form-select" id="template-month">
+                            <option value="1">1月</option>
+                            <option value="2">2月</option>
+                            <option value="3">3月</option>
+                            <option value="4">4月</option>
+                            <option value="5">5月</option>
+                            <option value="6">6月</option>
+                            <option value="7">7月</option>
+                            <option value="8">8月</option>
+                            <option value="9">9月</option>
+                            <option value="10">10月</option>
+                            <option value="11">11月</option>
+                            <option value="12">12月</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">数据间隔</label>
+                    <div style="display: flex; gap: 16px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="template-interval" value="15" checked> 15分钟
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="template-interval" value="60"> 1小时
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="template-sample" checked> 包含示例数据
+                    </label>
+                </div>
+                <div class="flex gap-4 mt-4">
+                    <button class="btn" onclick="closeModal('template-modal')" style="flex: 1;">取消</button>
+                    <button class="btn btn-primary" onclick="generateTemplate()" style="flex: 1;">下载模板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 保存模态框 -->
+    <div class="modal-overlay" id="save-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>保存项目</h3>
+                <button class="modal-close" onclick="closeModal('save-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">项目名称</label>
+                    <input type="text" class="form-input" id="save-project-name" placeholder="输入项目名称">
+                </div>
+                <button class="btn btn-primary" onclick="saveProject()" style="width: 100%;">保存到本地</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 打开模态框 -->
+    <div class="modal-overlay" id="load-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>打开项目</h3>
+                <button class="modal-close" onclick="closeModal('load-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="saved-projects-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // 全局状态
+        const state = {
+            rawData: [],
+            processedData: [],
+            months: [],
+            monthlyStats: {},
+            config: {
+                meterRatio: 1,
+                interval: 15,
+                billingMode: 'demand',
+                demandPrice: 40,
+                capacityPrice: 30,
+                transformerCapacity: 1000,
+                prices: {
+                    sharpPeak: 1.2,
+                    peak: 0.9,
+                    flat: 0.6,
+                    valley: 0.3,
+                    deepValley: 0.2
+                }
+            },
+            storageConfig: {
+                cycles: 2,
+                chargePower: 100,
+                dischargePower: 100,
+                capacity: 200,
+                consumptionRatio: 100,
+                efficiency: 90
+            },
+            manualInterval: 15,
+            charts: {}
+        };
+
+        // 时段配置
+        const defaultPeriods = {
+            sharpPeak: [{ start: '19:00', end: '21:00', action: 'standby' }],
+            peak: [{ start: '09:00', end: '12:00', action: 'standby' }, { start: '17:00', end: '19:00', action: 'standby' }],
+            flat: [{ start: '07:00', end: '09:00', action: 'standby' }, { start: '12:00', end: '17:00', action: 'standby' }, { start: '21:00', end: '23:00', action: 'standby' }],
+            valley: [{ start: '23:00', end: '07:00', action: 'standby' }],
+            deepValley: [{ start: '12:00', end: '14:00', action: 'standby' }]
+        };
+
+        let currentPeriods = JSON.parse(JSON.stringify(defaultPeriods));
+
+        // 工具函数
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
+            document.getElementById(`tab-${tabId}`)?.classList.add('active');
+            
+            if (tabId === 'visualization') renderCharts();
+            if (tabId === 'storage') calculateStorage();
+            if (tabId === 'monthly') renderMonthlyOverview();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showTemplateModal() {
+            document.getElementById('template-modal').classList.add('active');
+        }
+
+        function showSaveModal() {
+            document.getElementById('save-modal').classList.add('active');
+        }
+
+        function showLoadModal() {
+            renderSavedProjects();
+            document.getElementById('load-modal').classList.add('active');
+        }
+
+        // 文件上传处理
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                    
+                    parseExcelData(jsonData);
+                    showToast('文件上传成功', 'success');
+                } catch (error) {
+                    showToast('文件解析失败: ' + error.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseExcelData(rawData) {
+            // 查找表头行
+            let headerRow = 0;
+            for (let i = 0; i < Math.min(10, rawData.length); i++) {
+                const row = rawData[i];
+                if (row && row.some(cell => cell && String(cell).includes('时间'))) {
+                    headerRow = i;
+                    break;
+                }
+            }
+
+            const headers = rawData[headerRow] || [];
+            const timeIndex = headers.findIndex(h => h && String(h).includes('时间'));
+            const powerIndex = headers.findIndex(h => h && (String(h).includes('功率') || String(h).includes('负荷') || String(h).includes('P')));
+            const energyIndex = headers.findIndex(h => h && (String(h).includes('电量') || String(h).includes('电能')));
+
+            if (timeIndex === -1) {
+                showToast('未找到时间列', 'error');
+                return;
+            }
+
+            const parsedData = [];
+            for (let i = headerRow + 1; i < rawData.length; i++) {
+                const row = rawData[i];
+                if (!row || !row[timeIndex]) continue;
+
+                const timeValue = row[timeIndex];
+                let timestamp;
+                
+                if (typeof timeValue === 'number') {
+                    timestamp = new Date((timeValue - 25569) * 86400 * 1000);
+                } else {
+                    timestamp = new Date(timeValue);
+                }
+
+                if (isNaN(timestamp.getTime())) continue;
+
+                let power = 0;
+                if (powerIndex !== -1 && row[powerIndex] !== undefined) {
+                    power = parseFloat(row[powerIndex]) || 0;
+                } else if (energyIndex !== -1 && row[energyIndex] !== undefined) {
+                    const energy = parseFloat(row[energyIndex]) || 0;
+                    power = energy * (60 / state.config.interval);
+                }
+
+                if (power > 0) {
+                    parsedData.push({
+                        timestamp: timestamp,
+                        power: power,
+                        month: timestamp.getFullYear() + '-' + String(timestamp.getMonth() + 1).padStart(2, '0')
+                    });
+                }
+            }
+
+            state.rawData = parsedData;
+            processData();
+            enableTabs();
+            updateUploadInfo();
+        }
+
+        function processData() {
+            const ratio = state.config.meterRatio;
+            state.processedData = state.rawData.map(d => ({
+                ...d,
+                power: d.power * ratio
+            }));
+
+            // 按月份分组
+            const monthGroups = {};
+            state.processedData.forEach(d => {
+                if (!monthGroups[d.month]) monthGroups[d.month] = [];
+                monthGroups[d.month].push(d);
+            });
+
+            state.months = Object.keys(monthGroups).sort();
+            state.monthlyStats = {};
+
+            state.months.forEach(month => {
+                const monthData = monthGroups[month];
+                const powers = monthData.map(d => d.power);
+                const maxPower = Math.max(...powers);
+                const avgPower = powers.reduce((a, b) => a + b, 0) / powers.length;
+                const totalEnergy = monthData.reduce((sum, d) => sum + d.power * (state.config.interval / 60), 0);
+
+                state.monthlyStats[month] = {
+                    data: monthData,
+                    maxPower: maxPower,
+                    avgPower: avgPower,
+                    totalEnergy: totalEnergy,
+                    dataPoints: monthData.length
+                };
+            });
+
+            renderMonthlyOverview();
+            renderPeriodConfig();
+        }
+
+        function enableTabs() {
+            document.getElementById('tab-monthly-btn').disabled = false;
+            document.getElementById('tab-viz-btn').disabled = false;
+            document.getElementById('tab-storage-btn').disabled = false;
+            document.getElementById('tab-export-btn').disabled = false;
+            document.getElementById('save-btn').disabled = false;
+        }
+
+        function updateUploadInfo() {
+            document.getElementById('upload-info').classList.remove('hidden');
+            document.getElementById('data-points').textContent = state.processedData.length.toLocaleString();
+            document.getElementById('month-count').textContent = state.months.length;
+            document.getElementById('current-ratio').textContent = state.config.meterRatio + 'x';
+        }
+
+        // 配置更新
+        function updateConfig() {
+            state.config.meterRatio = parseFloat(document.getElementById('config-ratio').value) || 1;
+            state.config.interval = parseInt(document.getElementById('config-interval').value) || 15;
+            state.config.demandPrice = parseFloat(document.getElementById('config-demand-price').value) || 40;
+            state.config.capacityPrice = parseFloat(document.getElementById('config-capacity-price').value) || 30;
+            state.config.transformerCapacity = parseFloat(document.getElementById('config-transformer').value) || 1000;
+            state.config.prices.sharpPeak = parseFloat(document.getElementById('price-sharp').value) || 1.2;
+            state.config.prices.peak = parseFloat(document.getElementById('price-peak').value) || 0.9;
+            state.config.prices.flat = parseFloat(document.getElementById('price-flat').value) || 0.6;
+            state.config.prices.valley = parseFloat(document.getElementById('price-valley').value) || 0.3;
+            state.config.prices.deepValley = parseFloat(document.getElementById('price-deep').value) || 0.2;
+
+            if (state.rawData.length > 0) {
+                processData();
+                updateUploadInfo();
+            }
+        }
+
+        function setBillingMode(mode) {
+            state.config.billingMode = mode;
+            document.querySelectorAll('.billing-option').forEach(el => el.classList.remove('selected', 'demand', 'capacity'));
+            document.getElementById(`billing-${mode}`).classList.add('selected', mode);
+            
+            document.querySelectorAll('.radio-indicator').forEach(el => {
+                el.innerHTML = '';
+                el.style.borderColor = '#d1d5db';
+            });
+            const selectedIndicator = document.querySelector(`#billing-${mode} .radio-indicator`);
+            selectedIndicator.innerHTML = '<div style="width: 8px; height: 8px; background: ' + (mode === 'demand' ? '#3b82f6' : '#16a34a') + '; border-radius: 50%;"></div>';
+            selectedIndicator.style.borderColor = mode === 'demand' ? '#3b82f6' : '#16a34a';
+
+            document.getElementById('demand-price-group').classList.toggle('hidden', mode !== 'demand');
+            document.getElementById('capacity-price-group').classList.toggle('hidden', mode !== 'capacity');
+            document.getElementById('transformer-capacity-group').classList.toggle('hidden', mode !== 'capacity');
+        }
+
+
+        // 月度管理
+        function renderMonthlyOverview() {
+            const tbody = document.querySelector('#monthly-overview-table tbody');
+            tbody.innerHTML = '';
+
+            state.months.forEach(month => {
+                const stats = state.monthlyStats[month];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${month}</td>
+                    <td class="text-right">${stats.dataPoints.toLocaleString()}</td>
+                    <td class="text-right">${stats.maxPower.toFixed(2)}</td>
+                    <td class="text-right">${(stats.totalEnergy / 10000).toFixed(2)}万</td>
+                    <td class="text-center">
+                        <button class="btn" onclick="viewMonthDetail('${month}')">详情</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewMonthDetail(month) {
+            showToast(`查看 ${month} 详情功能开发中`, 'info');
+        }
+
+        // 时段配置
+        function renderPeriodConfig() {
+            const container = document.getElementById('period-config-container');
+            container.innerHTML = '';
+
+            const periodNames = {
+                sharpPeak: '尖峰时段',
+                peak: '高峰时段',
+                flat: '平段时段',
+                valley: '谷段时段',
+                deepValley: '深谷时段'
+            };
+
+            const periodClasses = {
+                sharpPeak: 'sharp-peak',
+                peak: 'peak',
+                flat: 'flat',
+                valley: 'valley',
+                deepValley: 'deep-valley'
+            };
+
+            Object.entries(currentPeriods).forEach(([key, periods]) => {
+                const section = document.createElement('div');
+                section.className = 'period-section';
+                
+                let periodsHtml = periods.map((p, idx) => `
+                    <div class="period-row">
+                        <span>时段 ${idx + 1}:</span>
+                        <input type="time" value="${p.start}" onchange="updatePeriod('${key}', ${idx}, 'start', this.value)">
+                        <span>至</span>
+                        <input type="time" value="${p.end}" onchange="updatePeriod('${key}', ${idx}, 'end', this.value)">
+                        <div class="action-buttons">
+                            <button class="action-btn ${p.action === 'charge' ? 'active charge' : ''}" onclick="setPeriodAction('${key}', ${idx}, 'charge')">充电</button>
+                            <button class="action-btn ${p.action === 'discharge' ? 'active discharge' : ''}" onclick="setPeriodAction('${key}', ${idx}, 'discharge')">放电</button>
+                            <button class="action-btn ${p.action === 'standby' ? 'active standby' : ''}" onclick="setPeriodAction('${key}', ${idx}, 'standby')">待机</button>
+                        </div>
+                        <button class="btn" onclick="removePeriod('${key}', ${idx})" style="margin-left: 8px;">删除</button>
+                    </div>
+                `).join('');
+
+                section.innerHTML = `
+                    <div class="period-header">
+                        <span class="period-title ${periodClasses[key]}">${periodNames[key]}</span>
+                        <button class="btn" onclick="addPeriod('${key}')">+ 添加时段</button>
+                    </div>
+                    ${periodsHtml}
+                `;
+                container.appendChild(section);
+            });
+        }
+
+        function updatePeriod(periodType, index, field, value) {
+            currentPeriods[periodType][index][field] = value;
+        }
+
+        function setPeriodAction(periodType, index, action) {
+            currentPeriods[periodType][index].action = action;
+            renderPeriodConfig();
+        }
+
+        function addPeriod(periodType) {
+            currentPeriods[periodType].push({ start: '00:00', end: '00:00', action: 'standby' });
+            renderPeriodConfig();
+        }
+
+        function removePeriod(periodType, index) {
+            currentPeriods[periodType].splice(index, 1);
+            renderPeriodConfig();
+        }
+
+        // 手动输入
+        function setManualInterval(interval) {
+            state.manualInterval = interval;
+            document.getElementById('btn-15min').classList.toggle('btn-primary', interval === 15);
+            document.getElementById('btn-1hour').classList.toggle('btn-primary', interval === 60);
+            document.getElementById('btn-15min').classList.toggle('btn', interval !== 15);
+            document.getElementById('btn-1hour').classList.toggle('btn', interval !== 60);
+        }
+
+        function generateManualTemplate() {
+            const month = document.getElementById('manual-month').value;
+            const [year, mon] = month.split('-');
+            const daysInMonth = new Date(parseInt(year), parseInt(mon), 0).getDate();
+            const interval = state.manualInterval;
+            const pointsPerDay = 24 * 60 / interval;
+
+            const tbody = document.getElementById('manual-data-body');
+            tbody.innerHTML = '';
+
+            let idx = 1;
+            for (let day = 1; day <= daysInMonth; day++) {
+                for (let i = 0; i < pointsPerDay; i++) {
+                    const hour = Math.floor(i * interval / 60);
+                    const minute = (i * interval) % 60;
+                    const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${idx}</td>
+                        <td>${mon}-${String(day).padStart(2, '0')}</td>
+                        <td>${timeStr}</td>
+                        <td><input type="number" class="form-input" style="width: 100px;" id="power-${idx}" placeholder="kW"></td>
+                        <td><button class="btn" onclick="this.closest('tr').remove()">删除</button></td>
+                    `;
+                    tbody.appendChild(row);
+                    idx++;
+                }
+            }
+        }
+
+        function clearManualData() {
+            document.getElementById('manual-data-body').innerHTML = '';
+        }
+
+        function submitManualData() {
+            const rows = document.querySelectorAll('#manual-data-body tr');
+            const month = document.getElementById('manual-month').value;
+            const [year, mon] = month.split('-');
+            const data = [];
+
+            rows.forEach(row => {
+                const dateStr = row.cells[1].textContent;
+                const timeStr = row.cells[2].textContent;
+                const powerInput = row.querySelector('input');
+                const power = parseFloat(powerInput?.value) || 0;
+
+                if (power > 0) {
+                    const timestamp = new Date(`${year}-${dateStr}T${timeStr}:00`);
+                    data.push({
+                        timestamp: timestamp,
+                        power: power,
+                        month: month
+                    });
+                }
+            });
+
+            if (data.length === 0) {
+                showToast('请输入至少一条数据', 'error');
+                return;
+            }
+
+            state.rawData = data;
+            processData();
+            enableTabs();
+            updateUploadInfo();
+            showToast(`成功导入 ${data.length} 条数据`, 'success');
+        }
+
+        // 模板生成
+        function generateTemplate() {
+            const year = document.getElementById('template-year').value;
+            const month = document.getElementById('template-month').value;
+            const interval = document.querySelector('input[name="template-interval"]:checked').value;
+            const withSample = document.getElementById('template-sample').checked;
+
+            const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
+            const pointsPerDay = 24 * 60 / parseInt(interval);
+
+            const data = [['时间', '功率(kW)', '电量(kWh)']];
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                for (let i = 0; i < pointsPerDay; i++) {
+                    const hour = Math.floor(i * parseInt(interval) / 60);
+                    const minute = (i * parseInt(interval)) % 60;
+                    const timestamp = new Date(year, month - 1, day, hour, minute);
+                    const power = withSample ? (50 + Math.random() * 150).toFixed(2) : '';
+                    const energy = power ? (power * parseInt(interval) / 60).toFixed(2) : '';
+                    
+                    data.push([
+                        timestamp,
+                        power,
+                        energy
+                    ]);
+                }
+            }
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '用电数据');
+            XLSX.writeFile(wb, `国网数据模板_${year}年${month}月.xlsx`);
+            closeModal('template-modal');
+            showToast('模板下载成功', 'success');
+        }
+
+
+        // 图表渲染
+        function renderCharts() {
+            renderElectricityChart();
+            renderRatioChart();
+            renderLoadChart();
+            renderCostChart();
+        }
+
+        function renderElectricityChart() {
+            const ctx = document.getElementById('chart-electricity');
+            if (!ctx) return;
+
+            if (state.charts.electricity) state.charts.electricity.destroy();
+
+            const labels = state.months;
+            const data = state.months.map(m => state.monthlyStats[m].totalEnergy / 10000);
+
+            state.charts.electricity = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '用电量 (万kWh)',
+                        data: data,
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: '月度用电量统计' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: '万kWh' } }
+                    }
+                }
+            });
+        }
+
+        function renderRatioChart() {
+            const ctx = document.getElementById('chart-ratio');
+            if (!ctx) return;
+
+            if (state.charts.ratio) state.charts.ratio.destroy();
+
+            // 计算各时段用电量占比
+            let sharpPeakEnergy = 0, peakEnergy = 0, flatEnergy = 0, valleyEnergy = 0, deepValleyEnergy = 0;
+
+            state.processedData.forEach(d => {
+                const hour = d.timestamp.getHours();
+                const minute = d.timestamp.getMinutes();
+                const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                const energy = d.power * (state.config.interval / 60);
+
+                const period = getPeriodForTime(timeStr);
+                switch (period) {
+                    case 'sharpPeak': sharpPeakEnergy += energy; break;
+                    case 'peak': peakEnergy += energy; break;
+                    case 'flat': flatEnergy += energy; break;
+                    case 'valley': valleyEnergy += energy; break;
+                    case 'deepValley': deepValleyEnergy += energy; break;
+                }
+            });
+
+            const total = sharpPeakEnergy + peakEnergy + flatEnergy + valleyEnergy + deepValleyEnergy;
+
+            state.charts.ratio = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['尖峰', '高峰', '平段', '谷段', '深谷'],
+                    datasets: [{
+                        data: [sharpPeakEnergy, peakEnergy, flatEnergy, valleyEnergy, deepValleyEnergy],
+                        backgroundColor: ['#dc2626', '#ea580c', '#2563eb', '#16a34a', '#059669']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: '各时段用电量占比' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return `${context.label}: ${(value / 10000).toFixed(2)}万kWh (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderLoadChart() {
+            const ctx = document.getElementById('chart-load');
+            if (!ctx || state.months.length === 0) return;
+
+            if (state.charts.load) state.charts.load.destroy();
+
+            // 显示最近一个月的小时平均负荷曲线
+            const lastMonth = state.months[state.months.length - 1];
+            const monthData = state.monthlyStats[lastMonth]?.data || [];
+
+            const hourlyData = new Array(24).fill(0);
+            const hourlyCount = new Array(24).fill(0);
+
+            monthData.forEach(d => {
+                const hour = d.timestamp.getHours();
+                hourlyData[hour] += d.power;
+                hourlyCount[hour]++;
+            });
+
+            const avgHourlyData = hourlyData.map((sum, i) => hourlyCount[i] > 0 ? sum / hourlyCount[i] : 0);
+
+            state.charts.load = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                    datasets: [{
+                        label: `${lastMonth} 平均负荷 (kW)`,
+                        data: avgHourlyData,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: '日负荷曲线' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'kW' } }
+                    }
+                }
+            });
+        }
+
+        function renderCostChart() {
+            const ctx = document.getElementById('chart-cost');
+            if (!ctx) return;
+
+            if (state.charts.cost) state.charts.cost.destroy();
+
+            // 计算各月电费
+            const labels = state.months;
+            const energyCostData = [];
+            const basicCostData = [];
+
+            state.months.forEach(month => {
+                const monthData = state.monthlyStats[month]?.data || [];
+                let energyCost = 0;
+
+                monthData.forEach(d => {
+                    const hour = d.timestamp.getHours();
+                    const minute = d.timestamp.getMinutes();
+                    const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                    const energy = d.power * (state.config.interval / 60);
+
+                    const period = getPeriodForTime(timeStr);
+                    let price = state.config.prices.flat;
+                    switch (period) {
+                        case 'sharpPeak': price = state.config.prices.sharpPeak; break;
+                        case 'peak': price = state.config.prices.peak; break;
+                        case 'flat': price = state.config.prices.flat; break;
+                        case 'valley': price = state.config.prices.valley; break;
+                        case 'deepValley': price = state.config.prices.deepValley; break;
+                    }
+                    energyCost += energy * price;
+                });
+
+                let basicCost = 0;
+                if (state.config.billingMode === 'demand') {
+                    basicCost = state.monthlyStats[month].maxPower * state.config.demandPrice;
+                } else {
+                    basicCost = state.config.transformerCapacity * state.config.capacityPrice;
+                }
+
+                energyCostData.push(energyCost);
+                basicCostData.push(basicCost);
+            });
+
+            state.charts.cost = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: '电度电费', data: energyCostData, backgroundColor: '#3b82f6' },
+                        { label: '基本电费', data: basicCostData, backgroundColor: '#22c55e' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: '月度电费分析' }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true, title: { display: true, text: '元' } }
+                    }
+                }
+            });
+        }
+
+        function getPeriodForTime(timeStr) {
+            const [hour, minute] = timeStr.split(':').map(Number);
+            const timeValue = hour * 60 + minute;
+
+            for (const [period, ranges] of Object.entries(currentPeriods)) {
+                for (const range of ranges) {
+                    const [startHour, startMin] = range.start.split(':').map(Number);
+                    const [endHour, endMin] = range.end.split(':').map(Number);
+                    const startValue = startHour * 60 + startMin;
+                    const endValue = endHour * 60 + endMin;
+
+                    if (startValue <= endValue) {
+                        if (timeValue >= startValue && timeValue < endValue) return period;
+                    } else {
+                        if (timeValue >= startValue || timeValue < endValue) return period;
+                    }
+                }
+            }
+            return 'flat';
+        }
+
+
+        // 储能优化
+        function setStorageCycles(cycles) {
+            state.storageConfig.cycles = cycles;
+            document.getElementById('cycle-1').classList.toggle('btn-primary', cycles === 1);
+            document.getElementById('cycle-2').classList.toggle('btn-primary', cycles === 2);
+            document.getElementById('cycle-1').classList.toggle('btn', cycles !== 1);
+            document.getElementById('cycle-2').classList.toggle('btn', cycles !== 2);
+            calculateStorage();
+        }
+
+        function updateStorageConfig() {
+            state.storageConfig.chargePower = parseFloat(document.getElementById('storage-charge-power').value) || 100;
+            state.storageConfig.dischargePower = parseFloat(document.getElementById('storage-discharge-power').value) || 100;
+            state.storageConfig.capacity = parseFloat(document.getElementById('storage-capacity').value) || 200;
+            state.storageConfig.consumptionRatio = parseInt(document.getElementById('consumption-ratio').value) || 100;
+            state.storageConfig.efficiency = parseInt(document.getElementById('efficiency').value) || 90;
+
+            document.getElementById('consumption-ratio-value').textContent = state.storageConfig.consumptionRatio + '%';
+            document.getElementById('efficiency-value').textContent = state.storageConfig.efficiency + '%';
+
+            calculateStorage();
+        }
+
+        function calculateStorage() {
+            const container = document.getElementById('storage-result');
+            if (!container || state.months.length === 0) return;
+
+            const config = state.storageConfig;
+            const efficiency = config.efficiency / 100;
+            const consumptionRatio = config.consumptionRatio / 100;
+
+            // 计算可充电和可放电的小时数
+            let dailyChargeHours = 0;
+            let dailyDischargeHours = 0;
+
+            Object.entries(currentPeriods).forEach(([period, ranges]) => {
+                ranges.forEach(range => {
+                    const [startHour, startMin] = range.start.split(':').map(Number);
+                    const [endHour, endMin] = range.end.split(':').map(Number);
+                    let hours = (endHour * 60 + endMin - startHour * 60 - startMin) / 60;
+                    if (hours < 0) hours += 24;
+
+                    if (range.action === 'charge') {
+                        dailyChargeHours += hours;
+                    } else if (range.action === 'discharge') {
+                        dailyDischargeHours += hours;
+                    }
+                });
+            });
+
+            // 日可充电量和日可放电量
+            const dailyChargeableEnergy = config.chargePower * dailyChargeHours * config.cycles;
+            const dailyDischargeableEnergy = config.dischargePower * dailyDischargeHours * efficiency * config.cycles;
+
+            // 推荐容量 = min(日可充电量, 日可放电量) x 消纳比例
+            const recommendedCapacity = Math.min(dailyChargeableEnergy, dailyDischargeableEnergy) * consumptionRatio;
+
+            // 计算收益
+            const lastMonth = state.months[state.months.length - 1];
+            const monthData = state.monthlyStats[lastMonth]?.data || [];
+            const daysInMonth = new Date(parseInt(lastMonth.split('-')[0]), parseInt(lastMonth.split('-')[1]), 0).getDate();
+
+            // 计算峰谷价差收益
+            let dailySavings = 0;
+            const avgDischargePrice = state.config.prices.peak;
+            const avgChargePrice = state.config.prices.valley;
+            const priceDiff = avgDischargePrice - avgChargePrice;
+
+            const actualDischargeEnergy = Math.min(dailyDischargeableEnergy, config.capacity) * efficiency;
+            dailySavings = actualDischargeEnergy * priceDiff * config.cycles;
+
+            const monthlySavings = dailySavings * daysInMonth;
+            const yearlySavings = monthlySavings * 12;
+
+            // 投资回收期
+            const unitCost = 1200; // 元/kWh
+            const totalCost = recommendedCapacity * unitCost;
+            const paybackPeriod = monthlySavings > 0 ? totalCost / monthlySavings : 0;
+
+            container.innerHTML = `
+                <div class="card">
+                    <h3 class="card-title">储能优化分析结果</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-label">推荐装机容量</div>
+                            <div class="stat-value">${recommendedCapacity.toFixed(1)} kWh</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-label">预计月收益</div>
+                            <div class="stat-value">${monthlySavings.toFixed(0)} 元</div>
+                        </div>
+                        <div class="stat-card purple">
+                            <div class="stat-label">预计年收益</div>
+                            <div class="stat-value">${yearlySavings.toFixed(0)} 元</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-label">预计投资回收期</div>
+                            <div class="stat-value">${paybackPeriod.toFixed(1)} 月</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-label">初始投资估算</div>
+                            <div class="stat-value">${totalCost.toFixed(0)} 元</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 16px; padding: 16px; background: #f9fafb; border-radius: 8px;">
+                        <h4 style="margin-bottom: 12px; font-size: 14px;">计算详情</h4>
+                        <div style="font-size: 13px; color: #6b7280; line-height: 1.8;">
+                            <p>日可充电量: ${dailyChargeableEnergy.toFixed(1)} kWh (充电功率 ${config.chargePower}kW x ${dailyChargeHours.toFixed(1)}小时 x ${config.cycles}次)</p>
+                            <p>日可放电量: ${dailyDischargeableEnergy.toFixed(1)} kWh (放电功率 ${config.dischargePower}kW x ${dailyDischargeHours.toFixed(1)}小时 x 效率${config.efficiency}% x ${config.cycles}次)</p>
+                            <p>消纳比例: ${config.consumptionRatio}%</p>
+                            <p>参考月份: ${lastMonth}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 导出功能
+        function exportMonthlyStats() {
+            if (state.months.length === 0) {
+                showToast('没有数据可导出', 'error');
+                return;
+            }
+
+            const data = [['月份', '数据点数', '最大负荷(kW)', '平均负荷(kW)', '总用电量(万kWh)', '尖峰电量(kWh)', '高峰电量(kWh)', '平段电量(kWh)', '谷段电量(kWh)', '深谷电量(kWh)']];
+
+            state.months.forEach(month => {
+                const stats = state.monthlyStats[month];
+                
+                // 计算各时段电量
+                let sharpPeakEnergy = 0, peakEnergy = 0, flatEnergy = 0, valleyEnergy = 0, deepValleyEnergy = 0;
+                stats.data.forEach(d => {
+                    const hour = d.timestamp.getHours();
+                    const minute = d.timestamp.getMinutes();
+                    const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                    const energy = d.power * (state.config.interval / 60);
+
+                    const period = getPeriodForTime(timeStr);
+                    switch (period) {
+                        case 'sharpPeak': sharpPeakEnergy += energy; break;
+                        case 'peak': peakEnergy += energy; break;
+                        case 'flat': flatEnergy += energy; break;
+                        case 'valley': valleyEnergy += energy; break;
+                        case 'deepValley': deepValleyEnergy += energy; break;
+                    }
+                });
+
+                data.push([
+                    month,
+                    stats.dataPoints,
+                    stats.maxPower.toFixed(2),
+                    stats.avgPower.toFixed(2),
+                    (stats.totalEnergy / 10000).toFixed(4),
+                    sharpPeakEnergy.toFixed(2),
+                    peakEnergy.toFixed(2),
+                    flatEnergy.toFixed(2),
+                    valleyEnergy.toFixed(2),
+                    deepValleyEnergy.toFixed(2)
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '月度统计');
+            XLSX.writeFile(wb, '月度统计.xlsx');
+            showToast('月度统计导出成功', 'success');
+        }
+
+        function exportDemandCalc() {
+            if (state.months.length === 0) {
+                showToast('没有数据可导出', 'error');
+                return;
+            }
+
+            const data = [['日期', '最大需量(kW)', '需量电费(元)', '备注']];
+
+            state.months.forEach(month => {
+                const stats = state.monthlyStats[month];
+                const daysInMonth = new Date(parseInt(month.split('-')[0]), parseInt(month.split('-')[1]), 0).getDate();
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayData = stats.data.filter(d => d.timestamp.getDate() === day);
+                    if (dayData.length === 0) continue;
+
+                    const maxPower = Math.max(...dayData.map(d => d.power));
+                    const demandCost = maxPower * state.config.demandPrice;
+
+                    data.push([
+                        `${month}-${String(day).padStart(2, '0')}`,
+                        maxPower.toFixed(2),
+                        demandCost.toFixed(2),
+                        ''
+                    ]);
+                }
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '需量计算');
+            XLSX.writeFile(wb, '需量计算.xlsx');
+            showToast('需量计算导出成功', 'success');
+        }
+
+        function exportStorageResult() {
+            const container = document.getElementById('storage-result');
+            if (!container || container.innerHTML === '') {
+                showToast('请先进行储能优化计算', 'error');
+                return;
+            }
+
+            const config = state.storageConfig;
+            const data = [
+                ['储能优化配置结果'],
+                [''],
+                ['配置参数', '数值'],
+                ['日充放电次数', config.cycles],
+                ['充电功率(kW)', config.chargePower],
+                ['放电功率(kW)', config.dischargePower],
+                ['初始装机容量(kWh)', config.capacity],
+                ['消纳比例(%)', config.consumptionRatio],
+                ['充放电效率(%)', config.efficiency],
+                [''],
+                ['优化结果', '数值'],
+                ['推荐装机容量(kWh)', document.querySelector('.stat-card.blue .stat-value')?.textContent || '-'],
+                ['预计月收益(元)', document.querySelector('.stat-card.green .stat-value')?.textContent || '-'],
+                ['预计年收益(元)', document.querySelector('.stat-card.purple .stat-value')?.textContent || '-'],
+                ['预计投资回收期(月)', document.querySelector('.stat-card.orange .stat-value')?.textContent || '-'],
+                ['初始投资估算(元)', document.querySelector('.stat-card.red .stat-value')?.textContent || '-']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '储能优化');
+            XLSX.writeFile(wb, '储能优化结果.xlsx');
+            showToast('储能优化结果导出成功', 'success');
+        }
+
+        function exportRawData() {
+            if (state.processedData.length === 0) {
+                showToast('没有数据可导出', 'error');
+                return;
+            }
+
+            const data = [['时间', '功率(kW)', '电量(kWh)', '月份']];
+
+            state.processedData.forEach(d => {
+                data.push([
+                    d.timestamp.toISOString(),
+                    d.power.toFixed(2),
+                    (d.power * state.config.interval / 60).toFixed(2),
+                    d.month
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '原始数据');
+            XLSX.writeFile(wb, '原始数据.xlsx');
+            showToast('原始数据导出成功', 'success');
+        }
+
+
+        // 本地保存功能
+        function saveProject() {
+            const name = document.getElementById('save-project-name').value.trim();
+            if (!name) {
+                showToast('请输入项目名称', 'error');
+                return;
+            }
+
+            const project = {
+                name: name,
+                timestamp: new Date().toISOString(),
+                rawData: state.rawData.map(d => ({...d, timestamp: d.timestamp.toISOString()})),
+                config: state.config,
+                storageConfig: state.storageConfig,
+                currentPeriods: currentPeriods
+            };
+
+            let projects = JSON.parse(localStorage.getItem('cxh-projects') || '[]');
+            const existingIndex = projects.findIndex(p => p.name === name);
+            if (existingIndex >= 0) {
+                projects[existingIndex] = project;
+            } else {
+                projects.push(project);
+            }
+
+            localStorage.setItem('cxh-projects', JSON.stringify(projects));
+            closeModal('save-modal');
+            showToast('项目保存成功', 'success');
+        }
+
+        function renderSavedProjects() {
+            const container = document.getElementById('saved-projects-list');
+            const projects = JSON.parse(localStorage.getItem('cxh-projects') || '[]');
+
+            if (projects.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray" style="padding: 24px;">暂无保存的项目</p>';
+                return;
+            }
+
+            container.innerHTML = projects.map(p => `
+                <div style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="font-weight: 500;">${p.name}</p>
+                        <p class="text-sm text-gray">${new Date(p.timestamp).toLocaleString()}</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn" onclick="loadProject('${p.name}')">打开</button>
+                        <button class="btn" onclick="deleteProject('${p.name}')" style="color: #dc2626;">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadProject(name) {
+            const projects = JSON.parse(localStorage.getItem('cxh-projects') || '[]');
+            const project = projects.find(p => p.name === name);
+
+            if (!project) {
+                showToast('项目不存在', 'error');
+                return;
+            }
+
+            // 恢复数据
+            state.rawData = project.rawData.map(d => ({
+                ...d,
+                timestamp: new Date(d.timestamp)
+            }));
+            state.config = project.config;
+            state.storageConfig = project.storageConfig;
+            currentPeriods = project.currentPeriods || defaultPeriods;
+
+            // 恢复配置到UI
+            document.getElementById('config-ratio').value = state.config.meterRatio;
+            document.getElementById('config-interval').value = state.config.interval;
+            document.getElementById('config-demand-price').value = state.config.demandPrice;
+            document.getElementById('config-capacity-price').value = state.config.capacityPrice;
+            document.getElementById('config-transformer').value = state.config.transformerCapacity;
+            document.getElementById('price-sharp').value = state.config.prices.sharpPeak;
+            document.getElementById('price-peak').value = state.config.prices.peak;
+            document.getElementById('price-flat').value = state.config.prices.flat;
+            document.getElementById('price-valley').value = state.config.prices.valley;
+            document.getElementById('price-deep').value = state.config.prices.deepValley;
+
+            document.getElementById('storage-charge-power').value = state.storageConfig.chargePower;
+            document.getElementById('storage-discharge-power').value = state.storageConfig.dischargePower;
+            document.getElementById('storage-capacity').value = state.storageConfig.capacity;
+            document.getElementById('consumption-ratio').value = state.storageConfig.consumptionRatio;
+            document.getElementById('efficiency').value = state.storageConfig.efficiency;
+            document.getElementById('consumption-ratio-value').textContent = state.storageConfig.consumptionRatio + '%';
+            document.getElementById('efficiency-value').textContent = state.storageConfig.efficiency + '%';
+
+            setBillingMode(state.config.billingMode);
+            setStorageCycles(state.storageConfig.cycles);
+
+            // 处理数据
+            processData();
+            enableTabs();
+            updateUploadInfo();
+            renderPeriodConfig();
+
+            closeModal('load-modal');
+            showToast('项目加载成功', 'success');
+        }
+
+        function deleteProject(name) {
+            let projects = JSON.parse(localStorage.getItem('cxh-projects') || '[]');
+            projects = projects.filter(p => p.name !== name);
+            localStorage.setItem('cxh-projects', JSON.stringify(projects));
+            renderSavedProjects();
+            showToast('项目已删除', 'success');
+        }
+
+        // 拖拽上传
+        const uploadArea = document.getElementById('upload-area');
+        if (uploadArea) {
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const event = { target: { files: files } };
+                    handleFileUpload(event);
+                }
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            setManualInterval(15);
+            setStorageCycles(2);
+            renderPeriodConfig();
+        });
+    </script>
+</body>
+</html>

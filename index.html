@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪子的智能工具包</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glow-icon {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        .tag-gradient-1 { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+        .tag-gradient-2 { background: linear-gradient(135deg, #10b981, #059669); }
+        .tag-gradient-3 { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+        .tag-gradient-4 { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+        .tag-gradient-5 { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .grid-bg {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="grid-bg">
+    <div class="container mx-auto px-4 py-16">
+        
+        <!-- Header -->
+        <div class="text-center mb-16 floating">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl glow-icon mb-8">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                </svg>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold gradient-text mb-6">雪子的智能工具包</h1>
+            <p class="text-xl text-slate-400">综合能源解决方案 · 专业工程计算 · 数据分析</p>
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            
+            <!-- 电价查询 -->
+            <a href="/electricity/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-1 px-3 py-1.5 rounded-full">数据</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors">全国电价查询</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">31省份分时电价数据，支持循环次数计算和电费查询，实时更新最新电价政策</p>
+                <div class="mt-6 flex items-center text-blue-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 电气一二次接线图 -->
+            <a href="/electrical/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-2 px-3 py-1.5 rounded-full">设计</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-green-300 transition-colors">电气接线图绘制</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">电气系统一二次接线图绘制工具，支持回路设计、元件选型和图纸导出</p>
+                <div class="mt-6 flex items-center text-green-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 储能电站智能排布 -->
+            <a href="/storage-layout/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-3 px-3 py-1.5 rounded-full">布局</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">储能智能排布</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">储能电站设备智能排布设计系统，支持集装箱布局、电缆路径规划，离线可用</p>
+                <div class="mt-6 flex items-center text-purple-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 工程师计算手册 -->
+            <a href="/manual/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-4 px-3 py-1.5 rounded-full">计算</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">工程师计算手册</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">专业电气、暖通、储能、光伏、流体力学及土建结构工程计算工具大全</p>
+                <div class="mt-6 flex items-center text-amber-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 测算工具包 -->
+            <a href="/calculation-tool/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-5 px-3 py-1.5 rounded-full">测算</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-pink-300 transition-colors">项目测算工具包</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">零碳园区、独立储能、光储充、工商业储能、碳排放核查、虚拟电厂经济测算</p>
+                <div class="mt-6 flex items-center text-pink-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- 国网数据分析 -->
+            <a href="/grid-analysis/" class="glass-card rounded-3xl p-8 card-hover block group">
+                <div class="flex items-start justify-between mb-6">
+                    <div class="glow-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-white tag-gradient-1 px-3 py-1.5 rounded-full">分析</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">国网数据分析</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">国网用电数据分析系统，支持Excel导入、储能优化配置、可视化报表导出</p>
+                <div class="mt-6 flex items-center text-cyan-400 text-sm font-medium">
+                    进入工具
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-20">
+            <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card">
+                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                <span class="text-slate-400 text-sm">所有工具运行正常</span>
+            </div>
+            <p class="mt-6 text-slate-500 text-sm">雪子的智能工具包 · 数据本地处理 · 安全可靠</p>
+        </div>
+    </div>
+</body>
+</html>
