@@ -1,31 +1,23 @@
 #!/bin/bash
 
-# OpenClaw 记忆文件和技能包备份脚本
-# 包含执行检查和重试机制
+# OpenClaw 记忆文件和技能包备份脚本（修复版）
+# 修复：改进文件检测逻辑，修复 cron 环境下的路径问题
 
 BACKUP_DIR="/Volumes/cu/ocu"
-MEMORY_SOURCE="$HOME/.openclaw/workspace/memory"
-SKILLS_SOURCE="$HOME/.openclaw/skills"
-LOG_FILE="$BACKUP_DIR/backups/backup.log"
+MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
+SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/skills"
+LOG_FILE="/tmp/backup_memory.log"
 MAX_RETRIES=3
 RETRY_DELAY=5
 
 # 飞书通知配置
 FEISHU_WEBHOOK="https://open.feishu.cn/open-apis/bot/v2/hook/8c3b0f1e-2d4a-4b5c-9e6f-7a8b9c0d1e2f"
 
-# 确保备份目录存在
-mkdir -p "$BACKUP_DIR/memory"
-mkdir -p "$BACKUP_DIR/skills"
-mkdir -p "$BACKUP_DIR/backups"
-
 # 日志函数
 log() {
     local msg="$(date '+%Y-%m-%d %H:%M:%S') - $1"
     echo "$msg"
-    # 尝试写入日志文件，失败则忽略（cron环境下可能没有权限）
-    if [ -w "$BACKUP_DIR/backups" ] || [ ! -f "$LOG_FILE" ]; then
-        echo "$msg" >> "$LOG_FILE" 2>/dev/null || true
-    fi
+    echo "$msg" >> "$LOG_FILE" 2>/dev/null || true
 }
 
 # 检查源目录是否存在
@@ -38,17 +30,17 @@ check_source() {
         return 1
     fi
     
-    # 检查是否有文件需要备份
     local file_count=$(find "$source_dir" -type f 2>/dev/null | wc -l)
     if [ "$file_count" -eq 0 ]; then
         log "WARNING: $name 源目录为空: $source_dir"
         return 1
     fi
     
+    log "INFO: $name 源目录检查通过，包含 $file_count 个文件"
     return 0
 }
 
-# 执行备份并验证
+# 执行备份
 perform_backup() {
     local source_dir=$1
     local dest_dir=$2
@@ -57,22 +49,29 @@ perform_backup() {
     
     log "Starting $name backup (attempt $attempt/$MAX_RETRIES)..."
     
-    # 统计需要传输的文件数（新增或修改的）
-    local transfer_count=$(rsync -avni --delete "$source_dir/" "$dest_dir/" 2>/dev/null | grep -E '^<' | wc -l)
+    # 确保目标目录存在
+    mkdir -p "$dest_dir"
     
-    if [ "$transfer_count" -eq 0 ]; then
-        log "INFO: $name 没有新文件需要备份（所有文件已是最新）"
-        return 0
-    fi
+    # 直接执行 rsync，不使用 -n 预检测
+    # -a: 归档模式 -v: 详细 -u: 只更新较新的文件
+    local rsync_output=$(rsync -avu "$source_dir/" "$dest_dir/" 2>&1)
+    local rsync_exit=$?
     
-    log "INFO: $name 检测到 $transfer_count 个新文件/修改文件需要备份"
+    # 统计传输的文件数（排除目录和空行）
+    local transfer_count=$(echo "$rsync_output" | grep -E '^>' | wc -l)
     
-    # 使用 rsync 进行增量备份，只传输变化的文件
-    if rsync -av --delete "$source_dir/" "$dest_dir/" >> "$LOG_FILE" 2>&1; then
-        log "SUCCESS: $name 备份完成，传输了 $transfer_count 个文件"
+    if [ $rsync_exit -eq 0 ]; then
+        if [ "$transfer_count" -eq 0 ]; then
+            log "INFO: $name 没有新文件需要备份（所有文件已是最新）"
+        else
+            log "SUCCESS: $name 备份完成，传输了 $transfer_count 个文件"
+            # 记录传输的文件列表
+            echo "$rsync_output" | grep -E '^>' >> "$LOG_FILE" 2>/dev/null || true
+        fi
         return 0
     else
-        log "ERROR: $name backup failed with rsync error"
+        log "ERROR: $name backup failed with rsync exit code $rsync_exit"
+        log "ERROR: $rsync_output"
         return 1
     fi
 }
@@ -83,12 +82,10 @@ backup_with_retry() {
     local dest_dir=$2
     local name=$3
     
-    # 首先检查源目录
     if ! check_source "$source_dir" "$name"; then
         return 1
     fi
     
-    # 尝试备份（带重试）
     for attempt in $(seq 1 $MAX_RETRIES); do
         if perform_backup "$source_dir" "$dest_dir" "$name" "$attempt"; then
             return 0
@@ -131,36 +128,41 @@ log "========== Backup Job Started =========="
 # 检查备份磁盘是否挂载
 if [ ! -d "$BACKUP_DIR" ]; then
     log "FATAL ERROR: Backup directory not mounted: $BACKUP_DIR"
+    send_feishu_notify "failed" "磁盘未挂载" "磁盘未挂载"
     exit 1
 fi
 
 # 备份记忆文件
 memory_success=false
+memory_info=""
 if backup_with_retry "$MEMORY_SOURCE" "$BACKUP_DIR/memory" "Memory"; then
     memory_success=true
+    memory_files=$(find "$BACKUP_DIR/memory" -type f 2>/dev/null | wc -l)
+    memory_info="$memory_files个文件"
+else
+    memory_info="失败"
 fi
 
 # 备份技能包
 skills_success=false
+skills_info=""
 if backup_with_retry "$SKILLS_SOURCE" "$BACKUP_DIR/skills" "Skills"; then
     skills_success=true
+    skills_files=$(find "$BACKUP_DIR/skills" -type f 2>/dev/null | wc -l)
+    skills_info="$skills_files个文件"
+else
+    skills_info="失败"
 fi
 
 # 汇总结果
 log "========== Backup Summary =========="
 if [ "$memory_success" = true ] && [ "$skills_success" = true ]; then
     log "ALL BACKUPS COMPLETED SUCCESSFULLY"
-    # 发送成功通知
-    memory_files=$(find "$BACKUP_DIR/memory" -type f 2>/dev/null | wc -l)
-    skills_files=$(find "$BACKUP_DIR/skills" -type f 2>/dev/null | wc -l)
-    send_feishu_notify "success" "$memory_files个文件" "$skills_files个文件"
+    send_feishu_notify "success" "$memory_info" "$skills_info"
     exit 0
 else
     [ "$memory_success" = false ] && log "FAILED: Memory backup"
     [ "$skills_success" = false ] && log "FAILED: Skills backup"
-    # 发送失败通知
-    mem_status=$([ "$memory_success" = true ] && echo "成功" || echo "失败")
-    skill_status=$([ "$skills_success" = true ] && echo "成功" || echo "失败")
-    send_feishu_notify "failed" "$mem_status" "$skill_status"
+    send_feishu_notify "failed" "$memory_info" "$skills_info"
     exit 1
 fi
