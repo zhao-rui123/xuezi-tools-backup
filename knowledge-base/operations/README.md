@@ -6,6 +6,8 @@
 
 ### OpenClaw 系统
 - [模型切换速查](模型切换.md)
+- [模型切换指令规范](模型切换指令规范.md)
+- [灾难恢复手册](灾难恢复手册.md) ⭐紧急
 - [Gateway 管理](gateway管理.md)
 - [故障排查](故障排查.md)
 
@@ -15,7 +17,6 @@
 
 ### 备份与恢复
 - [每日备份流程](每日备份.md)
-- [灾难恢复手册](灾难恢复.md)
 
 ### 开发环境
 - [Mac 常用命令](mac命令.md)
@@ -43,3 +44,4 @@ bash ~/.openclaw/workspace/backup_memory.sh
 | 工作区 | `~/.openclaw/workspace/` |
 | 媒体文件 | `~/.openclaw/media/inbound/` |
 | 日志 | `~/.openclaw/logs/` |
+| 备份磁盘 | `/Volumes/cu/ocu/` |
