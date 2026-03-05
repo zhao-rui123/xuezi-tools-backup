@@ -26,9 +26,9 @@ workspace/
 
 | 文件类型 | 存放位置 | 保留时间 |
 |---------|---------|---------|
-| 截图 | `tmp/screenshots/` | 7天 |
-| 下载文件 | `tmp/downloads/` | 7天 |
-| 生成的报告 | `reports/` | 30天 |
+| 截图 | `tmp/screenshots/` | 14天 |
+| 下载文件 | `tmp/downloads/` | 14天 |
+| 生成的报告 | `reports/` | 60天 |
 | 图片资源 | `assets/images/` | 永久 |
 | 缓存 | `tmp/cache/` | 随时可删 |
 
