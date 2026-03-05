@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# 文件清理脚本
+# 按策略清理临时文件、旧报告、缓存等
+
+WORKSPACE="$HOME/.openclaw/workspace"
+LOG_FILE="/tmp/file-cleanup.log"
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 文件清理开始" >> "$LOG_FILE"
+
+# 1. 清理7天前的截图
+echo "[1/5] 清理旧截图..." >> "$LOG_FILE"
+if [ -d "$WORKSPACE/tmp/screenshots" ]; then
+    count=$(find "$WORKSPACE/tmp/screenshots" -name "*.png" -mtime +7 | wc -l)
+    find "$WORKSPACE/tmp/screenshots" -name "*.png" -mtime +7 -delete
+    echo "  已删除 $count 个旧截图" >> "$LOG_FILE"
+fi
+
+# 2. 清理7天前的下载文件
+echo "[2/5] 清理旧下载文件..." >> "$LOG_FILE"
+if [ -d "$WORKSPACE/tmp/downloads" ]; then
+    count=$(find "$WORKSPACE/tmp/downloads" -type f -mtime +7 | wc -l)
+    find "$WORKSPACE/tmp/downloads" -type f -mtime +7 -delete
+    echo "  已删除 $count 个旧下载文件" >> "$LOG_FILE"
+fi
+
+# 3. 清理30天前的报告
+echo "[3/5] 清理旧报告..." >> "$LOG_FILE"
+if [ -d "$WORKSPACE/reports" ]; then
+    count=$(find "$WORKSPACE/reports" -type f -mtime +30 | wc -l)
+    find "$WORKSPACE/reports" -type f -mtime +30 -delete
+    echo "  已删除 $count 个旧报告" >> "$LOG_FILE"
+fi
+
+# 4. 清理30天前的日志备份
+echo "[4/5] 清理旧日志备份..." >> "$LOG_FILE"
+if [ -d "$WORKSPACE/tmp/logs" ]; then
+    count=$(find "$WORKSPACE/tmp/logs" -name "*.log" -mtime +30 | wc -l)
+    find "$WORKSPACE/tmp/logs" -name "*.log" -mtime +30 -delete
+    echo "  已删除 $count 个旧日志" >> "$LOG_FILE"
+fi
+
+# 5. 清理空目录
+echo "[5/5] 清理空目录..." >> "$LOG_FILE"
+find "$WORKSPACE/tmp" -type d -empty -delete 2>/dev/null
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 文件清理完成" >> "$LOG_FILE"
+echo "" >> "$LOG_FILE"
