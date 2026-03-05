@@ -12,9 +12,18 @@ Before doing anything else:
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
 3. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-4. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+4. **Read `knowledge-base/INDEX.md`** — 快速了解项目状态和知识分布
+5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 
 Don't ask permission. Just do it.
+
+## After Model Switch
+
+If you just switched models (new session):
+1. Execute startup check: `bash ~/.openclaw/workspace/scripts/startup-check.sh`
+2. Read `knowledge-base/INDEX.md` for project overview
+3. Check `memory/YYYY-MM-DD.md` for today's context
+4. Review any saved session state if needed
 
 ## Memory
 
