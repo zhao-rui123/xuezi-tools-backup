@@ -22,10 +22,11 @@ Don't ask permission. Just do it.
 
 If you just switched models (new session):
 1. Execute startup check: `bash ~/.openclaw/workspace/scripts/startup-check.sh`
-2. Read `knowledge-base/INDEX.md` for project overview
-3. Read `knowledge-base/GUIDE.md` for knowledge base usage rules
-4. Check `memory/YYYY-MM-DD.md` for today's context
-5. Review any saved session state if needed
+2. **Load session snapshot**: `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` 获取上下文恢复提示
+3. Read `knowledge-base/INDEX.md` for project overview
+4. Read `knowledge-base/GUIDE.md` for knowledge base usage rules
+5. Check `memory/YYYY-MM-DD.md` for today's context
+6. Review any saved session state if needed
 
 ## Memory
 
@@ -50,6 +51,9 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - When someone says "remember this" → update `memory/YYYY-MM-DD.md` or relevant file
 - When you learn a lesson → update AGENTS.md, TOOLS.md, or the relevant skill
 - When you make a mistake → document it so future-you doesn't repeat it
+- **After long conversation** → run `python3 ~/.openclaw/workspace/scripts/session-compressor.py` to compress and save summary
+- **When user says "remember this"** → run `python3 ~/.openclaw/workspace/scripts/memory-extractor.py` to auto-extract key info
+- **Before model switch** → run `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` to save current state
 - **Text > Brain** 📝
 
 ## Safety
