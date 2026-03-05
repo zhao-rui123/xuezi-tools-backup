@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月线趋势投资筛选器 - 雪子的智能工具包</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glow-icon {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        .tag-grade-a { background: linear-gradient(135deg, #10b981, #059669); }
+        .tag-grade-b { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+        .tag-grade-c { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+        .tag-sell { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .tag-hold { background: linear-gradient(135deg, #10b981, #059669); }
+        .grid-bg {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+            transform: translateY(-2px);
+        }
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #6366f1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .stock-row:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        .signal-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .signal-active { background: #10b981; box-shadow: 0 0 8px #10b981; }
+        .signal-inactive { background: #64748b; }
+        .signal-warning { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .signal-danger { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+    </style>
+</head>
+<body class="grid-bg">
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl glow-icon mb-6">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-4">月线趋势投资筛选器</h1>
+            <p class="text-lg text-slate-400">MACD+KDJ双金叉 · 均线多头排列 · 周期股预期差分析</p>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="glass-card rounded-2xl p-6 mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="btnScreen" class="btn-primary px-6 py-3 rounded-xl text-white font-semibold flex items-center gap-2 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        开始筛选
+                    </button>
+                    <button id="btnHistory" class="glass-panel px-6 py-3 rounded-xl text-slate-300 hover:text-white transition-colors">
+                        历史记录
+                    </button>
+                </div>
+                <div class="flex items-center gap-4 text-sm text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        数据更新: <span id="lastUpdate">--</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loadingPanel" class="hidden glass-card rounded-2xl p-12 text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-slate-400">正在分析全市场股票...</p>
+            <p class="text-sm text-slate-500 mt-2">预计需要 3-5 分钟</p>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="resultsPanel" class="hidden">
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="metric-card rounded-xl p-4">
+                    <p class="text-slate-400 text-sm mb-1">筛选总数</p>
+                    <p class="text-2xl font-bold text-white" id="totalCount">0</p>
+                </div>
+                <div class="metric-card rounded-xl p-4">
+                    <p class="text-slate-400 text-sm mb-1">A级（最佳）</p>
+                    <p class="text-2xl font-bold text-emerald-400" id="gradeACount">0</p>
+                </div>
+                <div class="metric-card rounded-xl p-4">
+                    <p class="text-slate-400 text-sm mb-1">B级（可接受）</p>
+                    <p class="text-2xl font-bold text-blue-400" id="gradeBCount">0</p>
+                </div>
+                <div class="metric-card rounded-xl p-4">
+                    <p class="text-slate-400 text-sm mb-1">C级（观察）</p>
+                    <p class="text-2xl font-bold text-amber-400" id="gradeCCount">0</p>
+                </div>
+            </div>
+
+            <!-- Stock List -->
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="p-4 border-b border-slate-700/50 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-white">筛选结果</h3>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="searchInput" placeholder="搜索股票代码/名称" 
+                            class="glass-panel px-4 py-2 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                        <select id="gradeFilter" class="glass-panel px-4 py-2 rounded-lg text-sm text-white focus:outline-none">
+                            <option value="all">全部评级</option>
+                            <option value="A">A级</option>
+                            <option value="B">B级</option>
+                            <option value="C">C级</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="glass-panel">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">评级</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">股票</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">价格/均线</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">MACD</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">KDJ</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">信号</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockListBody" class="text-sm">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyPanel" class="glass-card rounded-2xl p-12 text-center">
+            <svg class="w-16 h-16 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <p class="text-slate-400 mb-2">暂无筛选数据</p>
+            <p class="text-sm text-slate-500">点击"开始筛选"按钮运行全市场扫描</p>
+        </div>
+
+        <!-- Stock Detail Modal -->
+        <div id="detailModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="glass-card rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-hidden flex flex-col">
+                <div class="p-6 border-b border-slate-700/50 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white" id="modalStockName">--</h2>
+                            <p class="text-slate-400" id="modalStockCode">--</p>
+                        </div>
+                        <div id="modalGradeBadge" class="hidden">
+                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg text-sm font-bold text-white">
+                                --
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button id="btnAddWatch" class="btn-primary px-4 py-2 rounded-lg text-white text-sm font-medium flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            加入监听
+                        </button>
+                        <button id="btnCloseModal" class="text-slate-400 hover:text-white transition-colors p-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto">
+                    <!-- K线图 -->
+                    <div class="glass-panel rounded-xl p-4 mb-6">
+                        <h3 class="text-lg font-semibold text-white mb-4">K线走势</h3>
+                        <div id="klineChart" class="w-full h-80 rounded-lg"></div>
+                    </div>
+                    
+                    <!-- 详情内容 -->
+                    <div id="modalContent" class="space-y-6">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="static/app.js"></script>
+</body>
+</html>

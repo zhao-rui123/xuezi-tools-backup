@@ -1,0 +1,211 @@
+/* 电气接线图优化样式 - 专业配色方案 */
+
+:root {
+  /* 主色调 - 专业电气图配色 */
+  --color-primary: #1a365d;      /* 深蓝 - 主标题 */
+  --color-secondary: #2c5282;    /* 中蓝 - 次要元素 */
+  --color-accent: #3182ce;       /* 亮蓝 - 强调 */
+  
+  /* 电气元件配色 */
+  --color-transformer: #c53030;  /* 红色 - 变压器 */
+  --color-breaker: #dd6b20;      /* 橙色 - 断路器 */
+  --color-isolator: #38a169;     /* 绿色 - 隔离开关 */
+  --color-ct: #805ad5;           /* 紫色 - CT */
+  --color-pt: #d69e2e;           /* 金色 - PT */
+  --color-ground: #718096;       /* 灰色 - 接地 */
+  
+  /* 线路配色 */
+  --line-hv: #e53e3e;            /* 红色 - 高压 */
+  --line-mv: #dd6b20;            /* 橙色 - 中压 */
+  --line-lv: #38a169;            /* 绿色 - 低压 */
+  --line-dc: #3182ce;            /* 蓝色 - 直流 */
+  --line-control: #805ad5;       /* 紫色 - 控制 */
+  
+  /* 背景色 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #edf2f7;
+  
+  /* 文字 */
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+}
+
+/* SVG 图形优化样式 */
+.electrical-diagram {
+  font-family: 'Segoe UI', 'Microsoft YaHei', -apple-system, sans-serif;
+}
+
+/* 变压器样式 */
+.transformer-symbol {
+  fill: var(--bg-primary);
+  stroke: var(--color-transformer);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 4px rgba(197, 48, 48, 0.2));
+}
+
+/* 断路器样式 */
+.breaker-symbol {
+  fill: var(--bg-primary);
+  stroke: var(--color-breaker);
+  stroke-width: 2;
+  filter: drop-shadow(0 1px 3px rgba(221, 107, 32, 0.2));
+}
+
+/* 隔离开关样式 */
+.isolator-symbol {
+  fill: none;
+  stroke: var(--color-isolator);
+  stroke-width: 2;
+}
+
+/* CT/PT 样式 */
+.ct-symbol, .pt-symbol {
+  fill: var(--bg-primary);
+  stroke-width: 1.5;
+}
+
+.ct-symbol {
+  stroke: var(--color-ct);
+}
+
+.pt-symbol {
+  stroke: var(--color-pt);
+}
+
+/* 线路样式 */
+.line-hv {
+  stroke: var(--line-hv);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.line-mv {
+  stroke: var(--line-mv);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.line-lv {
+  stroke: var(--line-lv);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.line-dc {
+  stroke: var(--line-dc);
+  stroke-width: 2;
+  stroke-dasharray: 8, 4;
+}
+
+/* 母线样式 */
+.bus-bar {
+  stroke: #d69e2e;
+  stroke-width: 4;
+  fill: none;
+  filter: drop-shadow(0 1px 2px rgba(214, 158, 46, 0.3));
+}
+
+/* 接地符号 */
+.ground-symbol {
+  fill: none;
+  stroke: var(--color-ground);
+  stroke-width: 1.5;
+}
+
+/* 文字样式 */
+.diagram-text {
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--text-primary);
+}
+
+.diagram-text-small {
+  font-size: 9px;
+  fill: var(--text-secondary);
+}
+
+.diagram-label {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--color-primary);
+}
+
+/* 设备标注框 */
+.device-box {
+  fill: var(--bg-secondary);
+  stroke: var(--color-secondary);
+  stroke-width: 1;
+  rx: 4;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+/* 参数显示框 */
+.param-box {
+  fill: #fffaf0;
+  stroke: #ed8936;
+  stroke-width: 0.5;
+  rx: 3;
+}
+
+/* 图例样式 */
+.legend-box {
+  fill: var(--bg-primary);
+  stroke: #e2e8f0;
+  stroke-width: 1;
+  rx: 6;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+/* 标题样式 */
+.diagram-title {
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--color-primary);
+  letter-spacing: 0.5px;
+}
+
+/* 子标题 */
+.diagram-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--color-secondary);
+}
+
+/* 连接点 */
+.connection-point {
+  fill: var(--color-primary);
+  r: 3;
+}
+
+/* 箭头 */
+.arrow-head {
+  fill: var(--text-secondary);
+}
+
+/* 虚线 */
+.dashed-line {
+  stroke-dasharray: 5, 3;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.live-indicator {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* 响应式 */
+@media print {
+  .electrical-diagram {
+    background: white !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}

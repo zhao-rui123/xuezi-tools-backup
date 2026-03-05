@@ -1,0 +1,6 @@
+Flask
+flask-cors
+akshare
+pandas
+numpy
+tqdm

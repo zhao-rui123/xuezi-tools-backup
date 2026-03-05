@@ -1,0 +1,15 @@
+{
+  "name": "file-sender",
+  "version": "1.0.0",
+  "description": "发送文件到指定群聊",
+  "main": "file-sender.py",
+  "author": "Kimi Claw",
+  "config": {
+    "default_group_chat": "chat:oc_aff1ecbfd382d2235daf1d60c922f041",
+    "default_channel": "feishu"
+  },
+  "commands": {
+    "send": "python3 file-sender.py",
+    "send-multi": "批量发送多个文件"
+  }
+}

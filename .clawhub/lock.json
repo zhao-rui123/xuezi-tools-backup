@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "summarize": {
+      "version": "1.0.0",
+      "installedAt": 1772485921618
+    },
+    "apple-notes": {
+      "version": "1.0.0",
+      "installedAt": 1772487429394
+    },
+    "openai-whisper": {
+      "version": "1.0.0",
+      "installedAt": 1772499241606
+    }
+  }
+}

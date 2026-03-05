@@ -1,0 +1,9 @@
+{
+  "name": "daily-stock-report",
+  "schedule": "30 15 * * 1-5",
+  "timezone": "Asia/Shanghai",
+  "command": "python3 /Users/zhaoruicn/.openclaw/workspace/stock_analyzer.py",
+  "channel": "feishu",
+  "target": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+  "enabled": true
+}
