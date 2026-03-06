@@ -1,0 +1,247 @@
+// ==================== 分时电价时段配置 ====================
+// 数据来源: price_policy_2026_02.txt
+// 生成时间: 2026-03-05
+// 说明: 以下配置包含5个省份/地区的分时电价时段设置
+
+// 时段类型定义
+export type PeriodType = 'peak' | 'valley' | 'flat' | 'sharp' | 'deepValley';
+
+// 时段配置接口
+export interface TimeRange {
+  start: number;  // 开始小时 (0-24)
+  end: number;    // 结束小时 (0-24)
+}
+
+export interface PeriodConfig {
+  type: PeriodType;
+  ranges: TimeRange[];
+}
+
+export interface MonthConfig {
+  months: number[];  // 适用月份 (1-12)
+  periods: PeriodConfig[];
+}
+
+export interface ProvinceConfig {
+  name: string;
+  code: string;
+  monthConfigs: MonthConfig[];
+}
+
+// ==================== 1. 冀北地区 ====================
+export const jiBeiConfig: ProvinceConfig = {
+  name: '冀北地区',
+  code: 'JIBEI',
+  monthConfigs: [
+    // 6-8月
+    {
+      months: [6, 7, 8],
+      periods: [
+        { type: 'sharp', ranges: [{ start: 18, end: 21 }] },
+        { type: 'peak', ranges: [{ start: 10, end: 12 }, { start: 16, end: 18 }, { start: 21, end: 22 }] },
+        { type: 'flat', ranges: [{ start: 7, end: 10 }, { start: 12, end: 16 }, { start: 22, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 0, end: 7 }] }
+      ]
+    },
+    // 1、11、12月
+    {
+      months: [1, 11, 12],
+      periods: [
+        { type: 'sharp', ranges: [{ start: 17, end: 19 }] },
+        { type: 'peak', ranges: [{ start: 7, end: 9 }, { start: 16, end: 17 }, { start: 19, end: 22 }] },
+        { type: 'flat', ranges: [{ start: 0, end: 7 }, { start: 9, end: 12 }, { start: 14, end: 16 }, { start: 22, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 7, end: 9 }, { start: 12, end: 14 }] },
+        { type: 'deepValley', ranges: [{ start: 12, end: 15 }] }
+      ]
+    },
+    // 2月、3-5月、9-10月
+    {
+      months: [2, 3, 4, 5, 9, 10],
+      periods: [
+        { type: 'peak', ranges: [{ start: 16, end: 22 }] },
+        { type: 'flat', ranges: [{ start: 0, end: 1 }, { start: 6, end: 12 }, { start: 15, end: 16 }, { start: 22, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 1, end: 6 }, { start: 12, end: 15 }] }
+      ]
+    }
+  ]
+};
+
+// ==================== 2. 浙江省 ====================
+export const zheJiangConfig: ProvinceConfig = {
+  name: '浙江省',
+  code: 'ZHEJIANG',
+  monthConfigs: [
+    // 春秋季（2-6月、9-11月）
+    {
+      months: [2, 3, 4, 5, 6, 9, 10, 11],
+      periods: [
+        { type: 'peak', ranges: [{ start: 8, end: 11 }, { start: 13, end: 17 }] },
+        { type: 'flat', ranges: [{ start: 17, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 0, end: 8 }, { start: 11, end: 13 }] }
+      ]
+    },
+    // 夏冬季（1月、7月、8月、12月）
+    {
+      months: [1, 7, 8, 12],
+      periods: [
+        { type: 'sharp', ranges: [{ start: 9, end: 11 }, { start: 15, end: 17 }] },
+        { type: 'peak', ranges: [{ start: 8, end: 9 }, { start: 17, end: 23 }] },
+        { type: 'flat', ranges: [{ start: 13, end: 15 }, { start: 23, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 0, end: 8 }, { start: 11, end: 13 }] },
+        { type: 'deepValley', ranges: [{ start: 10, end: 14 }] }  // 春节、劳动节、国庆节
+      ]
+    }
+  ]
+};
+
+// ==================== 3. 上海市 ====================
+export const shangHaiConfig: ProvinceConfig = {
+  name: '上海市',
+  code: 'SHANGHAI',
+  monthConfigs: [
+    // 夏季（7-9月）
+    {
+      months: [7, 8, 9],
+      periods: [
+        { type: 'sharp', ranges: [{ start: 12, end: 14 }] },
+        { type: 'peak', ranges: [{ start: 8, end: 15 }, { start: 18, end: 21 }] },
+        { type: 'flat', ranges: [{ start: 6, end: 8 }, { start: 15, end: 18 }, { start: 21, end: 22 }] },
+        { type: 'valley', ranges: [{ start: 22, end: 24 }, { start: 0, end: 6 }] }
+      ]
+    },
+    // 冬季（1月、12月）
+    {
+      months: [1, 12],
+      periods: [
+        { type: 'sharp', ranges: [{ start: 19, end: 21 }] },
+        { type: 'peak', ranges: [{ start: 8, end: 11 }, { start: 18, end: 21 }] },
+        { type: 'flat', ranges: [{ start: 6, end: 8 }, { start: 11, end: 18 }, { start: 21, end: 22 }] },
+        { type: 'valley', ranges: [{ start: 22, end: 24 }, { start: 0, end: 6 }] }
+      ]
+    },
+    // 其他月份
+    {
+      months: [2, 3, 4, 5, 6, 10, 11],
+      periods: [
+        { type: 'peak', ranges: [{ start: 8, end: 11 }, { start: 18, end: 21 }] },
+        { type: 'flat', ranges: [{ start: 6, end: 8 }, { start: 11, end: 18 }, { start: 21, end: 22 }] },
+        { type: 'valley', ranges: [{ start: 22, end: 24 }, { start: 0, end: 6 }] }
+      ]
+    }
+  ]
+};
+
+// ==================== 4. 四川省 ====================
+export const siChuanConfig: ProvinceConfig = {
+  name: '四川省',
+  code: 'SICHUAN',
+  monthConfigs: [
+    // 冬季（1月、12月）
+    {
+      months: [1, 12],
+      periods: [
+        { type: 'peak', ranges: [{ start: 10, end: 12 }, { start: 16, end: 22 }] },
+        { type: 'flat', ranges: [{ start: 8, end: 10 }, { start: 12, end: 16 }, { start: 22, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 0, end: 8 }] }
+      ]
+    },
+    // 春秋季（3-6月、10-11月）
+    {
+      months: [3, 4, 5, 6, 10, 11],
+      periods: [
+        { type: 'peak', ranges: [{ start: 10, end: 12 }, { start: 17, end: 22 }] },
+        { type: 'flat', ranges: [{ start: 8, end: 10 }, { start: 12, end: 17 }, { start: 22, end: 24 }, { start: 0, end: 8 }] },
+        { type: 'valley', ranges: [{ start: 22, end: 24 }, { start: 0, end: 8 }] }
+      ]
+    },
+    // 夏季（7-9月）
+    {
+      months: [7, 8, 9],
+      periods: [
+        { type: 'peak', ranges: [{ start: 11, end: 18 }, { start: 20, end: 23 }] },
+        { type: 'flat', ranges: [{ start: 7, end: 11 }, { start: 18, end: 20 }, { start: 23, end: 24 }] },
+        { type: 'valley', ranges: [{ start: 0, end: 7 }] }
+      ]
+    }
+  ]
+};
+
+// ==================== 5. 黑龙江省 ====================
+export const heiLongJiangConfig: ProvinceConfig = {
+  name: '黑龙江省',
+  code: 'HEILONGJIANG',
+  monthConfigs: [
+    // 全年统一时段
+    {
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      periods: [
+        { type: 'peak', ranges: [{ start: 7, end: 8 }, { start: 9, end: 11.5 }, { start: 15.5, end: 20 }] },
+        { type: 'valley', ranges: [{ start: 12, end: 14 }, { start: 23.5, end: 24 }, { start: 0, end: 5.5 }] },
+        { type: 'flat', ranges: [{ start: 8, end: 9 }, { start: 11.5, end: 12 }, { start: 14, end: 15.5 }, { start: 20, end: 23.5 }] }
+      ]
+    }
+  ]
+};
+
+// ==================== 所有省份配置汇总 ====================
+export const allProvinceConfigs: ProvinceConfig[] = [
+  jiBeiConfig,
+  zheJiangConfig,
+  shangHaiConfig,
+  siChuanConfig,
+  heiLongJiangConfig
+];
+
+// ==================== 工具函数 ====================
+
+/**
+ * 根据省份代码获取配置
+ */
+export function getProvinceConfig(code: string): ProvinceConfig | undefined {
+  return allProvinceConfigs.find(p => p.code === code);
+}
+
+/**
+ * 根据月份获取对应的时段配置
+ */
+export function getMonthConfig(province: ProvinceConfig, month: number): MonthConfig | undefined {
+  return province.monthConfigs.find(mc => mc.months.includes(month));
+}
+
+/**
+ * 获取指定小时对应的时段类型
+ */
+export function getPeriodTypeAtHour(monthConfig: MonthConfig, hour: number): PeriodType {
+  for (const period of monthConfig.periods) {
+    for (const range of period.ranges) {
+      if (hour >= range.start && hour < range.end) {
+        return period.type;
+      }
+    }
+  }
+  return 'flat';  // 默认平时段
+}
+
+/**
+ * 获取时段类型的中文名称
+ */
+export function getPeriodTypeName(type: PeriodType): string {
+  const names: Record<PeriodType, string> = {
+    peak: '高峰',
+    valley: '低谷',
+    flat: '平段',
+    sharp: '尖峰',
+    deepValley: '深谷'
+  };
+  return names[type] || '未知';
+}
+
+// ==================== 导出默认配置 ====================
+export default {
+  jiBei: jiBeiConfig,
+  zheJiang: zheJiangConfig,
+  shangHai: shangHaiConfig,
+  siChuan: siChuanConfig,
+  heiLongJiang: heiLongJiangConfig,
+  all: allProvinceConfigs
+};

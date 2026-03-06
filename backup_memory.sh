@@ -3,6 +3,10 @@
 # OpenClaw 记忆文件和技能包备份脚本（修复版）
 # 修复：改进文件检测逻辑，修复 cron 环境下的路径问题
 
+# 设置环境变量（cron 环境需要）
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+export HOME="/Users/zhaoruicn"
+
 BACKUP_DIR="/Volumes/cu/ocu"
 MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
 SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/skills"
@@ -107,17 +111,22 @@ send_feishu_notify() {
     local memory_info=$2
     local skills_info=$3
     local timestamp=$(date '+%Y-%m-%d %H:%M')
+    local notify_script="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
     
     if [ "$status" = "success" ]; then
-        curl -s -X POST "$FEISHU_WEBHOOK" \
-            -H "Content-Type: application/json" \
-            -d "{\"msg_type\":\"text\",\"content\":{\"text\":\"✅ 备份完成 ($timestamp)\\nMemory: $memory_info\\nSkills: $skills_info\"}}" \
-            > /dev/null 2>&1
+        "$notify_script" send "✅ 每日备份完成 ($timestamp)
+
+📁 Memory: $memory_info
+📁 Skills: $skills_info
+
+备份位置: /Volumes/cu/ocu/"
     else
-        curl -s -X POST "$FEISHU_WEBHOOK" \
-            -H "Content-Type: application/json" \
-            -d "{\"msg_type\":\"text\",\"content\":{\"text\":\"❌ 备份失败 ($timestamp)\\nMemory: $memory_info\\nSkills: $skills_info\"}}" \
-            > /dev/null 2>&1
+        "$notify_script" send "❌ 每日备份失败 ($timestamp)
+
+📁 Memory: $memory_info
+📁 Skills: $skills_info
+
+请检查日志: /tmp/backup_memory.log"
     fi
 }
 

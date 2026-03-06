@@ -4,6 +4,10 @@
 # 新能源 + 科技板块
 # 每天 08:30 执行
 
+# 设置环境变量（cron 环境需要）
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+export HOME="/Users/zhaoruicn"
+
 FEISHU_WEBHOOK="https://open.feishu.cn/open-apis/bot/v2/hook/8c3b0f1e-2d4a-4b5c-9e6f-7a8b9c0d1e2f"
 REPORT_FILE="/tmp/daily-english-news-$(date '+%Y%m%d').txt"
 
@@ -71,15 +75,13 @@ Key Vocabulary:
 Have a great day of learning! 🚀
 EOF
 
-# 发送报告（通过飞书 webhook）
-report_content=$(cat "$REPORT_FILE")
-
-# 由于 webhook 可能未配置，先保存到文件供手动查看
-# 实际使用时取消下面注释并配置正确的 webhook
-# curl -s -X POST "$FEISHU_WEBHOOK" \
-#     -H "Content-Type: application/json" \
-#     -d "{\"msg_type\":\"text\",\"content\":{\"text\":\"$report_content\"}}" \
-#     > /dev/null 2>&1
+# 发送报告（通过 feishu-notify.sh）
+NOTIFY_SCRIPT="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
+if [ -x "$NOTIFY_SCRIPT" ]; then
+    "$NOTIFY_SCRIPT" send "$(cat "$REPORT_FILE")"
+else
+    echo "Push failed, report saved to $REPORT_FILE"
+fi
 
 # 输出到日志
 cat "$REPORT_FILE" >> /tmp/english-news.log

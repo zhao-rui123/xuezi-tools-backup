@@ -1,1 +1,0 @@
-0 22 * * * /Users/zhaoruicn/.openclaw/workspace/backup_memory.sh

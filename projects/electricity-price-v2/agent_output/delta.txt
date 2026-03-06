@@ -1,0 +1,105 @@
+// 辽宁省 - 不执行固定分时电价
+export const liaoningPolicy: ProvincePolicy = {
+  province: '辽宁省',
+  hasTimeOfUse: false,
+  periods: []
+};
+
+// 吉林省 - 全年统一时段
+// 高峰：8-10、16-21时，低谷：0-5、11-14、23-24时
+export const jilinPolicy: ProvincePolicy = {
+  province: '吉林省',
+  hasTimeOfUse: true,
+  periods: [
+    {
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      peakHours: [8, 9, 16, 17, 18, 19, 20],
+      valleyHours: [0, 1, 2, 3, 4, 11, 12, 13, 23],
+      flatHours: [5, 6, 7, 10, 14, 15, 21, 22]
+    }
+  ]
+};
+
+// 内蒙古东部
+// 6-8月：尖峰18-20时
+// 11-1月：高峰8-11、19-21时
+export const neimengguEastPolicy: ProvincePolicy = {
+  province: '内蒙古东部',
+  hasTimeOfUse: true,
+  periods: [
+    {
+      months: [6, 7, 8],
+      criticalPeakHours: [18, 19],
+      peakHours: [6, 7, 8, 17, 18, 19, 20, 21],
+      valleyHours: [0, 1, 2, 3, 4, 11, 12, 13],
+      deepValleyHours: [12, 13],
+      flatHours: [5, 9, 10, 14, 15, 16, 22, 23]
+    },
+    {
+      months: [11, 12, 1],
+      peakHours: [8, 9, 10, 19, 20],
+      valleyHours: [0, 1, 2, 3],
+      flatHours: [4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23]
+    },
+    {
+      months: [2, 3, 4, 5, 9, 10],
+      peakHours: [8, 9, 10, 19, 20, 21, 22, 23],
+      valleyHours: [0, 1, 2, 3],
+      flatHours: [4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18]
+    }
+  ]
+};
+
+// 内蒙古西部（蒙西）- 全年统一时段
+// 高峰：7-9、17-23时，低谷：9-17时
+export const neimengguWestPolicy: ProvincePolicy = {
+  province: '内蒙古西部',
+  hasTimeOfUse: true,
+  periods: [
+    {
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      peakHours: [7, 8, 17, 18, 19, 20, 21, 22],
+      valleyHours: [9, 10, 11, 12, 13, 14, 15, 16],
+      flatHours: [0, 1, 2, 3, 4, 5, 6, 23]
+    }
+  ]
+};
+
+// 江西省
+// 1、12月：尖峰18-20时
+// 2月：高峰16-22时
+// 7-9月：尖峰20:30-22:30
+export const jiangxiPolicy: ProvincePolicy = {
+  province: '江西省',
+  hasTimeOfUse: true,
+  periods: [
+    {
+      months: [1, 12],
+      criticalPeakHours: [18, 19],
+      peakHours: [9, 10, 11, 18, 19, 20],
+      valleyHours: [0, 1, 2, 3, 4, 5],
+      flatHours: [6, 7, 8, 12, 13, 14, 15, 16, 17, 21, 22, 23]
+    },
+    {
+      months: [2],
+      peakHours: [16, 17, 18, 19, 20, 21],
+      valleyHours: [0, 1, 2, 3, 4, 5],
+      flatHours: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 22, 23]
+    },
+    {
+      months: [7, 8, 9],
+      criticalPeakHours: [20, 21],
+      peakHours: [17, 18, 19, 20, 21, 22],
+      valleyHours: [1, 2, 3, 4, 11, 12, 13, 14],
+      deepValleyHours: [12, 13],
+      flatHours: [0, 5, 6, 7, 8, 9, 10, 15, 16, 23]
+    },
+    {
+      months: [3, 4, 5, 6, 10, 11],
+      peakHours: [16, 17, 18, 19, 20, 21],
+      valleyHours: [1, 2, 3, 4, 11, 12, 13, 14],
+      deepValleyHours: [12, 13],
+      flatHours: [0, 5, 6, 7, 8, 9, 10, 15, 22, 23]
+    }
+  ]
+};

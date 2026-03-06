@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>分时电价查询系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 标题 -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                分时电价查询系统
+            </h1>
+            <p class="text-slate-400">全国31省份工商业分时电价数据查询</p>
+        </header>
+
+        <!-- 控制面板 -->
+        <div class="glass-panel rounded-2xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 省份选择 -->
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">选择省份</label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="搜索省份..." 
+                            class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+                        <select id="provinceSelect" class="w-full mt-2 px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 年份选择 -->
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">选择年份</label>
+                    <select id="yearSelect" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                        <option value="2026" selected>2026年</option>
+                    </select>
+                </div>
+
+                <!-- 月份选择 -->
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-slate-300 mb-2">选择月份</label>
+                    <select id="monthSelect" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500">
+                    </select>
+                </div>
+            </div>
+
+            <!-- 备注信息 -->
+            <div id="noteBox" class="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg hidden">
+                <p class="text-yellow-400 text-sm flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    <span id="noteText"></span>
+                </p>
+            </div>
+
+            <!-- 循环次数 -->
+            <div id="cycleBadge" class="mt-4 inline-flex items-center px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
+                <span class="text-blue-400 text-sm">年循环次数: <strong id="cycleCount" class="text-white">-</strong> 次</span>
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="glass-panel rounded-2xl p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-slate-200">24小时电价分布</h2>
+            <div id="chartContainer" class="w-full h-96">
+                <canvas id="priceChart"></canvas>
+            </div>
+            <div id="noDataMessage" class="hidden text-center py-20 text-slate-500">
+                <p>暂无该月份电价数据</p>
+            </div>
+        </div>
+
+        <!-- 时段详情 -->
+        <div class="glass-panel rounded-2xl p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-slate-200">时段详情</h2>
+            <div id="tableContainer" class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-slate-600">
+                            <th class="text-left py-3 px-4 text-slate-300">时段类型</th>
+                            <th class="text-right py-3 px-4 text-slate-300">电价 (元/kWh)</th>
+                            <th class="text-left py-3 px-4 text-slate-300">小时数</th>
+                            <th class="text-left py-3 px-4 text-slate-300">时间段</th>
+                        </tr>
+                    </thead>
+                    <tbody id="priceTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <div class="glass-panel rounded-2xl p-6">
+            <h2 class="text-xl font-semibold mb-4 text-slate-200">电价统计</h2>
+            <div id="statsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="text-center mt-8 text-slate-500 text-sm">
+            <p>数据来源：各省电网公司官方文件 | 更新时间：2026年3月</p>
+        </footer>
+    </div>
+
+    <!-- 数据文件 -->
+    <script src="data/price-data.js"></script>
+    <script src="js/price-service.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

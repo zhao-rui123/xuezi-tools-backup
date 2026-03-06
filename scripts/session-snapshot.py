@@ -1,112 +1,154 @@
 #!/usr/bin/env python3
 """
-会话状态快照 - 保存和恢复当前会话状态
+会话快照工具 - 增强版
+自动保存对话上下文，支持急救恢复
 """
 
 import json
+import os
+import sys
 from datetime import datetime
 from pathlib import Path
 
-class SessionSnapshot:
-    def __init__(self, workspace_path="/Users/zhaoruicn/.openclaw/workspace"):
-        self.workspace = Path(workspace_path)
-        self.state_dir = self.workspace / "memory" / "session-state"
-        self.state_dir.mkdir(parents=True, exist_ok=True)
-        self.state_file = self.state_dir / "current.json"
-    
-    def save_snapshot(self, session_info):
-        """
-        保存会话状态快照
-        
-        Args:
-            session_info: {
-                "session_key": "...",
-                "current_topic": "...",
-                "pending_tasks": [...],
-                "user_mood": "...",
-                "last_decision": "...",
-                "key_files": [...],
-                "recent_summary": "..."
-            }
-        """
-        snapshot = {
-            "timestamp": datetime.now().isoformat(),
-            **session_info
-        }
-        
-        with open(self.state_file, 'w', encoding='utf-8') as f:
-            json.dump(snapshot, f, ensure_ascii=False, indent=2)
-        
-        return self.state_file
-    
-    def load_snapshot(self):
-        """加载会话状态快照"""
-        if not self.state_file.exists():
-            return None
-        
-        try:
-            with open(self.state_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"加载快照失败: {e}")
-            return None
-    
-    def get_recovery_prompt(self):
-        """
-        生成恢复提示，帮助新模型快速了解上下文
-        
-        Returns:
-            str: 3句话的恢复提示
-        """
-        snapshot = self.load_snapshot()
-        if not snapshot:
-            return None
-        
-        parts = []
-        
-        # 第一句：当前主题
-        if snapshot.get("current_topic"):
-            parts.append(f"当前正在讨论：{snapshot['current_topic']}")
-        
-        # 第二句：待办事项
-        if snapshot.get("pending_tasks"):
-            tasks = ", ".join(snapshot["pending_tasks"][:3])
-            parts.append(f"待办事项：{tasks}")
-        
-        # 第三句：最近决策
-        if snapshot.get("last_decision"):
-            parts.append(f"最近决策：{snapshot['last_decision']}")
-        
-        if not parts:
-            return "没有可用的会话状态快照"
-        
-        return "\n".join(parts)
-    
-    def clear_snapshot(self):
-        """清除会话快照"""
-        if self.state_file.exists():
-            self.state_file.unlink()
+# 快照目录
+SNAPSHOT_DIR = Path.home() / ".openclaw" / "workspace" / "memory" / "snapshots"
+CURRENT_SNAPSHOT = SNAPSHOT_DIR / "current_session.json"
 
+def ensure_dir():
+    """确保目录存在"""
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
 
-if __name__ == "__main__":
-    # 测试
-    snapshot = SessionSnapshot()
+def save_snapshot(task="", pending=None, context=None, last_messages=None):
+    """
+    保存会话快照
     
-    # 保存测试
-    test_info = {
-        "session_key": "test-session",
-        "current_topic": "知识库管理升级",
-        "pending_tasks": ["实现会话压缩", "实现自动提取"],
-        "user_mood": "积极",
-        "last_decision": "使用四层结构管理知识库",
-        "key_files": ["knowledge-base/INDEX.md"],
-        "recent_summary": "正在讨论记忆管理升级方案"
+    Args:
+        task: 当前进行中的任务
+        pending: 待办事项列表
+        context: 关键上下文字典
+        last_messages: 最近几条消息（可选）
+    """
+    ensure_dir()
+    
+    snapshot = {
+        "timestamp": datetime.now().isoformat(),
+        "session_key": "agent:main:main",
+        "current_task": task,
+        "pending_items": pending or [],
+        "key_context": context or {},
+        "last_messages": last_messages or [],
+        "recovery_phrase": generate_recovery_phrase(task, pending)
     }
     
-    snapshot.save_snapshot(test_info)
-    print("快照已保存")
+    # 保存当前快照
+    with open(CURRENT_SNAPSHOT, 'w', encoding='utf-8') as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
     
-    # 恢复测试
-    prompt = snapshot.get_recovery_prompt()
-    print("\n恢复提示：")
-    print(prompt)
+    # 同时保存历史快照
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    history_file = SNAPSHOT_DIR / f"session_{timestamp}.json"
+    with open(history_file, 'w', encoding='utf-8') as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
+    
+    # 清理旧快照（保留最近20个）
+    cleanup_old_snapshots(keep=20)
+    
+    return str(CURRENT_SNAPSHOT)
+
+def generate_recovery_phrase(task, pending):
+    """生成急救口令关键词"""
+    keywords = []
+    
+    if task:
+        # 提取任务关键词（前10个字符）
+        keywords.append(task[:20])
+    
+    if pending:
+        keywords.extend([item[:15] for item in pending[:3]])
+    
+    return " | ".join(keywords) if keywords else "继续之前的工作"
+
+def get_latest_snapshot():
+    """获取最新快照"""
+    if CURRENT_SNAPSHOT.exists():
+        with open(CURRENT_SNAPSHOT, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return None
+
+def cleanup_old_snapshots(keep=20):
+    """清理旧快照"""
+    snapshots = sorted(SNAPSHOT_DIR.glob("session_*.json"), reverse=True)
+    for old_snap in snapshots[keep:]:
+        old_snap.unlink()
+
+def generate_recovery_card():
+    """生成恢复卡片，用于 MEMORY.md"""
+    snap = get_latest_snapshot()
+    
+    if not snap:
+        return "# 没有可用的会话快照"
+    
+    lines = [
+        "# 🚨 会话恢复卡片",
+        "",
+        f"**最后更新**: {snap.get('timestamp', 'unknown')}",
+        f"**急救口令**: `{snap.get('recovery_phrase', '继续之前的工作')}`",
+        "",
+        "## 当前任务",
+        f"{snap.get('current_task', '无')}",
+        "",
+    ]
+    
+    if snap.get('pending_items'):
+        lines.extend([
+            "## 待办事项",
+            *[f"- [ ] {item}" for item in snap['pending_items']],
+            "",
+        ])
+    
+    if snap.get('key_context'):
+        lines.extend([
+            "## 关键上下文",
+            *[f"- **{k}**: {v}" for k, v in snap['key_context'].items()],
+            "",
+        ])
+    
+    lines.extend([
+        "---",
+        "**恢复方法**: 新会话时说急救口令即可",
+    ])
+    
+    return "\n".join(lines)
+
+def quick_save(task=""):
+    """快速保存 - 用于定时自动保存"""
+    save_snapshot(
+        task=task,
+        pending=[],
+        context={}
+    )
+    print(f"✅ 会话已保存: {datetime.now().strftime('%H:%M:%S')}")
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: session-snapshot.py <save|load|card> [task]")
+        sys.exit(1)
+    
+    action = sys.argv[1]
+    
+    if action == "save":
+        task = sys.argv[2] if len(sys.argv) > 2 else ""
+        quick_save(task)
+    
+    elif action == "load":
+        snap = get_latest_snapshot()
+        if snap:
+            print(json.dumps(snap, ensure_ascii=False, indent=2))
+        else:
+            print("{}")
+    
+    elif action == "card":
+        print(generate_recovery_card())
+    
+    else:
+        print(f"Unknown action: {action}")

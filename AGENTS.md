@@ -11,10 +11,12 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 Before doing anything else:
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
-3. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-4. **Read `knowledge-base/INDEX.md`** — 快速了解项目状态和知识分布
-5. **Read `knowledge-base/GUIDE.md`** — 了解知识库使用规范
-6. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+3. **Load session snapshot**: `python3 ~/.openclaw/workspace/scripts/session-snapshot.py load` — 恢复之前的上下文
+4. Read `memory/YYYY-MM-DD.md` (today) for recent context
+5. **Read `memory/YYYY-MM-DD.md` (yesterday)** — 获取昨天的上下文
+6. **Read `knowledge-base/INDEX.md`** — 快速了解项目状态和知识分布
+7. **Read `knowledge-base/GUIDE.md`** — 了解知识库使用规范
+8. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 
 Don't ask permission. Just do it.
 
@@ -54,6 +56,7 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - **After long conversation** → run `python3 ~/.openclaw/workspace/scripts/session-compressor.py` to compress and save summary
 - **When user says "remember this"** → run `python3 ~/.openclaw/workspace/scripts/memory-extractor.py` to auto-extract key info
 - **Before model switch** → run `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` to save current state
+- **When conversation has important context** → run `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` with current task/pending items to save for recovery
 - **Text > Brain** 📝
 
 ## Safety

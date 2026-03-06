@@ -3,6 +3,10 @@
 # OpenClaw 系统维护脚本
 # 清理日志、会话文件、检查磁盘空间
 
+# 设置环境变量（cron 环境需要）
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+export HOME="/Users/zhaoruicn"
+
 LOG_DIR="$HOME/.openclaw/logs"
 SESSION_DIR="$HOME/.openclaw/agents/main/sessions"
 BACKUP_DIR="/Volumes/cu/ocu/system-maintenance"
@@ -63,3 +67,17 @@ echo "  ✅ 已清理旧备份"
 echo ""
 echo "========== 维护完成 =========="
 echo "结束时间: $(date)"
+
+# 发送飞书通知
+NOTIFY_SCRIPT="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
+if [ -x "$NOTIFY_SCRIPT" ]; then
+    "$NOTIFY_SCRIPT" send "🔧 系统维护完成 ($(date '+%Y-%m-%d %H:%M'))
+
+✅ 日志轮转完成
+✅ 孤儿会话清理完成
+✅ 磁盘空间检查完成
+✅ OpenClaw 状态检查完成
+✅ 旧备份清理完成
+
+备份位置: $BACKUP_DIR/logs/"
+fi
