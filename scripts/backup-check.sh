@@ -23,11 +23,21 @@ if grep -q "$CHECK_TIME.*ALL BACKUPS COMPLETED SUCCESSFULLY" "$LOG_FILE" 2>/dev/
     # 获取备份统计
     memory_files=$(find /Volumes/cu/ocu/memory -type f 2>/dev/null | wc -l)
     skills_files=$(find /Volumes/cu/ocu/skills -type f 2>/dev/null | wc -l)
+    ws_skills_files=$(find /Volumes/cu/ocu/workspace-skills -type f 2>/dev/null | wc -l)
+    
+    # 检查是否有配置备份
+    if [ -d "/Volumes/cu/ocu/openclaw-config" ]; then
+        config_status="✓"
+    else
+        config_status="✗"
+    fi
     
     send_message "✅ 备份检查通过 ($(date '+%Y-%m-%d %H:%M'))
 
 📁 Memory: $memory_files 个文件
 📁 Skills: $skills_files 个文件
+📁 Workspace Skills: $ws_skills_files 个文件
+⚙️ Config: $config_status
 
 今日备份已完成，数据安全。"
 else

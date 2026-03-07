@@ -1,22 +1,20 @@
 #!/bin/bash
+# OpenClaw 完整备份脚本（增强版）
+# 支持：Memory + Skills + 系统配置 + Workspace Skills
 
-# OpenClaw 记忆文件和技能包备份脚本（修复版）
-# 修复：改进文件检测逻辑，修复 cron 环境下的路径问题
-
-# 设置环境变量（cron 环境需要）
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
 export HOME="/Users/zhaoruicn"
 
 BACKUP_DIR="/Volumes/cu/ocu"
-MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
-SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/skills"
-WORKSPACE_SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/workspace/skills"
 LOG_FILE="/tmp/backup_memory.log"
 MAX_RETRIES=3
 RETRY_DELAY=5
 
-# 飞书通知配置
-FEISHU_WEBHOOK="https://open.feishu.cn/open-apis/bot/v2/hook/8c3b0f1e-2d4a-4b5c-9e6f-7a8b9c0d1e2f"
+# 源目录
+MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
+SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/skills"
+WORKSPACE_SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/workspace/skills"
+OPENCLAW_CONFIG="/Users/zhaoruicn/.openclaw"
 
 # 日志函数
 log() {
@@ -25,23 +23,23 @@ log() {
     echo "$msg" >> "$LOG_FILE" 2>/dev/null || true
 }
 
-# 检查源目录是否存在
+# 检查源目录
 check_source() {
     local source_dir=$1
     local name=$2
     
     if [ ! -d "$source_dir" ]; then
-        log "ERROR: $name 源目录不存在: $source_dir"
+        log "WARNING: $name 目录不存在: $source_dir"
         return 1
     fi
     
     local file_count=$(find "$source_dir" -type f 2>/dev/null | wc -l)
     if [ "$file_count" -eq 0 ]; then
-        log "WARNING: $name 源目录为空: $source_dir"
+        log "WARNING: $name 目录为空: $source_dir"
         return 1
     fi
     
-    log "INFO: $name 源目录检查通过，包含 $file_count 个文件"
+    log "INFO: $name 检查通过，包含 $file_count 个文件"
     return 0
 }
 
@@ -54,34 +52,64 @@ perform_backup() {
     
     log "Starting $name backup (attempt $attempt/$MAX_RETRIES)..."
     
-    # 确保目标目录存在
     mkdir -p "$dest_dir"
     
-    # 直接执行 rsync，不使用 -n 预检测
-    # -a: 归档模式 -v: 详细 -u: 只更新较新的文件
     local rsync_output=$(rsync -avu "$source_dir/" "$dest_dir/" 2>&1)
     local rsync_exit=$?
     
-    # 统计传输的文件数（排除目录和空行）
     local transfer_count=$(echo "$rsync_output" | grep -E '^>' | wc -l)
     
     if [ $rsync_exit -eq 0 ]; then
         if [ "$transfer_count" -eq 0 ]; then
-            log "INFO: $name 没有新文件需要备份（所有文件已是最新）"
+            log "INFO: $name 已是最新，无需更新"
         else
-            log "SUCCESS: $name 备份完成，传输了 $transfer_count 个文件"
-            # 记录传输的文件列表
-            echo "$rsync_output" | grep -E '^>' >> "$LOG_FILE" 2>/dev/null || true
+            log "SUCCESS: $name 备份完成，传输 $transfer_count 个文件"
         fi
         return 0
     else
-        log "ERROR: $name backup failed with rsync exit code $rsync_exit"
-        log "ERROR: $rsync_output"
+        log "ERROR: $name backup failed (exit $rsync_exit)"
         return 1
     fi
 }
 
-# 带重试的备份函数
+# 备份 OpenClaw 配置
+backup_openclaw_config() {
+    log "Starting OpenClaw config backup..."
+    
+    local config_backup_dir="$BACKUP_DIR/openclaw-config"
+    mkdir -p "$config_backup_dir"
+    
+    # 备份关键配置文件
+    local files_to_backup=(
+        "openclaw.json"
+        "agents/main/agent/models.json"
+        "agents/main/agent/auth-profiles.json"
+    )
+    
+    local backup_count=0
+    for file in "${files_to_backup[@]}"; do
+        local src="$OPENCLAW_CONFIG/$file"
+        local dest_dir="$config_backup_dir/$(dirname $file)"
+        
+        if [ -f "$src" ]; then
+            mkdir -p "$dest_dir"
+            cp "$src" "$dest_dir/"
+            ((backup_count++))
+            log "INFO: 备份配置 $file"
+        fi
+    done
+    
+    # 备份 cron 配置
+    if [ -d "$OPENCLAW_CONFIG/cron" ]; then
+        cp -r "$OPENCLAW_CONFIG/cron" "$config_backup_dir/"
+        log "INFO: 备份 cron 配置"
+        ((backup_count++))
+    fi
+    
+    log "SUCCESS: OpenClaw 配置备份完成 ($backup_count 项)"
+}
+
+# 带重试的备份
 backup_with_retry() {
     local source_dir=$1
     local dest_dir=$2
@@ -106,12 +134,13 @@ backup_with_retry() {
     return 1
 }
 
-# 发送飞书通知函数
-send_feishu_notify() {
+# 发送通知
+send_notify() {
     local status=$1
     local memory_info=$2
     local skills_info=$3
-    local workspace_skills_info=$4
+    local ws_skills_info=$4
+    local config_info=$5
     local timestamp=$(date '+%Y-%m-%d %H:%M')
     local notify_script="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
     
@@ -119,16 +148,13 @@ send_feishu_notify() {
         "$notify_script" send "✅ 每日备份完成 ($timestamp)
 
 📁 Memory: $memory_info
-📁 Skills: $skills_info
-📁 Workspace Skills: $workspace_skills_info
+📁 Skills: $skills_info  
+📁 Workspace Skills: $ws_skills_info
+⚙️ Config: $config_info
 
 备份位置: /Volumes/cu/ocu/"
     else
         "$notify_script" send "❌ 每日备份失败 ($timestamp)
-
-📁 Memory: $memory_info
-📁 Skills: $skills_info
-📁 Workspace Skills: $workspace_skills_info
 
 请检查日志: /tmp/backup_memory.log"
     fi
@@ -136,58 +162,56 @@ send_feishu_notify() {
 
 # ============ 主程序 ============
 
-log "========== Backup Job Started =========="
+log "========== Daily Backup Started =========="
 
-# 检查备份磁盘是否挂载
+# 检查磁盘
 if [ ! -d "$BACKUP_DIR" ]; then
-    log "FATAL ERROR: Backup directory not mounted: $BACKUP_DIR"
-    send_feishu_notify "failed" "磁盘未挂载" "磁盘未挂载"
+    log "FATAL: Backup directory not mounted: $BACKUP_DIR"
+    send_notify "failed" "磁盘未挂载" "-" "-" "-"
     exit 1
 fi
 
-# 备份记忆文件
+# 备份 Memory
 memory_success=false
-memory_info=""
+memory_info="0个文件"
 if backup_with_retry "$MEMORY_SOURCE" "$BACKUP_DIR/memory" "Memory"; then
     memory_success=true
     memory_files=$(find "$BACKUP_DIR/memory" -type f 2>/dev/null | wc -l)
     memory_info="$memory_files个文件"
-else
-    memory_info="失败"
 fi
 
-# 备份技能包
+# 备份 Skills
 skills_success=false
-skills_info=""
+skills_info="0个文件"
 if backup_with_retry "$SKILLS_SOURCE" "$BACKUP_DIR/skills" "Skills"; then
     skills_success=true
     skills_files=$(find "$BACKUP_DIR/skills" -type f 2>/dev/null | wc -l)
     skills_info="$skills_files个文件"
-else
-    skills_info="失败"
 fi
 
-# 备份 workspace 技能包
-workspace_skills_success=false
-workspace_skills_info=""
+# 备份 Workspace Skills
+ws_skills_success=false
+ws_skills_info="0个文件"
 if backup_with_retry "$WORKSPACE_SKILLS_SOURCE" "$BACKUP_DIR/workspace-skills" "Workspace Skills"; then
-    workspace_skills_success=true
-    workspace_skills_files=$(find "$BACKUP_DIR/workspace-skills" -type f 2>/dev/null | wc -l)
-    workspace_skills_info="$workspace_skills_files个文件"
-else
-    workspace_skills_info="失败"
+    ws_skills_success=true
+    ws_skills_files=$(find "$BACKUP_DIR/workspace-skills" -type f 2>/dev/null | wc -l)
+    ws_skills_info="$ws_skills_files个文件"
 fi
 
-# 汇总结果
+# 备份 OpenClaw 配置
+backup_openclaw_config
+config_info="已备份"
+
+# 汇总
 log "========== Backup Summary =========="
-if [ "$memory_success" = true ] && [ "$skills_success" = true ] && [ "$workspace_skills_success" = true ]; then
+if [ "$memory_success" = true ] && [ "$skills_success" = true ] && [ "$ws_skills_success" = true ]; then
     log "ALL BACKUPS COMPLETED SUCCESSFULLY"
-    send_feishu_notify "success" "$memory_info" "$skills_info" "$workspace_skills_info"
+    send_notify "success" "$memory_info" "$skills_info" "$ws_skills_info" "$config_info"
     exit 0
 else
     [ "$memory_success" = false ] && log "FAILED: Memory backup"
     [ "$skills_success" = false ] && log "FAILED: Skills backup"
-    [ "$workspace_skills_success" = false ] && log "FAILED: Workspace Skills backup"
-    send_feishu_notify "failed" "$memory_info" "$skills_info" "$workspace_skills_info"
+    [ "$ws_skills_success" = false ] && log "FAILED: Workspace Skills backup"
+    send_notify "failed" "$memory_info" "$skills_info" "$ws_skills_info" "$config_info"
     exit 1
 fi
