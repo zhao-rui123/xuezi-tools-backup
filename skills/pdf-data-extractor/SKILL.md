@@ -1,6 +1,6 @@
 ---
 name: pdf-data-extractor
-description: Extract data from PDF files, especially for State Grid electricity bills and official documents. Supports table extraction, text parsing, and structured data output.
+description: Extract data from PDF files, including general text extraction, table extraction, and specialized extraction for State Grid electricity bills and official documents.
 ---
 
 # PDF 数据提取技能
@@ -9,9 +9,10 @@ description: Extract data from PDF files, especially for State Grid electricity 
 
 | 场景 | 示例 | 输出格式 |
 |------|------|---------|
-| 国网电费清单 | 月度电费明细 | Excel/CSV |
-| 发改委文件 | 电价政策文件 | 结构化文本 |
-| 技术规范 | 设备技术参数 | JSON/表格 |
+| **通用PDF文本提取** | 任意PDF文档转文本 | TXT/Markdown |
+| **国网电费清单** | 月度电费明细 | Excel/CSV |
+| **发改委文件** | 电价政策文件 | 结构化文本 |
+| **技术规范** | 设备技术参数 | JSON/表格 |
 
 ## 核心工具
 
@@ -21,7 +22,49 @@ import PyPDF2        # 文本提取
 import pandas as pd
 ```
 
-## 国网电费清单提取
+## 1. 通用PDF文本提取 (新增)
+
+### 基础文本提取
+```bash
+# 提取PDF文本
+python3 pdf_text_extractor.py document.pdf -o output.txt
+
+# 使用特定方法提取
+python3 pdf_text_extractor.py document.pdf -m pdfplumber -o output.txt
+
+# 保留布局提取
+python3 pdf_text_extractor.py document.pdf -m layout -o output.txt
+```
+
+### Python调用
+```python
+from pdf_text_extractor import extract_pdf_text, search_in_pdf
+
+# 提取文本
+text = extract_pdf_text('document.pdf', method='auto')
+
+# 在PDF中搜索关键词
+results = search_in_pdf('document.pdf', '电价')
+for r in results:
+    print(f"行 {r['line']}: {r['content']}")
+```
+
+### 批量提取
+```bash
+# 批量提取目录下所有PDF
+python3 pdf_text_extractor.py /path/to/pdfs/ -b -o ./extracted_texts/
+```
+
+### 提取方法对比
+
+| 方法 | 优点 | 适用场景 |
+|------|------|----------|
+| **auto** (默认) | 自动选择最佳方法 | 通用 |
+| **pdfplumber** | 精准度高 | 复杂排版 |
+| **pypdf2** | 速度快 | 简单文本 |
+| **layout** | 保留布局 | 表格混排 |
+
+## 2. 国网电费清单提取
 
 ### 标准流程
 ```python
@@ -84,7 +127,7 @@ def extract_load_curve(pdf_path):
     return pd.DataFrame(load_data)
 ```
 
-## 发改委电价文件提取
+## 3. 发改委电价文件提取
 
 ```python
 import PyPDF2
@@ -130,6 +173,10 @@ df.to_csv('output.csv', index=False, encoding='utf-8-sig')
 import json
 with open('output.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
+
+# 导出纯文本
+with open('output.txt', 'w', encoding='utf-8') as f:
+    f.write(text)
 ```
 
 ## 安装依赖
@@ -140,3 +187,4 @@ pip install pdfplumber PyPDF2 pandas openpyxl
 
 ---
 *创建于: 2026-03-04*
+*更新: 2026-03-07 - 添加通用PDF文本提取功能*

@@ -98,6 +98,39 @@ python3 ~/.openclaw/workspace/skills/office-pro/scripts/batch_processor.py \
   --output-dir ./output/
 ```
 
+**Office 转 Markdown (新增)**
+```bash
+# Word 转 Markdown
+python3 ~/.openclaw/workspace/skills/office-pro/scripts/office_to_markdown.py \
+  document.docx -o document.md
+
+# Excel 转 Markdown 表格
+python3 ~/.openclaw/workspace/skills/office-pro/scripts/office_to_markdown.py \
+  data.xlsx -o data.md
+
+# PPT 转 Markdown 大纲
+python3 ~/.openclaw/workspace/skills/office-pro/scripts/office_to_markdown.py \
+  presentation.pptx -o presentation.md
+
+# 批量转换整个目录
+python3 ~/.openclaw/workspace/skills/office-pro/scripts/office_to_markdown.py \
+  ./office_docs/ -b -o ./markdown_output/
+```
+
+**Python 调用 Office 转 Markdown**
+```python
+from scripts.office_to_markdown import convert_office_to_md
+
+# Word 转 Markdown
+md_content = convert_office_to_md('report.docx', 'report.md')
+
+# Excel 转 Markdown
+md_content = convert_office_to_md('data.xlsx', 'data.md')
+
+# PPT 转 Markdown
+md_content = convert_office_to_md('slides.pptx', 'slides.md')
+```
+
 ## 脚本参考
 
 | 脚本 | 功能 | 使用场景 |
@@ -108,6 +141,7 @@ python3 ~/.openclaw/workspace/skills/office-pro/scripts/batch_processor.py \
 | `pdf_processor.py` | PDF 合并/拆分/提取 | PDF 处理 |
 | `format_converter.py` | 格式转换 | 文档转换 |
 | `batch_processor.py` | 批量文档处理 | 批量任务 |
+| `office_to_markdown.py` | Office 转 Markdown | 文档格式转换 |
 
 ## 模板系统
 
