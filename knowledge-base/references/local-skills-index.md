@@ -153,6 +153,23 @@ results = valuation_screen(["002460", "000725"])
 - 估值策略筛选
 - 个股深度研究
 
+**分享给朋友：**
+```bash
+# 1. 复制技能包给朋友
+cp ~/.openclaw/workspace/skills/stock-analysis-pro-v2.1.0.tar.gz /path/to/share/
+
+# 2. 朋友安装
+mkdir -p ~/.openclaw/workspace/skills/
+cd ~/.openclaw/workspace/skills/
+tar -xzvf stock-analysis-pro-v2.1.0.tar.gz
+
+# 3. 配置Cookie（必须）
+编辑 ~/.openclaw/workspace/skills/stock-analysis-pro/config/xueqiu_config.py
+
+# 4. 测试运行
+python3 -m stock_analysis_pro daily
+```
+
 ---
 
 ## 技能包开发规范
