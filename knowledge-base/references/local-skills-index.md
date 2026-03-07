@@ -81,6 +81,80 @@
 
 ---
 
+### 3. stock-analysis-pro
+
+| 属性 | 内容 |
+|------|------|
+| **位置** | `skills/stock-analysis-pro/` |
+| **创建时间** | 2026-03-07 |
+| **版本** | v2.0.0 |
+| **状态** | ✅ 已部署 |
+| **功能** | 专业股票分析系统（A股+港股） |
+
+**核心功能：**
+- **数据源融合**：新浪财经 + 雪球 + 腾讯财经
+- **技术指标**：MA5/MA10/MA20、RSI、趋势判断、偏离度
+- **形态识别**：杯柄形态、双底(W底)、头肩底
+- **估值策略**：PB-ROE、PEG、综合估值评分
+- **深度分析**：盈利能力、成长性、财务健康、估值分位
+
+**包含模块：**
+- `core/data_fetcher.py` - 多源数据获取
+- `core/pattern_recognition.py` - 技术形态识别
+- `core/valuation.py` - 估值策略筛选
+- `core/deep_analysis.py` - 深度四维度分析
+- `core/daily_report.py` - 日报生成与推送
+
+**CLI命令：**
+```bash
+# 生成日报
+python3 -m stock_analysis_pro daily
+
+# 发送日报到飞书
+python3 -m stock_analysis_pro daily --send-feishu
+
+# 深度分析单股
+python3 -m stock_analysis_pro analyze 002460 --name "赣锋锂业"
+
+# 形态识别
+python3 -m stock_analysis_pro pattern 002460
+
+# 估值筛选
+python3 -m stock_analysis_pro screen
+```
+
+**Python API：**
+```python
+from stock_analysis_pro import deep_analyze, scan_patterns, valuation_screen
+
+# 深度分析
+report = deep_analyze("002460", "赣锋锂业")
+
+# 形态扫描
+patterns = scan_patterns(["002460", "000725"])
+
+# 估值筛选
+results = valuation_screen(["002460", "000725"])
+```
+
+**定时任务：**
+```cron
+# 工作日 16:30 - 日报推送（港股16:10收盘后）
+30 16 * * 1-5 skills/stock-analysis-pro/scripts/daily_push.sh
+```
+
+**参考文档：**
+- [详细文档](../references/stock-analysis-pro.md)
+- [技能包 SKILL.md](../skills/stock-analysis-pro/SKILL.md)
+
+**使用场景：**
+- 自选股每日监控
+- 技术形态自动识别
+- 估值策略筛选
+- 个股深度研究
+
+---
+
 ## 技能包开发规范
 
 ### 标准结构
@@ -139,7 +213,8 @@ description: 描述... Use when ...
 |------|----------|
 | 2026-03-06 | 创建 office-pro 技能包 |
 | 2026-03-06 | 创建 system-backup 技能包 |
+| 2026-03-07 | 创建 stock-analysis-pro v2.0.0 技能包 |
 
 ---
 
-*最后更新: 2026-03-06*
+*最后更新: 2026-03-07*

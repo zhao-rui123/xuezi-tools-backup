@@ -87,13 +87,14 @@
 | [Office技能包整理](references/office-skills-overview.md) | ClawHub Office技能包对比 | #Office #技能包 |
 | [ClawHub技能包调研](references/clawhub-skills-report.md) | ClawHub技能包完整调研 | #ClawHub #技能包 |
 | [本地技能包索引](references/local-skills-index.md) | 自定义技能包清单 | #技能包 #本地 |
+| [Stock Analysis Pro](references/stock-analysis-pro.md) | 专业股票分析技能包文档 | #股票 #技能包 #金融分析 |
 
 ## 统计信息
 
 - **项目数**: 3
 - **决策数**: 3
 - **运维文档**: 5
-- **技能包**: 3 (office-pro, system-backup, xueqiu-stock-client)
+- **技能包**: 4 (office-pro, system-backup, xueqiu-stock-client, stock-analysis-pro)
 - **最后更新**: 2026-03-07
 
 ---
