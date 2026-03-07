@@ -262,11 +262,24 @@ XUEQIU_COOKIES = {
 | `core.pattern_recognition` | 技术形态识别 |
 | `core.valuation` | 估值策略计算 |
 | `core.deep_analysis` | 四维度深度分析 |
+| `core.stock_classifier` | 股票类型识别（新增） |
+| `core.cyclical_analysis` | 周期股专项分析（新增） |
+| `core.growth_analysis` | 成长股专项分析（新增） |
+| `core.value_analysis` | 价值股专项分析（新增） |
+| `core.enhanced_analysis` | 增强版分析（新增） |
 | `core.daily_report` | 日报生成与推送 |
 
 ---
 
 ## 📝 更新日志
+
+### v2.1.0 (2026-03-07) - 三类股票差异化分析
+- ✅ 新增股票类型识别模块（周期股/成长股/价值股）
+- ✅ 新增周期股专项分析框架（周期位置+供需+PB估值）
+- ✅ 新增成长股专项分析框架（PEG+成长空间+竞争优势）
+- ✅ 新增价值股专项分析框架（PB-ROE+股息率+安全边际）
+- ✅ 增强版深度分析，自动根据股票类型选择分析框架
+- ✅ 周期前景分析（针对锂矿等大宗商品行业）
 
 ### v2.0.0 (2026-03-07)
 - ✅ 新增技术形态识别（杯柄/双底/头肩底）
