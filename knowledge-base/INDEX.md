@@ -70,6 +70,7 @@
 | 模型切换指令规范 | [模型切换指令规范](operations/模型切换指令规范.md) | ✅已生效 | #OpenClaw #指令规范 |
 | 灾难恢复 | [灾难恢复手册](operations/灾难恢复手册.md) | ✅已生效 | #OpenClaw #紧急 |
 | 系统备份 | [system-backup 技能包](../skills/system-backup/SKILL.md) | ✅已部署 | #备份 #运维 |
+| **系统保护守卫** | [system-guard 技能包](../skills/system-guard/SKILL.md) | ✅已部署 | #安全 #技能包安装保护 |
 
 ## 问题索引
 
@@ -88,6 +89,7 @@
 | [ClawHub技能包调研](references/clawhub-skills-report.md) | ClawHub技能包完整调研 | #ClawHub #技能包 |
 | [本地技能包索引](references/local-skills-index.md) | 自定义技能包清单 | #技能包 #本地 |
 | [Stock Analysis Pro](references/stock-analysis-pro.md) | 专业股票分析技能包文档 | #股票 #技能包 #金融分析 |
+| [技能包备份指南](references/skills-backup-guide.md) | 技能包备份与恢复 | #备份 #技能包 |
 
 ## 统计信息
 
