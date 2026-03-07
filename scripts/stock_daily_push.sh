@@ -1,6 +1,6 @@
 #!/bin/bash
 # 自选股每日推送脚本 - 新浪财经+雪球融合版
-# 工作日下午15:30自动执行
+# 工作日下午16:30自动执行（港股16:10收盘，A股15:00收盘）
 
 cd /Users/zhaoruicn/.openclaw/workspace
 
