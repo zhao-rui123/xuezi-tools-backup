@@ -1,6 +1,6 @@
 ---
 name: time-toolkit
-description: 时间管理工具包 - 网络对时、世界时钟、时区转换
+description: 时间管理工具包 - 网络对时、世界时钟、时区转换、天气查询
 metadata:
   openclaw:
     requires:
@@ -14,6 +14,7 @@ metadata:
 - 🕐 **网络对时** - 检查系统时间与网络时间的差异
 - 🌍 **世界时钟** - 显示多个时区的当前时间
 - 🔄 **时区转换** - 转换任意时间到不同时区
+- 🌤️ **天气查询** - 查询全球城市天气、穿衣建议
 
 ## 使用方法
 
@@ -36,29 +37,50 @@ python3 time_sync.py sync
 python3 world_clock.py
 ```
 
-输出示例：
-```
-======================================================================
-🕐 世界时钟
-======================================================================
-🌍 北京     11:58:32 2026-03-07 Sat
-🌍 东京     12:58:32 2026-03-07 Sat
-🌍 悉尼     14:58:32 2026-03-07 Sat
-🌍 伦敦     03:58:32 2026-03-07 Sat
-🌍 纽约     22:58:32 2026-03-06 Fri
-🌍 洛杉矶   19:58:32 2026-03-06 Fri
-🌍 UTC      03:58:32 2026-03-07 Sat
-======================================================================
-```
-
 ### 3. 时区转换
 
 ```bash
 # 转换北京时间 14:30 到纽约时间
 python3 world_clock.py convert 北京 14:30 纽约
+```
 
-# 转换洛杉矶时间 9:00 到东京时间
-python3 world_clock.py convert 洛杉矶 9:00 东京
+### 4. 天气查询 🌤️
+
+**查询天气：**
+```bash
+python3 weather.py           # 默认查询北京
+python3 weather.py Shanghai  # 查询上海
+python3 weather.py Tokyo     # 查询东京
+python3 weather.py "New York" # 查询纽约
+```
+
+**输出示例：**
+```
+============================================================
+🌤️  Beijing天气
+============================================================
+
+当前温度: 15°C
+体感温度: 13°C
+天气状况: 晴
+相对湿度: 45%
+今日最高: 18°C
+今日最低: 8°C
+
+💡 🌤️ 天气舒适，正常穿着
+============================================================
+```
+
+**Python调用：**
+```python
+from weather import get_weather, quick_weather
+
+# 获取天气数据
+data = get_weather("Shanghai")
+print(f"温度: {data['temperature']}°C")
+
+# 快速获取格式化输出
+print(quick_weather("Tokyo"))
 ```
 
 ## 支持的时区
@@ -71,22 +93,19 @@ python3 world_clock.py convert 洛杉矶 9:00 东京
 - 洛杉矶 (America/Los_Angeles)
 - UTC
 
-## 与系统时间的关系
+## 天气数据来源
 
-**注意**：这个工具检查系统时间是否准确，但不会自动修改系统时间（需要管理员权限）。
-
-在 macOS 上，建议：
-1. 系统设置 → 日期与时间
-2. 勾选「自动设置日期与时间」
-3. 选择时间服务器如 `time.apple.com`
+- 使用 Open-Meteo 免费API
+- 无需API Key
+- 支持全球任意城市（按名称搜索）
 
 ## 定时检查
 
-可以添加到定时任务，每天检查时间：
 ```bash
 # 编辑 crontab
 crontab -e
 
-# 添加（每天8点检查）
+# 每天8点检查时间和天气
 0 8 * * * ~/.openclaw/workspace/skills/time-toolkit/time_sync.py check >> /tmp/time_check.log 2>&1
+0 8 * * * ~/.openclaw/workspace/skills/time-toolkit/weather.py >> /tmp/weather.log 2>&1
 ```
