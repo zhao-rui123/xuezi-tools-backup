@@ -173,6 +173,12 @@ XUEQIU_COOKIES = {
 3. 右键 → Copy → Copy as cURL (bash)
 4. 提取 `xq_a_token` 和 `xq_id_token`
 
+**⚠️ 安全提示（分享给朋友必读）**:
+- Cookie是你的个人认证信息，**绝对不要分享给他人**
+- 分享给朋友的技能包应该是**清洁版**（config/xueqiu_config.py 中的Cookie已清空）
+- 朋友需要自己登录雪球网站获取他们自己的Cookie
+- 每个人的Cookie不同，不能互相共用
+
 ---
 
 ## 📊 输出示例
