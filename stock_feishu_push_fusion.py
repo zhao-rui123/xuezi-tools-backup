@@ -13,6 +13,12 @@ import requests
 import re
 from datetime import datetime
 
+# 导入新模块
+sys.path.insert(0, '/Users/zhaoruicn/.openclaw/workspace')
+from stock_pattern_recognition import analyze_patterns, format_pattern_report
+from stock_valuation_screener import analyze_valuation, format_valuation_report
+from stock_deep_analysis import deep_analyze_stock, format_deep_analysis
+
 # 添加workspace到路径
 sys.path.insert(0, '/Users/zhaoruicn/.openclaw/workspace')
 
@@ -383,6 +389,42 @@ def generate_report():
             lines.append(f"   {rsi_emoji} RSI:{tech['rsi']:.1f}({tech['rsi_status']}) {dev_emoji} 偏离MA20:{tech['deviation']:+.1f}%")
         else:
             lines.append(f"⚪ {name}: 技术指标暂不可用")
+    
+    # 技术形态识别（新增）
+    lines.append("")
+    lines.append("【技术形态识别】")
+    pattern_found = False
+    for code, name, sector in WATCHLIST:
+        pattern = analyze_patterns(code, name)
+        if pattern and pattern.confidence >= 60:
+            pattern_found = True
+            emoji = "📐" if pattern.direction == "bullish" else "📉"
+            lines.append(f"{emoji} {name}: {pattern.pattern_name} ({pattern.confidence}%)")
+            lines.append(f"   {pattern.suggestion}")
+    if not pattern_found:
+        lines.append("   暂无明确技术形态信号")
+    
+    # 估值策略筛选（新增）
+    lines.append("")
+    lines.append("【估值策略筛选】")
+    codes_only = [s[0] for s in WATCHLIST]
+    names_dict = {s[0]: s[1] for s in WATCHLIST}
+    try:
+        val_results = analyze_valuation(codes_only)
+        
+        # PB-ROE前3
+        if val_results.get('pb_roe'):
+            lines.append("🏆 PB-ROE策略:")
+            for i, r in enumerate(val_results['pb_roe'][:3]):
+                lines.append(f"   {i+1}. {r.description}")
+        
+        # 综合评分前3
+        if val_results.get('comprehensive'):
+            lines.append("📊 综合估值:")
+            for i, r in enumerate(val_results['comprehensive'][:3]):
+                lines.append(f"   {i+1}. 得分{r.score} - {r.description}")
+    except Exception as e:
+        lines.append(f"   估值分析暂不可用")
     
     # 统计
     avg_change = total_change / len(WATCHLIST)
