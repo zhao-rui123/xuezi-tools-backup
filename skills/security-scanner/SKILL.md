@@ -1,13 +1,165 @@
 ---
 name: security-scanner
-description: 技能包安全检查工具 - 安装前扫描潜在风险，检测恶意代码和敏感操作
+description: 技能包安全检查工具 + 轻量级安全增强（危险操作确认、审计日志）
 metadata:
   openclaw:
     requires:
       bins: [python3]
 ---
 
-# Security Scanner - 技能包安全检查
+# Security Scanner - 安全检查与增强
+
+## 🛡️ 功能概述
+
+### 1. 技能包安全扫描（原有）
+- 扫描危险代码模式
+- 检测可疑文件操作
+- 检查硬编码凭证
+
+### 2. 危险操作确认（新增）
+在执行敏感操作前自动要求二次确认：
+- `rm -rf` 删除文件/目录
+- `chmod 777` 修改权限
+- `curl | sh` 执行网络脚本
+- 直接安装未经验证的技能包
+
+### 3. 审计日志（新增）
+记录关键操作便于追溯：
+- 文件操作（删除、修改）
+- 命令执行
+- 消息发送
+- 技能包安装/卸载
+- 自动保留30天，过期自动清理
+
+---
+
+## 🚀 快速开始
+
+### 启用安全增强
+
+```bash
+cd ~/.openclaw/workspace/skills/security-scanner
+./scripts/enable-safety.sh
+```
+
+### 测试危险操作确认
+
+```bash
+# 尝试删除文件（会触发确认）
+rm -rf ~/.openclaw/test.txt
+
+# 提示: 🛡️ 检测到危险操作: 删除文件/目录
+#       确认要永久删除 ~/.openclaw/test.txt 吗？(yes/no):
+```
+
+### 查看审计日志
+
+```bash
+# 查看最近24小时报告
+python3 audit_logger.py report
+
+# 查看最近7天
+python3 audit_logger.py report 168
+
+# 清理旧日志
+python3 audit_logger.py cleanup
+```
+
+---
+
+## 📊 审计日志内容
+
+日志位置: `~/.openclaw/.logs/audit.log`
+
+```json
+{"timestamp": "2026-03-07 15:30:00", "action": "file_delete", "details": "path: ~/.openclaw/test.txt, result: success", "level": "WARNING", "session": "abc123"}
+{"timestamp": "2026-03-07 15:31:00", "action": "command_execute", "details": "cmd: ls -la, status: executed", "level": "INFO", "session": "abc123"}
+```
+
+---
+
+## ⚙️ 配置说明
+
+### 危险操作白名单
+
+某些路径被认为是安全的，不需要确认：
+- `/tmp/`
+- `~/.openclaw/workspace/temp/`
+- `~/.openclaw/.cache/`
+
+### 关键保护文件
+
+这些文件删除前会自动备份：
+- `MEMORY.md`
+- `USER.md`
+- `openclaw.json`
+- `models.json`
+
+---
+
+## 📝 日志管理
+
+### 自动清理
+
+日志默认保留 **30天**，超过自动删除。
+
+### 手动清理
+
+```bash
+python3 audit_logger.py cleanup
+```
+
+### 生成报告
+
+```bash
+python3 audit_logger.py report 24  # 最近24小时
+```
+
+---
+
+## 🔒 安全级别
+
+| 功能 | 影响 | 建议 |
+|------|------|------|
+| 危险操作确认 | 中等（多一步确认） | ✅ 启用 |
+| 审计日志 | 无感知 | ✅ 启用 |
+| 关键文件备份 | 低（自动） | ✅ 启用 |
+
+**注意**: 这些措施对系统稳定性影响极小，主要用于防止误操作。
+
+---
+
+## 🎯 使用场景
+
+### 场景1: 防止误删文件
+```
+用户: 删除 xxx
+系统: 🛡️ 检测到危险操作: 删除文件/目录
+      确认要永久删除 xxx 吗？(yes/no): 
+用户: no
+系统: ❌ 操作已取消
+```
+
+### 场景2: 事后追溯
+```bash
+# 发现文件不见了
+python3 audit_logger.py report 24
+
+# 输出:
+# 📊 审计报告（最近24小时）
+# ==================================================
+# 总操作数: 15
+# 错误数: 0
+# 
+# 操作分布:
+#   - file_delete: 2次
+#   - command_execute: 10次
+#   - message_send: 3次
+```
+
+---
+
+**安全第一，但不要过度！** 🛡️
 
 ## 🛡️ 功能概述
 

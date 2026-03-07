@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪子助手 - 智能工具包生态系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 800;
+        }
+        
+        .hero .tagline {
+            font-size: 24px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+        }
+        
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 核心数据 */
+        .stats-section {
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+        }
+        
+        .stat-card .number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card .label {
+            font-size: 16px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        /* 区块标题 */
+        .section {
+            margin-top: 50px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: white;
+            font-weight: 700;
+        }
+        
+        /* 核心能力卡片 */
+        .abilities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        
+        .ability-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .ability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .ability-card .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .ability-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .ability-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        
+        .ability-card .features {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .ability-card .features li {
+            list-style: none;
+            font-size: 13px;
+            color: #888;
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .ability-card .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        /* 技能包分类 */
+        .skills-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+        
+        .skill-category {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-category:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .skill-category:nth-child(1) { border-color: #e74c3c; }
+        .skill-category:nth-child(2) { border-color: #f39c12; }
+        .skill-category:nth-child(3) { border-color: #27ae60; }
+        .skill-category:nth-child(4) { border-color: #3498db; }
+        .skill-category:nth-child(5) { border-color: #9b59b6; }
+        .skill-category:nth-child(6) { border-color: #1abc9c; }
+        .skill-category:nth-child(7) { border-color: #e67e22; }
+        .skill-category:nth-child(8) { border-color: #34495e; }
+        
+        .skill-category h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .skill-category ul {
+            list-style: none;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .skill-category li {
+            padding: 5px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+        
+        .skill-category li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+        
+        /* 时间线 */
+        .timeline-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 30px 20px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            background: white;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+            z-index: 1;
+            border: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .timeline-item .time {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .timeline-item .task {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 4px;
+        }
+        
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .footer p {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .footer .sub {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .abilities-grid { grid-template-columns: repeat(2, 1fr); }
+            .skills-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .abilities-grid { grid-template-columns: 1fr; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; gap: 20px; }
+            .timeline::before { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero区域 -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>🦞 雪子助手</h1>
+            <p class="tagline">智能工具包生态系统 · 生产级AI助手</p>
+            <div class="hero-badges">
+                <span class="badge">⚡ 储能新能源专家</span>
+                <span class="badge">📈 股票分析系统</span>
+                <span class="badge">🤖 多Agent开发</span>
+                <span class="badge">🛡️ 企业级安全</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- 核心数据 -->
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">20+</div>
+                    <div class="label">技能包</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">10K+</div>
+                    <div class="label">代码行</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">10+</div>
+                    <div class="label">自动化任务</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">99.9%</div>
+                    <div class="label">系统稳定性</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心能力 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <h2 class="section-title">核心能力</h2>
+            </div>
+            <div class="abilities-grid">
+                <div class="ability-card">
+                    <div class="icon">⚡</div>
+                    <h3>储能新能源解决方案</h3>
+                    <p>专业的储能项目测算与电站设计工具，支持全国31省份电价查询、工商业储能测算、不规则土地智能排布</p>
+                    <ul class="features">
+                        <li>全国分时电价查询（31省份）</li>
+                        <li>工商业储能项目测算</li>
+                        <li>储能电站智能排布系统</li>
+                        <li>国网电费清单处理</li>
+                    </ul>
+                </div>
+                <div class="ability-card">
+                    <div class="icon">📈</div>
+                    <h3>股票分析系统</h3>
+                    <p>A股+港股实时监控，三类股票差异化分析框架，技术指标+估值策略+自动化日报推送</p>
+                    <ul class="features">
+                        <li>8只自选股实时监控</li>
+                        <li>周期股/成长股/价值股分析</li>
+                        <li>技术形态识别（杯柄/双底）</li>
+                        <li>每日16:30自动推送</li>
+                    </ul>
+                </div>
+                <div class="ability-card">
+                    <div class="icon">🤖</div>
+                    <h3>多Agent开发框架</h3>
+                    <p>5-Agent并行开发流程，支持复杂项目快速交付，从需求分析到统一部署全流程自动化</p>
+                    <ul class="features">
+                        <li>Orchestrator任务分配</li>
+                        <li>Builder并行开发</li>
+                        <li>Reviewer代码审查</li>
+                        <li>Ops部署验证</li>
+                    </ul>
+                </div>
+                <div class="ability-card">
+                    <div class="icon">🛡️</div>
+                    <h3>企业级安全保护</h3>
+                    <p>多重安全机制：安装前扫描、沙箱测试、系统自动快照、一键回滚，防止恶意技能包破坏</p>
+                    <ul class="features">
+                        <li>security-scanner安全扫描</li>
+                        <li>system-guard系统保护</li>
+                        <li>自动快照备份</li>
+                        <li>一键回滚恢复</li>
+                    </ul>
+                </div>
+                <div class="ability-card">
+                    <div class="icon">🔄</div>
+                    <h3>自动化运维体系</h3>
+                    <p>无人值守自动化运维：定时任务、健康检查、系统备份、文件清理，3层备份策略保障</p>
+                    <ul class="features">
+                        <li>每日健康检查报告</li>
+                        <li>定时任务自动执行</li>
+                        <li>3层备份策略</li>
+                        <li>自动文件清理</li>
+                    </ul>
+                </div>
+                <div class="ability-card">
+                    <div class="icon">🧠</div>
+                    <h3>自我进化系统</h3>
+                    <p>从错误中学习：记录错误场景→总结解决方案→应用到MEMORY.md→避免重复犯错</p>
+                    <ul class="features">
+                        <li>错误记录与学习</li>
+                        <li>性能监控分析</li>
+                        <li>自动技能包维护</li>
+                        <li>持续优化改进</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技能包生态系统 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📦</div>
+                <h2 class="section-title">技能包生态系统</h2>
+            </div>
+            <div class="skills-container">
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h4>⚡ 储能新能源</h4>
+                        <ul>
+                            <li>electricity-price-query</li>
+                            <li>storage-calc</li>
+                            <li>energy-bill-processor</li>
+                            <li>storage-layout-ai</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>📈 股票分析</h4>
+                        <ul>
+                            <li>stock-analysis-pro</li>
+                            <li>stock-alert</li>
+                            <li>stock-earnings-calendar</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>📄 文档处理</h4>
+                        <ul>
+                            <li>office-pro</li>
+                            <li>pdf-data-extractor</li>
+                            <li>summarize</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>🔍 搜索工具</h4>
+                        <ul>
+                            <li>web-search</li>
+                            <li>skill-finder</li>
+                            <li>data-processor</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>🛡️ 安全防护</h4>
+                        <ul>
+                            <li>security-scanner</li>
+                            <li>system-guard</li>
+                            <li>system-backup</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>🧠 自我进化</h4>
+                        <ul>
+                            <li>self-improvement</li>
+                            <li>performance-monitor</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>🛠️ 系统工具</h4>
+                        <ul>
+                            <li>time-toolkit</li>
+                            <li>file-management</li>
+                            <li>git-workflow</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>📊 数据可视化</h4>
+                        <ul>
+                            <li>chart-generator</li>
+                            <li>report-generator</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 自动化运维 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">⏰</div>
+                <h2 class="section-title">自动化运维时间线</h2>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="time">00:00</span>
+                        <span class="task">备份检查</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time">08:00</span>
+                        <span class="task">健康检查</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time">08:30</span>
+                        <span class="task">英语新闻</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time">16:30</span>
+                        <span class="task">股票日报</span>
+                    </div>
+                    <div class="timeline-item">
+                        <span class="time">22:00</span>
+                        <span class="task">系统备份</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部 -->
+    <div class="footer">
+        <p>🦞 不只是聊天机器人，是生产级的智能工具包生态系统</p>
+        <p class="sub">储能新能源专家 · 股票分析师 · 自动化运维 · 安全保护</p>
+    </div>
+</body>
+</html>

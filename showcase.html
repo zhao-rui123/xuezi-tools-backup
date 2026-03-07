@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪子助手 - 智能工具包生态系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        
+        /* 核心数据卡片 */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .number {
+            font-size: 42px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-card .label {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* 核心能力 */
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title .icon {
+            font-size: 32px;
+        }
+        
+        /* 能力卡片 */
+        .abilities {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .ability-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .ability-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ability-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* 技能包分类 */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .skill-category {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-top: 4px solid;
+        }
+        
+        .skill-category:nth-child(1) { border-color: #e74c3c; }
+        .skill-category:nth-child(2) { border-color: #3498db; }
+        .skill-category:nth-child(3) { border-color: #2ecc71; }
+        .skill-category:nth-child(4) { border-color: #f39c12; }
+        .skill-category:nth-child(5) { border-color: #9b59b6; }
+        .skill-category:nth-child(6) { border-color: #1abc9c; }
+        
+        .skill-category h4 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .skill-category ul {
+            list-style: none;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .skill-category li {
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+        
+        .skill-category li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        /* 时间线 */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            z-index: 0;
+        }
+        
+        .timeline-item {
+            background: white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1;
+            border: 3px solid #667eea;
+        }
+        
+        .timeline-item .time {
+            font-size: 14px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .timeline-item .task {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-top: 2px;
+        }
+        
+        /* 底部标语 */
+        .footer {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .abilities {
+                grid-template-columns: 1fr;
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <div class="header">
+            <h1>🦞 雪子助手</h1>
+            <p class="subtitle">智能工具包生态系统 · 生产级AI助手</p>
+        </div>
+        
+        <!-- 核心数据 -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number">20+</div>
+                <div class="label">技能包</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">10K+</div>
+                <div class="label">代码行</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">10+</div>
+                <div class="label">自动化任务</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">99.9%</div>
+                <div class="label">稳定性</div>
+            </div>
+        </div>
+        
+        <!-- 五大核心能力 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">🎯</span>五大核心能力</h2>
+            <div class="abilities">
+                <div class="ability-card">
+                    <h3>📈 股票分析系统</h3>
+                    <p>专业级分析框架：三类股票差异化（周期/成长/价值）、技术形态识别、估值策略筛选、每日16:30自动推送完整报告</p>
+                </div>
+                <div class="ability-card">
+                    <h3>📦 技能包生态</h3>
+                    <p>20+可复用技能包像搭积木一样组合：股票分析、文档处理、数据搜索、安全防护，每个都有完整文档和版本控制</p>
+                </div>
+                <div class="ability-card">
+                    <h3>🔄 自动化运维</h3>
+                    <p>定时任务全自动：每日健康检查、股票日报推送、系统备份、文件清理，3层备份策略保障数据安全</p>
+                </div>
+                <div class="ability-card">
+                    <h3>🤖 多Agent开发</h3>
+                    <p>5-Agent并行开发流程：需求分析→并行开发→审查验证→统一部署，支持复杂项目快速交付</p>
+                </div>
+                <div class="ability-card">
+                    <h3>🧠 自我进化</h3>
+                    <p>从错误中学习：记录错误→总结方案→应用到MEMORY.md→避免重复犯错，持续优化改进</p>
+                </div>
+                <div class="ability-card">
+                    <h3>🛡️ 安全保护</h3>
+                    <p>多重安全机制：安装前扫描危险代码、沙箱测试、系统自动快照、一键回滚，防止恶意技能包破坏</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技能包分类 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">📦</span>技能包生态系统</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>📈 股票分析</h4>
+                    <ul>
+                        <li>stock-analysis-pro</li>
+                        <li>stock-alert</li>
+                        <li>stock-earnings-calendar</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h4>🔍 搜索工具</h4>
+                    <ul>
+                        <li>web-search</li>
+                        <li>skill-finder</li>
+                        <li>summarize</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h4>📄 文档处理</h4>
+                    <ul>
+                        <li>office-pro</li>
+                        <li>pdf-data-extractor</li>
+                        <li>nano-pdf</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h4>🛡️ 安全防护</h4>
+                    <ul>
+                        <li>security-scanner</li>
+                        <li>system-guard</li>
+                        <li>system-backup</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h4>🧠 自我进化</h4>
+                    <ul>
+                        <li>self-improvement</li>
+                        <li>performance-monitor</li>
+                    </ul>
+                </div>
+                <div class="skill-category">
+                    <h4>🛠️ 系统工具</h4>
+                    <ul>
+                        <li>time-toolkit</li>
+                        <li>file-management</li>
+                        <li>data-processor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 自动化运维时间线 -->
+        <div class="section">
+            <h2 class="section-title"><span class="icon">⏰</span>自动化运维时间线</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="time">00:00</span>
+                    <span class="task">备份检查</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="time">08:00</span>
+                    <span class="task">健康检查</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="time">08:30</span>
+                    <span class="task">英语新闻</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="time">16:30</span>
+                    <span class="task">股票日报</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="time">22:00</span>
+                    <span class="task">系统备份</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="footer">
+            <p>🦞 不只是聊天机器人，是生产级的智能工具包生态系统</p>
+        </div>
+    </div>
+</body>
+</html>
