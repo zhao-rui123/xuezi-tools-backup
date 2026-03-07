@@ -196,6 +196,37 @@ if backup_with_retry "$WORKSPACE_SKILLS_SOURCE" "$BACKUP_DIR/workspace-skills" "
     ws_skills_success=true
     ws_skills_files=$(find "$BACKUP_DIR/workspace-skills" -type f 2>/dev/null | wc -l)
     ws_skills_info="$ws_skills_files个文件"
+    
+    # 额外生成 tar.gz 压缩包（用于分享和恢复）
+    log "Creating tar.gz archive for skills..."
+    mkdir -p "$BACKUP_DIR/skills-backup"
+    DATE=$(date +%Y%m%d_%H%M%S)
+    BACKUP_NAME="skills-backup-${DATE}.tar.gz"
+    LATEST_LINK="$BACKUP_DIR/skills-backup/latest"
+    
+    tar -czf "$BACKUP_DIR/skills-backup/$BACKUP_NAME" \
+        --exclude='__pycache__' \
+        --exclude='*.pyc' \
+        --exclude='.DS_Store' \
+        --exclude='*.backup' \
+        -C "$BACKUP_DIR" \
+        workspace-skills/ 2>/dev/null
+    
+    if [ $? -eq 0 ]; then
+        log "SUCCESS: tar.gz archive created: $BACKUP_NAME"
+        # 更新 latest 链接
+        rm -f "$LATEST_LINK"
+        ln -s "$BACKUP_DIR/skills-backup/$BACKUP_NAME" "$LATEST_LINK"
+        # 清理旧备份（保留最近30个）
+        local count=$(ls -1 "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz 2>/dev/null | wc -l)
+        if [ $count -gt 30 ]; then
+            log "Cleaning old tar.gz backups (keeping 30)..."
+            ls -1t "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz | tail -n +31 | xargs rm -f
+        fi
+        ws_skills_info="$ws_skills_info + tar.gz"
+    else
+        log "WARNING: Failed to create tar.gz archive"
+    fi
 fi
 
 # 备份 OpenClaw 配置

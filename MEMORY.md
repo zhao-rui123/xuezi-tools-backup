@@ -354,3 +354,89 @@ media: "/tmp/test.png"  // 会失败
 - - 清理云服务器磁盘空间（从88%降到51%）
 - - 投资2600万，年收益555万，回收期4.95年
 
+---
+
+## 安全与隐私准则 [2026-03-07 更新]
+
+### 🔐 技能包分享安全规范
+
+**重要原则：分享技能包给朋友时，必须移除所有个人信息**
+
+#### 必须移除的内容：
+- API Key / Token（如雪球 xq_a_token、xq_id_token）
+- Cookie 信息
+- 用户ID（如飞书 user_id）
+- 设备标识符
+- 个人配置路径
+
+#### 处理流程：
+1. 创建配置模板文件（.template）
+2. 将实际配置文件中的敏感信息替换为占位符
+3. 打包时排除 .backup 等临时文件
+4. 在文档中明确说明需要朋友自行配置
+
+#### 示例（雪球配置）：
+```python
+# 分享前 - 需要改成：
+XUEQIU_COOKIES = {
+    'xq_a_token': '请填入你的token',
+    'xq_id_token': '请填入你的id_token',
+}
+```
+
+#### 已执行：
+- ✅ 2026-03-07 stock-analysis-pro v2.1.0 清洁版已创建
+- ✅ 朋友版本移除了所有Cookie和个人ID
+- ✅ 添加了模板配置说明
+
+**违反后果**：泄露Cookie可能导致账号被盗用、API额度被消耗等风险。
+
+---
+
+## 技能包自动备份系统 [2026-03-07 更新]
+
+### 备份配置（已合并）
+- **备份时间**: 每天 22:00
+- **备份脚本**: `~/.openclaw/workspace/skills/system-backup/scripts/daily-backup.sh`
+- **备份内容**:
+  1. Memory → `/Volumes/cu/ocu/memory/`
+  2. Skills → `/Volumes/cu/ocu/skills/`
+  3. **Workspace Skills → `/Volumes/cu/ocu/workspace-skills/` (文件夹同步)**
+  4. **Workspace Skills → `/Volumes/cu/ocu/skills-backup/*.tar.gz` (压缩包)**
+  5. OpenClaw配置 → `/Volumes/cu/ocu/openclaw-config/`
+
+### 两种备份格式
+| 格式 | 位置 | 用途 |
+|------|------|------|
+| **文件夹同步** | `workspace-skills/` | 快速恢复、查看文件 |
+| **tar.gz压缩包** | `skills-backup/` | 分享、迁移到其他电脑 |
+
+### 保留策略
+- 文件夹同步：始终保留最新版本
+- tar.gz压缩包：保留最近30个历史版本
+
+### 使用方法
+```bash
+# 查看备份
+ls /Volumes/cu/ocu/workspace-skills/      # 文件夹版本
+ls /Volumes/cu/ocu/skills-backup/         # 压缩包版本
+
+# 恢复到新电脑
+cd ~/.openclaw/workspace
+tar -xzvf /Volumes/cu/ocu/skills-backup/latest
+
+# 手动执行备份
+~/.openclaw/workspace/skills/system-backup/scripts/daily-backup.sh
+```
+
+
+---
+
+## 用户偏好设置 [2026-03-07]
+
+### 时区偏好
+- **用户所在时区**: 北京时间 (CST, UTC+8)
+- **系统当前时区**: 洛杉矶时间 (PST, UTC-8)
+- **时间差**: 北京时间 = 系统时间 + 16小时
+
+**要求**: 以后所有时间表述使用北京时间，避免混淆。
