@@ -205,6 +205,36 @@ sensitivity = model.sensitivity_analysis(
 - `storage-calc` - 储能专项测算
 - `stock-analysis-pro` - 投资收益分析
 
+## Excel报告生成（新增）
+
+生成带图表的专业Excel财务报告：
+
+```python
+from excel_report_generator import ExcelReportGenerator
+
+# 创建Excel报告生成器
+generator = ExcelReportGenerator(model)
+
+# 生成报告
+output_path = generator.generate_report('/path/to/报告.xlsx')
+```
+
+### Excel报告包含
+
+| 工作表 | 内容 | 图表 |
+|--------|------|------|
+| **财务摘要** | 核心指标、投资构成 | 投资构成饼图 |
+| **现金流明细** | 逐年现金流 | 现金流趋势折线图 |
+| **投资分析** | 投资构成、资金来源 | - |
+
+### 报告特点
+
+- ✅ **专业配色** - 蓝白商务风格
+- ✅ **智能判断** - NPV/IRR自动标注✓⚠✗
+- ✅ **金额格式化** - 万元单位，千分位分隔
+- ✅ **可视化图表** - 饼图、折线图
+- ✅ **自动结论** - 生成文字分析结论
+
 ---
 
 *适用于中国税收法规和会计准则，2024年版*
