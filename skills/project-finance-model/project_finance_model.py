@@ -269,12 +269,9 @@ class ProjectFinancialModel:
         # NPV（净现值）
         npv = -total_investment + sum(y.discounted_cf for y in self.yearly_data)
         
-        # IRR（内部收益率）- 用近似法
+        # IRR（内部收益率）- 使用手动计算（numpy 2.0+已移除np.irr）
         cash_flows = [-total_investment] + [y.cash_flow for y in self.yearly_data]
-        try:
-            irr = np.irr(cash_flows)
-        except:
-            irr = self._calculate_irr_manual(cash_flows)
+        irr = self._calculate_irr_manual(cash_flows)
         
         # 回收期
         payback_period = self._calculate_payback_period()
@@ -313,15 +310,52 @@ class ProjectFinancialModel:
         return self.metrics
     
     def _calculate_irr_manual(self, cash_flows: List[float]) -> float:
-        """手动计算IRR（牛顿迭代法）"""
+        """手动计算IRR（二分查找+牛顿迭代混合）"""
         def npv(rate):
-            return sum(cf / (1 + rate) ** i for i, cf in enumerate(cash_flows))
+            return sum(cf / ((1 + rate) ** i) for i, cf in enumerate(cash_flows))
         
-        # 试错法
-        for r in np.linspace(-0.5, 1.0, 150):
-            if abs(npv(r)) < 0.01:
-                return r
-        return 0.0
+        # 检查现金流符号变化
+        signs = [1 if cf > 0 else -1 if cf < 0 else 0 for cf in cash_flows]
+        if not any(s > 0 for s in signs) or not any(s < 0 for s in signs):
+            return 0.0  # 没有符号变化，无解
+        
+        # 二分查找确定大致范围
+        low, high = -0.99, 10.0  # -99% 到 1000%
+        
+        # 确保high足够大
+        while npv(high) > 0 and high < 100:
+            high *= 2
+        
+        # 二分查找
+        for _ in range(50):
+            mid = (low + high) / 2
+            npv_mid = npv(mid)
+            
+            if abs(npv_mid) < 0.0001:
+                return mid
+            
+            if npv_mid > 0:
+                low = mid
+            else:
+                high = mid
+        
+        # 牛顿迭代精化
+        rate = (low + high) / 2
+        for _ in range(20):
+            npv_val = npv(rate)
+            if abs(npv_val) < 0.00001:
+                break
+            
+            # 数值微分
+            h = 0.0001
+            derivative = (npv(rate + h) - npv(rate - h)) / (2 * h)
+            
+            if abs(derivative) < 1e-10:
+                break
+            
+            rate = rate - npv_val / derivative
+        
+        return rate
     
     def _calculate_payback_period(self) -> float:
         """计算静态回收期"""
