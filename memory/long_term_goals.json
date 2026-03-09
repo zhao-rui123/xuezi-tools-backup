@@ -1,0 +1,304 @@
+{
+  "goals": [
+    {
+      "id": "goal_20260309_011910",
+      "title": "个性化学习模型",
+      "description": "基于用户行为训练的个性化推荐和响应优化模型",
+      "category": "个性化模型",
+      "start_date": "2026-03-09",
+      "target_date": "2026-09-05",
+      "status": "active",
+      "progress": 0.0,
+      "priority": 4,
+      "keywords": [
+        "化模型",
+        "训练的个性化",
+        "推荐和响应优",
+        "个性化学习模",
+        "基于用户行为"
+      ],
+      "created_at": "2026-03-09T01:19:10.367063",
+      "updated_at": "2026-03-09T07:11:52.417196",
+      "milestones": [
+        {
+          "task_id": "task_goal_20260309_011910_1",
+          "title": "偏好收集机制设计"
+        },
+        {
+          "task_id": "task_goal_20260309_011910_2",
+          "title": "行为分析模块开发"
+        },
+        {
+          "task_id": "task_goal_20260309_011910_3",
+          "title": "推荐算法实现"
+        },
+        {
+          "task_id": "task_goal_20260309_011910_4",
+          "title": "模型训练与调优"
+        }
+      ],
+      "related_memories": [
+        9
+      ]
+    },
+    {
+      "id": "goal_20260309_011930_a843",
+      "title": "知识图谱系统开发",
+      "description": "构建增强型知识图谱，支持实体关系自动提取和可视化",
+      "category": "知识图谱",
+      "start_date": "2026-03-09",
+      "target_date": "2026-06-07",
+      "status": "active",
+      "progress": 25.0,
+      "priority": 5,
+      "keywords": [
+        "视化",
+        "知识图谱系统",
+        "自动提取和可",
+        "开发",
+        "构建增强型知",
+        "识图谱",
+        "支持实体关系"
+      ],
+      "created_at": "2026-03-09T01:19:30.626670",
+      "updated_at": "2026-03-09T07:11:52.417264",
+      "milestones": [
+        {
+          "task_id": "task_goal_20260309_011930_a843_1",
+          "title": "需求分析与架构设计"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_a843_2",
+          "title": "核心模块开发"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_a843_3",
+          "title": "数据模型设计"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_a843_4",
+          "title": "功能测试与优化"
+        }
+      ],
+      "related_memories": [
+        7,
+        10,
+        12
+      ]
+    },
+    {
+      "id": "goal_20260309_011930_8bdb",
+      "title": "多模态记忆系统实现",
+      "description": "整合图像、音频等多模态数据的记忆存储与检索",
+      "category": "多模态记忆",
+      "start_date": "2026-03-09",
+      "target_date": "2026-07-07",
+      "status": "active",
+      "progress": 0.0,
+      "priority": 4,
+      "keywords": [
+        "统实现",
+        "数据的记忆存",
+        "多模态记忆系",
+        "音频等多模态",
+        "储与检索",
+        "整合图像"
+      ],
+      "created_at": "2026-03-09T01:19:30.667627",
+      "updated_at": "2026-03-09T07:11:52.417319",
+      "milestones": [
+        {
+          "task_id": "task_goal_20260309_011930_8bdb_1",
+          "title": "技术调研与方案选型"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_8bdb_2",
+          "title": "图像处理模块开发"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_8bdb_3",
+          "title": "音频处理模块开发"
+        },
+        {
+          "task_id": "task_goal_20260309_011930_8bdb_4",
+          "title": "跨模态关联实现"
+        }
+      ],
+      "related_memories": [
+        8,
+        11
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_goal_20260309_011910_1",
+      "goal_id": "goal_20260309_011910",
+      "title": "偏好收集机制设计",
+      "description": "为达成'个性化学习模型'的子任务",
+      "due_date": "2026-04-23",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 16,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:12.971165"
+    },
+    {
+      "id": "task_goal_20260309_011910_2",
+      "goal_id": "goal_20260309_011910",
+      "title": "行为分析模块开发",
+      "description": "为达成'个性化学习模型'的子任务",
+      "due_date": "2026-06-07",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 32,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:12.971170"
+    },
+    {
+      "id": "task_goal_20260309_011910_3",
+      "goal_id": "goal_20260309_011910",
+      "title": "推荐算法实现",
+      "description": "为达成'个性化学习模型'的子任务",
+      "due_date": "2026-07-22",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 24,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:12.971173"
+    },
+    {
+      "id": "task_goal_20260309_011910_4",
+      "goal_id": "goal_20260309_011910",
+      "title": "模型训练与调优",
+      "description": "为达成'个性化学习模型'的子任务",
+      "due_date": "2026-09-05",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 24,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:12.971174"
+    },
+    {
+      "id": "task_goal_20260309_011930_a843_1",
+      "goal_id": "goal_20260309_011930_a843",
+      "title": "需求分析与架构设计",
+      "description": "为达成'知识图谱系统开发'的子任务",
+      "due_date": "2026-03-31",
+      "status": "completed",
+      "priority": 5,
+      "estimated_hours": 16,
+      "actual_hours": 16.0,
+      "completed_at": "2026-03-09T01:19:54.471096",
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.067192"
+    },
+    {
+      "id": "task_goal_20260309_011930_a843_2",
+      "goal_id": "goal_20260309_011930_a843",
+      "title": "核心模块开发",
+      "description": "为达成'知识图谱系统开发'的子任务",
+      "due_date": "2026-04-22",
+      "status": "pending",
+      "priority": 5,
+      "estimated_hours": 40,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.067197"
+    },
+    {
+      "id": "task_goal_20260309_011930_a843_3",
+      "goal_id": "goal_20260309_011930_a843",
+      "title": "数据模型设计",
+      "description": "为达成'知识图谱系统开发'的子任务",
+      "due_date": "2026-05-14",
+      "status": "pending",
+      "priority": 5,
+      "estimated_hours": 24,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.067200"
+    },
+    {
+      "id": "task_goal_20260309_011930_a843_4",
+      "goal_id": "goal_20260309_011930_a843",
+      "title": "功能测试与优化",
+      "description": "为达成'知识图谱系统开发'的子任务",
+      "due_date": "2026-06-05",
+      "status": "pending",
+      "priority": 5,
+      "estimated_hours": 16,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.067202"
+    },
+    {
+      "id": "task_goal_20260309_011930_8bdb_1",
+      "goal_id": "goal_20260309_011930_8bdb",
+      "title": "技术调研与方案选型",
+      "description": "为达成'多模态记忆系统实现'的子任务",
+      "due_date": "2026-04-08",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 12,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.109019"
+    },
+    {
+      "id": "task_goal_20260309_011930_8bdb_2",
+      "goal_id": "goal_20260309_011930_8bdb",
+      "title": "图像处理模块开发",
+      "description": "为达成'多模态记忆系统实现'的子任务",
+      "due_date": "2026-05-08",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 32,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.109023"
+    },
+    {
+      "id": "task_goal_20260309_011930_8bdb_3",
+      "goal_id": "goal_20260309_011930_8bdb",
+      "title": "音频处理模块开发",
+      "description": "为达成'多模态记忆系统实现'的子任务",
+      "due_date": "2026-06-07",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 32,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.109025"
+    },
+    {
+      "id": "task_goal_20260309_011930_8bdb_4",
+      "goal_id": "goal_20260309_011930_8bdb",
+      "title": "跨模态关联实现",
+      "description": "为达成'多模态记忆系统实现'的子任务",
+      "due_date": "2026-07-07",
+      "status": "pending",
+      "priority": 4,
+      "estimated_hours": 24,
+      "actual_hours": 0,
+      "completed_at": null,
+      "related_memories": [],
+      "created_at": "2026-03-09T01:19:34.109026"
+    }
+  ],
+  "updated_at": "2026-03-09T07:11:52.417411"
+}

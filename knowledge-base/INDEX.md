@@ -20,6 +20,19 @@
 
 ## 项目索引
 
+### 🟢 小龙虾之家（AI助手看板）
+| 文档 | 内容 | 标签 | 更新时间 |
+|------|------|------|---------|
+| [项目概览](projects/小龙虾之家/README.md) | AI助手工作状态可视化看板 | #AI助手 #可视化 #看板 | 2026-03-09 |
+
+**核心功能**:
+- 9宫格像素房子，小龙虾实时跟随工作状态
+- 今日统计：任务、Token、工作时长
+- 近7天统计：累计数据可视化
+- 成就墙：12个徽章系统
+- 数据持久化 + 飞书日报推送
+- **访问**: http://106.54.25.161/my-home/
+
 ### 🟢 储能工具包
 | 文档 | 内容 | 标签 | 更新时间 |
 |------|------|------|---------|
@@ -91,13 +104,26 @@
 | [Stock Analysis Pro](references/stock-analysis-pro.md) | 专业股票分析技能包文档 | #股票 #技能包 #金融分析 |
 | [技能包备份指南](references/skills-backup-guide.md) | 技能包备份与恢复 | #备份 #技能包 |
 
+
+### 2026-03月度高频主题与关键词
+
+**高频关键词**: api, openclaw, agent, workspace, 修复
+
+**核心主题**:
+- 技能包开发 (1次)
+- 系统运维 (1次)
+
+**来源**: [月度摘要](memory/summary/2026-03-summary.md) | [永久记忆](memory/permanent/2026-03-permanent.md)
+
 ## 统计信息
 
-- **项目数**: 3
+- **系统更新**: 2026-03-10 - 统一记忆系统联动更新
+
+- **项目数**: 4
 - **决策数**: 3
 - **运维文档**: 5
-- **技能包**: 4 (office-pro, system-backup, xueqiu-stock-client, stock-analysis-pro)
-- **最后更新**: 2026-03-07
+- **技能包**: 5 (office-pro, system-backup, xueqiu-stock-client, stock-analysis-pro, lobster-home)
+- **最后更新**: 2026-03-09
 
 ---
 *使用 [GUIDE.md](GUIDE.md) 了解知识库使用规范*

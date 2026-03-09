@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-03-10T01:00:02.048907",
+  "records": [
+    {
+      "timestamp": "2026-03-09T19:31:10.240003",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-07.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/下午/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 下午"
+    },
+    {
+      "timestamp": "2026-03-09T19:31:10.240187",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-03.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/decisions/2026-03-09-使用新浪财经免费API获取实时行情-暂不需要购买付费数据源-.md",
+      "operation": "create",
+      "status": "success",
+      "details": "决策: 使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股"
+    },
+    {
+      "timestamp": "2026-03-09T19:31:10.240435",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-08.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/1--小龙虾之家---AI助手工作状态看板-/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 1. 小龙虾之家 - AI助手工作状态看板 "
+    },
+    {
+      "timestamp": "2026-03-09T20:51:40.175454",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-07.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/下午/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 下午"
+    },
+    {
+      "timestamp": "2026-03-09T20:51:40.175634",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-03.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/decisions/2026-03-09-使用新浪财经免费API获取实时行情-暂不需要购买付费数据源-.md",
+      "operation": "create",
+      "status": "success",
+      "details": "决策: 使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股"
+    },
+    {
+      "timestamp": "2026-03-09T20:51:40.175850",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-08.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/1--小龙虾之家---AI助手工作状态看板-/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 1. 小龙虾之家 - AI助手工作状态看板 "
+    },
+    {
+      "timestamp": "2026-03-10T01:00:02.042824",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-07.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/下午/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 下午"
+    },
+    {
+      "timestamp": "2026-03-10T01:00:02.043220",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-03.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/decisions/2026-03-10-使用新浪财经免费API获取实时行情-暂不需要购买付费数据源-.md",
+      "operation": "create",
+      "status": "success",
+      "details": "决策: 使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股"
+    },
+    {
+      "timestamp": "2026-03-10T01:00:02.043554",
+      "source": "/Users/zhaoruicn/.openclaw/workspace/memory/2026-03-08.md",
+      "target": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/projects/1--小龙虾之家---AI助手工作状态看板-/summary.md",
+      "operation": "create",
+      "status": "success",
+      "details": "项目: 1. 小龙虾之家 - AI助手工作状态看板 "
+    }
+  ]
+}

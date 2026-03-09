@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-03-10T01:00:02.347297",
+  "summary": {
+    "total_docs": 38,
+    "active_docs": 38,
+    "stale_docs": 0,
+    "archived_docs": 0
+  },
+  "category_distribution": {
+    "other": 4,
+    "reference": 7,
+    "project": 7,
+    "decision": 10,
+    "operation": 5,
+    "template": 3,
+    "problem": 2
+  },
+  "quality_distribution": {
+    "high": 33,
+    "medium": 5,
+    "low": 0
+  },
+  "high_value_docs": [
+    {
+      "path": "INDEX.md",
+      "title": "知识库全局索引",
+      "importance": 1.0
+    },
+    {
+      "path": "GUIDE.md",
+      "title": "知识库使用指南",
+      "importance": 0.9500000000000002
+    },
+    {
+      "path": "README.md",
+      "title": "雪子的知识库",
+      "importance": 0.9000000000000001
+    },
+    {
+      "path": "projects/记忆管理升级方案.md",
+      "title": "长期记忆管理升级方案",
+      "importance": 0.9000000000000001
+    },
+    {
+      "path": "decisions/2026-03-04-知识库管理体系建立.md",
+      "title": "2026-03-04 知识库管理体系建立",
+      "importance": 0.9000000000000001
+    },
+    {
+      "path": "plans/unified-memory-long-term-plan.md",
+      "title": "统一记忆系统长期规划 (Unified Memory System Long-Term Plan)",
+      "importance": 0.8500000000000002
+    },
+    {
+      "path": "decisions/2026-03-06-备份策略升级.md",
+      "title": "决策记录：备份策略升级",
+      "importance": 0.8500000000000001
+    },
+    {
+      "path": "operations/灾难恢复手册.md",
+      "title": "OpenClaw 灾难恢复手册",
+      "importance": 0.8000000000000002
+    },
+    {
+      "path": "references/local-skills-index.md",
+      "title": "本地技能包索引",
+      "importance": 0.8
+    },
+    {
+      "path": "references/模型配置参考.md",
+      "title": "参考资料 - 模型配置",
+      "importance": 0.8
+    }
+  ],
+  "recommendations": []
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 雪子助手的温馨小家</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 左上角统计面板 -->
+    <div class="stats-panel">
+        <div class="stats-header">📊 今日统计</div>
+        <div class="stat-item">
+            <span class="stat-label">完成任务:</span>
+            <span class="stat-value" id="task-count">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Token消耗:</span>
+            <span class="stat-value" id="token-count">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">工作时长:</span>
+            <span class="stat-value" id="work-time">0h 0m</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">当前位置:</span>
+            <span class="stat-value location-badge" id="current-room">客厅</span>
+        </div>
+    </div>
+
+    <!-- 近七天统计面板 -->
+    <div class="charts-panel" id="charts-panel">
+        <div class="charts-header">📈 近7天总计</div>
+        <div class="charts-content" id="charts-content">
+            <!-- 动态生成总计数据 -->
+        </div>
+    </div>
+
+    <!-- 主游戏区域 -->
+    <div class="game-container">
+        <!-- 房子标题 -->
+        <div class="house-title">🏠 雪子助手的温馨小家</div>
+        
+        <!-- 房子主体 -->
+        <div class="house" id="house">
+            
+            <div class="room-row">
+                <div class="room side-room tea-room" data-room="tearoom" id="room-tearoom">
+                    <div class="room-header"><span class="room-icon">🍵</span><span class="room-name">茶水室</span></div>
+                    <div class="room-content">
+                        <div class="furniture tea-set">🫖</div>
+                        <div class="furniture zen-plant">🪴</div>
+                    </div>
+                </div>
+                
+                <div class="room side-room kitchen" data-room="kitchen" id="room-kitchen">
+                    <div class="room-header"><span class="room-icon">🍳</span><span class="room-name">厨房</span></div>
+                    <div class="room-content">
+                        <div class="furniture cooking">🔥</div>
+                        <div class="furniture fridge">❄️</div>
+                    </div>
+                </div>
+                
+                <div class="room side-room gameroom" data-room="gameroom" id="room-gameroom">
+                    <div class="room-header"><span class="room-icon">🎮</span><span class="room-name">游戏室</span></div>
+                    <div class="room-content">
+                        <div class="furniture rgb-setup">🖥️</div>
+                        <div class="furniture gaming-chair">🪑</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="room-row center-row">
+                <div class="room side-room bathroom" data-room="bathroom1" id="room-bathroom1">
+                    <div class="room-header"><span class="room-icon">🚽</span><span class="room-name">卫生间</span></div>
+                    <div class="room-content">
+                        <div class="furniture toilet">🚽</div>
+                        <div class="furniture phone">📱</div>
+                    </div>
+                </div>
+                
+                <div class="room center-room livingroom" data-room="livingroom" id="room-livingroom">
+                    <div class="room-header"><span class="room-icon">📺</span><span class="room-name">客厅</span></div>
+                    <div class="room-content">
+                        <div class="furniture big-sofa">🛋️</div>
+                        <div class="furniture tv-center">📺</div>
+                        <div class="furniture coffee-table">☕</div>
+                        <div class="center-badge">C位</div>
+                    </div>
+                </div>
+                
+                <div class="room side-room workspace" data-room="workspace" id="room-workspace">
+                    <div class="room-header"><span class="room-icon">💻</span><span class="room-name">工作室</span></div>
+                    <div class="room-content">
+                        <div class="furniture computer">🖥️</div>
+                        <div class="furniture books">📚</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="room-row">
+                <div class="room side-room dining" data-room="dining" id="room-dining">
+                    <div class="room-header"><span class="room-icon">🍽️</span><span class="room-name">餐厅</span></div>
+                    <div class="room-content">
+                        <div class="furniture dining-table">🍜</div>
+                        <div class="furniture chandelier">💡</div>
+                    </div>
+                </div>
+                
+                <div class="room side-room bedroom" data-room="bedroom" id="room-bedroom">
+                    <div class="room-header"><span class="room-icon">🛏️</span><span class="room-name">主卧</span></div>
+                    <div class="room-content">
+                        <div class="furniture bed">🛌</div>
+                        <div class="furniture moon">🌙</div>
+                    </div>
+                </div>
+                
+                <div class="room side-room bathroom" data-room="bathroom2" id="room-bathroom2">
+                    <div class="room-header"><span class="room-icon">🚿</span><span class="room-name">浴室</span></div>
+                    <div class="room-content">
+                        <div class="furniture shower">🚿</div>
+                        <div class="furniture towel">🧻</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="balcony-door">
+                <div class="arrow-down">⬇️</div>
+            </div>
+        </div>
+        
+        <div class="balcony-playground" data-room="playground" id="room-playground">
+            <div class="balcony-header">🌞 阳台运动场</div>
+            
+            <div class="balcony-content">
+                <div class="sky">
+                    <div class="sun">☀️</div>
+                    <div class="cloud">☁️</div>
+                </div>
+                
+                <div class="ground">
+                    <div class="equipment">🏋️</div>
+                    <div class="equipment">🧘</div>
+                    <div class="equipment">🏃</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 小龙虾 -->
+        <div class="lobster" id="lobster">
+            <div class="lobster-body">
+                <div class="body-main"></div>
+                
+                <div class="head">
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="antenna left"></div>
+                    <div class="antenna right"></div>
+                </div>
+                
+                <div class="claw left"><div class="claw-arm"></div><div class="claw-hand"></div></div>
+                
+                <div class="claw right"><div class="claw-arm"></div><div class="claw-hand"></div></div>
+                
+                <div class="tail"><div class="tail-seg"></div><div class="tail-seg"></div><div class="tail-fin"></div></div>
+            </div>
+            
+            <div class="emotion-bubble" id="emotion">😊</div>
+            
+            <div class="shadow"></div>
+        </div>
+
+        <!-- 对话气泡 -->
+        <div class="speech-bubble" id="speech-bubble">
+            <p id="speech-text">欢迎来到我的温馨小家！客厅是C位哦~ 🏠🦞</p>
+        </div>
+    </div>
+
+    <!-- 底部状态栏 -->
+    <div class="status-bar">
+        <div class="status-item">
+            <span class="label">当前活动:</span>
+            <span id="current-activity">休息中</span>
+        </div>
+        <div class="status-item">
+            <span class="label">心情:</span>
+            <span id="mood">开心</span>
+        </div>
+        <div class="status-item">
+            <span class="label">上次活动:</span>
+            <span id="last-activity">刚刚</span>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+{
+  "timestamp": "2026-03-10T01:00:01.854450",
+  "total_recommendations": 28,
+  "by_type": {
+    "alert": 23,
+    "skill": 3,
+    "knowledge": 2
+  },
+  "by_priority": {
+    "medium": 26,
+    "low": 2
+  },
+  "high_priority": [],
+  "all_recommendations": [
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 定时任务修复",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 雪球API整合",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: Stock Analysis Pro v2.1.0 技能包",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 晚间备份",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 2. 记忆文件管理",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 6. 统一记忆",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 3. 统一记忆",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 5. 多Agent协作增强",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 晚间工作 -",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 🔧 电价查询",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 1. 江西10MWh储能",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 电价网站",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 河南储能",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 2026-02-20 储能循环次数计算",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 多Agent协作",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 2026-02-25 晚",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 1. 完整",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 2. 4阶段",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 3. 线下",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 5. 监控告警",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 7. 用户反馈",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 量化模拟炒股",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "alert",
+      "title": "🚨 项目待完善: 10-Agent协作",
+      "priority": "medium",
+      "confidence": 0.7
+    },
+    {
+      "type": "skill",
+      "title": "🛠️ 推荐技能: stock_analyzer_fusion",
+      "priority": "medium",
+      "confidence": 0.75
+    },
+    {
+      "type": "skill",
+      "title": "🛠️ 推荐技能: stock_feishu_push_fusion",
+      "priority": "medium",
+      "confidence": 0.75
+    },
+    {
+      "type": "skill",
+      "title": "🛠️ 推荐技能: stock_pattern_recognition",
+      "priority": "medium",
+      "confidence": 0.75
+    },
+    {
+      "type": "knowledge",
+      "title": "相关话题: 运维",
+      "priority": "low",
+      "confidence": 0.188
+    },
+    {
+      "type": "knowledge",
+      "title": "相关话题: 储能",
+      "priority": "low",
+      "confidence": 0.156
+    }
+  ]
+}

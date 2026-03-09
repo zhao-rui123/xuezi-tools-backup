@@ -1,0 +1,28 @@
+{
+  "name": "unified-memory-universal",
+  "version": "2.0.0-universal",
+  "description": "统一记忆管理系统 - 通用脱敏版，可自由分享",
+  "author": "Community",
+  "tags": ["memory", "ai-assistant", "knowledge-management"],
+  "license": "MIT",
+  "dependencies": ["numpy", "jieba"],
+  "modules": {
+    "daily": {
+      "enabled": true,
+      "description": "每日工作记录"
+    },
+    "analyzer": {
+      "enabled": true,
+      "schedule": "0 2 1 * *",
+      "description": "月度智能分析"
+    },
+    "recall": {
+      "enabled": true,
+      "description": "增强记忆（重要性分级）"
+    },
+    "session": {
+      "enabled": true,
+      "description": "会话持久化"
+    }
+  }
+}

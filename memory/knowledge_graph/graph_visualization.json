@@ -1,0 +1,1031 @@
+{
+  "nodes": [
+    {
+      "id": "aedb315f5643",
+      "name": "储能",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "1e7a38815abe",
+      "name": "定时任务修复",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "58df68531d8b",
+      "name": "电价查询",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "901d93e8d66b",
+      "name": "股票",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "052393e49ef9",
+      "name": "3. 完整",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "7f876e8afe87",
+      "name": "雪球API整合",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "d3bc42400c4d",
+      "name": "Stock Analysis Pro v2.1.0 技能包",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "3b21e7595c48",
+      "name": "晚间备份",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "85ac956513cb",
+      "name": "stock_analyzer_fusion",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "22ac1f4cf509",
+      "name": "stock_feishu_push_fusion",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "0ce35df12c7f",
+      "name": "stock_pattern_recognition",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "7f6ce475e856",
+      "name": "stock_valuation_screener",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "72734aee11b2",
+      "name": "stock_deep_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "6813381cb816",
+      "name": "test_xueqiu_*",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "84fb3f09e381",
+      "name": "stock_classifier",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "d3bd10478e1b",
+      "name": "cyclical_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "72342e12bdfc",
+      "name": "growth_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "fa42505a7740",
+      "name": "value_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "f64b230eaf77",
+      "name": "enhanced_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "b3d2a73be916",
+      "name": "data_fetcher",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "eba7ee01bf14",
+      "name": "pattern_recognition",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "f19b539b3456",
+      "name": "valuation",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "94d74ab1e17a",
+      "name": "deep_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "1aa502e05552",
+      "name": "daily_report",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "bef888728b51",
+      "name": "yfinance_client",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "cf4912003e4c",
+      "name": "enterprise_tax_calculator",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "145682dec048",
+      "name": "project_investment_tax",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "a7234559e407",
+      "name": "safety_guard",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "cde93024195c",
+      "name": "audit_logger",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "f4aad5e4b288",
+      "name": "enable-safety",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "1504fe996a3d",
+      "name": "- `enterprise_tax_calculator.py` - 企业经营税务计算",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "cdc8e51f1f87",
+      "name": "- 输入：CAPEX（各项投资）+ OPEX（运营成本）+ 收入预测",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "e4962149ba35",
+      "name": "- `safety_guard.py` - 危险操作确认",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "2b83a14784e9",
+      "name": "OpenClaw",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "db974238714c",
+      "name": "API",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "86e02ad60c16",
+      "name": "光伏",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "0760f96ab4e3",
+      "name": "Kimi",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "7714e5cf3c18",
+      "name": "飞书",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "afa9c9ba7415",
+      "name": "stock_analyzer",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "54bfa0ced321",
+      "name": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "type": "decision",
+      "color": "#FF9800",
+      "properties": {
+        "category": "decision"
+      }
+    },
+    {
+      "id": "ab978dc59027",
+      "name": "1. 小龙虾之家 - AI助手工作状态看板",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "a44fbe41e4fc",
+      "name": "2. 记忆文件管理",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "cdb6a3026a5c",
+      "name": "6. 统一记忆",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "008f272fcef6",
+      "name": "统一记忆",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "5bc56e97daa8",
+      "name": "记忆文件永久保留，不清理",
+      "type": "decision",
+      "color": "#FF9800",
+      "properties": {
+        "category": "decision"
+      }
+    },
+    {
+      "id": "a1b162b26d8f",
+      "name": "3. 统一记忆",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "4d6990ebe720",
+      "name": "5. 多Agent协作增强",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "9beecfe53376",
+      "name": "小龙虾之家",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "5eede63b333f",
+      "name": "晚间工作 -",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "ad87dbc83ad3",
+      "name": "auto_archive",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "39d09178a806",
+      "name": "importance_scorer",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "b376f645154a",
+      "name": "semantic_search",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "2d1cd64505aa",
+      "name": "cron_tasks",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "c61a24b866bb",
+      "name": "yfinance-stock, memory-search, openclaw-memory-kit, nano-pdf, report-generator",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "aedf5c0fcdd6",
+      "name": "44个核心 + 4套件 + 5运维 = 53个",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "a7f5f35426b9",
+      "name": "Python",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "9784e91c7b26",
+      "name": "Flask",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "686155af75a6",
+      "name": "JavaScript",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "b670629695f1",
+      "name": "MiniMax",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "6ee15a311e46",
+      "name": "🔧 电价查询",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "99aa7d459575",
+      "name": "股票筛选",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "1756ef34aff5",
+      "name": "/opt/stock-screener/backend/services/stock_screener",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "fd8495a20b81",
+      "name": "/opt/stock-screener/backend/services/technical_analysis",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "fdbda02a449c",
+      "name": "| 技能包 | 位置 | 内容 |",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "d3b7c913cd04",
+      "name": "GitHub",
+      "type": "concept",
+      "color": "#9C27B0",
+      "properties": {
+        "category": "technology"
+      }
+    },
+    {
+      "id": "b22e35409e73",
+      "name": "1. 江西10MWh储能",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "2ef17e769b81",
+      "name": "电价网站",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "8889d0b87307",
+      "name": "河南储能",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "fdf848d8646b",
+      "name": "工商业储能",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "959767e797e4",
+      "name": "./workspace/project/main",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "0ca8140fc20a",
+      "name": "~/.openclaw/workspace/backup_memory",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "ef98d32a6861",
+      "name": "2026-02-20 储能循环次数计算",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "b6529024cffd",
+      "name": "`http://106.54.25.161/energy-bill-simple/`",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    },
+    {
+      "id": "28fe93e72d51",
+      "name": "多Agent协作",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "098ce5ab02aa",
+      "name": "2026-02-25 晚",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "afbdf4c59a82",
+      "name": "1. 完整",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "69a462c28148",
+      "name": "2. 4阶段",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "63fecba4d913",
+      "name": "3. 线下",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "b8fa220f76a2",
+      "name": "5. 监控告警",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "018a8fcad775",
+      "name": "7. 用户反馈",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "507437ffd670",
+      "name": "量化模拟炒股",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "9ab70aebe4ad",
+      "name": "储能电站不规则土地智能排布",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "9ce285b330b4",
+      "name": "国网电费清单处理",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "4c057cb62860",
+      "name": "10-Agent协作",
+      "type": "project",
+      "color": "#4CAF50",
+      "properties": {
+        "category": "project"
+      }
+    },
+    {
+      "id": "c259ee2085e9",
+      "name": "pm命令",
+      "type": "skill",
+      "color": "#2196F3",
+      "properties": {
+        "category": "skill"
+      }
+    }
+  ],
+  "links": [
+    {
+      "source": "052393e49ef9",
+      "target": "cdc8e51f1f87",
+      "type": "uses"
+    },
+    {
+      "source": "85ac956513cb",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "85ac956513cb",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "85ac956513cb",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "22ac1f4cf509",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "22ac1f4cf509",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "22ac1f4cf509",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "0ce35df12c7f",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "0ce35df12c7f",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "0ce35df12c7f",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "7f6ce475e856",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "7f6ce475e856",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "7f6ce475e856",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "72734aee11b2",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "72734aee11b2",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "72734aee11b2",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "eba7ee01bf14",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "eba7ee01bf14",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "eba7ee01bf14",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "f19b539b3456",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "f19b539b3456",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "f19b539b3456",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "94d74ab1e17a",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "94d74ab1e17a",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "94d74ab1e17a",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "145682dec048",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "145682dec048",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "a7234559e407",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "a7234559e407",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "cde93024195c",
+      "target": "2b83a14784e9",
+      "type": "implements"
+    },
+    {
+      "source": "cde93024195c",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "cde93024195c",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "f4aad5e4b288",
+      "target": "2b83a14784e9",
+      "type": "implements"
+    },
+    {
+      "source": "f4aad5e4b288",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "f4aad5e4b288",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "cdc8e51f1f87",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "cdc8e51f1f87",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "e4962149ba35",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "e4962149ba35",
+      "target": "86e02ad60c16",
+      "type": "implements"
+    },
+    {
+      "source": "afa9c9ba7415",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "afa9c9ba7415",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "afa9c9ba7415",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    },
+    {
+      "source": "c61a24b866bb",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "1756ef34aff5",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "fd8495a20b81",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "fdbda02a449c",
+      "target": "2b83a14784e9",
+      "type": "implements"
+    },
+    {
+      "source": "fdbda02a449c",
+      "target": "db974238714c",
+      "type": "implements"
+    },
+    {
+      "source": "0ca8140fc20a",
+      "target": "2b83a14784e9",
+      "type": "implements"
+    },
+    {
+      "source": "0ca8140fc20a",
+      "target": "aedb315f5643",
+      "type": "implements"
+    },
+    {
+      "source": "0ca8140fc20a",
+      "target": "901d93e8d66b",
+      "type": "implements"
+    },
+    {
+      "source": "0ca8140fc20a",
+      "target": "b670629695f1",
+      "type": "implements"
+    },
+    {
+      "source": "0ca8140fc20a",
+      "target": "7714e5cf3c18",
+      "type": "implements"
+    }
+  ]
+}

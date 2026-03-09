@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-03-10T01:00:01.574460",
+  "profile": {
+    "name": "雪子",
+    "timezone": "Asia/Shanghai",
+    "preferred_model": "k2p5",
+    "model_usage_count": {},
+    "total_interactions": 0,
+    "total_tokens": 0,
+    "avg_session_duration": 0.0,
+    "topic_preferences": {
+      "数据分析": 0.219,
+      "运维": 0.188,
+      "储能": 0.156,
+      "开发": 0.156,
+      "股票": 0.156,
+      "AI/模型": 0.125
+    },
+    "active_hours": [
+      10,
+      4,
+      13
+    ],
+    "preferred_response_time": "immediate",
+    "response_style": "concise",
+    "use_emoji": true,
+    "preferred_language": "zh",
+    "interested_projects": [
+      "3. 完整",
+      "统一记忆系统 - 第一阶段",
+      "6. 统一记忆系统 v2.0 -",
+      "定时任务修复",
+      "Stock Analysis Pro v2.1.0 技能包",
+      "1. 小龙虾之家 - AI助手工作状态看板",
+      "小龙虾之家",
+      "雪球API整合",
+      "晚间备份"
+    ],
+    "stock_watchlist": [
+      "中矿资源",
+      "赣锋锂业",
+      "盐湖股份",
+      "盛新锂能",
+      "京东方A",
+      "彩虹股份",
+      "中芯国际"
+    ],
+    "learning_style": "practical",
+    "skill_level": {}
+  },
+  "insights": {
+    "most_active_hours": [
+      10,
+      4,
+      13
+    ],
+    "top_interests": [
+      "数据分析",
+      "运维",
+      "储能"
+    ],
+    "favorite_model": "k2p5",
+    "total_interactions": 0
+  },
+  "recommendations": [
+    "用户对'数据分析'话题最感兴趣，可主动推送相关内容",
+    "用户活跃时段: [10, 4, 13]点",
+    "用户偏好模型: k2p5",
+    "关注股票: 中矿资源, 赣锋锂业, 盐湖股份..."
+  ]
+}

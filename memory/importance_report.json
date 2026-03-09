@@ -1,0 +1,136 @@
+{
+  "timestamp": "2026-03-09T21:47:57.800265",
+  "total_memories": 23,
+  "importance_distribution": {
+    "high": 21,
+    "medium": 2,
+    "low": 0
+  },
+  "category_distribution": {
+    "decision": 5,
+    "task": 3,
+    "project": 10,
+    "issue": 1,
+    "general": 3,
+    "skill": 1
+  },
+  "average_importance": 0.92,
+  "high_importance_memories": [
+    {
+      "file": "2026-03-02.md",
+      "importance": 1,
+      "category": "decision",
+      "reasons": [
+        "包含重要决策",
+        "包含5个重要关键词"
+      ]
+    },
+    {
+      "file": "2026-03-06.md",
+      "importance": 1,
+      "category": "task",
+      "reasons": [
+        "包含任务记录",
+        "包含5个重要关键词",
+        "包含代码",
+        "内容长度适中",
+        "部分内容质量较低"
+      ]
+    },
+    {
+      "file": "2026-03-07.md",
+      "importance": 1,
+      "category": "project",
+      "reasons": [
+        "包含项目信息",
+        "包含任务记录",
+        "包含5个重要关键词",
+        "包含代码",
+        "部分内容质量较低"
+      ]
+    },
+    {
+      "file": "2026-03-03.md",
+      "importance": 1,
+      "category": "decision",
+      "reasons": [
+        "包含重要决策",
+        "包含5个重要关键词",
+        "内容长度适中",
+        "部分内容质量较低"
+      ]
+    },
+    {
+      "file": "2026-03-08.md",
+      "importance": 1,
+      "category": "decision",
+      "reasons": [
+        "包含重要决策",
+        "包含任务记录",
+        "包含5个重要关键词",
+        "包含链接",
+        "内容长度适中"
+      ]
+    },
+    {
+      "file": "2026-02-22.md",
+      "importance": 1,
+      "category": "decision",
+      "reasons": [
+        "包含重要决策",
+        "包含项目信息",
+        "包含任务记录",
+        "包含5个重要关键词",
+        "包含链接",
+        "内容长度适中",
+        "部分内容质量较低"
+      ]
+    },
+    {
+      "file": "2026-02-23.md",
+      "importance": 1,
+      "category": "project",
+      "reasons": [
+        "包含项目信息",
+        "包含5个重要关键词",
+        "包含链接",
+        "内容长度适中"
+      ]
+    },
+    {
+      "file": "2026-02-20.md",
+      "importance": 1,
+      "category": "project",
+      "reasons": [
+        "包含项目信息",
+        "包含任务记录",
+        "包含5个重要关键词",
+        "包含链接",
+        "内容长度适中"
+      ]
+    },
+    {
+      "file": "2026-02-21.md",
+      "importance": 1,
+      "category": "project",
+      "reasons": [
+        "包含项目信息",
+        "包含5个重要关键词",
+        "包含代码",
+        "内容长度适中"
+      ]
+    },
+    {
+      "file": "2026-03-01.md",
+      "importance": 1,
+      "category": "task",
+      "reasons": [
+        "包含5个重要关键词",
+        "包含代码",
+        "包含链接",
+        "内容长度适中",
+        "部分内容质量较低"
+      ]
+    }
+  ]
+}

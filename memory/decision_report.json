@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-03-10T01:00:02.134517",
+  "summary": {
+    "total_decisions": 6,
+    "success": 0,
+    "failure": 0,
+    "unknown": 6,
+    "success_rate": 0.0
+  },
+  "monthly_distribution": {
+    "2026-03": 6
+  },
+  "recent_decisions": [
+    {
+      "title": "记忆文件永久保留，不清理",
+      "date": "2026-03-08",
+      "outcome": "unknown"
+    },
+    {
+      "title": "记忆文件永久保留，不清理",
+      "date": "2026-03-08",
+      "outcome": "unknown"
+    },
+    {
+      "title": "记忆文件永久保留，不清理",
+      "date": "2026-03-08",
+      "outcome": "unknown"
+    },
+    {
+      "title": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "date": "2026-03-03",
+      "outcome": "unknown"
+    },
+    {
+      "title": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "date": "2026-03-03",
+      "outcome": "unknown"
+    }
+  ]
+}

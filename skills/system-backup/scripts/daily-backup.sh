@@ -54,16 +54,19 @@ perform_backup() {
     
     mkdir -p "$dest_dir"
     
-    local rsync_output=$(rsync -avu "$source_dir/" "$dest_dir/" 2>&1)
+    # 使用 --checksum 确保内容不同的文件也会被备份，而不是仅依赖时间戳
+    local rsync_output=$(rsync -av --checksum "$source_dir/" "$dest_dir/" 2>&1)
     local rsync_exit=$?
     
     local transfer_count=$(echo "$rsync_output" | grep -E '^>' | wc -l)
     
     if [ $rsync_exit -eq 0 ]; then
+        # 统计实际备份的文件数量
+        local total_files=$(find "$dest_dir" -type f 2>/dev/null | wc -l)
         if [ "$transfer_count" -eq 0 ]; then
-            log "INFO: $name 已是最新，无需更新"
+            log "SUCCESS: $name 备份完成，共 $total_files 个文件 (已是最新)"
         else
-            log "SUCCESS: $name 备份完成，传输 $transfer_count 个文件"
+            log "SUCCESS: $name 备份完成，传输 $transfer_count 个文件，共 $total_files 个文件"
         fi
         return 0
     else
@@ -204,28 +207,33 @@ if backup_with_retry "$WORKSPACE_SKILLS_SOURCE" "$BACKUP_DIR/workspace-skills" "
     BACKUP_NAME="skills-backup-${DATE}.tar.gz"
     LATEST_LINK="$BACKUP_DIR/skills-backup/latest"
     
-    tar -czf "$BACKUP_DIR/skills-backup/$BACKUP_NAME" \
-        --exclude='__pycache__' \
-        --exclude='*.pyc' \
-        --exclude='.DS_Store' \
-        --exclude='*.backup' \
-        -C "$BACKUP_DIR" \
-        workspace-skills/ 2>/dev/null
-    
-    if [ $? -eq 0 ]; then
-        log "SUCCESS: tar.gz archive created: $BACKUP_NAME"
-        # 更新 latest 链接
-        rm -f "$LATEST_LINK"
-        ln -s "$BACKUP_DIR/skills-backup/$BACKUP_NAME" "$LATEST_LINK"
-        # 清理旧备份（保留最近30个）
-        local count=$(ls -1 "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz 2>/dev/null | wc -l)
-        if [ $count -gt 30 ]; then
-            log "Cleaning old tar.gz backups (keeping 30)..."
-            ls -1t "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz | tail -n +31 | xargs rm -f
-        fi
-        ws_skills_info="$ws_skills_info + tar.gz"
+    # 检查源目录是否存在
+    if [ ! -d "$BACKUP_DIR/workspace-skills" ]; then
+        log "WARNING: Source directory not found: $BACKUP_DIR/workspace-skills"
     else
-        log "WARNING: Failed to create tar.gz archive"
+        tar -czf "$BACKUP_DIR/skills-backup/$BACKUP_NAME" \
+            --exclude='__pycache__' \
+            --exclude='*.pyc' \
+            --exclude='.DS_Store' \
+            --exclude='*.backup' \
+            -C "$BACKUP_DIR" \
+            workspace-skills/ 2>/dev/null
+        
+        if [ $? -eq 0 ]; then
+            log "SUCCESS: tar.gz archive created: $BACKUP_NAME"
+            # 更新 latest 链接
+            rm -f "$LATEST_LINK"
+            ln -s "$BACKUP_DIR/skills-backup/$BACKUP_NAME" "$LATEST_LINK"
+            # 清理旧备份（保留最近30个）
+            count=$(ls -1 "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz 2>/dev/null | wc -l)
+            if [ "${count:-0}" -gt 30 ]; then
+                log "Cleaning old tar.gz backups (keeping 30)..."
+                ls -1t "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz | tail -n +31 | xargs rm -f
+            fi
+            ws_skills_info="$ws_skills_info + tar.gz"
+        else
+            log "WARNING: Failed to create tar.gz archive"
+        fi
     fi
 fi
 

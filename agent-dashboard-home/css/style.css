@@ -1,0 +1,944 @@
+/** 像素风小龙虾之家 - 四室两厅布局 **/
+
+/* ===== 基础设置 ===== */
+:root {
+    --pixel-size: 4px;
+    --lobster-red: #E74C3C;
+    --lobster-dark: #C0392B;
+    --lobster-light: #F1948A;
+    --bg-color: #2C3E50;
+    --panel-bg: #34495E;
+    --text-color: #ECF0F1;
+    --accent-color: #F39C12;
+    
+    /* 房间颜色 */
+    --bedroom-color: #9B59B6;
+    --gameroom-color: #E74C3C;
+    --livingroom-color: #3498DB;
+    --workspace-color: #1ABC9C;
+    --dining-color: #F39C12;
+    --bathroom-color: #95A5A6;
+    --playground-color: #27AE60;
+    
+    --wall-color: #5D6D7E;
+    --floor-color: #566573;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'VT323', monospace;
+    background: linear-gradient(180deg, #1a252f 0%, #2C3E50 50%, #27AE60 100%);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* ===== 统计面板（左上角） ===== */
+.stats-panel {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--panel-bg);
+    border: 4px solid var(--lobster-red);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 220px;
+    box-shadow: 
+        0 0 0 4px var(--bg-color),
+        0 0 0 8px var(--lobster-red),
+        8px 8px 0 rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.stats-header {
+    font-size: 24px;
+    color: var(--accent-color);
+    text-align: center;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    border-bottom: 2px dashed var(--lobster-red);
+    padding-bottom: 8px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 18px;
+    color: #BDC3C7;
+}
+
+.stat-value {
+    font-size: 20px;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.location-badge {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    background: var(--livingroom-color);
+}
+
+/* ===== 游戏容器 ===== */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    padding-left: 260px;
+    padding-bottom: 100px;
+}
+
+/* ===== 房子 ===== */
+.house {
+    background: var(--wall-color);
+    border: 8px solid #34495E;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 
+        0 0 0 4px #2C3E50,
+        0 0 0 8px var(--wall-color),
+        16px 16px 0 rgba(0,0,0,0.4);
+    position: relative;
+    max-width: 700px;
+    width: 100%;
+}
+
+.house-title {
+    text-align: center;
+    font-size: 28px;
+    color: var(--accent-color);
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+/* ===== 房间布局 ===== */
+.house-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.room-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* ===== 房间基础样式 ===== */
+.room {
+    position: relative;
+    border: 4px solid #2C3E50;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 140px;
+    transition: all 0.3s;
+}
+
+.room:hover {
+    transform: scale(1.02);
+}
+
+.room.active {
+    box-shadow: 0 0 30px rgba(255,255,255,0.5);
+    animation: room-pulse 2s infinite;
+}
+
+@keyframes room-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.4); }
+    50% { box-shadow: 0 0 40px rgba(255,255,255,0.7); }
+}
+
+/* 房间头部 */
+.room-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.3);
+    font-size: 18px;
+}
+
+.room-icon {
+    font-size: 24px;
+}
+
+.room-name {
+    font-weight: bold;
+}
+
+/* 房间内容区 */
+.room-content {
+    position: relative;
+    height: 100px;
+    padding: 10px;
+}
+
+/* ===== 各房间样式 ===== */
+
+/* 卧室 */
+.bedroom {
+    background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);
+}
+
+/* 游戏室 */
+.gameroom {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+}
+
+/* 客厅 */
+.livingroom {
+    background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+}
+
+/* 工作室 */
+.workspace {
+    background: linear-gradient(135deg, #1ABC9C 0%, #16A085 100%);
+}
+
+/* 餐厅 */
+.dining {
+    background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+}
+
+/* 卫生间 */
+.bathroom {
+    background: linear-gradient(135deg, #BDC3C7 0%, #95A5A6 100%);
+}
+
+/* ===== 家具 ===== */
+
+/* 卧室家具 */
+.bed {
+    position: absolute;
+    width: 70px;
+    height: 50px;
+    background: #8B4513;
+    border: 3px solid #5D4037;
+    border-radius: 8px;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pillow {
+    width: 20px;
+    height: 15px;
+    background: #ECF0F1;
+    border: 1px solid #BDC3C7;
+    border-radius: 4px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.blanket {
+    width: 40px;
+    height: 35px;
+    background: #9B59B6;
+    border: 1px solid #8E44AD;
+    border-radius: 4px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.nightstand {
+    width: 25px;
+    height: 30px;
+    background: #8B4513;
+    border: 2px solid #5D4037;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 4px;
+}
+
+.lamp {
+    width: 12px;
+    height: 15px;
+    background: #F1C40F;
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+}
+
+/* 游戏室家具 */
+.gaming-chair {
+    width: 35px;
+    height: 40px;
+    background: #2C3E50;
+    border: 2px solid #1a252f;
+    border-radius: 8px 8px 4px 4px;
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+}
+
+.chair-back {
+    width: 100%;
+    height: 20px;
+    background: #E74C3C;
+    border-radius: 8px 8px 0 0;
+}
+
+.gaming-setup {
+    width: 60px;
+    height: 50px;
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+}
+
+.monitor {
+    width: 50px;
+    height: 35px;
+    background: #2C3E50;
+    border: 3px solid #7F8C8D;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.monitor::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 70%;
+    background: linear-gradient(135deg, #E74C3C, #9B59B6, #3498DB);
+    margin: 10% auto;
+    animation: rgb-glow 2s infinite;
+}
+
+@keyframes rgb-glow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.pc-case {
+    width: 20px;
+    height: 30px;
+    background: #34495E;
+    border: 2px solid #2C3E50;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+/* 客厅家具 */
+.sofa {
+    width: 80px;
+    height: 35px;
+    background: #8E44AD;
+    border: 3px solid #6C3483;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.sofa-cushion {
+    width: 90%;
+    height: 60%;
+    background: #9B59B6;
+    border-radius: 8px;
+    margin: 10% auto;
+}
+
+.tv-set {
+    width: 60px;
+    height: 50px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.tv-screen {
+    width: 50px;
+    height: 35px;
+    background: #2C3E50;
+    border: 4px solid #566573;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.tv-screen::after {
+    content: '📺';
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    margin-top: 5px;
+    animation: tv-static 0.5s infinite;
+}
+
+@keyframes tv-static {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+.tv-stand {
+    width: 40px;
+    height: 10px;
+    background: #5D4037;
+    margin: 5px auto 0;
+}
+
+/* 工作室家具 */
+.desk {
+    width: 90px;
+    height: 45px;
+    background: #8B4513;
+    border: 3px solid #5D4037;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+}
+
+.laptop {
+    width: 35px;
+    height: 25px;
+    background: #34495E;
+    border: 2px solid #566573;
+    border-radius: 4px;
+    position: absolute;
+    top: -15px;
+    left: 10px;
+}
+
+.laptop::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 70%;
+    background: rgba(52, 152, 219, 0.6);
+    margin: 10% auto;
+    animation: screen-blink 3s infinite;
+}
+
+@keyframes screen-blink {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.9; }
+}
+
+.coffee {
+    position: absolute;
+    top: -20px;
+    right: 15px;
+    font-size: 16px;
+}
+
+.office-chair {
+    width: 30px;
+    height: 35px;
+    background: #2C3E50;
+    border: 2px solid #1a252f;
+    border-radius: 6px;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bookshelf-work {
+    width: 25px;
+    height: 50px;
+    background: #8B4513;
+    border: 2px solid #5D4037;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.book-w {
+    width: 18px;
+    height: 12px;
+    background: #E74C3C;
+    border: 1px solid #C0392B;
+    margin: 3px auto;
+    border-radius: 2px;
+}
+
+/* 餐厅家具 */
+.dining-table {
+    width: 70px;
+    height: 40px;
+    background: #8B4513;
+    border: 3px solid #5D4037;
+    border-radius: 8px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.plate {
+    width: 20px;
+    height: 20px;
+    background: #ECF0F1;
+    border: 2px solid #BDC3C7;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.plate:first-child { left: 10px; }
+.plate:last-child { right: 10px; }
+
+.dining-chair {
+    width: 25px;
+    height: 25px;
+    background: #E67E22;
+    border: 2px solid #D35400;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 55px;
+}
+
+.dining-chair:nth-of-type(2) { left: 20px; }
+.dining-chair:nth-of-type(3) { right: 20px; }
+
+/* 卫生间家具 */
+.toilet {
+    width: 30px;
+    height: 40px;
+    background: #ECF0F1;
+    border: 2px solid #BDC3C7;
+    border-radius: 15px 15px 4px 4px;
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+}
+
+.toilet-lid {
+    width: 100%;
+    height: 8px;
+    background: #BDC3C7;
+    border-radius: 15px 15px 0 0;
+}
+
+.sink-bath {
+    width: 35px;
+    height: 25px;
+    background: #ECF0F1;
+    border: 2px solid #BDC3C7;
+    border-radius: 4px 4px 15px 15px;
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+}
+
+.mirror {
+    width: 25px;
+    height: 30px;
+    background: #AAB7B8;
+    border: 2px solid #7F8C8D;
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+}
+
+.towel-rack {
+    width: 40px;
+    height: 4px;
+    background: #7F8C8D;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ===== 门 ===== */
+.door-to-playground {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+    padding: 8px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+.door {
+    font-size: 32px;
+    animation: door-wiggle 2s infinite;
+}
+
+@keyframes door-wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+.arrow {
+    font-size: 24px;
+    color: var(--accent-color);
+    animation: bounce-down 1s infinite;
+}
+
+@keyframes bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* ===== 操场 ===== */
+.playground-area {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #27AE60 0%, #229954 100%);
+    border: 6px solid #1E8449;
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.3);
+}
+
+.playground-header {
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    margin-bottom: 12px;
+}
+
+.playground-content {
+    position: relative;
+    height: 100px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    border: 2px dashed rgba(255,255,255,0.3);
+}
+
+.ground-track {
+    position: absolute;
+    width: 80%;
+    height: 60%;
+    border: 3px dashed rgba(255,255,255,0.4);
+    border-radius: 50px;
+    top: 20%;
+    left: 10%;
+}
+
+.playground-item {
+    position: absolute;
+    font-size: 32px;
+}
+
+.basketball-hoop {
+    top: 10px;
+    left: 20px;
+    animation: bounce-ball 1s infinite;
+}
+
+@keyframes bounce-ball {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.dumbbell-set {
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+}
+
+.yoga-mat {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ===== 小龙虾（复用之前的样式） ===== */
+.lobster {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 100;
+    transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lobster-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.body-main {
+    position: absolute;
+    width: 28px;
+    height: 32px;
+    background: var(--lobster-red);
+    border: 3px solid var(--lobster-dark);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.head {
+    position: absolute;
+    width: 24px;
+    height: 20px;
+    background: var(--lobster-red);
+    border: 3px solid var(--lobster-dark);
+    border-radius: 50%;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.eye {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border: 2px solid var(--lobster-dark);
+    border-radius: 50%;
+    top: 4px;
+}
+
+.eye.left { left: 2px; }
+.eye.right { right: 2px; }
+
+.eye::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--lobster-dark);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: blink 4s infinite;
+}
+
+@keyframes blink {
+    0%, 96%, 100% { transform: translate(-50%, -50%) scaleY(1); }
+    98% { transform: translate(-50%, -50%) scaleY(0.1); }
+}
+
+.antenna {
+    position: absolute;
+    width: 2px;
+    height: 12px;
+    background: var(--lobster-red);
+    top: -6px;
+}
+
+.antenna.left {
+    left: 6px;
+    transform: rotate(-20deg);
+}
+
+.antenna.right {
+    right: 6px;
+    transform: rotate(20deg);
+}
+
+.claw {
+    position: absolute;
+    top: 15px;
+}
+
+.claw.left { left: 2px; }
+.claw.right { right: 2px; }
+
+.claw-arm {
+    width: 8px;
+    height: 15px;
+    background: var(--lobster-red);
+    border: 2px solid var(--lobster-dark);
+    border-radius: 4px;
+}
+
+.claw.left .claw-arm { transform: rotate(-30deg); }
+.claw.right .claw-arm { transform: rotate(30deg); }
+
+.claw-hand {
+    position: absolute;
+    top: -6px;
+    width: 12px;
+    height: 12px;
+    background: var(--lobster-red);
+    border: 2px solid var(--lobster-dark);
+    border-radius: 50%;
+}
+
+.claw.left .claw-hand { left: -3px; }
+.claw.right .claw-hand { right: -3px; }
+
+.tail {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tail-seg {
+    width: 16px;
+    height: 8px;
+    background: var(--lobster-dark);
+    border: 1px solid #922B21;
+    border-radius: 8px;
+    margin-top: -2px;
+}
+
+.tail-fin {
+    width: 10px;
+    height: 8px;
+    background: #922B21;
+    border-radius: 50% 50% 0 0;
+    margin: -2px auto 0;
+}
+
+.shadow {
+    position: absolute;
+    width: 30px;
+    height: 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.emotion-bubble {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-size: 20px;
+    background: white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--lobster-dark);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: bounce-emotion 1s ease-in-out infinite;
+}
+
+@keyframes bounce-emotion {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* ===== 对话气泡 ===== */
+.speech-bubble {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    color: #2C3E50;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 4px solid var(--lobster-red);
+    font-size: 20px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+    z-index: 1001;
+    max-width: 400px;
+    text-align: center;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid var(--lobster-red);
+}
+
+/* ===== 底部状态栏 ===== */
+.status-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--panel-bg);
+    border: 4px solid var(--lobster-red);
+    border-radius: 8px;
+    padding: 12px 24px;
+    display: flex;
+    gap: 30px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-item .label {
+    color: #BDC3C7;
+    font-size: 16px;
+}
+
+.status-item span:last-child {
+    color: var(--accent-color);
+    font-size: 18px;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+    .stats-panel {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    
+    .game-container {
+        padding-left: 20px;
+    }
+    
+    .room-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .room {
+        min-height: 120px;
+    }
+    
+    .status-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        max-width: 90%;
+    }
+}

@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-03-10T01:00:02.228699",
+  "evolution_score": 0.18,
+  "summary": {
+    "total_lessons": 76,
+    "applied_lessons": 27,
+    "application_rate": 35.5,
+    "total_improvements": 0,
+    "completed": 0,
+    "in_progress": 0,
+    "abandoned": 0
+  },
+  "category_distribution": {
+    "error": 49,
+    "success": 27
+  },
+  "recent_lessons": [
+    {
+      "date": "2026-03-09",
+      "category": "error",
+      "trigger": "**1-10ms** (目标 < 500ms) ✅",
+      "applied": false
+    },
+    {
+      "date": "2026-03-09",
+      "category": "success",
+      "trigger": "任务、Token、时长、位置",
+      "applied": true
+    },
+    {
+      "date": "2026-03-09",
+      "category": "success",
+      "trigger": "**1-10ms** (目标 < 500ms) ✅",
+      "applied": true
+    },
+    {
+      "date": "2026-03-09",
+      "category": "error",
+      "trigger": "**1-10ms** (目标 < 500ms) ✅",
+      "applied": false
+    },
+    {
+      "date": "2026-03-09",
+      "category": "success",
+      "trigger": "任务、Token、时长、位置",
+      "applied": true
+    }
+  ],
+  "active_improvements": []
+}

@@ -1,0 +1,14 @@
+#!/bin/bash
+# Unified Memory System - CLI
+# 统一记忆系统命令行入口
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON_SCRIPT="$SCRIPT_DIR/../unified_memory.py"
+
+if [ ! -f "$PYTHON_SCRIPT" ]; then
+    echo "Error: unified_memory.py not found"
+    echo "Please check your installation"
+    exit 1
+fi
+
+python3 "$PYTHON_SCRIPT" "$@"

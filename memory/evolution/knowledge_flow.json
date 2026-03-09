@@ -1,0 +1,134 @@
+[
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛...",
+    "content_summary": "[DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n",
+    "keywords": [
+      "一放到",
+      "保留",
+      "ouc",
+      "generated",
+      "记忆文件永久",
+      "每周日凌晨",
+      "生成的文件统",
+      "目录",
+      "OUC",
+      "不清理"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T07:20:32.582129",
+    "auto_extracted": true
+  },
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DEC...",
+    "content_summary": "[DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DECISION] 定时任务迁移到 ums analyze monthly\n- [DECISION] 旧技能包归档到 skills/archived/ 目录（保留备用）\n- [DECISION] 创建通用脱敏版分享给朋友\n",
+    "keywords": [
+      "保留备用",
+      "analyze",
+      "ums",
+      "archived",
+      "定时任务迁移",
+      "skills",
+      "目录",
+      "创建通用脱敏",
+      "unified",
+      "统一系统"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T07:20:32.582143",
+    "auto_extracted": true
+  },
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛...",
+    "content_summary": "[DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n",
+    "keywords": [
+      "每月",
+      "目录",
+      "OUC",
+      "不清理",
+      "记忆文件永久",
+      "文件夹",
+      "保留",
+      "每周日凌晨",
+      "点自动清理",
+      "生成的文件统"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T07:20:35.450662",
+    "auto_extracted": true
+  },
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DEC...",
+    "content_summary": "[DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DECISION] 定时任务迁移到 ums analyze monthly\n- [DECISION] 旧技能包归档到 skills/archived/ 目录（保留备用）\n- [DECISION] 创建通用脱敏版分享给朋友\n",
+    "keywords": [
+      "ums",
+      "unified",
+      "目录",
+      "archived",
+      "版分享给朋友",
+      "skills",
+      "monthly",
+      "统一系统",
+      "保留备用",
+      "DECISION"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T07:20:35.450677",
+    "auto_extracted": true
+  },
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛...",
+    "content_summary": "[DECISION] 记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n",
+    "keywords": [
+      "每周日凌晨",
+      "ouc",
+      "忆智能筛选",
+      "OUC",
+      "一放到",
+      "目录",
+      "生成的文件统",
+      "文件夹",
+      "DECISION",
+      "不清理"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T21:48:31.600422",
+    "auto_extracted": true
+  },
+  {
+    "source": "daily_memory",
+    "target": "knowledge_base",
+    "content_type": "decision",
+    "title": "决策: [DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DEC...",
+    "content_summary": "[DECISION] 将分散的记忆技能包整合为 unified-memory 统一系统\n- [DECISION] 定时任务迁移到 ums analyze monthly\n- [DECISION] 旧技能包归档到 skills/archived/ 目录（保留备用）\n- [DECISION] 创建通用脱敏版分享给朋友\n",
+    "keywords": [
+      "定时任务迁移",
+      "ums",
+      "技能包整合为",
+      "memory",
+      "旧技能包归档",
+      "unified",
+      "monthly",
+      "skills",
+      "目录",
+      "保留备用"
+    ],
+    "importance": 0.85,
+    "created_at": "2026-03-09T21:48:31.600439",
+    "auto_extracted": true
+  }
+]

@@ -11,12 +11,17 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 Before doing anything else:
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
-3. **Load session snapshot**: `python3 ~/.openclaw/workspace/scripts/session-snapshot.py load` — 恢复之前的上下文
-4. Read `memory/YYYY-MM-DD.md` (today) for recent context
-5. **Read `memory/YYYY-MM-DD.md` (yesterday)** — 获取昨天的上下文
-6. **Read `knowledge-base/INDEX.md`** — 快速了解项目状态和知识分布
-7. **Read `knowledge-base/GUIDE.md`** — 了解知识库使用规范
-8. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+3. **⚠️ 加载会话快照**: 执行以下命令加载上下文：
+   ```python
+   python3 -c "import sys; sys.path.insert(0, 'skills/unified-memory'); from session_recovery import on_session_start; result = on_session_start(); print(result if result else '无恢复内容')"
+   ```
+4. **⚠️ 报告恢复状态**: 向用户报告恢复的任务: "根据自动保存记录（x分钟前），你最后在做：xxx"
+5. **⚠️ 如果快照显示有任务**: 询问用户是否继续该任务
+6. Read `memory/YYYY-MM-DD.md` (today) for recent context
+7. **Read `memory/YYYY-MM-DD.md` (yesterday)** — 获取昨天的上下文
+8. **Read `knowledge-base/INDEX.md`** — 快速了解项目状态和知识分布
+9. **Read `knowledge-base/GUIDE.md`** — 了解知识库使用规范
+10. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 
 Don't ask permission. Just do it.
 
@@ -24,11 +29,12 @@ Don't ask permission. Just do it.
 
 If you just switched models (new session):
 1. Execute startup check: `bash ~/.openclaw/workspace/scripts/startup-check.sh`
-2. **Load session snapshot**: `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` 获取上下文恢复提示
-3. Read `knowledge-base/INDEX.md` for project overview
-4. Read `knowledge-base/GUIDE.md` for knowledge base usage rules
-5. Check `memory/YYYY-MM-DD.md` for today's context
-6. Review any saved session state if needed
+2. **⚠️ Load session snapshot**: `python3 ~/.openclaw/workspace/scripts/session-snapshot.py load` 加载上下文
+3. **⚠️ 报告恢复状态**: 向用户报告恢复的任务: "根据自动保存记录（x分钟前），你最后在做：xxx"
+4. **⚠️ 如果快照显示有任务**: 询问用户是否继续该任务
+5. Read `knowledge-base/INDEX.md` for project overview
+6. Read `knowledge-base/GUIDE.md` for knowledge base usage rules
+7. Check `memory/YYYY-MM-DD.md` for today's context
 
 ## Memory
 
@@ -55,8 +61,10 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - When you make a mistake → document it so future-you doesn't repeat it
 - **After long conversation** → run `python3 ~/.openclaw/workspace/scripts/session-compressor.py` to compress and save summary
 - **When user says "remember this"** → run `python3 ~/.openclaw/workspace/scripts/memory-extractor.py` to auto-extract key info
-- **Before model switch** → run `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` to save current state
-- **When conversation has important context** → run `python3 ~/.openclaw/workspace/scripts/session-snapshot.py` with current task/pending items to save for recovery
+- **Before model switch** → 必须先执行 `python3 ~/.openclaw/workspace/scripts/session-snapshot.py save "切换模型前保存"`，然后再切换
+- **⚠️ 重要任务完成后** → 必须执行 `python3 ~/.openclaw/workspace/scripts/session-snapshot.py save "完成的任务"`
+- **⚠️ 对话结束/用户说拜拜/去做别的了** → 立即执行 `python3 ~/.openclaw/workspace/scripts/session-snapshot.py save "当前任务状态"`
+- **⚠️ 检测到 /new 前兆** → 用户说"我要新建会话"、"重新开始"等 → 立即保存快照
 - **Text > Brain** 📝
 
 ## Safety

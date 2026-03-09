@@ -1,0 +1,164 @@
+{
+  "updated_at": "2026-03-09T22:36:24.305443",
+  "agents": {
+    "alpha": {
+      "id": "alpha",
+      "name": "Alpha",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "html",
+        "css",
+        "ui",
+        "responsive",
+        "pixel-art"
+      ]
+    },
+    "bravo": {
+      "id": "bravo",
+      "name": "Bravo",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "javascript",
+        "python",
+        "algorithm",
+        "backend",
+        "api"
+      ]
+    },
+    "charlie": {
+      "id": "charlie",
+      "name": "Charlie",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "fullstack",
+        "debug",
+        "integration",
+        "refactoring"
+      ]
+    },
+    "delta": {
+      "id": "delta",
+      "name": "Delta",
+      "role": "reviewer",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "code_review",
+        "testing",
+        "quality",
+        "best_practices"
+      ]
+    },
+    "echo": {
+      "id": "echo",
+      "name": "Echo",
+      "role": "devops",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "deploy",
+        "testing",
+        "ops",
+        "monitoring",
+        "ci_cd"
+      ]
+    },
+    "foxtrot": {
+      "id": "foxtrot",
+      "name": "Foxtrot",
+      "role": "security_expert",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "security",
+        "audit",
+        "vulnerability_scan",
+        "encryption",
+        "best_practices"
+      ]
+    },
+    "golf": {
+      "id": "golf",
+      "name": "Golf",
+      "role": "performance_expert",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "performance",
+        "optimization",
+        "profiling",
+        "caching",
+        "load_testing"
+      ]
+    },
+    "hotel": {
+      "id": "hotel",
+      "name": "Hotel",
+      "role": "documentation_expert",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "documentation",
+        "technical_writing",
+        "api_docs",
+        "readme",
+        "tutorials"
+      ]
+    },
+    "india": {
+      "id": "india",
+      "name": "India",
+      "role": "ai_expert",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "machine_learning",
+        "deep_learning",
+        "nlp",
+        "tensorflow",
+        "pytorch",
+        "model_training",
+        "ai_api"
+      ]
+    },
+    "juliet": {
+      "id": "juliet",
+      "name": "Juliet",
+      "role": "data_expert",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "sql",
+        "pandas",
+        "data_viz",
+        "etl",
+        "database",
+        "big_data",
+        "analytics"
+      ]
+    },
+    "kilo": {
+      "id": "kilo",
+      "name": "Kilo",
+      "role": "notification_agent",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "messaging",
+        "notifications",
+        "daily_reports",
+        "summaries",
+        "feishu",
+        "alerts"
+      ]
+    }
+  },
+  "tasks": {},
+  "subtasks": {}
+}

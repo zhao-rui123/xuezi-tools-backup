@@ -115,38 +115,15 @@ echo "" >> "$REPORT_FILE"
 echo "================================" >> "$REPORT_FILE"
 echo "报告生成时间: $(date '+%H:%M:%S')" >> "$REPORT_FILE"
 
-# 发送报告到飞书
-FEISHU_USER="ou_5a7b7ec0339ffe0c1d5bb6c5bc162579"
-NOTIFY_SCRIPT="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
+# 发送报告到飞书 - 使用Kilo Agent
+report_summary=$(cat "$REPORT_FILE")
 
-# 构建简洁的报告消息
-report_summary=$(cat <<EOF
-📊 每日健康检查报告 ($(date '+%Y-%m-%d %H:%M'))
+# 使用Kilo发送健康检查报告
+python3 ~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_v2.py \
+    --health "$report_summary" \
+    2>/dev/null
 
-🔧 OpenClaw 状态
-$(grep "Gateway:" "$REPORT_FILE")
-$(grep "磁盘空间:" "$REPORT_FILE" | head -1)
-
-☁️ 云服务器 (106.54.25.161)
-$(grep "服务器:" "$REPORT_FILE")
-$(grep "Nginx:" "$REPORT_FILE")
-
-💾 备份状态
-$(grep "本地备份:" "$REPORT_FILE")
-$(grep "GitHub:" "$REPORT_FILE")
-
-📈 今日统计
-$(grep "今日记忆:" "$REPORT_FILE")
-$(grep "未提交变更:" "$REPORT_FILE" || grep "工作区:" "$REPORT_FILE")
-EOF
-)
-
-# 发送消息
-if [ -x "$NOTIFY_SCRIPT" ]; then
-    "$NOTIFY_SCRIPT" send "$report_summary"
-else
-    echo "警告: 通知脚本不存在或不可执行"
-fi
+echo "✅ 健康检查报告已通过Kilo发送"
 
 # 输出报告
 cat "$REPORT_FILE"

@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-03-08",
+    "category": "error",
+    "trigger": "时区问题",
+    "lesson": "混淆了PST和北京时间",
+    "solution": "直接使用数字时间，忽略时区标签",
+    "applied": false
+  }
+]

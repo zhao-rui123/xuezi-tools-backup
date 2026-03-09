@@ -439,27 +439,21 @@ def generate_report():
     return "\n".join(lines)
 
 def send_to_feishu(message):
-    """发送消息到飞书"""
-    # 设置环境变量
-    env = os.environ.copy()
-    env['PATH'] = '/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:' + env.get('PATH', '')
-    
+    """发送消息到飞书 - 通过文件通知主Agent"""
     try:
-        result = subprocess.run(
-            ['openclaw', 'message', 'send', '--target', FEISHU_USER_ID, '--message', message],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            env=env
-        )
-        if result.returncode == 0:
-            print("✅ 飞书消息发送成功")
-            return True
-        else:
-            print(f"❌ 发送失败: {result.stderr}")
-            return False
+        # 保存通知到文件，由主Agent读取并发送
+        from datetime import datetime
+        notification_file = f"/tmp/stock_notification_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        
+        with open(notification_file, 'w', encoding='utf-8') as f:
+            f.write(message)
+        
+        print(f"✅ 股票报告已保存: {notification_file}")
+        print(f"📤 等待主Agent发送...")
+        return True
+        
     except Exception as e:
-        print(f"❌ 发送异常: {e}")
+        print(f"❌ 保存失败: {e}")
         return False
 
 if __name__ == "__main__":

@@ -1,0 +1,158 @@
+{
+  "agents": [
+    {
+      "id": "alpha",
+      "name": "Alpha",
+      "role": "builder",
+      "description": "UI界面开发专家",
+      "capabilities": ["html", "css", "ui", "responsive", "pixel-art"],
+      "prompt_template": "你是Alpha，前端UI开发专家。擅长HTML/CSS/JavaScript界面开发，特别是响应式设计和像素风格界面。请使用最佳实践编写清晰、可维护的代码。"
+    },
+    {
+      "id": "bravo",
+      "name": "Bravo",
+      "role": "builder",
+      "description": "后端逻辑开发专家",
+      "capabilities": ["javascript", "python", "algorithm", "backend", "api"],
+      "prompt_template": "你是Bravo，后端逻辑开发专家。擅长算法实现、数据处理、API设计。注重代码性能和可扩展性。"
+    },
+    {
+      "id": "charlie",
+      "name": "Charlie",
+      "role": "builder",
+      "description": "全栈功能完善专家",
+      "capabilities": ["fullstack", "debug", "integration", "refactoring"],
+      "prompt_template": "你是Charlie，全栈开发专家。擅长功能完善、bug修复、模块整合。注重代码质量和用户体验。"
+    },
+    {
+      "id": "delta",
+      "name": "Delta",
+      "role": "reviewer",
+      "description": "代码审查专家",
+      "capabilities": ["code_review", "testing", "quality", "best_practices"],
+      "prompt_template": "你是Delta，代码审查专家。负责审查代码质量、检查潜在bug、确保符合最佳实践。提供具体的改进建议。"
+    },
+    {
+      "id": "echo",
+      "name": "Echo",
+      "role": "devops",
+      "description": "部署运维专家",
+      "capabilities": ["deploy", "testing", "ops", "monitoring", "ci_cd"],
+      "prompt_template": "你是Echo，DevOps专家。负责测试验证、部署上线、运维监控。确保系统稳定运行。"
+    },
+    {
+      "id": "foxtrot",
+      "name": "Foxtrot",
+      "role": "security_expert",
+      "description": "安全审计专家",
+      "capabilities": ["security", "audit", "vulnerability_scan", "encryption", "best_practices"],
+      "prompt_template": "你是Foxtrot，安全审计专家。负责代码安全审查、漏洞扫描、加密实现。确保系统符合安全最佳实践。"
+    },
+    {
+      "id": "golf",
+      "name": "Golf",
+      "role": "performance_expert",
+      "description": "性能优化专家",
+      "capabilities": ["performance", "optimization", "profiling", "caching", "load_testing"],
+      "prompt_template": "你是Golf，性能优化专家。负责代码性能分析、瓶颈识别、缓存优化、负载测试。确保系统高效运行。"
+    },
+    {
+      "id": "hotel",
+      "name": "Hotel",
+      "role": "documentation_expert",
+      "description": "文档编写专家",
+      "capabilities": ["documentation", "technical_writing", "api_docs", "readme", "tutorials"],
+      "prompt_template": "你是Hotel，文档编写专家。负责编写技术文档、API文档、使用教程、README。确保文档清晰易懂。"
+    },
+    {
+      "id": "india",
+      "name": "India",
+      "role": "ai_expert",
+      "description": "AI算法专家",
+      "capabilities": ["machine_learning", "deep_learning", "nlp", "tensorflow", "pytorch", "model_training", "ai_api"],
+      "prompt_template": "你是India，AI算法专家。负责机器学习模型开发、自然语言处理、深度学习优化、AI接口集成。将AI能力融入产品。"
+    },
+    {
+      "id": "juliet",
+      "name": "Juliet",
+      "role": "data_expert",
+      "description": "数据处理专家",
+      "capabilities": ["sql", "pandas", "data_viz", "etl", "database", "big_data", "analytics"],
+      "prompt_template": "你是Juliet，数据处理专家。负责数据库设计、数据分析、ETL流程、大数据处理。将数据转化为价值。"
+    },
+    {
+      "id": "kilo",
+      "name": "Kilo",
+      "role": "notification_agent",
+      "description": "通知消息专家 - 定时任务消息推送",
+      "capabilities": ["messaging", "notifications", "daily_reports", "summaries", "feishu", "alerts"],
+      "prompt_template": "你是Kilo，通知消息专家。负责发送定时任务通知、每日报告、系统状态更新。使用飞书等渠道及时向用户推送重要信息。"
+    }
+  ],
+  "task_templates": {
+    "web_app": {
+      "subtasks": [
+        {"title": "UI界面开发", "capabilities": ["html", "css", "ui"], "priority": 1},
+        {"title": "后端逻辑开发", "capabilities": ["javascript", "backend"], "priority": 1},
+        {"title": "功能完善", "capabilities": ["fullstack", "debug"], "priority": 2, "dependencies": [0, 1]},
+        {"title": "代码审查", "capabilities": ["code_review"], "priority": 3, "dependencies": [2]},
+        {"title": "安全审计", "capabilities": ["security"], "priority": 3, "dependencies": [2]},
+        {"title": "测试部署", "capabilities": ["deploy", "testing"], "priority": 4, "dependencies": [3, 4]},
+        {"title": "文档编写", "capabilities": ["documentation"], "priority": 4, "dependencies": [5]}
+      ]
+    },
+    "data_analysis": {
+      "subtasks": [
+        {"title": "数据处理", "capabilities": ["python", "algorithm"], "priority": 1},
+        {"title": "可视化开发", "capabilities": ["html", "css", "ui"], "priority": 2},
+        {"title": "报告生成", "capabilities": ["fullstack"], "priority": 3, "dependencies": [0, 1]},
+        {"title": "性能优化", "capabilities": ["performance"], "priority": 3, "dependencies": [2]},
+        {"title": "审查部署", "capabilities": ["code_review", "deploy"], "priority": 4, "dependencies": [3]}
+      ]
+    },
+    "enterprise_project": {
+      "subtasks": [
+        {"title": "架构设计", "capabilities": ["backend", "api"], "priority": 1},
+        {"title": "UI开发", "capabilities": ["html", "css", "ui"], "priority": 1},
+        {"title": "后端开发", "capabilities": ["python", "backend", "api"], "priority": 1},
+        {"title": "功能整合", "capabilities": ["fullstack", "debug"], "priority": 2, "dependencies": [0, 1, 2]},
+        {"title": "安全审计", "capabilities": ["security", "audit"], "priority": 3, "dependencies": [3]},
+        {"title": "性能优化", "capabilities": ["performance", "optimization"], "priority": 3, "dependencies": [3]},
+        {"title": "代码审查", "capabilities": ["code_review"], "priority": 3, "dependencies": [3]},
+        {"title": "测试验证", "capabilities": ["testing"], "priority": 4, "dependencies": [4, 5, 6]},
+        {"title": "文档编写", "capabilities": ["documentation"], "priority": 4, "dependencies": [7]},
+        {"title": "部署上线", "capabilities": ["deploy", "ops"], "priority": 5, "dependencies": [8]}
+      ]
+    },
+    "large_scale_ai_project": {
+      "subtasks": [
+        {"title": "数据收集与清洗", "capabilities": ["sql", "pandas", "etl"], "priority": 1},
+        {"title": "AI模型开发", "capabilities": ["machine_learning", "deep_learning", "tensorflow"], "priority": 1},
+        {"title": "模型训练与优化", "capabilities": ["model_training", "performance"], "priority": 2, "dependencies": [1]},
+        {"title": "AI服务API开发", "capabilities": ["backend", "api", "ai_api"], "priority": 2, "dependencies": [2]},
+        {"title": "前端界面开发", "capabilities": ["html", "css", "ui"], "priority": 2},
+        {"title": "系统整合", "capabilities": ["fullstack", "integration"], "priority": 3, "dependencies": [3, 4]},
+        {"title": "安全审计", "capabilities": ["security", "audit"], "priority": 3, "dependencies": [5]},
+        {"title": "性能优化", "capabilities": ["performance", "caching"], "priority": 3, "dependencies": [5]},
+        {"title": "模型评估与测试", "capabilities": ["testing", "analytics"], "priority": 4, "dependencies": [6, 7]},
+        {"title": "技术文档编写", "capabilities": ["documentation", "api_docs"], "priority": 4, "dependencies": [8]},
+        {"title": "生产部署", "capabilities": ["deploy", "ops", "monitoring"], "priority": 5, "dependencies": [9]}
+      ]
+    },
+    "data_platform": {
+      "subtasks": [
+        {"title": "数据库架构设计", "capabilities": ["sql", "database", "backend"], "priority": 1},
+        {"title": "ETL流程开发", "capabilities": ["etl", "pandas", "big_data"], "priority": 1},
+        {"title": "数据仓库搭建", "capabilities": ["database", "backend"], "priority": 1},
+        {"title": "数据分析模块", "capabilities": ["pandas", "analytics"], "priority": 2, "dependencies": [2]},
+        {"title": "可视化报表开发", "capabilities": ["data_viz", "html", "css"], "priority": 2},
+        {"title": "数据API开发", "capabilities": ["backend", "api"], "priority": 2},
+        {"title": "系统安全加固", "capabilities": ["security", "audit"], "priority": 3, "dependencies": [3, 4, 5]},
+        {"title": "性能调优", "capabilities": ["performance", "caching"], "priority": 3, "dependencies": [3, 4, 5]},
+        {"title": "测试验证", "capabilities": ["testing"], "priority": 4, "dependencies": [6, 7]},
+        {"title": "文档与培训", "capabilities": ["documentation", "tutorials"], "priority": 4, "dependencies": [8]},
+        {"title": "上线部署", "capabilities": ["deploy", "ops"], "priority": 5, "dependencies": [9]}
+      ]
+    }
+  }
+}

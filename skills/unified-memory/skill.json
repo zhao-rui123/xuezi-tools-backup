@@ -1,0 +1,39 @@
+{
+  "name": "unified-memory",
+  "version": "2.0.0",
+  "description": "统一记忆系统 - 整合所有记忆相关技能包，提供一致的使用接口",
+  "author": "雪子助手",
+  "tags": ["memory", "unified", "integration", "ai-assistant"],
+  "entry": "unified_memory.py",
+  "dependencies": ["numpy", "jieba"],
+  "modules": {
+    "daily": {
+      "enabled": true,
+      "description": "每日工作记录"
+    },
+    "analyzer": {
+      "enabled": true,
+      "schedule": "0 2 1 * *",
+      "description": "月度智能分析"
+    },
+    "recall": {
+      "enabled": true,
+      "description": "增强记忆（重要性分级）"
+    },
+    "session": {
+      "enabled": true,
+      "description": "会话持久化"
+    },
+    "context": {
+      "enabled": true,
+      "description": "上下文管理"
+    }
+  },
+  "commands": {
+    "daily": "python3 -m unified_memory daily",
+    "analyze": "python3 -m unified_memory analyze",
+    "recall": "python3 -m unified_memory recall",
+    "session": "python3 -m unified_memory session",
+    "status": "python3 -m unified_memory status"
+  }
+}

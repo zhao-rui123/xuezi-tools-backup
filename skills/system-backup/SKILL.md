@@ -1,11 +1,92 @@
 ---
 name: system-backup
-description: Comprehensive backup and restore system for OpenClaw. Use when setting up automated backups, performing manual backups, or restoring from backup. Handles daily incremental backups of memory/skills and monthly full archives with rotation. Supports complete disaster recovery.
+description: |
+  Comprehensive backup and restore system for OpenClaw and website.
+  v2.0 整合: website-backup + website-restore
+  Handles OpenClaw backup, website backup, and complete disaster recovery.
 ---
 
-# System Backup - OpenClaw 系统备份恢复套件
+# System Backup - OpenClaw & 网站备份恢复套件 v2.0
 
-全面的 OpenClaw 备份解决方案，支持每日增量备份和月度完整归档，包含完整的恢复文档。
+全面的备份解决方案，支持 OpenClaw 系统备份、网站备份恢复、灾难恢复。
+
+## 功能特性
+
+### 1. OpenClaw 系统备份
+- **Memory** - 对话记录和每日笔记
+- **Skills** - 系统技能包
+- **Workspace Skills** - 自定义技能包
+- **OpenClaw Config** - 配置、cron、认证信息
+
+### 2. 月度归档备份
+- 完整的 `~/.openclaw/` 目录打包
+- tar.gz 压缩格式
+- 自动保留最近 6 个月
+
+### 3. 网站备份恢复 ⭐NEW v2.0
+- **网站备份** - 备份腾讯云服务器网站
+- **网站恢复** - 从备份恢复网站
+- **远程操作** - 自动 SSH 操作
+
+### 4. 恢复工具
+- 从每日备份快速恢复
+- 从月度归档完整恢复
+- 网站备份恢复
+- 自动回滚支持
+
+## 快速开始
+
+### OpenClaw 备份
+```bash
+# 每日备份
+~/.openclaw/workspace/skills/system-backup/scripts/daily-backup.sh
+
+# 月度归档
+~/.openclaw/workspace/skills/system-backup/scripts/monthly-archive.sh
+```
+
+### 网站备份恢复 ⭐NEW v2.0
+```bash
+# 备份网站
+cd ~/.openclaw/workspace/skills/system-backup
+bash website_backup.sh
+
+# 恢复网站
+bash website_restore.sh /tmp/xuezi-tools-backup-2026-03-09.tar.gz
+```
+
+### 恢复数据
+```bash
+# 查看可用备份
+./scripts/restore.sh list
+
+# 从每日备份恢复
+./scripts/restore.sh restore-daily
+
+# 从月度归档恢复
+./scripts/restore.sh restore-archive 2026-03-01
+```
+
+## 文件说明
+
+| 文件 | 功能 |
+|------|------|
+| scripts/daily-backup.sh | OpenClaw 每日备份 |
+| scripts/monthly-archive.sh | OpenClaw 月度归档 |
+| scripts/restore.sh | OpenClaw 恢复工具 |
+| website_backup.sh | 网站备份 ⭐NEW |
+| website_restore.sh | 网站恢复 ⭐NEW |
+| SKILL.md | 本文档 |
+
+## 更新日志
+
+### v2.0 (2026-03-09)
+- ✅ 整合 website-backup 网站备份
+- ✅ 整合 website-restore 网站恢复
+- ✅ 创建统一的备份恢复套件
+
+### v1.0
+- 初始版本，OpenClaw 系统备份
 
 ## 功能特性
 

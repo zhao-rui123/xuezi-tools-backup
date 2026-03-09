@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-03-10T01:00:02.132988",
+  "decisions": [
+    {
+      "id": "2026-03-03-4321",
+      "title": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "context": "",
+      "decision": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股自动报告机制\n\n## 关键数据\n- 中矿资源今日跌幅 -8.65%，领跌锂矿板块\n- 赣锋锂业 -6.49%，盐湖股份 -6.06%\n- 海博思创唯一上涨 +0.72%\n- 自选股平均跌幅 -4.65%\n\n## 待办\n- [x] 验证今晚 22:00 自动备份是否正常（已完成，日志显示正常）\n- [",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-03",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    },
+    {
+      "id": "2026-03-08-8347",
+      "title": "记忆文件永久保留，不清理",
+      "context": "",
+      "decision": "记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n\n## 关键数据\n\n- Token消耗：约11,000（今天累计）\n- 工作时长：约2小时\n- 解锁成就：🌱初出茅庐、💰Token新手、⏰一小时\n- 技能包新增：lobste",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-08",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    },
+    {
+      "id": "2026-03-03-5777",
+      "title": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "context": "",
+      "decision": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股自动报告机制\n\n## 关键数据\n- 中矿资源今日跌幅 -8.65%，领跌锂矿板块\n- 赣锋锂业 -6.49%，盐湖股份 -6.06%\n- 海博思创唯一上涨 +0.72%\n- 自选股平均跌幅 -4.65%\n\n## 待办\n- [x] 验证今晚 22:00 自动备份是否正常（已完成，日志显示正常）\n- [",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-03",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    },
+    {
+      "id": "2026-03-08-3597",
+      "title": "记忆文件永久保留，不清理",
+      "context": "",
+      "decision": "记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n\n## 关键数据\n\n- Token消耗：约11,000（今天累计）\n- 工作时长：约2小时\n- 解锁成就：🌱初出茅庐、💰Token新手、⏰一小时\n- 技能包新增：lobste",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-08",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    },
+    {
+      "id": "2026-03-03-2116",
+      "title": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
+      "context": "",
+      "decision": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源\n- [DECISION] 建立每日自选股自动报告机制\n\n## 关键数据\n- 中矿资源今日跌幅 -8.65%，领跌锂矿板块\n- 赣锋锂业 -6.49%，盐湖股份 -6.06%\n- 海博思创唯一上涨 +0.72%\n- 自选股平均跌幅 -4.65%\n\n## 待办\n- [x] 验证今晚 22:00 自动备份是否正常（已完成，日志显示正常）\n- [",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-03",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    },
+    {
+      "id": "2026-03-08-1535",
+      "title": "记忆文件永久保留，不清理",
+      "context": "",
+      "decision": "记忆文件永久保留，不清理\n- [DECISION] 每月1日自动执行记忆智能筛选\n- [DECISION] 每周日凌晨3点自动清理OUC文件夹\n- [DECISION] 生成的文件统一放到 ouc/generated/ 目录\n\n## 关键数据\n\n- Token消耗：约11,000（今天累计）\n- 工作时长：约2小时\n- 解锁成就：🌱初出茅庐、💰Token新手、⏰一小时\n- 技能包新增：lobste",
+      "reasoning": "",
+      "outcome": "unknown",
+      "date": "2026-03-08",
+      "tags": [],
+      "related_projects": [],
+      "lessons": ""
+    }
+  ]
+}

@@ -1,72 +1,106 @@
 ---
 name: system-maintenance
-description: OpenClaw system maintenance and health monitoring. Use when performing system cleanup, log rotation, session cleanup, or health checks. Covers automated maintenance tasks for the OpenClaw environment.
+description: |
+  全面系统维护技能包 - 整合 OpenClaw 维护、每日健康检查、服务器监控。
+  v2.0 整合: daily-health-check + server-monitor
 ---
 
-# 系统维护技能
+# 系统维护技能包 v2.0
+
+全面系统维护解决方案，整合 OpenClaw 环境维护、每日健康检查、云服务器监控。
+
+## 功能特性
+
+### 1. OpenClaw 环境维护
+- 日志轮转和清理
+- 孤儿会话文件清理
+- 磁盘空间检查
+- Gateway 状态监控
+
+### 2. 每日健康检查 ⭐NEW v2.0
+- OpenClaw 状态检查
+- 云服务器健康检查
+- 备份状态验证
+- 今日工作统计
+
+### 3. 服务器监控 ⭐NEW v2.0
+- 腾讯云服务器 (106.54.25.161) 监控
+- 磁盘/内存/服务状态
+- 网站可访问性检查
+- 大文件管理
 
 ## 维护脚本
 
-**位置**: `~/.openclaw/workspace/scripts/system-maintenance.sh`
-
-**功能**:
-1. 日志轮转（gateway.log, gateway.err.log）
-2. 清理孤儿会话文件
-3. 检查磁盘空间
-4. 检查 OpenClaw 状态
-5. 清理旧备份（保留30天）
-
-## 手动执行
-
+### 主维护脚本
 ```bash
-bash ~/.openclaw/workspace/scripts/system-maintenance.sh
+# 完整系统维护（每周执行）
+bash ~/.openclaw/workspace/skills/system-maintenance/system-maintenance.sh
 ```
 
-## 定时执行
-
-### 添加到 crontab（每周执行）
+### 每日健康检查
 ```bash
-# 每周日凌晨2点执行维护
-0 2 * * 0 /Users/zhaoruicn/.openclaw/workspace/scripts/system-maintenance.sh >> /tmp/system-maintenance.log 2>&1
+# 每日健康检查（每日执行）
+bash ~/.openclaw/workspace/skills/system-maintenance/daily-health-check.sh
 ```
 
-## 维护内容详解
+### 快速服务器检查
+```bash
+# 服务器快速检查
+bash ~/.openclaw/workspace/skills/system-maintenance/server-check.sh
+```
 
-### 1. 日志轮转
-- 将当前日志备份到 `/Volumes/cu/ocu/system-maintenance/logs/`
-- 创建新的空日志文件
-- 保留30天的备份
+## 定时任务配置
 
-### 2. 会话清理
-- 删除 `.jsonl.reset.*` 文件（重置的历史）
-- 删除 `.jsonl.deleted.*` 文件（已删除会话）
-- 保留当前活跃的会话文件
+### 推荐配置
+```bash
+# 每日早上9点 - 健康检查
+0 9 * * * /Users/zhaoruicn/.openclaw/workspace/skills/system-maintenance/daily-health-check.sh >> /tmp/daily-health.log 2>&1
 
-### 3. 磁盘检查
-- 检查主磁盘使用率
-- 检查备份磁盘使用率
-- 空间不足时警告
+# 每周日凌晨2点 - 系统维护
+0 2 * * 0 /Users/zhaoruicn/.openclaw/workspace/skills/system-maintenance/system-maintenance.sh >> /tmp/system-maintenance.log 2>&1
 
-### 4. 服务检查
-- 检查 Gateway 进程状态
-- 未运行时提示
+# 每小时 - 服务器检查
+0 * * * * /Users/zhaoruicn/.openclaw/workspace/skills/system-maintenance/server-check.sh >> /tmp/server-check.log 2>&1
+```
 
-## 健康检查清单
+## 服务器信息
 
-### 每日检查
-- [ ] Gateway 运行状态
-- [ ] 磁盘空间 < 80%
-- [ ] 备份任务执行成功
+| 项目 | 详情 |
+|------|------|
+| **IP** | 106.54.25.161 |
+| **用户名** | root |
+| **网站目录** | /usr/share/nginx/html/ |
+| **网站地址** | http://106.54.25.161/ |
 
-### 每周检查
-- [ ] 执行维护脚本
-- [ ] 检查日志大小
-- [ ] 清理临时文件
+## 快速操作
 
-### 每月检查
-- [ ] 清理旧会话历史
-- [ ] 检查技能包更新
-- [ ] 备份配置审查
+### SSH连接服务器
+```bash
+sshpass -p 'Zr123456' ssh root@106.54.25.161
+```
+
+### 检查服务器状态
+```bash
+sshpass -p 'Zr123456' ssh root@106.54.25.161 "df -h && free -h && systemctl status nginx --no-pager"
+```
+
+### 上传文件到服务器
+```bash
+sshpass -p 'Zr123456' scp localfile.txt root@106.54.25.161:/usr/share/nginx/html/
+```
+
+### 重启 Nginx
+```bash
+sshpass -p 'Zr123456' ssh root@106.54.25.161 "nginx -s reload"
+```
+
+## 告警阈值
+
+| 指标 | 正常 | 警告 | 危险 |
+|------|------|------|------|
+| 磁盘空间 | < 70% | 70-85% | > 85% |
+| 内存使用 | < 70% | 70-85% | > 85% |
+| 备份延迟 | < 1天 | 1-2天 | > 2天 |
 
 ## 故障处理
 
@@ -77,19 +111,41 @@ openclaw gateway restart
 
 ### 磁盘空间不足
 ```bash
-# 清理大文件
-find ~/.openclaw/logs -name "*.log" -size +10M -delete
+# 清理日志
+rm ~/.openclaw/logs/gateway.log.*.bak
 
 # 清理旧备份
 find /Volumes/cu/ocu -name "*.bak" -mtime +30 -delete
+
+# 服务器磁盘清理
+sshpass -p 'Zr123456' ssh root@106.54.25.161 "find /var/log -name '*.log' -mtime +30 -delete"
 ```
 
-### 会话文件过多
-```bash
-cd ~/.openclaw/agents/main/sessions/
-rm -f *.jsonl.reset.* *.jsonl.deleted.*
-```
+### 网站无法访问
+1. 检查 Nginx: `systemctl status nginx`
+2. 检查端口: `netstat -tlnp | grep 80`
+3. 检查防火墙: `firewall-cmd --list-all`
+
+## 文件说明
+
+| 文件 | 功能 |
+|------|------|
+| system-maintenance.sh | 主维护脚本（日志轮转、会话清理） |
+| daily-health-check.sh | 每日健康检查脚本 ⭐NEW |
+| server-check.sh | 服务器快速检查 ⭐NEW |
+| SKILL.md | 本文档 |
+
+## 更新日志
+
+### v2.0 (2026-03-09)
+- ✅ 整合 daily-health-check 每日健康检查
+- ✅ 整合 server-monitor 服务器监控
+- ✅ 创建全面的系统维护技能包
+- ✅ 统一定时任务配置
+
+### v1.0
+- 初始版本，基础 OpenClaw 维护功能
 
 ---
 *创建于: 2026-03-04*  
-*执行频率: 每周一次*
+*整合时间: 2026-03-09*

@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-03-10T01:00:01.955910",
+  "summary": {
+    "total_skills": 64,
+    "used_skills": 0,
+    "usage_rate": 0.0
+  },
+  "category_breakdown": {
+    "document": {
+      "count": 4,
+      "usage": 0
+    },
+    "general": {
+      "count": 33,
+      "usage": 0
+    },
+    "data": {
+      "count": 7,
+      "usage": 0
+    },
+    "ops": {
+      "count": 6,
+      "usage": 0
+    },
+    "finance": {
+      "count": 9,
+      "usage": 0
+    },
+    "web": {
+      "count": 2,
+      "usage": 0
+    },
+    "agent": {
+      "count": 2,
+      "usage": 0
+    },
+    "communication": {
+      "count": 1,
+      "usage": 0
+    }
+  },
+  "top_skills": [],
+  "neglected_skills": [
+    "nano-pdf",
+    "file-sender",
+    "memory-search",
+    "unified-memory",
+    "tesseract-ocr",
+    "system-backup",
+    "lobster-home",
+    "time-toolkit",
+    "system-guard",
+    "stock-screener"
+  ],
+  "recommendations": [
+    {
+      "name": "system-backup",
+      "reason": "运维类技能，建议了解",
+      "category": "ops",
+      "priority": "low",
+      "confidence": 0.5
+    },
+    {
+      "name": "system-guard",
+      "reason": "运维类技能，建议了解",
+      "category": "ops",
+      "priority": "low",
+      "confidence": 0.5
+    },
+    {
+      "name": "website-backup",
+      "reason": "运维类技能，建议了解",
+      "category": "ops",
+      "priority": "low",
+      "confidence": 0.5
+    }
+  ]
+}

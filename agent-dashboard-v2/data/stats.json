@@ -1,0 +1,32 @@
+{
+  "today": {
+    "date": "2026-03-08",
+    "tasks_completed": 1,
+    "tokens_used": 850,
+    "work_time_seconds": 120,
+    "room_time": {
+      "study": 0,
+      "workspace": 120,
+      "gameroom": 0,
+      "bedroom": 60,
+      "bathroom": 0,
+      "kitchen": 0,
+      "playground": 0
+    },
+    "tasks": [
+      {
+        "name": "测试小龙虾看板",
+        "start_time": "2026-03-08T12:29:48",
+        "end_time": "2026-03-08T12:30:00",
+        "duration_seconds": 12,
+        "tokens_used": 850,
+        "success": true
+      }
+    ]
+  },
+  "current_status": "thinking",
+  "current_room": "study",
+  "last_activity": "2026-03-08T12:30:15",
+  "current_task": null,
+  "updated_at": "2026-03-08T12:30:15"
+}

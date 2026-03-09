@@ -1,0 +1,145 @@
+{
+  "timestamp": "2026-03-09T21:47:57.800292",
+  "scores": [
+    {
+      "file": "2026-03-02.md",
+      "importance": 1,
+      "category": "decision",
+      "tags": []
+    },
+    {
+      "file": "2026-03-06.md",
+      "importance": 1,
+      "category": "task",
+      "tags": []
+    },
+    {
+      "file": "2026-03-07.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "2026-03-03.md",
+      "importance": 1,
+      "category": "decision",
+      "tags": []
+    },
+    {
+      "file": "2026-03-08.md",
+      "importance": 1,
+      "category": "decision",
+      "tags": []
+    },
+    {
+      "file": "2026-03-09.md",
+      "importance": 1.0,
+      "category": "decision",
+      "tags": []
+    },
+    {
+      "file": "2026-03-04.md",
+      "importance": 0.95,
+      "category": "issue",
+      "tags": []
+    },
+    {
+      "file": "2026-03-05.md",
+      "importance": 0.75,
+      "category": "task",
+      "tags": []
+    },
+    {
+      "file": "archive/2026-02-22.md",
+      "importance": 1,
+      "category": "decision",
+      "tags": []
+    },
+    {
+      "file": "archive/2026-02-23.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026-02-20.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026-02-21.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/03/2026-03-01-feishu-conversation.md",
+      "importance": 0.75,
+      "category": "general",
+      "tags": [
+        "1"
+      ]
+    },
+    {
+      "file": "archive/2026/03/2026-03-01-test-write.md",
+      "importance": 0.85,
+      "category": "skill",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/03/2026-03-01-2025.md",
+      "importance": 0.5,
+      "category": "general",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/03/2026-03-01.md",
+      "importance": 1,
+      "category": "task",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/03/2026-03-01-first-conversation.md",
+      "importance": 0.6,
+      "category": "general",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-20-储能循环计算.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-26.md",
+      "importance": 0.95,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-27.md",
+      "importance": 0.9,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-26-sichuan-update.md",
+      "importance": 1,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-24.md",
+      "importance": 0.95,
+      "category": "project",
+      "tags": []
+    },
+    {
+      "file": "archive/2026/02/2026-02-25.md",
+      "importance": 0.9,
+      "category": "project",
+      "tags": []
+    }
+  ]
+}

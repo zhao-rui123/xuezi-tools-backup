@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0-universal",
+  "note": "使用前请修改路径配置为您的实际路径",
+  "modules": {
+    "daily": {
+      "enabled": true,
+      "auto_save": true,
+      "retention": "permanent"
+    },
+    "analyzer": {
+      "enabled": true,
+      "schedule": "0 2 1 * *",
+      "keywords_top_n": 30,
+      "themes": ["项目开发", "学习", "工作", "生活", "投资", "其他"]
+    },
+    "recall": {
+      "enabled": true,
+      "auto_decay": true,
+      "default_scope": "global"
+    },
+    "session": {
+      "enabled": true,
+      "auto_save_on_model_switch": true,
+      "retention_days": 30
+    }
+  },
+  "paths": {
+    "workspace": "PLEASE_SET_YOUR_WORKSPACE_PATH",
+    "memory_dir": "PLEASE_SET_YOUR_MEMORY_PATH",
+    "knowledge_base": "PLEASE_SET_YOUR_KB_PATH"
+  },
+  "setup_guide": {
+    "step1": "修改 paths 中的路径为您的实际路径",
+    "step2": "确保路径目录存在且有读写权限",
+    "step3": "安装依赖: pip install numpy jieba",
+    "step4": "添加到 PATH: export PATH=$PATH:YOUR_SKILL_PATH/bin",
+    "step5": "测试: ums status"
+  }
+}

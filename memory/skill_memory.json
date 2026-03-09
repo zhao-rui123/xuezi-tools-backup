@@ -1,0 +1,930 @@
+{
+  "timestamp": "2026-03-10T01:00:01.953043",
+  "skills": {
+    "nano-pdf": {
+      "name": "nano-pdf",
+      "path": "skills/nano-pdf",
+      "category": "document",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.963566",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "file-sender": {
+      "name": "file-sender",
+      "path": "skills/file-sender",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.963679",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "memory-search": {
+      "name": "memory-search",
+      "path": "skills/memory-search",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.963820",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "记忆"
+      ]
+    },
+    "unified-memory": {
+      "name": "unified-memory",
+      "path": "skills/unified-memory",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.963989",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "备份",
+        "记忆"
+      ]
+    },
+    "tesseract-ocr": {
+      "name": "tesseract-ocr",
+      "path": "skills/tesseract-ocr",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964169",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "system-backup": {
+      "name": "system-backup",
+      "path": "skills/system-backup",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964278",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "lobster-home": {
+      "name": "lobster-home",
+      "path": "skills/lobster-home",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964302",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "time-toolkit": {
+      "name": "time-toolkit",
+      "path": "skills/time-toolkit",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964398",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "system-guard": {
+      "name": "system-guard",
+      "path": "skills/system-guard",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964546",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "stock-screener": {
+      "name": "stock-screener",
+      "path": "skills/stock-screener",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964610",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "tushare-stock-datasource": {
+      "name": "tushare-stock-datasource",
+      "path": "skills/tushare-stock-datasource",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964713",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "office-pro": {
+      "name": "office-pro",
+      "path": "skills/office-pro",
+      "category": "document",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964860",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "yfinance-stock": {
+      "name": "yfinance-stock",
+      "path": "skills/yfinance-stock",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964880",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "website-backup": {
+      "name": "website-backup",
+      "path": "skills/website-backup",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.964947",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "electricity-price-crawler": {
+      "name": "electricity-price-crawler",
+      "path": "skills/electricity-price-crawler",
+      "category": "web",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965035",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "daily-health-check": {
+      "name": "daily-health-check",
+      "path": "skills/daily-health-check",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965124",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "xueqiu-stock-client": {
+      "name": "xueqiu-stock-client",
+      "path": "skills/xueqiu-stock-client",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965242",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "Agent"
+      ]
+    },
+    "openai-whisper": {
+      "name": "openai-whisper",
+      "path": "skills/openai-whisper",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965310",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "git-workflow": {
+      "name": "git-workflow",
+      "path": "skills/git-workflow",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965396",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "备份",
+        "记忆"
+      ]
+    },
+    "system-maintenance": {
+      "name": "system-maintenance",
+      "path": "skills/system-maintenance",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965477",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "pdf-data-extractor": {
+      "name": "pdf-data-extractor",
+      "path": "skills/pdf-data-extractor",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965630",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "summarize": {
+      "name": "summarize",
+      "path": "skills/summarize",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965708",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "file-management": {
+      "name": "file-management",
+      "path": "skills/file-management",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965791",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "记忆"
+      ]
+    },
+    "chart-generator": {
+      "name": "chart-generator",
+      "path": "skills/chart-generator",
+      "category": "document",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.965943",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "video-frames": {
+      "name": "video-frames",
+      "path": "skills/video-frames",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966008",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "website-restore": {
+      "name": "website-restore",
+      "path": "skills/website-restore",
+      "category": "web",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966103",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "备份"
+      ]
+    },
+    "openclaw-memory-kit": {
+      "name": "openclaw-memory-kit",
+      "path": "skills/openclaw-memory-kit",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966123",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "multi-search-engine": {
+      "name": "multi-search-engine",
+      "path": "skills/multi-search-engine",
+      "category": "agent",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966187",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "data-processor": {
+      "name": "data-processor",
+      "path": "skills/data-processor",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966325",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "self-improvement": {
+      "name": "self-improvement",
+      "path": "skills/self-improvement",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966584",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "记忆"
+      ]
+    },
+    "apple-reminders": {
+      "name": "apple-reminders",
+      "path": "skills/apple-reminders",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966677",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "file-to-mac": {
+      "name": "file-to-mac",
+      "path": "skills/file-to-mac",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966742",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "skill-version-control": {
+      "name": "skill-version-control",
+      "path": "skills/skill-version-control",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966827",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "stock-earnings-calendar": {
+      "name": "stock-earnings-calendar",
+      "path": "skills/stock-earnings-calendar",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.966914",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "feishu-image-send": {
+      "name": "feishu-image-send",
+      "path": "skills/feishu-image-send",
+      "category": "communication",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967060",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "stock-analysis-pro": {
+      "name": "stock-analysis-pro",
+      "path": "skills/stock-analysis-pro",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967256",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "github": {
+      "name": "github",
+      "path": "skills/github",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967310",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "project-tracker": {
+      "name": "project-tracker",
+      "path": "skills/project-tracker",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967403",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "备份",
+        "Agent"
+      ]
+    },
+    "knowledge-base": {
+      "name": "knowledge-base",
+      "path": "skills/knowledge-base",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967616",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "记忆"
+      ]
+    },
+    "cad-generator": {
+      "name": "cad-generator",
+      "path": "skills/cad-generator",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967700",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "unified-memory-universal": {
+      "name": "unified-memory-universal",
+      "path": "skills/unified-memory-universal",
+      "category": "data",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967719",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "stock-alert": {
+      "name": "stock-alert",
+      "path": "skills/stock-alert",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967797",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "model-switching": {
+      "name": "model-switching",
+      "path": "skills/model-switching",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967893",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "Agent"
+      ]
+    },
+    "weather": {
+      "name": "weather",
+      "path": "skills/weather",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.967966",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "report-generator": {
+      "name": "report-generator",
+      "path": "skills/report-generator",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968079",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "debug-pro": {
+      "name": "debug-pro",
+      "path": "skills/debug-pro",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968189",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "记忆"
+      ]
+    },
+    "skill-finder": {
+      "name": "skill-finder",
+      "path": "skills/skill-finder",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968269",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融",
+        "备份"
+      ]
+    },
+    "obsidian": {
+      "name": "obsidian",
+      "path": "skills/obsidian",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968362",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "project-finance-model": {
+      "name": "project-finance-model",
+      "path": "skills/project-finance-model",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968526",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "file-transfer-workflow": {
+      "name": "file-transfer-workflow",
+      "path": "skills/file-transfer-workflow",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968596",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "security-scanner": {
+      "name": "security-scanner",
+      "path": "skills/security-scanner",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968748",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "file-transfer": {
+      "name": "file-transfer",
+      "path": "skills/file-transfer",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968814",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "apple-notes": {
+      "name": "apple-notes",
+      "path": "skills/apple-notes",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968896",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "startup-check": {
+      "name": "startup-check",
+      "path": "skills/startup-check",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968958",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "记忆"
+      ]
+    },
+    "archived": {
+      "name": "archived",
+      "path": "skills/archived",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.968977",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "server-monitor": {
+      "name": "server-monitor",
+      "path": "skills/server-monitor",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.969072",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "china-enterprise-tax": {
+      "name": "china-enterprise-tax",
+      "path": "skills/china-enterprise-tax",
+      "category": "finance",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T19:31:06.969180",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "金融"
+      ]
+    },
+    "enhancement-suites": {
+      "name": "enhancement-suites",
+      "path": "skills/enhancement-suites",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.470887",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "suites": {
+      "name": "suites",
+      "path": "skills/suites",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.471897",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "doc-automation": {
+      "name": "doc-automation",
+      "path": "skills/doc-automation",
+      "category": "document",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.471955",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "dashboard": {
+      "name": "dashboard",
+      "path": "skills/dashboard",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.473424",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "记忆"
+      ]
+    },
+    "monitoring-alert": {
+      "name": "monitoring-alert",
+      "path": "skills/monitoring-alert",
+      "category": "ops",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.474094",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份"
+      ]
+    },
+    "cron-manager": {
+      "name": "cron-manager",
+      "path": "skills/cron-manager",
+      "category": "general",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-09T20:51:35.475069",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": []
+    },
+    "multi-agent-suite": {
+      "name": "multi-agent-suite",
+      "path": "skills/multi-agent-suite",
+      "category": "agent",
+      "usage_count": 0,
+      "last_used": null,
+      "first_used": "2026-03-10T01:00:01.948394",
+      "success_count": 0,
+      "fail_count": 0,
+      "avg_execution_time": 0.0,
+      "user_rating": 0.0,
+      "tags": [
+        "备份",
+        "Agent"
+      ]
+    }
+  }
+}

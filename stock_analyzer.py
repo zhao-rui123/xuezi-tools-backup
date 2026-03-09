@@ -16,7 +16,6 @@ WATCHLIST = [
     ("002460", "赣锋锂业", "锂电池/新能源"),
     ("000792", "盐湖股份", "盐湖提锂"),
     ("002240", "盛新锂能", "锂电池材料"),
-    ("688411", "海博思创", "储能系统"),
     ("000725", "京东方A", "面板/显示"),
     ("600707", "彩虹股份", "面板/显示"),
     ("688981", "中芯国际", "半导体/芯片"),
@@ -184,7 +183,7 @@ def generate_report() -> str:
     for i, item in enumerate(stocks_with_data, 1):
         s = item['stock']
         m = item['metrics']
-        emoji = "🟢" if m['change_pct'] > 0 else "🔴" if m['change_pct'] < 0 else "⚪"
+        emoji = "🔴" if m['change_pct'] > 0 else "🟢" if m['change_pct'] < 0 else "⚪"
         
         report_lines.append(
             f"{emoji}{i:<3} {item['name']:<8} {item['code']:<8} "
