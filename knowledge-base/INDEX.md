@@ -11,6 +11,7 @@
 | 储能项目相关 | [projects/储能工具包](projects/储能工具包/) |
 | 股票分析相关 | [projects/股票分析系统](projects/股票分析系统/) |
 | Agent开发流程 | [projects/多Agent开发框架](projects/多Agent开发框架/) |
+| **广播专员(Kilo)** | **[projects/多Agent开发框架](projects/多Agent开发框架/)#kilo-广播专员** |
 | 系统故障排查 | [problems/openclaw/](problems/openclaw/) |
 | 系统备份恢复 | [system-backup 技能包](../skills/system-backup/SKILL.md) |
 | 飞书文件发送 | [operations/飞书文件发送](operations/飞书文件发送.md) |

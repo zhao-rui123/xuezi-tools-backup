@@ -16,6 +16,42 @@
 | Builder | Charlie | 功能完善、修复问题 | kimi-for-coding |
 | Reviewer | Delta | 代码审查、测试验证 | kimi-for-coding |
 | Ops | Echo | 部署运维、质量检查 | kimi-for-coding |
+| **Notification** | **Kilo (广播专员)** | **系统通知、定时任务报告** | **Python脚本** |
+
+### Kilo (广播专员) - 通知专家
+
+**角色**: Notification Agent (通知消息专家)  
+**别名**: 广播专员  
+**职责**: 统一发送所有定时任务通知、系统状态报告、每日汇总  
+**状态**: ✅ 已配置，运行正常
+
+**关键配置**:
+- **群聊ID**: `oc_b14195eb990ab57ea573e696758ae3d5`
+- **用户ID**: `ou_5a7b7ec0339ffe0c1d5bb6c5bc162579` (雪子)
+- **主脚本**: `~/.openclaw/workspace/agents/kilo/broadcaster.py`
+- **技能包**: `~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_notification.py`
+
+**通知类型**:
+1. **每日备份通知** (22:00) - 备份完成状态、文件统计
+2. **健康检查报告** (09:00) - 系统状态、磁盘空间、服务检查
+3. **定时任务汇总** (01:00) - 夜间任务执行状态
+4. **系统告警** - 异常事件实时推送
+5. **任务提醒** - 到期任务通知
+
+**使用方式**:
+```bash
+# 发送通知到群聊
+python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
+  --task send_notification \
+  --message "通知内容" \
+  --target group
+
+# 检查定时任务并报告
+python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
+  --task daily_report
+```
+
+**验证状态**: ✅ 2026-03-10 测试通过，消息可正常发送到群聊
 
 ## 标准开发流程
 

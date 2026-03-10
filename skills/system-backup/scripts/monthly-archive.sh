@@ -28,10 +28,9 @@ send_notify() {
     local size=$2
     local count=$3
     local timestamp=$(date '+%Y-%m-%d %H:%M')
-    local notify_script="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
     
     if [ "$status" = "success" ]; then
-        "$notify_script" send "📦 月度归档备份完成 ($timestamp)
+        MESSAGE="📦 月度归档备份完成 ($timestamp)
 
 文件名: $ARCHIVE_NAME
 大小: $size
@@ -42,12 +41,25 @@ send_notify() {
 - 完整 OpenClaw 配置
 - 所有技能包
 - Memory 和 Workspace
-- API 密钥和认证信息"
-    else
-        "$notify_script" send "❌ 月度归档备份失败 ($timestamp)
+- API 密钥和认证信息
 
-请检查日志: /tmp/backup_archive.log"
+---
+🤖 广播专员 | $(date '+%H:%M')"
+    else
+        MESSAGE="❌ 月度归档备份失败 ($timestamp)
+
+请检查日志: /tmp/backup_archive.log
+
+---
+🤖 广播专员 | $(date '+%H:%M')"
     fi
+    
+    # 使用 broadcaster.py 发送
+    python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+        --task send \
+        --message "$MESSAGE" \
+        --target group \
+        2>/dev/null
 }
 
 # 主程序

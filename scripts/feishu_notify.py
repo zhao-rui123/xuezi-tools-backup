@@ -133,8 +133,22 @@ def send_1am_notification():
     
     print(f"\n✅ 通知已保存到: {notification_file}")
     
-    # 尝试发送飞书消息（如果配置了Webhook）
-    send_feishu_message("凌晨1点任务完成", message)
+    # 使用Kilo广播专员发送通知
+    try:
+        import subprocess
+        result = subprocess.run(
+            ['python3', '/Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py',
+             '--task', 'send', '--message', message, '--target', 'group'],
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        if result.returncode == 0:
+            print("✅ 通知已通过Kilo发送到群聊")
+        else:
+            print(f"⚠️ Kilo发送失败: {result.stderr}")
+    except Exception as e:
+        print(f"⚠️ Kilo发送异常: {e}")
     
     return True
 

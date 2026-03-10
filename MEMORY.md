@@ -135,6 +135,7 @@ ss "正在做的任务"
 **技能包组合**：
 - **multi-agent-cn** - 5个固定子Agent并行开发
 - **agent-team-orchestration** - 任务生命周期和质量控制
+- **multi-agent-suite** - 11-Agent超级团队（含广播专员Kilo）
 
 **团队角色**：
 | 角色 | 职责 |
@@ -144,6 +145,48 @@ ss "正在做的任务"
 | Bravo | Builder - JavaScript/算法开发 |
 | Charlie/Delta | Builder/Reviewer - 功能完善、修复问题 |
 | Echo | Reviewer/Ops - 测试验证、检查质量 |
+| **Kilo (广播专员)** | **Notification Agent - 系统通知与定时任务报告** |
+
+### 广播专员 (Kilo) - 必须记住！
+
+**身份**: 专职通知Agent，负责所有定时任务的消息推送  
+**群聊ID**: `oc_b14195eb990ab57ea573e696758ae3d5` ⚠️ **重要！**  
+**用户ID**: `ou_5a7b7ec0339ffe0c1d5bb6c5bc162579` (雪子)
+
+**核心功能**:
+- 每日备份通知 (22:00)
+- 健康检查报告 (09:00)  
+- 定时任务汇总 (01:00)
+- 系统告警推送
+
+**文件位置**:
+- 主脚本: `~/.openclaw/workspace/agents/kilo/broadcaster.py`
+- 配置文档: `~/.openclaw/workspace/memory/KILO_NOTIFICATION_SETUP.md`
+- 技能包: `~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_notification.py`
+
+**发送方式** (2026-03-10更新): 直接发送模式
+```bash
+python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "通知内容" \
+    --target group
+```
+
+**已配置通知的定时任务** (12个):
+1. 每日备份 (22:00)
+2. 健康检查 (09:00)
+3. 备份检查 (22:05)
+4. 系统维护 (周日 02:00)
+5. 文件清理 (周一 03:00)
+6. 股票推送 (工作日 16:30)
+7. 知识库维护 (周一 05:00)
+8. 进化报告 (每月2号 09:00)
+9. 月度归档 (每月1号 03:00)
+10. 系统扫描 (周一 04:00)
+11. 日志轮转 (每天 03:00)
+12. 每日英语新闻 (每天 08:30)
+
+**状态**: ✅ 全部配置完成 (2026-03-10)
 
 **标准开发流程**：
 1. **需求确认**（Orchestrator）- 整理功能清单、评估任务等级

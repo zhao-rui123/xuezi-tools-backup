@@ -224,12 +224,12 @@ create_archive() {
     fi
 }
 
-# 发送通知 (使用Kilo)
+# 发送通知 (直接发送到飞书群聊)
 send_notification() {
     local memory_count=$1
     local skills_count=$2
     
-    log "使用 Kilo (通知Agent) 生成通知..."
+    log "发送备份通知到飞书群聊..."
     
     # 获取压缩包大小
     local backup_size="未知"
@@ -237,13 +237,21 @@ send_notification() {
         backup_size=$(du -h "$BACKUP_DIR/full-backups/latest" 2>/dev/null | cut -f1)
     fi
     
-    # 使用Kilo生成通知
-    python3 ~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_v2.py \
-        --backup success \
-        --backup-details "📊 备份统计:\n• Memory: $memory_count 个文件\n• Skills: $skills_count 个文件\n• 压缩包: $backup_size\n\n📄 清单: backup-manifest-$DATE.json" \
+    # 构建精简通知消息
+    local message="💾 每日备份完成 | $(date '+%m-%d %H:%M')
+
+✅ Memory: $memory_count 文件
+✅ Skills: $skills_count 文件
+📦 压缩包: $backup_size"
+    
+    # 使用 broadcaster.py 直接发送到群聊
+    python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
+        --task send \
+        --message "$message" \
+        --target group \
         2>/dev/null
     
-    log "✅ Kilo 通知已生成"
+    log "✅ 备份通知已发送到群聊"
 }
 
 # 清理旧备份
@@ -292,3 +300,4 @@ cleanup_old_backups
 send_notification "$memory_count" "$skills_count"
 
 log "========== 备份完成 =========="
+log "ALL BACKUPS COMPLETED SUCCESSFULLY"

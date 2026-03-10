@@ -115,15 +115,16 @@ echo "" >> "$REPORT_FILE"
 echo "================================" >> "$REPORT_FILE"
 echo "报告生成时间: $(date '+%H:%M:%S')" >> "$REPORT_FILE"
 
-# 发送报告到飞书 - 使用Kilo Agent
+# 发送报告到飞书 - 使用广播专员
 report_summary=$(cat "$REPORT_FILE")
 
-# 使用Kilo发送健康检查报告
-python3 ~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_v2.py \
-    --health "$report_summary" \
+# 使用广播专员发送健康检查报告
+/usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "$report_summary" \
     2>/dev/null
 
-echo "✅ 健康检查报告已通过Kilo发送"
+echo "✅ 健康检查报告已通过广播专员发送"
 
 # 输出报告
 cat "$REPORT_FILE"

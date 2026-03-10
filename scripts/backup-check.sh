@@ -12,9 +12,8 @@ CHECK_TIME=$(date '+%Y-%m-%d 22:00')
 # 发送消息函数
 send_message() {
     local message="$1"
-    openclaw message send \
-        --channel feishu \
-        --target ou_5a7b7ec0339ffe0c1d5bb6c5bc162579 \
+    /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+        --task send \
         --message "$message" 2>&1
 }
 

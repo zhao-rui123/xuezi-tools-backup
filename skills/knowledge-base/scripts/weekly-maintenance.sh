@@ -119,4 +119,27 @@ echo "报告完成: $REPORT_FILE" >> "$REPORT_FILE"
 # 输出报告
 cat "$REPORT_FILE"
 
+# 发送飞书通知 - 使用广播专员
+NOTIFICATION="📚 知识库维护报告 ($(date '+%Y-%m-%d %H:%M'))
+
+📊 统计:
+• 项目文档: $PROJECTS
+• 决策记录: $DECISIONS
+• 问题方案: $PROBLEMS
+• 参考资料: $REFERENCES
+• 运维文档: $OPERATIONS
+
+$(grep -E "^(✅|⚠️|📌)" "$REPORT_FILE" | head -10)
+
+---
+🤖 广播专员 | $(date '+%H:%M')"
+
+python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "$NOTIFICATION" \
+    --target group \
+    2>/dev/null
+
+echo "✅ 维护通知已发送"
+
 exit 0

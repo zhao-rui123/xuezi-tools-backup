@@ -75,13 +75,8 @@ Key Vocabulary:
 Have a great day of learning! 🚀
 EOF
 
-# 发送报告（通过 feishu-notify.sh）
-NOTIFY_SCRIPT="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
-if [ -x "$NOTIFY_SCRIPT" ]; then
-    "$NOTIFY_SCRIPT" send "$(cat "$REPORT_FILE")"
-else
-    echo "Push failed, report saved to $REPORT_FILE"
-fi
+# 发送报告（通过广播专员）
+/usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py --task send --message "$(cat "$REPORT_FILE")" >> /tmp/english-news.log 2>&1
 
 # 输出到日志
 cat "$REPORT_FILE" >> /tmp/english-news.log

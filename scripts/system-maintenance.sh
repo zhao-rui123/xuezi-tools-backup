@@ -68,16 +68,24 @@ echo ""
 echo "========== 维护完成 =========="
 echo "结束时间: $(date)"
 
-# 发送飞书通知
-NOTIFY_SCRIPT="/Users/zhaoruicn/.openclaw/workspace/scripts/feishu-notify.sh"
-if [ -x "$NOTIFY_SCRIPT" ]; then
-    "$NOTIFY_SCRIPT" send "🔧 系统维护完成 ($(date '+%Y-%m-%d %H:%M'))
+# 发送飞书通知 - 使用广播专员
+MESSAGE="🔧 系统维护完成 ($(date '+%Y-%m-%d %H:%M'))
 
 ✅ 日志轮转完成
-✅ 孤儿会话清理完成
+✅ 孤儿会话清理完成  
 ✅ 磁盘空间检查完成
 ✅ OpenClaw 状态检查完成
 ✅ 旧备份清理完成
 
-备份位置: $BACKUP_DIR/logs/"
-fi
+备份位置: $BACKUP_DIR/logs/
+
+---
+🤖 广播专员 | $(date '+%H:%M')"
+
+python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "$MESSAGE" \
+    --target group \
+    2>/dev/null
+
+echo "✅ 维护通知已发送"

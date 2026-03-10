@@ -44,5 +44,35 @@ fi
 echo "[5/5] 清理空目录..." >> "$LOG_FILE"
 find "$WORKSPACE/tmp" -type d -empty -delete 2>/dev/null
 
+# 生成清理摘要
+SUMMARY=$(cat <<EOF
+$(date '+%Y-%m-%d %H:%M:%S') - 文件清理摘要:
+$(grep "已删除" "$LOG_FILE" | tail -4)
+EOF
+)
+
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 文件清理完成" >> "$LOG_FILE"
 echo "" >> "$LOG_FILE"
+
+# 发送飞书通知 - 使用广播专员
+MESSAGE="🧹 文件清理完成 ($(date '+%Y-%m-%d %H:%M'))
+
+✅ 清理项目:
+• 14天前截图
+• 14天前下载文件  
+• 60天前报告
+• 60天前日志备份
+• 空目录
+
+$(grep "已删除" "$LOG_FILE" | tail -4)
+
+---
+🤖 广播专员 | $(date '+%H:%M')"
+
+python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "$MESSAGE" \
+    --target group \
+    2>/dev/null
+
+echo "✅ 清理通知已发送" >> "$LOG_FILE"

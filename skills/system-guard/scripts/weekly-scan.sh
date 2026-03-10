@@ -163,13 +163,30 @@ echo "详细报告: $REPORT_FILE" >> "$REPORT_FILE"
 # 输出到控制台
 cat "$REPORT_FILE"
 
-# 如果有危险，发送警报
+# 发送飞书通知 - 使用广播专员
+NOTIFICATION="🛡️ 系统安全扫描完成 ($(date '+%Y-%m-%d %H:%M'))
+
+📊 扫描摘要:
+• 技能包总数: $TOTAL_SKILLS
+• ✅ 安全: $SAFE_SKILLS
+• ⚠️ 警告: $WARNING_SKILLS
+• ❌ 危险: $DANGEROUS_SKILLS
+
+$(if [ $DANGEROUS_SKILLS -gt 0 ]; then echo "⚠️ 发现 $DANGEROUS_SKILLS 个危险技能包，请立即检查！"; else echo "✅ 本周系统安全，无危险技能包"; fi)
+
+---
+🤖 广播专员 | $(date '+%H:%M')"
+
+python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    --task send \
+    --message "$NOTIFICATION" \
+    --target group \
+    2>/dev/null
+
+# 如果有危险，额外提示
 if [[ $DANGEROUS_SKILLS -gt 0 ]]; then
     echo ""
     echo -e "${RED}⚠️  发现 $DANGEROUS_SKILLS 个危险技能包，请立即检查！${NC}"
-    
-    # 可以在这里添加飞书通知
-    # 例如: 发送报告到飞书
 fi
 
 echo ""

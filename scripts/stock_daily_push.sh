@@ -1,10 +1,14 @@
 #!/bin/bash
-# 自选股每日推送脚本 - 新浪财经+雪球融合版
-# 工作日下午16:30自动执行（港股16:10收盘，A股15:00收盘）
+# 自选股每日推送脚本 - V3完整版（新浪+雪球+技术分析）
+# 工作日下午16:30自动执行
+
+# 设置环境变量
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+export HOME="/Users/zhaoruicn"
 
 cd /Users/zhaoruicn/.openclaw/workspace
 
-# 使用融合版 Python 脚本推送（新浪财经实时数据 + 雪球PE/PB指标）
-python3 stock_feishu_push_fusion.py >> /tmp/stock_push.log 2>&1
+# 使用V3完整版Python脚本
+python3 stock_daily_push_v3.py >> /tmp/stock_push.log 2>&1
 
 echo "[$(date)] 股票推送完成" >> ~/.openclaw/workspace/logs/stock_push.log

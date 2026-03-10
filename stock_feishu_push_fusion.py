@@ -9,9 +9,16 @@ import sys
 import json
 import subprocess
 import urllib.request
-import requests
 import re
 from datetime import datetime
+
+# 尝试导入requests，如果失败则使用urllib替代
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    HAS_REQUESTS = False
+    print("⚠️ requests模块未安装，使用urllib替代")
 
 # 导入新模块
 sys.path.insert(0, '/Users/zhaoruicn/.openclaw/workspace')
@@ -152,29 +159,47 @@ def fetch_xueqiu_data(codes):
     url = f"https://stock.xueqiu.com/v5/stock/batch/quote.json?symbol={symbol_str}&extend=detail&is_delay_hk=false"
     
     try:
-        response = requests.get(url, headers=XUEQIU_HEADERS, cookies=XUEQIU_COOKIES, timeout=15)
-        if response.status_code == 200:
-            data = response.json()
-            result = {}
-            for item in data.get('data', {}).get('items', []):
-                quote = item.get('quote', {})
-                code = quote.get('code', '')
-                # 港股code就是纯数字，A股有SH/SZ前缀
-                if code.startswith(('SZ', 'SH')):
-                    code = code[2:]
-                if code:
-                    result[code] = {
-                        'name': quote.get('name'),
-                        'current': quote.get('current'),
-                        'percent': quote.get('percent', 0),
-                        'pe_ttm': quote.get('pe_ttm'),
-                        'pb': quote.get('pb'),
-                        'turnover_rate': quote.get('turnover_rate'),
-                        'volume_ratio': quote.get('volume_ratio'),
-                        'high52w': quote.get('high52w'),
-                        'low52w': quote.get('low52w'),
-                    }
-            return result
+        if HAS_REQUESTS:
+            response = requests.get(url, headers=XUEQIU_HEADERS, cookies=XUEQIU_COOKIES, timeout=15)
+            if response.status_code == 200:
+                data = response.json()
+            else:
+                print(f"雪球API返回错误状态码: {response.status_code}")
+                return {}
+        else:
+            # 使用urllib替代
+            req = urllib.request.Request(url, headers=XUEQIU_HEADERS)
+            # 添加cookies
+            cookie_str = '; '.join([f"{k}={v}" for k, v in XUEQIU_COOKIES.items()])
+            req.add_header('Cookie', cookie_str)
+            response = urllib.request.urlopen(req, timeout=15)
+            if response.status == 200:
+                data = json.loads(response.read().decode('utf-8'))
+            else:
+                print(f"雪球API返回错误状态码: {response.status}")
+                return {}
+        
+        # 解析数据
+        result = {}
+        for item in data.get('data', {}).get('items', []):
+            quote = item.get('quote', {})
+            code = quote.get('code', '')
+            # 港股code就是纯数字，A股有SH/SZ前缀
+            if code.startswith(('SZ', 'SH')):
+                code = code[2:]
+            if code:
+                result[code] = {
+                    'name': quote.get('name'),
+                    'current': quote.get('current'),
+                    'percent': quote.get('percent', 0),
+                    'pe_ttm': quote.get('pe_ttm'),
+                    'pb': quote.get('pb'),
+                    'turnover_rate': quote.get('turnover_rate'),
+                    'volume_ratio': quote.get('volume_ratio'),
+                    'high52w': quote.get('high52w'),
+                    'low52w': quote.get('low52w'),
+                }
+        return result
     except Exception as e:
         print(f"雪球API错误: {e}")
     return {}
@@ -439,21 +464,52 @@ def generate_report():
     return "\n".join(lines)
 
 def send_to_feishu(message):
-    """发送消息到飞书 - 通过文件通知主Agent"""
+    """发送消息到飞书 - 使用openclaw CLI"""
+    import subprocess
+    import os
+    
+    # 保存报告到临时文件
+    report_file = f"/tmp/stock_report_{datetime.now().strftime('%Y%m%d')}.txt"
+    with open(report_file, 'w', encoding='utf-8') as f:
+        f.write(message)
+    
     try:
-        # 保存通知到文件，由主Agent读取并发送
-        from datetime import datetime
-        notification_file = f"/tmp/stock_notification_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        # 使用openclaw CLI直接发送
+        env = os.environ.copy()
+        env['PATH'] = '/opt/homebrew/bin:' + env.get('PATH', '')
         
-        with open(notification_file, 'w', encoding='utf-8') as f:
-            f.write(message)
-        
-        print(f"✅ 股票报告已保存: {notification_file}")
-        print(f"📤 等待主Agent发送...")
-        return True
-        
+        result = subprocess.run(
+            ['openclaw', 'message', 'send', 
+             '--target', 'ou_5a7b7ec0339ffe0c1d5bb6c5bc162579',
+             '--message', message],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            env=env
+        )
+        if result.returncode == 0:
+            print("✅ 股票报告已发送")
+            return True
+        else:
+            print(f"❌ 发送失败: {result.stderr}")
+            # 尝试使用message工具
+            return send_via_message_tool(message)
     except Exception as e:
-        print(f"❌ 保存失败: {e}")
+        print(f"❌ 发送异常: {e}")
+        return send_via_message_tool(message)
+
+def send_via_message_tool(message):
+    """备用发送方式"""
+    try:
+        # 将消息写入文件，通过文件发送
+        report_file = f"/tmp/stock_report_{datetime.now().strftime('%Y%m%d')}.txt"
+        with open(report_file, 'w', encoding='utf-8') as f:
+            f.write(message)
+        print(f"✅ 报告已保存到: {report_file}")
+        print("请手动查看或使用openclaw message send --media发送")
+        return True
+    except Exception as e:
+        print(f"❌ 备用发送也失败: {e}")
         return False
 
 if __name__ == "__main__":

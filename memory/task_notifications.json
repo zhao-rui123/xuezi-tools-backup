@@ -1,5 +1,14 @@
 {
   "stock_sent": [
     "stock_notification_20260310_062853.txt"
-  ]
+  ],
+  "daily_report_2026-03-10": {
+    "time": "2026-03-10T08:33:11.520382",
+    "success_count": 5,
+    "failed_count": 0
+  },
+  "2026-03-10_08:30-english": {
+    "time": "2026-03-10T18:32:14.369629",
+    "status": "unknown"
+  }
 }
