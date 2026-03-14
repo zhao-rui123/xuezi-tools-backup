@@ -1,5 +1,13 @@
 # AGENTS.md - Your Workspace
 
+⚠️ **修改 OpenClaw 配置前必须执行**:
+1. `cd ~/.openclaw && git add -A && git commit -m "改动前快照"`
+2. 如需要：设 5 分钟自动回滚（at/crontab）
+3. 改完测试正常后再提交一次
+4. 如改炸了：`git checkout .` 一键还原
+
+---
+
 This folder is home. Treat it that way.
 
 ## First Run
