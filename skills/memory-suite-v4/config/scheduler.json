@@ -2,8 +2,13 @@
   "tasks": {
     "real-time": {
       "enabled": true,
-      "last_run": null,
-      "last_result": null
+      "last_run": "2026-03-15T10:20:00.982735",
+      "last_result": {
+        "success": true,
+        "result": {
+          "snapshot_path": "/Users/zhaoruicn/.openclaw/workspace/memory/snapshots/snapshot_20260315_102000.json"
+        }
+      }
     },
     "daily-init": {
       "enabled": true,
@@ -17,14 +22,8 @@
     },
     "index": {
       "enabled": true,
-      "last_run": "2026-03-15T10:00:00.902892",
-      "last_result": {
-        "success": true,
-        "result": {
-          "indexed_files": 20,
-          "unique_keywords": 2410
-        }
-      }
+      "last_run": null,
+      "last_result": null
     },
     "analyze-daily": {
       "enabled": true,
