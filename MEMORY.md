@@ -700,3 +700,47 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 ### 项目位置
 - 本地：~/.openclaw/workspace/stock-screener-v2/
 - 部署：/opt/stock-screener-v2/
+
+---
+
+## 测试方法论（2026-03-15 总结）
+
+### 云服务器测试体系
+
+**1. Python代码测试**
+```bash
+# 云服务器测试路径
+cd /opt/stock-screener-v2 && ./test_code.sh
+
+# 语法检查
+python3 -m py_compile your_file.py
+
+# 导入测试
+python3 -c "from your_module import something"
+```
+
+**2. OpenClaw配置测试**
+```bash
+# 备份
+cp openclaw.json openclaw.json.bak
+
+# 修改测试
+cat openclaw.json | jq '. + {"test":"修改"}' > openclaw_test.json
+
+# 恢复
+mv openclaw.json.bak openclaw.json
+```
+
+### 安全修改流程
+
+1. **云服务器测试** → 改代码/配置测试
+2. **本地git commit** → 备份
+3. **复制到本地** → 双重验证
+4. **本地测试** → 确保OK
+5. **取消回滚** → 完成
+
+### 经验
+
+- 故意改错配置会挂 → 验证恢复流程OK
+- 云服务器改坏不影响本地
+- 双保险更安全
