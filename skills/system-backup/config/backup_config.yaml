@@ -12,7 +12,7 @@ backup:
     skills: "/Users/zhaoruicn/.openclaw/workspace/skills"
   
   # 保留天数
-  retention_days: 30
+  retention_days: 3
   
   # 压缩包名称前缀
   archive_prefix: "openclaw-backup"
