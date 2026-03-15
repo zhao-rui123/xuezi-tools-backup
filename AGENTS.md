@@ -280,3 +280,23 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+
+---
+
+## 🔄 代码修改流程（2026-03-15 新增）
+
+**重要：修改任何代码前必须遵循！**
+
+### 流程步骤
+
+1. **先云服务器测试** - 上传到云服务器验证代码正确性
+2. **本地git commit** - 测试成功后提交备份
+3. **征求用户意见** - 是否改本地 + 回滚时间
+4. **用户同意后再改** - 确认后再动手
+5. **成功后取消回滚** - 任务完成
+
+### 示例
+```
+❌ 错误流程：直接本地改 → 改坏了
+✅ 正确流程：云服务器测试 → git commit → 征求意见 → 同意后再改 → 取消回滚
+```
