@@ -1,0 +1,150 @@
+{
+  "entries": [
+    {
+      "id": "1f9a5e5a",
+      "title": "测试知识条目",
+      "content": "这是一个测试知识条目的内容，用于验证功能正常。",
+      "category": "测试",
+      "tags": [
+        "测试",
+        "示例"
+      ],
+      "source": "manual",
+      "importance": 0.8,
+      "created_at": "2026-03-11T12:06:19.082215",
+      "updated_at": "2026-03-11T12:06:19.082216",
+      "version": 1,
+      "related_ids": [],
+      "metadata": {}
+    },
+    {
+      "id": "3a8098be",
+      "title": "测试知识条目",
+      "content": "这是一个测试知识条目的内容。",
+      "category": "测试",
+      "tags": [
+        "测试",
+        "示例"
+      ],
+      "source": "manual",
+      "importance": 0.8,
+      "created_at": "2026-03-11T12:07:56.746977",
+      "updated_at": "2026-03-11T12:07:56.746980",
+      "version": 1,
+      "related_ids": [],
+      "metadata": {}
+    },
+    {
+      "id": "e416f011",
+      "title": "另一个测试条目",
+      "content": "这是另一个测试知识条目的内容。",
+      "category": "测试",
+      "tags": [
+        "测试",
+        "重要"
+      ],
+      "source": "manual",
+      "importance": 0.9,
+      "created_at": "2026-03-11T12:07:56.747298",
+      "updated_at": "2026-03-11T12:07:56.747300",
+      "version": 1,
+      "related_ids": [],
+      "metadata": {}
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat_default",
+      "name": "默认",
+      "description": "默认分类",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.081988",
+      "entry_count": 0
+    },
+    {
+      "id": "cat_project",
+      "name": "项目",
+      "description": "项目相关知识",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.081992",
+      "entry_count": 0
+    },
+    {
+      "id": "cat_decision",
+      "name": "决策",
+      "description": "重要决策记录",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.081993",
+      "entry_count": 0
+    },
+    {
+      "id": "cat_problem",
+      "name": "问题",
+      "description": "问题与解决方案",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.081995",
+      "entry_count": 0
+    },
+    {
+      "id": "cat_reference",
+      "name": "参考",
+      "description": "参考资料",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.081996",
+      "entry_count": 0
+    },
+    {
+      "id": "cat_e728a8",
+      "name": "测试",
+      "description": "自动创建的分类: 测试",
+      "parent_id": null,
+      "created_at": "2026-03-11T12:06:19.082207",
+      "entry_count": 3
+    }
+  ],
+  "tags": [
+    {
+      "name": "重要",
+      "description": "",
+      "color": "#e74c3c",
+      "created_at": "2026-03-11T12:06:19.081998",
+      "entry_count": 1
+    },
+    {
+      "name": "待办",
+      "description": "",
+      "color": "#f39c12",
+      "created_at": "2026-03-11T12:06:19.081999",
+      "entry_count": 0
+    },
+    {
+      "name": "已完成",
+      "description": "",
+      "color": "#27ae60",
+      "created_at": "2026-03-11T12:06:19.082000",
+      "entry_count": 0
+    },
+    {
+      "name": "学习中",
+      "description": "",
+      "color": "#3498db",
+      "created_at": "2026-03-11T12:06:19.082000",
+      "entry_count": 0
+    },
+    {
+      "name": "测试",
+      "description": "",
+      "color": "#3498db",
+      "created_at": "2026-03-11T12:06:19.082210",
+      "entry_count": 3
+    },
+    {
+      "name": "示例",
+      "description": "",
+      "color": "#3498db",
+      "created_at": "2026-03-11T12:06:19.082212",
+      "entry_count": 2
+    }
+  ],
+  "updated_at": "2026-03-11T12:07:56.747329"
+}

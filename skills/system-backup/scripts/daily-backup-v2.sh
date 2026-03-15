@@ -5,7 +5,7 @@
 #
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
-export HOME="/Users/zhaoruicn"
+export HOME="/Users/YOUR_USERNAME"
 
 BACKUP_DIR="/Volumes/cu/ocu"
 LOG_FILE="/tmp/backup_memory.log"
@@ -13,8 +13,8 @@ DATE=$(date +%Y%m%d)
 DATETIME=$(date +%Y%m%d_%H%M%S)
 
 # 源目录
-MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
-WORKSPACE_SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/workspace/skills"
+MEMORY_SOURCE="/Users/YOUR_USERNAME/.openclaw/workspace/memory"
+WORKSPACE_SKILLS_SOURCE="/Users/YOUR_USERNAME/.openclaw/workspace/skills"
 
 # 日志函数
 log() {
@@ -47,14 +47,14 @@ setup_backup_structure() {
 
 # 分类备份 Memory 文件
 backup_memory_categorized() {
-    log "开始分类备份 Memory..."
+    # log "开始分类备份 Memory..."
     
     local memory_src="$MEMORY_SOURCE"
     local memory_dst="$BACKUP_DIR/memory-backup"
     local file_count=0
     
     # 1. 每日记忆文件
-    log "  📅 备份每日记忆..."
+    # log "备份每日记忆..."
     for file in "$memory_src"/2*.md; do
         if [ -f "$file" ]; then
             cp "$file" "$memory_dst/daily/" 2>/dev/null
@@ -63,7 +63,7 @@ backup_memory_categorized() {
     done
     
     # 2. 归档文件
-    log "  📦 备份归档文件..."
+    # log "备份归档文件..."
     if [ -d "$memory_src/archive" ]; then
         cp -r "$memory_src/archive"/* "$memory_dst/archive/" 2>/dev/null
         local archive_count=$(find "$memory_src/archive" -type f 2>/dev/null | wc -l)
@@ -71,19 +71,19 @@ backup_memory_categorized() {
     fi
     
     # 3. 会话快照
-    log "  📸 备份会话快照..."
+    # log "备份会话快照..."
     if [ -d "$memory_src/session_states" ]; then
         cp -r "$memory_src/session_states"/* "$memory_dst/snapshots/" 2>/dev/null
     fi
     
     # 4. 进化系统
-    log "  🔄 备份进化系统..."
+    # log "备份进化系统..."
     if [ -d "$memory_src/evolution" ]; then
         cp -r "$memory_src/evolution"/* "$memory_dst/evolution/" 2>/dev/null
     fi
     
     # 5. 报告文件
-    log "  📊 备份报告文件..."
+    # log "备份报告文件..."
     for file in "$memory_src"/*report*.json "$memory_src"/*report*.md; do
         if [ -f "$file" ]; then
             cp "$file" "$memory_dst/reports/" 2>/dev/null
@@ -92,19 +92,19 @@ backup_memory_categorized() {
     done
     
     # 6. 知识图谱
-    log "  🧠 备份知识图谱..."
+    # log "备份知识图谱..."
     if [ -d "$memory_src/knowledge_graph" ]; then
         cp -r "$memory_src/knowledge_graph"/* "$memory_dst/knowledge/" 2>/dev/null
     fi
     
     # 7. 搜索索引
-    log "  🔍 备份搜索索引..."
+    # log "备份搜索索引..."
     if [ -d "$memory_src/index" ]; then
         cp -r "$memory_src/index"/* "$memory_dst/index/" 2>/dev/null
     fi
     
     # 8. 配置文件
-    log "  ⚙️  备份配置文件..."
+    # log "备份配置文件..."
     for file in "$memory_src"/*.json; do
         if [ -f "$file" ]; then
             cp "$file" "$memory_dst/config/" 2>/dev/null
@@ -118,7 +118,7 @@ backup_memory_categorized() {
 
 # 分类备份 Skills
 backup_skills_categorized() {
-    log "开始分类备份 Skills..."
+    # log "开始分类备份 Skills..."
     
     local skills_src="$WORKSPACE_SKILLS_SOURCE"
     local skills_dst="$BACKUP_DIR/skills-backup"
@@ -200,7 +200,7 @@ create_archive() {
     mkdir -p "$BACKUP_DIR/full-backups"
     local archive_name="openclaw-backup-${DATETIME}.tar.gz"
     
-    tar -czf "$BACKUP_DIR/full-backups/$archive_name" \
+    if tar -czf "$BACKUP_DIR/full-backups/$archive_name" \
         --exclude='__pycache__' \
         --exclude='*.pyc' \
         --exclude='.DS_Store' \
@@ -209,9 +209,7 @@ create_archive() {
         memory-backup/ \
         skills-backup/ \
         backup-manifest-$DATE.json \
-        2>/dev/null
-    
-    if [ $? -eq 0 ]; then
+        2>/dev/null; then
         log "✅ 压缩包创建: $archive_name"
         local size=$(du -h "$BACKUP_DIR/full-backups/$archive_name" | cut -f1)
         log "   大小: $size"
@@ -224,12 +222,10 @@ create_archive() {
     fi
 }
 
-# 发送通知 (直接发送到飞书群聊)
+# 发送通知 (精简版)
 send_notification() {
     local memory_count=$1
     local skills_count=$2
-    
-    log "发送备份通知到飞书群聊..."
     
     # 获取压缩包大小
     local backup_size="未知"
@@ -237,12 +233,8 @@ send_notification() {
         backup_size=$(du -h "$BACKUP_DIR/full-backups/latest" 2>/dev/null | cut -f1)
     fi
     
-    # 构建精简通知消息
-    local message="💾 每日备份完成 | $(date '+%m-%d %H:%M')
-
-✅ Memory: $memory_count 文件
-✅ Skills: $skills_count 文件
-📦 压缩包: $backup_size"
+    # 构建通知消息（极简版）
+    local message="💾 备份完成 | $(date '+%m-%d %H:%M') | Memory:$memory_count | Skills:$skills_count | $backup_size"
     
     # 使用 broadcaster.py 直接发送到群聊
     python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
@@ -250,8 +242,6 @@ send_notification() {
         --message "$message" \
         --target group \
         2>/dev/null
-    
-    log "✅ 备份通知已发送到群聊"
 }
 
 # 清理旧备份

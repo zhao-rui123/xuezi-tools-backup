@@ -1,0 +1,14 @@
+
+# 电力设计技能包依赖
+# 本技能包基础功能无外部依赖，仅需Python标准库
+
+# Python版本要求
+python>=3.7
+
+# Excel导出功能需要
+openpyxl>=3.0.0
+
+# 可选依赖（用于增强功能）
+# numpy>=1.19.0
+# matplotlib>=3.3.0
+# pandas>=1.1.0

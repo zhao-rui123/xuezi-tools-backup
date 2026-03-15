@@ -1,0 +1,46 @@
+# Memory Suite v4.0 - 健康检查定时任务配置
+# 用于配置 crontab 自动执行健康检查
+
+# 健康检查调度配置
+health_check:
+  # 每天执行时间 (cron 格式)
+  schedule: "0 9 * * *"  # 每天早上 9 点
+  
+  # 执行命令
+  command: "python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scripts/health_check.py --all --notify"
+  
+  # 日志输出
+  log_file: "/tmp/health_check.log"
+
+# 日志轮转调度配置
+log_rotate:
+  # 每天执行时间
+  schedule: "0 2 * * *"  # 每天凌晨 2 点
+  
+  # 执行命令
+  command: "python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scripts/log_rotate.py --all"
+  
+  # 日志输出
+  log_file: "/tmp/log_rotate.log"
+
+# 监控服务调度配置
+monitor_service:
+  # 每 4 小时执行一次
+  schedule: "0 */4 * * *"  # 每 4 小时
+  
+  # 执行命令
+  command: "python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/services/monitor_service.py --health"
+  
+  # 日志输出
+  log_file: "/tmp/monitor_service.log"
+
+# 飞书通知配置
+feishu_notification:
+  # 通知目标
+  target: "group"  # 群组
+  
+  # 通知时间 (健康检查后)
+  notify_after_check: true
+  
+  # 只在有警告/问题时通知
+  notify_on_warning_only: true

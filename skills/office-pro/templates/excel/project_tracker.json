@@ -1,0 +1,29 @@
+{
+  "id": "project_tracker",
+  "name": "项目跟踪表",
+  "category": "project",
+  "type": "excel",
+  "style": "green",
+  "description": "项目管理与进度跟踪模板，包含任务列表、里程碑和资源分配",
+  "sheets": [
+    {
+      "name": "项目概览",
+      "type": "summary",
+      "kpis": ["完成进度", "剩余天数", "预算使用", "风险数量"]
+    },
+    {
+      "name": "任务列表",
+      "type": "tasks",
+      "columns": ["任务名称", "负责人", "开始日期", "截止日期", "进度", "状态", "优先级"]
+    },
+    {
+      "name": "里程碑",
+      "type": "milestones",
+      "columns": ["里程碑", "计划日期", "实际日期", "状态"]
+    }
+  ],
+  "format": {
+    "date_format": "YYYY-MM-DD",
+    "percentage": "0%"
+  }
+}

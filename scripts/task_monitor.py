@@ -655,13 +655,30 @@ def check_all_tasks():
     return notifications_to_send
 
 if __name__ == "__main__":
-    # 测试模式
+    import subprocess
+    
+    # 检查所有任务
     notifications = check_all_tasks()
+    
     if notifications:
         print(f"发现 {len(notifications)} 条待发送通知:\n")
         for n in notifications:
             print(f"--- {n['title']} ---")
             print(n['message'])
             print()
+            
+            # 发送飞书通知
+            try:
+                result = subprocess.run(
+                    ["bash", "/Users/zhaoruicn/.openclaw/workspace/scripts/feishu_notify.sh", 
+                     n['title'], n['message'], "normal"],
+                    capture_output=True, text=True, timeout=30
+                )
+                if result.returncode == 0:
+                    print(f"✅ 发送成功: {n['title']}")
+                else:
+                    print(f"❌ 发送失败: {result.stderr}")
+            except Exception as e:
+                print(f"❌ 发送异常: {e}")
     else:
         print("没有新的通知需要发送")

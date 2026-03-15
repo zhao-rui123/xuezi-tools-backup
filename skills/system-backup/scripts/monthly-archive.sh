@@ -3,12 +3,12 @@
 # 每月1号执行，打包整个 OpenClaw 目录为 tar.gz
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
-export HOME="/Users/zhaoruicn"
+export HOME="/Users/YOUR_USERNAME"
 
 # 配置
 BACKUP_DIR="/Volumes/cu/ocu"
 ARCHIVE_DIR="$BACKUP_DIR/archives"
-OPENCLAW_DIR="/Users/zhaoruicn/.openclaw"
+OPENCLAW_DIR="/Users/YOUR_USERNAME/.openclaw"
 DATE=$(date +%Y-%m-%d)
 ARCHIVE_NAME="openclaw-archive-$DATE.tar.gz"
 ARCHIVE_PATH="$ARCHIVE_DIR/$ARCHIVE_NAME"
@@ -55,7 +55,7 @@ send_notify() {
     fi
     
     # 使用 broadcaster.py 发送
-    python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py \
+    python3 /Users/YOUR_USERNAME/.openclaw/workspace/agents/kilo/broadcaster.py \
         --task send \
         --message "$MESSAGE" \
         --target group \

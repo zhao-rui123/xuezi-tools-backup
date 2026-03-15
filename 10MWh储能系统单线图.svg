@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="1200" height="800" fill="#f5f5f5"/>
+  
+  <!-- 标题 -->
+  <text x="600" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">
+    10MWh工商业储能系统单线图
+  </text>
+  <text x="600" y="65" text-anchor="middle" font-size="14" fill="#666">
+    314Ah磷酸铁锂电芯 | 1500V直流 | 10kV并网
+  </text>
+  
+  <!-- 并网点 -->
+  <rect x="50" y="150" width="120" height="60" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="110" y="175" text-anchor="middle" font-size="12" font-weight="bold">10kV电网</text>
+  <text x="110" y="195" text-anchor="middle" font-size="10">并网点</text>
+  
+  <!-- 高压开关柜 -->
+  <rect x="250" y="130" width="100" height="100" fill="#fff3e0" stroke="#f57c00" stroke-width="2" rx="5"/>
+  <text x="300" y="160" text-anchor="middle" font-size="11" font-weight="bold">高压开关柜</text>
+  <text x="300" y="180" text-anchor="middle" font-size="10">KYN28-12</text>
+  <text x="300" y="200" text-anchor="middle" font-size="9">10kV</text>
+  
+  <!-- 变压器 -->
+  <circle cx="500" cy="180" r="50" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="500" y="175" text-anchor="middle" font-size="11" font-weight="bold">变压器</text>
+  <text x="500" y="195" text-anchor="middle" font-size="10">5000kVA</text>
+  
+  <!-- 低压配电柜 -->
+  <rect x="650" y="130" width="100" height="100" fill="#fce4ec" stroke="#c2185b" stroke-width="2" rx="5"/>
+  <text x="700" y="160" text-anchor="middle" font-size="11" font-weight="bold">低压配电柜</text>
+  <text x="700" y="180" text-anchor="middle" font-size="10">GGD</text>
+  <text x="700" y="200" text-anchor="middle" font-size="9">690V</text>
+  
+  <!-- PCS1 -->
+  <rect x="850" y="100" width="120" height="80" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5"/>
+  <text x="910" y="130" text-anchor="middle" font-size="11" font-weight="bold">PCS1</text>
+  <text x="910" y="150" text-anchor="middle" font-size="10">2500kW</text>
+  <text x="910" y="170" text-anchor="middle" font-size="9">AC690V/DC1500V</text>
+  
+  <!-- PCS2 -->
+  <rect x="850" y="200" width="120" height="80" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5"/>
+  <text x="910" y="230" text-anchor="middle" font-size="11" font-weight="bold">PCS2</text>
+  <text x="910" y="250" text-anchor="middle" font-size="10">2500kW</text>
+  <text x="910" y="270" text-anchor="middle" font-size="9">AC690V/DC1500V</text>
+  
+  <!-- 电池柜1 -->
+  <rect x="1050" y="50" width="120" height="70" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" rx="5"/>
+  <text x="1110" y="75" text-anchor="middle" font-size="11" font-weight="bold">电池柜1</text>
+  <text x="1110" y="95" text-anchor="middle" font-size="10">3.44MWh</text>
+  <text x="1110" y="110" text-anchor="middle" font-size="9">16簇×215kWh</text>
+  
+  <!-- 电池柜2 -->
+  <rect x="1050" y="140" width="120" height="70" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" rx="5"/>
+  <text x="1110" y="165" text-anchor="middle" font-size="11" font-weight="bold">电池柜2</text>
+  <text x="1110" y="185" text-anchor="middle" font-size="10">3.44MWh</text>
+  <text x="1110" y="200" text-anchor="middle" font-size="9">16簇×215kWh</text>
+  
+  <!-- 电池柜3 -->
+  <rect x="1050" y="230" width="120" height="70" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" rx="5"/>
+  <text x="1110" y="255" text-anchor="middle" font-size="11" font-weight="bold">电池柜3</text>
+  <text x="1110" y="275" text-anchor="middle" font-size="10">3.44MWh</text>
+  <text x="1110" y="290" text-anchor="middle" font-size="9">16簇×215kWh</text>
+  
+  <!-- EMS -->
+  <rect x="650" y="300" width="100" height="60" fill="#fff8e1" stroke="#ffa000" stroke-width="2" rx="5"/>
+  <text x="700" y="325" text-anchor="middle" font-size="11" font-weight="bold">EMS</text>
+  <text x="700" y="345" text-anchor="middle" font-size="9">能量管理系统</text>
+  
+  <!-- 连接线 - 高压侧 -->
+  <line x1="170" y1="180" x2="250" y2="180" stroke="#333" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="210" y="170" text-anchor="middle" font-size="9">YJV22-3×185mm²</text>
+  
+  <line x1="350" y1="180" x2="450" y2="180" stroke="#333" stroke-width="3"/>
+  <text x="400" y="170" text-anchor="middle" font-size="9">10kV</text>
+  
+  <line x1="550" y1="180" x2="650" y2="180" stroke="#333" stroke-width="3"/>
+  <text x="600" y="170" text-anchor="middle" font-size="9">10kV/0.69kV</text>
+  
+  <!-- 连接线 - 低压侧 -->
+  <line x1="750" y1="160" x2="850" y2="140" stroke="#333" stroke-width="2"/>
+  <line x1="750" y1="200" x2="850" y2="240" stroke="#333" stroke-width="2"/>
+  <text x="790" y="130" text-anchor="middle" font-size="9">AC690V</text>
+  
+  <!-- 连接线 - 直流侧 -->
+  <line x1="970" y1="140" x2="1050" y2="85" stroke="#d32f2f" stroke-width="2"/>
+  <line x1="970" y1="140" x2="1050" y2="175" stroke="#d32f2f" stroke-width="2"/>
+  <line x1="970" y1="140" x2="1050" y2="265" stroke="#d32f2f" stroke-width="2"/>
+  <text x="1000" y="100" text-anchor="middle" font-size="9" fill="#d32f2f">DC1500V</text>
+  
+  <line x1="970" y1="240" x2="1050" y2="85" stroke="#d32f2f" stroke-width="2"/>
+  <line x1="970" y1="240" x2="1050" y2="175" stroke="#d32f2f" stroke-width="2"/>
+  <line x1="970" y1="240" x2="1050" y2="265" stroke="#d32f2f" stroke-width="2"/>
+  
+  <!-- 控制线 -->
+  <line x1="700" y1="230" x2="700" y2="300" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="750" y1="300" x2="910" y2="180" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="750" y1="310" x2="910" y2="280" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="910" y1="180" x2="1110" y2="85" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="910" y1="180" x2="1110" y2="175" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <line x1="910" y1="180" x2="1110" y2="265" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="800" y="290" text-anchor="middle" font-size="8" fill="#666">RS485/CAN</text>
+  
+  <!-- 系统参数框 -->
+  <rect x="50" y="400" width="350" height="180" fill="white" stroke="#333" stroke-width="1" rx="5"/>
+  <text x="225" y="425" text-anchor="middle" font-size="14" font-weight="bold">系统技术参数</text>
+  
+  <text x="70" y="455" font-size="11">• 额定容量: 10.32MWh (3×3.44MWh)</text>
+  <text x="70" y="475" font-size="11">• 额定功率: 5000kW (2×2500kW)</text>
+  <text x="70" y="495" font-size="11">• 直流电压: 1500V (1331.2V标称)</text>
+  <text x="70" y="515" font-size="11">• 交流电压: 10kV/690V</text>
+  <text x="70" y="535" font-size="11">• 电芯规格: 314Ah磷酸铁锂</text>
+  <text x="70" y="555" font-size="11">• 单簇配置: 1P416S (215kWh)</text>
+  <text x="70" y="575" font-size="11">• 系统效率: ≥85%</text>
+  
+  <!-- 电池簇详情 -->
+  <rect x="450" y="400" width="350" height="180" fill="white" stroke="#333" stroke-width="1" rx="5"/>
+  <text x="625" y="425" text-anchor="middle" font-size="14" font-weight="bold">电池簇参数 (314Ah电芯)</text>
+  
+  <text x="470" y="455" font-size="11">• 单簇容量: 215kWh (1P416S)</text>
+  <text x="470" y="475" font-size="11">• 标称电压: 1331.2V (416×3.2V)</text>
+  <text x="470" y="495" font-size="11">• 额定容量: 314Ah</text>
+  <text x="470" y="515" font-size="11">• 可用能量: 376kWh (90%DOD)</text>
+  <text x="470" y="535" font-size="11">• 最大电流: 314A (1C)</text>
+  <text x="470" y="555" font-size="11">• 单柜簇数: 16簇 (3.44MWh)</text>
+  <text x="470" y="575" font-size="11">• 循环寿命: ≥6000次</text>
+  
+  <!-- 电缆清册摘要 -->
+  <rect x="850" y="400" width="320" height="180" fill="white" stroke="#333" stroke-width="1" rx="5"/>
+  <text x="1010" y="425" text-anchor="middle" font-size="14" font-weight="bold">主要电缆规格</text>
+  
+  <text x="870" y="455" font-size="11">• 直流电缆: ZC-YJV22-2×300mm²</text>
+  <text x="870" y="475" font-size="11">• 交流电缆: ZC-YJV22-4×400mm²</text>
+  <text x="870" y="495" font-size="11">• 变压器进线: ZC-YJV22-4×500mm²</text>
+  <text x="870" y="515" font-size="11">• 高压电缆: YJV22-3×185mm²</text>
+  <text x="870" y="535" font-size="11">• 控制电缆: ZR-RVSP-2×1.5mm²</text>
+  <text x="870" y="555" font-size="11">• 接地电缆: BV-1×50mm²</text>
+  <text x="870" y="575" font-size="11">• 敷设方式: 电缆沟/桥架</text>
+  
+  <!-- 图例 -->
+  <rect x="50" y="620" width="1100" height="150" fill="#fafafa" stroke="#ddd" stroke-width="1" rx="5"/>
+  <text x="600" y="645" text-anchor="middle" font-size="12" font-weight="bold">图例说明</text>
+  
+  <rect x="80" y="660" width="60" height="30" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="3"/>
+  <text x="150" y="680" font-size="10">电网/并网点</text>
+  
+  <rect x="250" y="660" width="60" height="30" fill="#fff3e0" stroke="#f57c00" stroke-width="2" rx="3"/>
+  <text x="320" y="680" font-size="10">高压设备</text>
+  
+  <circle cx="420" cy="675" r="15" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <text x="445" y="680" font-size="10">变压器</text>
+  
+  <rect x="520" y="660" width="60" height="30" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="3"/>
+  <text x="590" y="680" font-size="10">PCS变流器</text>
+  
+  <rect x="680" y="660" width="60" height="30" fill="#e1f5fe" stroke="#0288d1" stroke-width="2" rx="3"/>
+  <text x="750" y="680" font-size="10">电池柜</text>
+  
+  <line x1="850" y1="675" x2="920" y2="675" stroke="#333" stroke-width="3"/>
+  <text x="930" y="680" font-size="10">高压电缆</text>
+  
+  <line x1="850" y1="710" x2="920" y2="710" stroke="#d32f2f" stroke-width="2"/>
+  <text x="930" y="715" font-size="10">直流电缆</text>
+  
+  <line x1="1000" y1="675" x2="1070" y2="675" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+  <text x="1080" y="680" font-size="10">控制线</text>
+  
+  <!-- 编制信息 -->
+  <text x="600" y="780" text-anchor="middle" font-size="10" fill="#999">
+    编制日期: 2026-03-14 | 参考标准: GB/T 36547-2018, GB/T 36276-2018
+  </text>
+</svg>

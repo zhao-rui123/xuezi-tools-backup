@@ -1,0 +1,19 @@
+{
+  "id": "learning_20260310_224953_46ed0c0f",
+  "title": "Memory Service开发经验",
+  "content": "开发上下文恢复模块时需要注意数据类定义和类型注解",
+  "learning_type": "pattern",
+  "tags": [
+    "memory",
+    "python",
+    "development"
+  ],
+  "context": "Memory Service开发",
+  "solution": "使用dataclasses和typing模块",
+  "created_at": "2026-03-10T22:49:53.939959",
+  "updated_at": "2026-03-10T22:49:53.939959",
+  "usage_count": 0,
+  "effectiveness": 0.0,
+  "related_tasks": [],
+  "source": ""
+}

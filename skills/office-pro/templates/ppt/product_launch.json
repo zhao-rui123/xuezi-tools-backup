@@ -1,0 +1,24 @@
+{
+  "id": "product_launch",
+  "name": "产品发布",
+  "category": "marketing",
+  "type": "ppt",
+  "style": "modern",
+  "description": "产品发布会演示模板，适合新品发布和展示",
+  "slides": [
+    {"type": "title", "title": "产品发布会", "subtitle": "全新产品震撼登场"},
+    {"type": "content", "title": "产品介绍", "bullets": ["产品名称", "产品定位", "核心价值"]},
+    {"type": "content", "title": "核心功能", "bullets": ["功能亮点1", "功能亮点2", "功能亮点3"]},
+    {"type": "content", "title": "产品演示", "bullets": ["现场演示", "功能展示", "用户体验"]},
+    {"type": "content", "title": "市场机会", "bullets": ["市场规模", "目标用户", "增长潜力"]},
+    {"type": "content", "title": "竞争优势", "bullets": ["独特卖点", "技术优势", "品牌优势"]},
+    {"type": "content", "title": "定价策略", "bullets": ["定价方案", "销售渠道", "推广计划"]},
+    {"type": "content", "title": "上市时间", "bullets": ["发布计划", "推广活动", "预期效果"]},
+    {"type": "closing", "title": "谢谢", "contact": {"官网": "www.example.com"}}
+  ],
+  "theme": {
+    "primary": "#2C3E50",
+    "secondary": "#34495E",
+    "accent": "#E74C3C"
+  }
+}

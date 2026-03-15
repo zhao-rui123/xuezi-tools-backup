@@ -1,0 +1,8 @@
+{
+  "name": "mx_data",
+  "description": "妙想金融数据 - 查询行情、财务、关系数据",
+  "api_url": "https://mkapi2.dfcfs.com/finskillshub/api/claw/query",
+  "api_key": "mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs",
+  "enabled": true,
+  "installed_at": "2026-03-14"
+}

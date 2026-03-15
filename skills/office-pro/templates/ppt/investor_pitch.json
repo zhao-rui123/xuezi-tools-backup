@@ -1,0 +1,24 @@
+{
+  "id": "investor_pitch",
+  "name": "投资者演示",
+  "category": "investment",
+  "type": "ppt",
+  "style": "warm",
+  "description": "投资人路演模板，适合融资演示和商业计划展示",
+  "slides": [
+    {"type": "title", "title": "商业计划书", "subtitle": "融资演示"},
+    {"type": "content", "title": "团队介绍", "bullets": ["创始人背景", "核心团队", "顾问团队"]},
+    {"type": "content", "title": "问题与解决方案", "bullets": ["行业痛点", "解决方案", "价值主张"]},
+    {"type": "content", "title": "市场分析", "bullets": ["市场规模", "目标市场", "市场策略"]},
+    {"type": "content", "title": "商业模式", "bullets": ["收入来源", "定价策略", "盈利预测"]},
+    {"type": "content", "title": "竞争优势", "bullets": ["护城河", "差异化", "进入壁垒"]},
+    {"type": "content", "title": "财务预测", "bullets": ["收入预测", "成本结构", "盈利时间表"]},
+    {"type": "content", "title": "融资计划", "bullets": ["融资金额", "资金用途", "估值"]},
+    {"type": "closing", "title": "联系方式", "contact": {"邮箱": "pitch@example.com"}}
+  ],
+  "theme": {
+    "primary": "#8D4004",
+    "secondary": "#E67E22",
+    "accent": "#F39C12"
+  }
+}

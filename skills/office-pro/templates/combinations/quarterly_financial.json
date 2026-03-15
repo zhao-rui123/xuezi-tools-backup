@@ -1,0 +1,44 @@
+{
+  "name": "季度财务报告",
+  "category": "financial",
+  "type": "combination",
+  "description": "专业的季度财务分析报告模板",
+  "sections": [
+    {
+      "type": "header",
+      "title": "财务摘要",
+      "level": 1
+    },
+    {
+      "type": "kpi",
+      "metrics": ["总收入", "总支出", "净利润", "毛利率"]
+    },
+    {
+      "type": "chart",
+      "chart_type": "waterfall",
+      "title": "利润分析",
+      "data_source": "profit_data"
+    },
+    {
+      "type": "chart",
+      "chart_type": "bar",
+      "title": "部门支出对比",
+      "data_source": "expense_data"
+    },
+    {
+      "type": "chart",
+      "chart_type": "line",
+      "title": "年度趋势",
+      "data_source": "trend_data"
+    },
+    {
+      "type": "table",
+      "title": "财务报表",
+      "data_source": "financial_data"
+    }
+  ],
+  "styles": {
+    "primary_color": "#2C3E50",
+    "accent_color": "#E74C3C"
+  }
+}

@@ -3,11 +3,11 @@
 # 支持从每日备份或月度归档恢复
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
-export HOME="/Users/zhaoruicn"
+export HOME="/Users/YOUR_USERNAME"
 
 BACKUP_DIR="/Volumes/cu/ocu"
 ARCHIVE_DIR="$BACKUP_DIR/archives"
-OPENCLAW_DIR="/Users/zhaoruicn/.openclaw"
+OPENCLAW_DIR="/Users/YOUR_USERNAME/.openclaw"
 
 show_help() {
     echo "OpenClaw 恢复工具"

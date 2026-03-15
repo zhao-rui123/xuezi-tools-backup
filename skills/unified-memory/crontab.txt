@@ -1,8 +1,0 @@
-# Memory System Cron Jobs
-# 统一记忆系统定时任务
-
-# 每天凌晨2点执行自动归档和重要性评估
-0 2 * * * /Users/zhaoruicn/.openclaw/workspace/skills/unified-memory/cron_tasks.sh >> /Users/zhaoruicn/.openclaw/workspace/memory/cron.log 2>&1
-
-# 每小时更新搜索索引
-0 * * * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/unified-memory/semantic_search.py >> /Users/zhaoruicn/.openclaw/workspace/memory/cron.log 2>&1

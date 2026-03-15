@@ -1,0 +1,93 @@
+# ============================================
+# 优化后的定时任务配置 (Phase 3)
+# 生成时间: 2026-03-11
+# 优化前: 22个任务 → 优化后: 15个任务
+# ============================================
+
+# ============================================
+# 高频率任务 (每10分钟)
+# ============================================
+# 自动保存会话快照（防止卡死丢失上下文）
+*/10 * * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/scripts/session-snapshot.py save "自动保存" >> /tmp/session-snapshot.log 2>&1
+
+# ============================================
+# 每小时任务
+# ============================================
+# 小龙虾看板 - 每小时记录房间时间
+0 * * * * cd /Users/zhaoruicn/.openclaw/workspace/agent-dashboard-v2 && python3 -c "from tracker import get_tracker; get_tracker().save_data()" >> /tmp/lobster_cron.log 2>&1
+
+# ============================================
+# 每日任务 - 凌晨时段 (00:00-06:00)
+# ============================================
+# 00:30 - 每日记忆归档 (统一记忆系统)
+30 0 * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/unified-memory/unified_memory.py daily >> /tmp/ums-daily.log 2>&1
+
+# 01:00 - 知识同步 + 知识图谱更新 (合并任务)
+0 1 * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/knowledge-base/scripts/knowledge_memory_integration.py daily-sync >> /tmp/kb-integration.log 2>&1 && /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/unified-memory/knowledge_graph.py build --memory-dir /Users/zhaoruicn/.openclaw/workspace/memory >> /tmp/ums-graph.log 2>&1
+
+# 02:00 - 系统维护 (周日) + 日志轮转
+0 2 * * 0 /Users/zhaoruicn/.openclaw/workspace/scripts/system-maintenance.sh >> /tmp/system-maintenance.log 2>&1
+0 3 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/log_rotate.sh >> /tmp/log-rotate.log 2>&1
+
+# 03:00 - 文件清理 (周一) + OUC清理 (周日)
+0 3 * * 1 /Users/zhaoruicn/.openclaw/workspace/scripts/file-cleanup.sh
+0 3 * * 0 /Volumes/cu/ocu/scripts/ouc-cleanup.sh
+
+# ============================================
+# 每日任务 - 上午时段 (08:00-12:00)
+# ============================================
+# 08:00 - 定时任务日报 (Kilo广播)
+0 8 * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py --task daily >> /tmp/broadcaster.log 2>&1
+
+# 08:05 - Git自动提交
+5 8 * * * cd /Users/zhaoruicn/.openclaw/workspace && git add -A && git commit -m "auto: $(date +\"%Y-%m-%d\") 日常更新" >> /tmp/git-auto-commit.log 2>&1
+
+# 08:30 - 每日健康检查
+30 8 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/daily-health-check.sh >> /tmp/daily-health.log 2>&1
+
+# 09:00 - 每日英语新闻
+0 9 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/daily-english-news.sh >> /tmp/english-news.log 2>&1
+
+# ============================================
+# 每日任务 - 下午/晚间时段 (16:00-23:00)
+# ============================================
+# 16:30 - 自选股每日收盘推送 (工作日)
+30 16 * * 1-5 /Users/zhaoruicn/.openclaw/workspace/scripts/stock_daily_push.sh >> /tmp/stock_push.log 2>&1
+
+# 22:00 - 小龙虾看板飞书推送 + 每日备份
+0 22 * * * cd /Users/zhaoruicn/.openclaw/workspace/agent-dashboard-v2 && python3 daily_push.py >> /tmp/lobster_cron.log 2>&1 && /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_cron.log 2>&1
+
+# 22:05 - 备份检查
+5 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-check.sh >> /tmp/backup-check.log 2>&1
+
+# 23:00 - 每日自我进化
+0 23 * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/self-improvement/triggers/evolution_triggers.py daily >> /tmp/evolution-daily.log 2>&1
+
+# ============================================
+# 每周任务 (周一)
+# ============================================
+# 周一 04:00 - System Guard 安全扫描
+0 4 * * 1 /Users/zhaoruicn/.openclaw/workspace/skills/system-guard/scripts/weekly-scan.sh >> /tmp/system-guard-scan.log 2>&1
+
+# 周一 05:00 - 知识库维护
+0 5 * * 1 /Users/zhaoruicn/.openclaw/workspace/skills/knowledge-base/scripts/weekly-maintenance.sh >> /tmp/kb-maintenance.log 2>&1
+
+# 周日 22:00 - 每周进化回顾
+0 22 * * 0 /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/self-improvement/triggers/evolution_triggers.py weekly >> /tmp/evolution-weekly.log 2>&1
+
+# ============================================
+# 每月任务
+# ============================================
+# 每月1号 03:00 - 月度归档备份
+0 3 1 * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/monthly-archive.sh >> /tmp/backup_archive.log 2>&1
+
+# 每月1号 08:00 - 月度深度进化
+0 8 1 * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/self-improvement/triggers/evolution_triggers.py monthly >> /tmp/evolution-monthly.log 2>&1
+
+# 每月2号 09:00 - 自我进化报告
+0 9 2 * * /Users/zhaoruicn/.openclaw/workspace/skills/self-improvement/evolution_reporter.py >> /tmp/evolution-report.log 2>&1
+
+# ============================================
+# 月度记忆深度分析 (每月1号 02:00)
+# ============================================
+0 2 1 * * cd /Users/zhaoruicn/.openclaw/workspace/skills/unified-memory && /usr/bin/python3 unified_memory.py analyze >> /tmp/ums-monthly.log 2>&1

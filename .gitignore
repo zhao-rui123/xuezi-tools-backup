@@ -53,3 +53,22 @@ test_*.json
 *.mp3
 *.avi
 *.mov
+
+# 记忆快照（太大）
+memory/snapshots/
+memory/summary/
+memory/archive/
+memory/evolution/
+
+# 临时测试文件
+test-*/
+*.tar.gz
+*.zip
+
+# 大型数据文件
+projects/*/data/
+projects/*/cache/
+
+# 知识库导出
+knowledge-base/memory_exports/
+knowledge-base/sync/

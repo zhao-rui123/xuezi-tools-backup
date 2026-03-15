@@ -1,0 +1,16 @@
+{
+  "apr-6b65399c": {
+    "id": "apr-6b65399c",
+    "type": "task_complete",
+    "title": "测试审批",
+    "description": "测试描述",
+    "requester": "test_user",
+    "approver": "",
+    "status": "pending",
+    "data": {},
+    "created_at": "2026-03-12T21:28:00.362610",
+    "approved_at": null,
+    "comments": "",
+    "expires_at": "2026-03-12T23:59:59.362605"
+  }
+}

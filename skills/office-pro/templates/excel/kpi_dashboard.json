@@ -1,0 +1,30 @@
+{
+  "id": "kpi_dashboard",
+  "name": "KPI仪表盘",
+  "category": "dashboard",
+  "type": "excel",
+  "style": "dark",
+  "description": "关键绩效指标仪表盘模板，实时跟踪业务KPI",
+  "sheets": [
+    {
+      "name": "KPI概览",
+      "type": "kpi",
+      "charts": ["gauge", "bar"],
+      "kpis": ["完成率", "目标达成", "排名", "趋势"]
+    },
+    {
+      "name": "目标vs实际",
+      "type": "comparison",
+      "columns": ["指标", "目标值", "实际值", "差距", "完成率"]
+    },
+    {
+      "name": "趋势分析",
+      "type": "trend",
+      "charts": ["line", "area"]
+    }
+  ],
+  "format": {
+    "number_format": "#,##0.00",
+    "percentage": "0.00%"
+  }
+}

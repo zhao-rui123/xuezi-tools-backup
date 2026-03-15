@@ -1,0 +1,12 @@
+{
+  "system": {
+    "name": "Multi-Agent Suite",
+    "version": "2.0"
+  },
+  "agents": {},
+  "workflow": {
+    "max_retries": 3,
+    "timeout": 300
+  },
+  "test_key": "test_value"
+}

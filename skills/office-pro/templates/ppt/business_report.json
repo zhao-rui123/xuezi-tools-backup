@@ -1,0 +1,25 @@
+{
+  "id": "business_report",
+  "name": "商务报告",
+  "category": "business",
+  "type": "ppt",
+  "style": "corporate",
+  "description": "专业的商务报告演示模板，适合各类业务汇报",
+  "slides": [
+    {"type": "title", "title": "商务报告"},
+    {"type": "content", "title": "目录"},
+    {"type": "section", "title": "执行摘要"},
+    {"type": "content", "title": "执行摘要", "bullets": ["主要发现", "关键数据", "行动建议"]},
+    {"type": "section", "title": "数据分析"},
+    {"type": "content", "title": "数据分析", "bullets": ["数据来源", "分析方法", "主要结果"]},
+    {"type": "two_column", "title": "详细数据", "left": "指标A", "right": "指标B"},
+    {"type": "section", "title": "结论与建议"},
+    {"type": "content", "title": "结论与建议", "bullets": ["主要结论", "行动建议", "下一步计划"]},
+    {"type": "closing", "title": "感谢聆听"}
+  ],
+  "theme": {
+    "primary": "#1F4E79",
+    "secondary": "#2E75B6",
+    "accent": "#70AD47"
+  }
+}

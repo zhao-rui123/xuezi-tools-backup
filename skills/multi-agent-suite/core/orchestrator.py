@@ -129,7 +129,7 @@ class MultiAgentOrchestrator:
                         capabilities=agent_data.get('capabilities', [])
                     )
                     self.agents[agent_id] = agent
-                    print(f"  ✅ 加载Agent: {agent.name} ({agent.role.value})")
+                    print(f"  ✅ 加载Agent: {agent.name} ({hasattr(agent.role, "value") and agent.role.value or agent.role})")
         else:
             # 如果没有配置文件，使用默认agents
             default_agents = [
@@ -170,7 +170,7 @@ class MultiAgentOrchestrator:
         agents_data = {}
         for k, v in self.agents.items():
             agent_dict = asdict(v)
-            agent_dict['role'] = v.role.value  # 转换枚举为字符串
+            agent_dict['role'] = hasattr(v.role, "value") and v.role.value or v.role  # 转换枚举为字符串
             agents_data[k] = agent_dict
         
         data = {
@@ -321,7 +321,7 @@ class MultiAgentOrchestrator:
         try:
             # 构建任务指令
             task_prompt = f"""
-你是 {agent.name} ({agent.role.value})，负责开发任务。
+你是 {agent.name} ({hasattr(agent.role, "value") and agent.role.value or agent.role})，负责开发任务。
 
 任务: {subtask.title}
 描述: {subtask.description}
@@ -420,7 +420,7 @@ class MultiAgentOrchestrator:
         print("-" * 60)
         for agent in self.agents.values():
             task = self.subtasks.get(agent.current_task) if agent.current_task else None
-            print(f"{agent.id:<10} {agent.name:<10} {agent.role.value:<12} {agent.status:<10} {task.title if task else '-'}")
+            print(f"{agent.id:<10} {agent.name:<10} {hasattr(agent.role, "value") and agent.role.value or agent.role:<12} {agent.status:<10} {task.title if task else '-'}")
     
     def list_tasks(self):
         """列出所有任务"""
@@ -433,19 +433,96 @@ class MultiAgentOrchestrator:
                           if self.subtasks[st_id].status == TaskStatus.COMPLETED)
             total = len(task.subtasks)
             print(f"{task.id:<25} {task.title:<30} {task.status.value:<12} {completed}/{total}")
+    
+    def cancel_task(self, task_id: str) -> bool:
+        """取消任务"""
+        task = self.tasks.get(task_id)
+        if not task:
+            print(f"❌ 任务不存在: {task_id}")
+            return False
+        
+        for subtask_id in task.subtasks:
+            subtask = self.subtasks[subtask_id]
+            if subtask.status in [TaskStatus.PENDING, TaskStatus.ASSIGNED]:
+                subtask.status = TaskStatus.FAILED
+                subtask.result = "任务已取消"
+                
+                if subtask.assigned_to:
+                    agent = self.agents.get(subtask.assigned_to)
+                    if agent:
+                        agent.status = "idle"
+                        agent.current_task = None
+        
+        task.status = TaskStatus.FAILED
+        self.save_state()
+        print(f"✅ 任务已取消: {task.title}")
+        return True
+    
+    def run_subtask(self, subtask_id: str) -> bool:
+        """直接运行指定的子任务"""
+        return self.execute_subtask(subtask_id)
+    
+    def get_agent_by_id(self, agent_id: str) -> Optional[Agent]:
+        """根据ID获取Agent"""
+        return self.agents.get(agent_id)
+    
+    def find_available_agents(self, capabilities: List[str]) -> List[Agent]:
+        """查找具有特定能力的空闲Agent"""
+        available = []
+        for agent in self.agents.values():
+            if agent.status == "idle":
+                if any(cap in agent.capabilities for cap in capabilities):
+                    available.append(agent)
+        return available
+    
+    def get_system_stats(self) -> Dict:
+        """获取系统统计信息"""
+        total_agents = len(self.agents)
+        idle_agents = sum(1 for a in self.agents.values() if a.status == "idle")
+        busy_agents = sum(1 for a in self.agents.values() if a.status == "busy")
+        
+        total_tasks = len(self.tasks)
+        completed_tasks = sum(1 for t in self.tasks.values() if t.status == TaskStatus.COMPLETED)
+        failed_tasks = sum(1 for t in self.tasks.values() if t.status == TaskStatus.FAILED)
+        pending_tasks = sum(1 for t in self.tasks.values() if t.status == TaskStatus.PENDING)
+        
+        return {
+            'agents': {
+                'total': total_agents,
+                'idle': idle_agents,
+                'busy': busy_agents
+            },
+            'tasks': {
+                'total': total_tasks,
+                'completed': completed_tasks,
+                'failed': failed_tasks,
+                'pending': pending_tasks
+            }
+        }
 
 def main():
     import argparse
     
-    parser = argparse.ArgumentParser(description='多Agent协作系统 v2.0')
+    parser = argparse.ArgumentParser(description='多Agent协作系统 v3.2')
     parser.add_argument('--create-task', type=str, help='创建任务')
     parser.add_argument('--description', type=str, help='任务描述')
     parser.add_argument('--requirements', type=str, nargs='+', help='需求列表')
     parser.add_argument('--status', type=str, help='查看任务状态')
     parser.add_argument('--list-agents', action='store_true', help='列出Agent')
     parser.add_argument('--list-tasks', action='store_true', help='列出任务')
+    parser.add_argument('--cancel-task', type=str, help='取消任务')
+    parser.add_argument('--stats', action='store_true', help='显示系统统计')
+    parser.add_argument('--agent', type=str, help='查看指定Agent状态')
+    parser.add_argument('--available-agents', type=str, nargs='+', help='查找具有特定能力的空闲Agent')
+    parser.add_argument('--run-subtask', type=str, help='运行指定的子任务')
+    parser.add_argument('--version', action='store_true', help='显示版本')
     
     args = parser.parse_args()
+    
+    if args.version:
+        print("Multi-Agent Suite v3.2.0")
+        print("11-Agent 超级团队 + 工作流管理 + Web看板")
+        return
     
     orchestrator = MultiAgentOrchestrator()
     
@@ -459,8 +536,43 @@ def main():
         orchestrator.list_agents()
     elif args.list_tasks:
         orchestrator.list_tasks()
+    elif args.cancel_task:
+        orchestrator.cancel_task(args.cancel_task)
+    elif args.stats:
+        stats = orchestrator.get_system_stats()
+        print("\n📊 系统状态统计:")
+        print(f"  🤖 Agent: {stats['agents']['idle']} 空闲 | {stats['agents']['busy']} 工作中 | {stats['agents']['total']} 总数")
+        print(f"  📋 任务: {stats['tasks']['completed']} 完成 | {stats['tasks']['pending']} 待处理 | {stats['tasks']['failed']} 失败 | {stats['tasks']['total']} 总数")
+    elif args.agent:
+        agent = orchestrator.get_agent_by_id(args.agent)
+        if agent:
+            print(f"\n👤 Agent: {agent.name}")
+            print(f"   ID: {agent.id}")
+            print(f"   角色: {hasattr(agent.role, "value") and agent.role.value or agent.role}")
+            print(f"   状态: {agent.status}")
+            print(f"   当前任务: {agent.current_task or '无'}")
+            print(f"   能力: {', '.join(agent.capabilities)}")
+        else:
+            print(f"❌ 未找到Agent: {args.agent}")
+    elif args.available_agents:
+        agents = orchestrator.find_available_agents(args.available_agents)
+        print(f"\n🔍 具有能力 {args.available_agents} 的空闲Agent:")
+        for a in agents:
+            print(f"   - {a.name} ({a.role.value})")
+        if not agents:
+            print("   (无)")
+    elif args.run_subtask:
+        success = orchestrator.run_subtask(args.run_subtask)
+        if success:
+            print(f"✅ 子任务执行完成: {args.run_subtask}")
+        else:
+            print(f"❌ 子任务执行失败: {args.run_subtask}")
     else:
         parser.print_help()
+        print("\n💡 快速使用:")
+        print("   python3 core/orchestrator.py --list-agents")
+        print("   python3 core/orchestrator.py --stats")
+        print("   python3 core/orchestrator.py --create-task '新项目' --description '描述'")
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,8 @@
+# 小龙虾之家自动更新定时任务
+# 添加到crontab: crontab -e
+
+# 每小时更新一次数据（更频繁）
+0 * * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/projects/lobster_hourly_update.py >> /tmp/lobster_cron.log 2>&1
+
+# 每天0点重置数据（由服务器端处理）
+# 0 0 * * * curl -s http://106.54.25.161:5000/api/status > /dev/null 2>&1

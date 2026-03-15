@@ -1,0 +1,54 @@
+
+{
+    "name": "power_design_skill_complete",
+    "version": "2.0.0",
+    "description": "整合三本设计手册的完整电力设计计算技能包",
+    "author": "AI Assistant",
+    "license": "MIT",
+    "python_version": ">=3.7",
+    "dependencies": [
+        "openpyxl>=3.0.0"
+    ],
+    "modules": [
+        "power_design_skill.py",
+        "steel_transmission_modules.py",
+        "excel_exporter.py",
+        "openclaw_integration.py"
+    ],
+    "entry_points": {
+        "skill": "openclaw_integration:PowerDesignSkill",
+        "cli": "openclaw_integration:main"
+    },
+    "capabilities": [
+        "load_calculation",
+        "short_circuit_calculation",
+        "cable_selection",
+        "protection_setting",
+        "reactive_power_compensation",
+        "grounding_design",
+        "transformer_selection",
+        "circuit_breaker_selection",
+        "steel_plant_power_design",
+        "transmission_line_design",
+        "excel_export"
+    ],
+    "standards": [
+        "工业与民用配电设计手册 第四版",
+        "钢铁企业电力设计手册 上、下册",
+        "电力工程高压送电线路设计手册 第二版",
+        "GB 50052-2009 供配电系统设计规范",
+        "GB 50054-2011 低压配电设计规范",
+        "GB 50055-2011 通用用电设备配电设计规范",
+        "GB 50057-2010 建筑物防雷设计规范",
+        "GB 50065-2011 交流电气装置的接地设计规范",
+        "IEC 60909 短路电流计算标准"
+    ],
+    "voltage_levels": ["0.38kV", "0.4kV", "6kV", "10kV", "20kV", "35kV", "66kV", "110kV", "220kV", "330kV", "500kV"],
+    "calculation_methods": {
+        "load": ["需要系数法", "利用系数法", "单位指标法", "单位产品耗电量法"],
+        "short_circuit": ["标幺值法", "有名值法(欧姆法)"],
+        "cable": ["按载流量选择", "按电压降校验", "按热稳定校验"],
+        "steel_plant": ["电弧炉负荷计算", "轧钢机冲击负荷计算", "谐波计算"],
+        "transmission_line": ["电气参数计算", "弧垂计算", "导线选择", "杆塔荷载计算", "绝缘配合"]
+    }
+}

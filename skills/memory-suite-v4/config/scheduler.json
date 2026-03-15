@@ -1,0 +1,70 @@
+{
+  "tasks": {
+    "real-time": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "daily-init": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "archive": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "index": {
+      "enabled": true,
+      "last_run": "2026-03-15T10:00:00.902892",
+      "last_result": {
+        "success": true,
+        "result": {
+          "indexed_files": 20,
+          "unique_keywords": 2410
+        }
+      }
+    },
+    "analyze-daily": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "evolution-daily": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "evolution-monthly": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "evolution-report": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "skill-eval": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "knowledge-graph": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "knowledge-sync": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    },
+    "knowledge-import": {
+      "enabled": true,
+      "last_run": null,
+      "last_result": null
+    }
+  }
+}

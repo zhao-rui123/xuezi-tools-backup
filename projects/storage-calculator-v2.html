@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>储能财务测算工具 v2.0（增强版）</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #666;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .input-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: inline-block;
+            margin-right: 20px;
+        }
+        label {
+            display: inline-block;
+            width: 200px;
+            font-weight: bold;
+            color: #333;
+        }
+        input {
+            padding: 8px;
+            width: 150px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="checkbox"] {
+            width: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f0f8ff;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .result-label {
+            display: inline-block;
+            width: 250px;
+            font-weight: bold;
+        }
+        .result-value {
+            font-weight: bold;
+            color: #007bff;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0069d9;
+        }
+        button.secondary {
+            background-color: #6c757d;
+        }
+        button.secondary:hover {
+            background-color: #5a6268;
+        }
+        button.success {
+            background-color: #28a745;
+        }
+        button.success:hover {
+            background-color: #218838;
+        }
+        button.warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+        button.warning:hover {
+            background-color: #e0a800;
+        }
+        .sub-section {
+            margin-left: 20px;
+            padding: 15px;
+            background-color: #fdfdfd;
+            border-left: 3px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+        .sensitivity-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff9f0;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+        }
+        .add-btn {
+            background-color: #28a745;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .remove-btn {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .tab-buttons {
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            margin-right: 5px;
+        }
+        .tab-btn.active {
+            background-color: #007bff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .flex-item {
+            flex: 1;
+            min-width: 300px;
+        }
+        .year-input {
+            width: 80px;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1001;
+        }
+        .modal h2 {
+            margin-top: 0;
+        }
+        .config-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        .config-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .config-item:hover {
+            background: #f5f5f5;
+        }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .compare-table th, .compare-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .compare-table th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>度电成本测算对比</h1>
+        
+        <!-- 操作按钮 -->
+        <div style="margin-bottom: 20px;">
+            <input type="text" id="configName" placeholder="输入配置名称" style="width: 150px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <button onclick="saveConfig()">保存配置</button>
+            <button class="secondary" onclick="showLoadDialog()">加载配置</button>
+            <button class="success" onclick="showCompareDialog()">对比配置</button>
+            <button class="warning" onclick="resetConfig()">重置配置</button>
+        </div>
+        
+        <!-- 标签页 -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('basic')">基础参数</button>
+            <button class="tab-btn" onclick="showTab('investment')">初始投资</button>
+            <button class="tab-btn" onclick="showTab('revenue')">收入来源</button>
+            <button class="tab-btn" onclick="showTab('operation')">运营成本</button>
+            <button class="tab-btn" onclick="showTab('policy')">政策支持</button>
+            <button class="tab-btn" onclick="showTab('calculation')">计算结果</button>
+            <button class="tab-btn" onclick="showTab('sensitivity')">敏感性分析</button>
+            <button class="tab-btn" onclick="showTab('charts')">图表分析</button>
+        </div>
+        
+        <!-- 基础参数 -->
+        <div id="basic" class="tab-content active">
+            <div class="input-section">
+                <h2>1. 基础参数</h2>
+                
+                <div class="sub-section">
+                    <h3>1.1 电芯选择</h3>
+                    <div class="form-group" style="width: 100%;">
+                        <label>电芯型号：</label>
+                        <select id="cellModel" onchange="loadCellModel()" style="width: 300px; padding: 8px; font-size: 14px;">
+                            <option value="">-- 选择电芯型号 --</option>
+                            <option value="CALB314B-5.0">CALB314B-5.0 (中航锂电 5.0MWh)</option>
+                            <option value="CALB392-6.25">CALB392-6.25 (中航锂电 6.25MWh)</option>
+                            <option value="CATL588-6.26">CATL588-6.26 (宁德时代 6.26MWh)</option>
+                            <option value="CATL565-6">CATL565-6 (宁德时代 6MWh)</option>
+                            <option value="640A-6.68">640A-6.68 (6.68MWh)</option>
+                            <option value="中车648-6.9">中车648-6.9 (6.9MWh)</option>
+                            <option value="CALB314-5.0">CALB314-5.0 (中航锂电 5.0MWh)</option>
+                            <option value="custom">自定义电芯...</option>
+                        </select>
+                    </div>
+                    <button onclick="showCellManager()" style="margin-left: 210px;">🔧 电芯管理</button>
+                    <button onclick="showAttenuationTable()" style="margin-left: 10px;">📊 衰减曲线</button>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>1.2 系统参数</h3>
+                    <div class="form-group">
+                        <label>系统总容量（MWh）：</label>
+                        <input type="number" id="totalCapacity" step="0.01" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>系统功率（MW）：</label>
+                        <input type="number" id="systemPower" step="0.01" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>直流侧集装箱数量（个）：</label>
+                        <input type="number" id="dcContainerCount" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>放电深度（%）：</label>
+                        <input type="number" id="dod" step="0.1" value="90">
+                    </div>
+                    <div class="form-group">
+                        <label>年运营天数（天）：</label>
+                        <input type="number" id="annualDays" value="365">
+                    </div>
+                    <div class="form-group">
+                        <label>日充放电次数（次）：</label>
+                        <input type="number" id="dailyCycles" step="0.1" value="1">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>1.3 效率参数</h3>
+                    <div class="form-group">
+                        <label>直流侧效率（%）：</label>
+                        <input type="number" id="dcEfficiency" step="0.1" value="98">
+                    </div>
+                    <div class="form-group">
+                        <label>PCS效率（%）：</label>
+                        <input type="number" id="pcsEfficiency" step="0.1" value="96">
+                    </div>
+                    <div class="form-group">
+                        <label>变压器效率（%）：</label>
+                        <input type="number" id="transformerEfficiency" step="0.1" value="99">
+                    </div>
+                    <div class="form-group">
+                        <label>线损（%）：</label>
+                        <input type="number" id="lineLoss" step="0.1" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>自用电电量（kWh/次）：</label>
+                        <input type="number" id="selfPowerConsumption" step="0.01" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>待机损耗自用电（kWh/天）：</label>
+                        <input type="number" id="standbyPowerConsumption" step="0.01" value="10">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>1.4 系统剩余容量（%）</h3>
+                    <div class="form-group">
+                        <label>计算年限（年）：</label>
+                        <input type="number" id="analysisYears" value="20" min="1" max="30">
+                        <button onclick="generateCapacityTable()">生成容量表</button>
+                    </div>
+                    <table id="capacityTable">
+                        <thead>
+                            <tr>
+                                <th>年份</th>
+                                <th>剩余容量（%）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>1.5 分析区间</h3>
+                    <div class="form-group">
+                        <label>起始年份：</label>
+                        <input type="number" class="year-input" id="startYear" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>结束年份：</label>
+                        <input type="number" class="year-input" id="endYear" value="20" min="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 初始投资 -->
+        <div id="investment" class="tab-content">
+            <div class="input-section">
+                <h2>2. 初始投资成本</h2>
+                
+                <div class="sub-section">
+                    <h3>2.1 直流侧（元/Wh）</h3>
+                    <div class="form-group">
+                        <label>单直流舱容量（kWh）：</label>
+                        <input type="number" id="dcCabinCapacity" step="0.1" value="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>直流舱数量（台）：</label>
+                        <input type="number" id="dcCabinCount" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>电芯价格（元/Wh）：</label>
+                        <input type="number" id="cellPrice" step="0.001" value="0.8">
+                    </div>
+                    <div class="form-group">
+                        <label>集成价格（元/Wh）：</label>
+                        <input type="number" id="dcIntegrationPrice" step="0.001" value="0.3">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.2 交流侧（元）</h3>
+                    <div class="form-group">
+                        <label>PCS单价（万元）：</label>
+                        <input type="number" id="pcsUnitPrice" step="0.1" value="300">
+                    </div>
+                    <div class="form-group">
+                        <label>PCS数量（台）：</label>
+                        <input type="number" id="pcsCount" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>变压器单价（万元）：</label>
+                        <input type="number" id="transformerPrice" step="0.1" value="80">
+                    </div>
+                    <div class="form-group">
+                        <label>一体机数量（台）：</label>
+                        <input type="number" id="integratedMachineCount" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>EMS系统价格（万元）：</label>
+                        <input type="number" id="emsPrice" step="0.1" value="50">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.3 电缆价格（元）</h3>
+                    <div class="form-group">
+                        <label>直流电缆单价（元/m）：</label>
+                        <input type="number" id="dcCableUnitPrice" step="0.01" value="200">
+                    </div>
+                    <div class="form-group">
+                        <label>直流电缆长度（m）：</label>
+                        <input type="number" id="dcCableLength" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>通讯电缆单价（元/m）：</label>
+                        <input type="number" id="commCableUnitPrice" step="0.01" value="50">
+                    </div>
+                    <div class="form-group">
+                        <label>通讯电缆长度（m）：</label>
+                        <input type="number" id="commCableLength" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>配电电缆单价（元/m）：</label>
+                        <input type="number" id="distCableUnitPrice" step="0.01" value="150">
+                    </div>
+                    <div class="form-group">
+                        <label>配电电缆长度（m）：</label>
+                        <input type="number" id="distCableLength" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>交流电缆单价（元/m）：</label>
+                        <input type="number" id="acCableUnitPrice" step="0.01" value="300">
+                    </div>
+                    <div class="form-group">
+                        <label>交流电缆长度（m）：</label>
+                        <input type="number" id="acCableLength" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>消防线缆单价（元/m）：</label>
+                        <input type="number" id="fireCableUnitPrice" step="0.01" value="80">
+                    </div>
+                    <div class="form-group">
+                        <label>消防线缆长度（m）：</label>
+                        <input type="number" id="fireCableLength" step="0.1" value="100">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.4 总变电站价格（元）</h3>
+                    <div class="form-group">
+                        <label>主变压器数量（台）：</label>
+                        <input type="number" id="mainTransformerCount" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label>主变压器单价（万元）：</label>
+                        <input type="number" id="mainTransformerUnitPrice" step="0.1" value="200">
+                    </div>
+                    <div class="form-group">
+                        <label>二次设备价格（万元）：</label>
+                        <input type="number" id="secondaryEquipmentPrice" step="0.1" value="100">
+                    </div>
+                    <div class="form-group">
+                        <label>一次设备价格（万元）：</label>
+                        <input type="number" id="primaryEquipmentPrice" step="0.1" value="150">
+                    </div>
+                    <div class="form-group">
+                        <label>辅助变压器价格（万元）：</label>
+                        <input type="number" id="auxTransformerPrice" step="0.1" value="30">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.5 土地价格（元）</h3>
+                    <div class="form-group">
+                        <label>占地面积（㎡）：</label>
+                        <input type="number" id="landArea" step="0.1" value="1000">
+                    </div>
+                    <div class="form-group">
+                        <label>土地单价（元/㎡）：</label>
+                        <input type="number" id="landUnitPrice" step="0.01" value="500">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.6 施工价格（元）</h3>
+                    <div class="form-group">
+                        <label>设计费（万元）：</label>
+                        <input type="number" id="designFee" step="0.1" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>监理费（万元）：</label>
+                        <input type="number" id="supervisionFee" step="0.1" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>基础土建费（万元）：</label>
+                        <input type="number" id="civilWorkFee" step="0.1" value="80">
+                    </div>
+                    <div class="form-group">
+                        <label>站区消防建设费（万元）：</label>
+                        <input type="number" id="fireConstructionFee" step="0.1" value="40">
+                    </div>
+                    <div class="form-group">
+                        <label>站区安防建设费（万元）：</label>
+                        <input type="number" id="securityConstructionFee" step="0.1" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>居间费（万元）：</label>
+                        <input type="number" id="intermediaryFee" step="0.1" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>大件运输费（万元）：</label>
+                        <input type="number" id="transportFee" step="0.1" value="30">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>2.7 其他费用（元）</h3>
+                    <button class="add-btn" onclick="addOtherCost()">添加其他费用</button>
+                    <table id="otherCostTable">
+                        <thead>
+                            <tr>
+                                <th>费用名称</th>
+                                <th>金额（万元）</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 收入来源 -->
+        <div id="revenue" class="tab-content">
+            <div class="input-section">
+                <h2>3. 收入来源</h2>
+                
+                <div class="sub-section">
+                    <h3>3.1 市场化交易</h3>
+                    <div class="form-group">
+                        <label>购电电价（元/kWh）：</label>
+                        <input type="number" id="purchasePrice" step="0.001" value="0.4">
+                    </div>
+                    <div class="form-group">
+                        <label>售电电价（元/kWh）：</label>
+                        <input type="number" id="salesPrice" step="0.001" value="0.8">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>3.2 辅助服务收入</h3>
+                    <div class="form-group">
+                        <label>调频单价（元/MW/年）：</label>
+                        <input type="number" id="frequencyRegulationPrice" step="0.1" value="60">
+                    </div>
+                    <div class="form-group">
+                        <label>容量电价单价（元/kW/年）：</label>
+                        <input type="number" id="capacityPrice" step="0.1" value="200">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>3.3 其他收入</h3>
+                    <button class="add-btn" onclick="addRevenue()">添加其他收入</button>
+                    <table id="revenueTable">
+                        <thead>
+                            <tr>
+                                <th>收入名称</th>
+                                <th>年收入（万元）</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 运营成本 -->
+        <div id="operation" class="tab-content">
+            <div class="input-section">
+                <h2>4. 运营成本</h2>
+                
+                <div class="sub-section">
+                    <h3>4.1 固定运营成本</h3>
+                    <div class="form-group">
+                        <label>年保险费率（%）：</label>
+                        <input type="number" id="insuranceRate" step="0.01" value="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>年运营费（万元）：</label>
+                        <input type="number" id="operationCost" step="0.1" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>年人工费（万元）：</label>
+                        <input type="number" id="laborCost" step="0.1" value="30">
+                    </div>
+                    <div class="form-group">
+                        <label>年平台使用费（万元）：</label>
+                        <input type="number" id="platformCost" step="0.1" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label>年大修费（万元）：</label>
+                        <input type="number" id="overhaulCost" step="0.1" value="15">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>4.2 其他运营费用</h3>
+                    <button class="add-btn" onclick="addOperationCost()">添加其他费用</button>
+                    <table id="operationCostTable">
+                        <thead>
+                            <tr>
+                                <th>费用名称</th>
+                                <th>年费用（万元）</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 政策支持 -->
+        <div id="policy" class="tab-content">
+            <div class="input-section">
+                <h2>5. 政策支持</h2>
+                
+                <div class="sub-section">
+                    <h3>5.1 税收政策</h3>
+                    <div class="form-group">
+                        <label>增值税税率（%）：</label>
+                        <input type="number" id="vatRate" step="0.1" value="13">
+                    </div>
+                    <div class="form-group">
+                        <label>企业所得税税率（%）：</label>
+                        <input type="number" id="incomeTaxRate" step="0.1" value="25">
+                    </div>
+                    <div class="form-group">
+                        <label>折旧年限（年）：</label>
+                        <input type="number" id="depreciationYears" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>折现率（%）：</label>
+                        <input type="number" id="discountRate" step="0.1" value="8">
+                    </div>
+                    <div class="form-group">
+                        <label>设备折旧后残值百分比（%）：</label>
+                        <input type="number" id="residualValueRate" step="0.1" value="5">
+                    </div>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>5.2 补贴政策</h3>
+                    <button class="add-btn" onclick="addSubsidy()">添加补贴</button>
+                    <table id="subsidyTable">
+                        <thead>
+                            <tr>
+                                <th>补贴名称</th>
+                                <th>年补贴（万元）</th>
+                                <th>补贴年限（年）</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 计算结果 -->
+        <div id="calculation" class="tab-content">
+            <div style="margin-bottom: 20px;">
+                <button class="success" onclick="calculateAll()">计算所有指标</button>
+                <button class="secondary" onclick="exportToExcel()">导出Excel</button>
+            </div>
+            
+            <div class="result-section">
+                <h2>6. 投资总成本</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">直流侧投资（元）：</span>
+                            <span class="result-value" id="dcSideInvestment"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">交流侧投资（元）：</span>
+                            <span class="result-value" id="acSideInvestment"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">电缆投资（元）：</span>
+                            <span class="result-value" id="cableInvestment"></span>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">变电站投资（元）：</span>
+                            <span class="result-value" id="substationInvestment"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">土地投资（元）：</span>
+                            <span class="result-value" id="landInvestment"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">施工投资（元）：</span>
+                            <span class="result-value" id="constructionInvestment"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <span class="result-label"><strong>总初始投资（元）：</strong></span>
+                    <span class="result-value" id="totalInitialInvestment" style="font-size: 20px;"></span>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <h2>7. 效率与容量计算</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">充电效率（%）：</span>
+                            <span class="result-value" id="chargeEfficiency"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">放电效率（%）：</span>
+                            <span class="result-value" id="dischargeEfficiency"></span>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">年充电量（MWh）：</span>
+                            <span class="result-value" id="annualChargeAmount"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">年放电量（MWh）：</span>
+                            <span class="result-value" id="annualDischargeAmount"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <h2>8. 核心财务指标（分析区间：第 <span id="displayStartYear"></span> 年 - 第 <span id="displayEndYear"></span> 年）</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">总充电量（MWh）：</span>
+                            <span class="result-value" id="totalChargeAmount"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">总放电量（MWh）：</span>
+                            <span class="result-value" id="totalDischargeAmount"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">LCOE（元/kWh）：</span>
+                            <span class="result-value" id="lcoe"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">LCOS（元/kWh）：</span>
+                            <span class="result-value" id="lcos"></span>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="result-item">
+                            <span class="result-label">NPV（元）：</span>
+                            <span class="result-value" id="npv"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">IRR（%）：</span>
+                            <span class="result-value" id="irr"></span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">投资回收期（年）：</span>
+                            <span class="result-value" id="paybackPeriod"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-section">
+                <h2>9. 年度详细计算</h2>
+                <div style="overflow-x: auto;">
+                <table id="detailedTable">
+                    <thead>
+                        <tr>
+                            <th>年份</th>
+                            <th>剩余容量(%)</th>
+                            <th>充电量(MWh)</th>
+                            <th>放电量(MWh)</th>
+                            <th>购电成本(元)</th>
+                            <th>售电收入(元)</th>
+                            <th>调频收入(元)</th>
+                            <th>容量电费(元)</th>
+                            <th>其他收入(元)</th>
+                            <th>补贴收入(元)</th>
+                            <th>运营成本(元)</th>
+                            <th>折旧(元)</th>
+                            <th>增值税(元)</th>
+                            <th>利润总额(元)</th>
+                            <th>所得税(元)</th>
+                            <th>净利润(元)</th>
+                            <th>现金流量(元)</th>
+                            <th>累计现金流量(元)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态生成 -->
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 敏感性分析 -->
+        <div id="sensitivity" class="tab-content">
+            <div class="input-section">
+                <h2>10. 敏感性分析</h2>
+                
+                <div class="sub-section">
+                    <h3>10.1 敏感性参数设置</h3>
+                    <div class="form-group">
+                        <label>变化范围（%）：</label>
+                        <input type="number" id="sensitivityRange" step="5" value="20">
+                    </div>
+                    <div class="form-group">
+                        <label>步长（%）：</label>
+                        <input type="number" id="sensitivityStep" step="1" value="5">
+                    </div>
+                    <button class="success" onclick="performSensitivityAnalysis()">执行敏感性分析</button>
+                </div>
+                
+                <div class="sensitivity-section">
+                    <h3>10.2 敏感性分析结果</h3>
+                    <table id="sensitivityTable">
+                        <thead>
+                            <tr>
+                                <th>变化幅度</th>
+                                <th>购电电价</th>
+                                <th>售电电价</th>
+                                <th>初始投资</th>
+                                <th>系统容量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="sensitivityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 图表分析 -->
+        <div id="charts" class="tab-content">
+            <div class="input-section">
+                <h2>11. 图表分析</h2>
+                
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <h3>11.1 年度现金流量</h3>
+                        <div class="chart-container">
+                            <canvas id="cashFlowChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <h3>11.2 年度净利润</h3>
+                        <div class="chart-container">
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <h3>11.3 投资构成</h3>
+                        <div class="chart-container">
+                            <canvas id="investmentPieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <h3>11.4 累计现金流量</h3>
+                        <div class="chart-container">
+                            <canvas id="cumulativeCashFlowChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 数据存储
+        let otherCosts = [];
+        let revenues = [];
+        let operationCosts = [];
+        let subsidies = [];
+        let yearlyCapacity = [];
+        let yearlyData = [];
+        let sensitivityData = [];
+        
+        let cashFlowChart = null;
+        let profitChart = null;
+        let investmentPieChart = null;
+        let cumulativeCashFlowChart = null;
+        let sensitivityChart = null;
+        
+        // 标签页切换
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // 生成容量表
+        function generateCapacityTable() {
+            const years = parseInt(document.getElementById('analysisYears').value);
+            const tbody = document.querySelector('#capacityTable tbody');
+            tbody.innerHTML = '';
+            
+            for (let i = 1; i <= years; i++) {
+                const row = document.createElement('tr');
+                const capacity = Math.max(70, 100 - i * 1.5);
+                row.innerHTML = `
+                    <td>${i}</td>
+                    <td><input type="number" class="capacity-input" step="0.1" value="${capacity.toFixed(1)}"></td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+        
+        // 添加其他费用
+        function addOtherCost() {
+            otherCosts.push({ name: '', amount: 0 });
+            updateOtherCostTable();
+        }
+        
+        function updateOtherCostTable() {
+            const tbody = document.querySelector('#otherCostTable tbody');
+            tbody.innerHTML = '';
+            otherCosts.forEach((cost, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${cost.name}" onchange="updateOtherCost(${index}, 'name', this.value)"></td>
+                    <td><input type="number" step="0.1" value="${cost.amount}" onchange="updateOtherCost(${index}, 'amount', parseFloat(this.value))"></td>
+                    <td><button class="remove-btn" onclick="removeOtherCost(${index})">删除</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateOtherCost(index, field, value) {
+            otherCosts[index][field] = value;
+        }
+        
+        function removeOtherCost(index) {
+            otherCosts.splice(index, 1);
+            updateOtherCostTable();
+        }
+        
+        // 添加其他收入
+        function addRevenue() {
+            revenues.push({ name: '', amount: 0 });
+            updateRevenueTable();
+        }
+        
+        function updateRevenueTable() {
+            const tbody = document.querySelector('#revenueTable tbody');
+            tbody.innerHTML = '';
+            revenues.forEach((revenue, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${revenue.name}" onchange="updateRevenue(${index}, 'name', this.value)"></td>
+                    <td><input type="number" step="0.1" value="${revenue.amount}" onchange="updateRevenue(${index}, 'amount', parseFloat(this.value))"></td>
+                    <td><button class="remove-btn" onclick="removeRevenue(${index})">删除</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateRevenue(index, field, value) {
+            revenues[index][field] = value;
+        }
+        
+        function removeRevenue(index) {
+            revenues.splice(index, 1);
+            updateRevenueTable();
+        }
+        
+        // 添加运营费用
+        function addOperationCost() {
+            operationCosts.push({ name: '', amount: 0 });
+            updateOperationCostTable();
+        }
+        
+        function updateOperationCostTable() {
+            const tbody = document.querySelector('#operationCostTable tbody');
+            tbody.innerHTML = '';
+            operationCosts.forEach((cost, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${cost.name}" onchange="updateOperationCost(${index}, 'name', this.value)"></td>
+                    <td><input type="number" step="0.1" value="${cost.amount}" onchange="updateOperationCost(${index}, 'amount', parseFloat(this.value))"></td>
+                    <td><button class="remove-btn" onclick="removeOperationCost(${index})">删除</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateOperationCost(index, field, value) {
+            operationCosts[index][field] = value;
+        }
+        
+        function removeOperationCost(index) {
+            operationCosts.splice(index, 1);
+            updateOperationCostTable();
+        }
+        
+        // 添加补贴
+        function addSubsidy() {
+            subsidies.push({ name: '', amount: 0, years: 0 });
+            updateSubsidyTable();
+        }
+        
+        function updateSubsidyTable() {
+            const tbody = document.querySelector('#subsidyTable tbody');
+            tbody.innerHTML = '';
+            subsidies.forEach((subsidy, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><input type="text" value="${subsidy.name}" onchange="updateSubsidy(${index}, 'name', this.value)"></td>
+                    <td><input type="number" step="0.1" value="${subsidy.amount}" onchange="updateSubsidy(${index}, 'amount', parseFloat(this.value))"></td>
+                    <td><input type="number" value="${subsidy.years}" onchange="updateSubsidy(${index}, 'years', parseInt(this.value))"></td>
+                    <td><button class="remove-btn" onclick="removeSubsidy(${index})">删除</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateSubsidy(index, field, value) {
+            subsidies[index][field] = value;
+        }
+        
+        function removeSubsidy(index) {
+            subsidies.splice(index, 1);
+            updateSubsidyTable();
+        }
+        
+        // 计算所有指标
+        function calculateAll() {
+            calculateInitialInvestment();
+            calculateEfficiencyAndCapacity();
+            calculateYearlyData();
+            calculateFinancialIndicators();
+            updateDetailedTable();
+            updateCharts();
+        }
+        
+        // 计算初始投资
+        function calculateInitialInvestment() {
+            const totalCapacity = parseFloat(document.getElementById('totalCapacity').value) || 0;
+            const systemPower = parseFloat(document.getElementById('systemPower').value) || 0;
+            
+            const dcCabinCapacity = parseFloat(document.getElementById('dcCabinCapacity').value) || 0;
+            const dcCabinCount = parseInt(document.getElementById('dcCabinCount').value) || 0;
+            const cellPrice = parseFloat(document.getElementById('cellPrice').value) || 0;
+            const dcIntegrationPrice = parseFloat(document.getElementById('dcIntegrationPrice').value) || 0;
+            const dcCabinPrice = dcCabinCapacity * (cellPrice + dcIntegrationPrice) * 1000;
+            const dcSideInvestment = dcCabinPrice * dcCabinCount / 10000;
+            
+            const pcsUnitPrice = parseFloat(document.getElementById('pcsUnitPrice').value) || 0;
+            const pcsCount = parseInt(document.getElementById('pcsCount').value) || 0;
+            const transformerPrice = parseFloat(document.getElementById('transformerPrice').value) || 0;
+            const integratedMachineCount = parseInt(document.getElementById('integratedMachineCount').value) || 0;
+            const emsPrice = parseFloat(document.getElementById('emsPrice').value) || 0;
+            const integratedMachinePrice = pcsUnitPrice * pcsCount;
+            const acSideInvestment = integratedMachineCount * integratedMachinePrice + transformerPrice + emsPrice;
+            
+            const dcCableLength = parseFloat(document.getElementById('dcCableLength').value) || 0;
+            const dcCableUnitPrice = parseFloat(document.getElementById('dcCableUnitPrice').value) || 0;
+            const commCableLength = parseFloat(document.getElementById('commCableLength').value) || 0;
+            const commCableUnitPrice = parseFloat(document.getElementById('commCableUnitPrice').value) || 0;
+            const distCableLength = parseFloat(document.getElementById('distCableLength').value) || 0;
+            const distCableUnitPrice = parseFloat(document.getElementById('distCableUnitPrice').value) || 0;
+            const acCableLength = parseFloat(document.getElementById('acCableLength').value) || 0;
+            const acCableUnitPrice = parseFloat(document.getElementById('acCableUnitPrice').value) || 0;
+            const fireCableLength = parseFloat(document.getElementById('fireCableLength').value) || 0;
+            const fireCableUnitPrice = parseFloat(document.getElementById('fireCableUnitPrice').value) || 0;
+            const cableInvestment = (dcCableLength * dcCableUnitPrice + commCableLength * commCableUnitPrice + distCableLength * distCableUnitPrice + acCableLength * acCableUnitPrice + fireCableLength * fireCableUnitPrice) / 10000;
+            
+            const mainTransformerCount = parseInt(document.getElementById('mainTransformerCount').value) || 0;
+            const mainTransformerUnitPrice = parseFloat(document.getElementById('mainTransformerUnitPrice').value) || 0;
+            const secondaryEquipmentPrice = parseFloat(document.getElementById('secondaryEquipmentPrice').value) || 0;
+            const primaryEquipmentPrice = parseFloat(document.getElementById('primaryEquipmentPrice').value) || 0;
+            const auxTransformerPrice = parseFloat(document.getElementById('auxTransformerPrice').value) || 0;
+            const substationInvestment = mainTransformerCount * mainTransformerUnitPrice + secondaryEquipmentPrice + primaryEquipmentPrice + auxTransformerPrice;
+            
+            const landArea = parseFloat(document.getElementById('landArea').value) || 0;
+            const landUnitPrice = parseFloat(document.getElementById('landUnitPrice').value) || 0;
+            const landInvestment = (landArea * landUnitPrice) / 10000;
+            
+            const designFee = parseFloat(document.getElementById('designFee').value) || 0;
+            const supervisionFee = parseFloat(document.getElementById('supervisionFee').value) || 0;
+            const civilWorkFee = parseFloat(document.getElementById('civilWorkFee').value) || 0;
+            const fireConstructionFee = parseFloat(document.getElementById('fireConstructionFee').value) || 0;
+            const securityConstructionFee = parseFloat(document.getElementById('securityConstructionFee').value) || 0;
+            const intermediaryFee = parseFloat(document.getElementById('intermediaryFee').value) || 0;
+            const transportFee = parseFloat(document.getElementById('transportFee').value) || 0;
+            const constructionInvestment = designFee + supervisionFee + civilWorkFee + fireConstructionFee + securityConstructionFee + intermediaryFee + transportFee;
+            
+            let otherInvestment = 0;
+            otherCosts.forEach(cost => {
+                otherInvestment += parseFloat(cost.amount) || 0;
+            });
+            
+            const totalInitialInvestment = dcSideInvestment + acSideInvestment + cableInvestment + substationInvestment + landInvestment + constructionInvestment + otherInvestment;
+            
+            document.getElementById('dcSideInvestment').textContent = (dcSideInvestment * 10000).toFixed(0);
+            document.getElementById('acSideInvestment').textContent = (acSideInvestment * 10000).toFixed(0);
+            document.getElementById('cableInvestment').textContent = (cableInvestment * 10000).toFixed(0);
+            document.getElementById('substationInvestment').textContent = (substationInvestment * 10000).toFixed(0);
+            document.getElementById('landInvestment').textContent = (landInvestment * 10000).toFixed(0);
+            document.getElementById('constructionInvestment').textContent = (constructionInvestment * 10000).toFixed(0);
+            document.getElementById('totalInitialInvestment').textContent = (totalInitialInvestment * 10000).toFixed(0);
+            
+            return {
+                dcSideInvestment,
+                acSideInvestment,
+                cableInvestment,
+                substationInvestment,
+                landInvestment,
+                constructionInvestment,
+                otherInvestment,
+                totalInitialInvestment
+            };
+        }
+        
+        // 计算效率和容量
+        function calculateEfficiencyAndCapacity() {
+            const dcEfficiency = parseFloat(document.getElementById('dcEfficiency').value) / 100 || 0;
+            const pcsEfficiency = parseFloat(document.getElementById('pcsEfficiency').value) / 100 || 0;
+            const transformerEfficiency = parseFloat(document.getElementById('transformerEfficiency').value) / 100 || 0;
+            const lineLoss = parseFloat(document.getElementById('lineLoss').value) / 100 || 0;
+            const totalCapacity = parseFloat(document.getElementById('totalCapacity').value) || 0;
+            const dod = parseFloat(document.getElementById('dod').value) / 100 || 0;
+            const annualDays = parseInt(document.getElementById('annualDays').value) || 0;
+            const dailyCycles = parseFloat(document.getElementById('dailyCycles').value) || 0;
+            const selfPowerConsumptionPerCycle = parseFloat(document.getElementById('selfPowerConsumption').value) || 0;
+            const standbyPowerConsumption = parseFloat(document.getElementById('standbyPowerConsumption').value) || 0;
+            
+            const effectiveCapacity = totalCapacity * dod;
+            const selfPowerMWh = selfPowerConsumptionPerCycle / 1000;
+            
+            const chargeEfficiency = effectiveCapacity / (effectiveCapacity / dcEfficiency / pcsEfficiency / transformerEfficiency / (1 - lineLoss) + selfPowerMWh);
+            const dischargeEfficiency = (effectiveCapacity * dcEfficiency * pcsEfficiency * transformerEfficiency * (1 - lineLoss) - selfPowerMWh) / effectiveCapacity;
+            
+            const selfPowerAnnual = (selfPowerConsumptionPerCycle * dailyCycles + standbyPowerConsumption) * annualDays / 1000;
+            const annualChargeAmount = (effectiveCapacity / chargeEfficiency) * annualDays * dailyCycles + selfPowerAnnual;
+            const annualDischargeAmount = (effectiveCapacity * dischargeEfficiency) * annualDays * dailyCycles - selfPowerAnnual;
+            
+            document.getElementById('chargeEfficiency').textContent = (chargeEfficiency * 100).toFixed(2);
+            document.getElementById('dischargeEfficiency').textContent = (dischargeEfficiency * 100).toFixed(2);
+            document.getElementById('annualChargeAmount').textContent = annualChargeAmount.toFixed(2);
+            document.getElementById('annualDischargeAmount').textContent = annualDischargeAmount.toFixed(2);
+            
+            return {
+                chargeEfficiency,
+                dischargeEfficiency,
+                annualChargeAmount,
+                annualDischargeAmount,
+                effectiveCapacity,
+                selfPowerAnnual
+            };
+        }
+        
+        // 计算年度数据
+        function calculateYearlyData() {
+            const analysisYears = parseInt(document.getElementById('analysisYears').value) || 0;
+            const startYear = parseInt(document.getElementById('startYear').value) || 1;
+            const endYear = parseInt(document.getElementById('endYear').value) || analysisYears;
+            const totalCapacity = parseFloat(document.getElementById('totalCapacity').value) || 0;
+            const systemPower = parseFloat(document.getElementById('systemPower').value) || 0;
+            const dod = parseFloat(document.getElementById('dod').value) / 100 || 0;
+            const annualDays = parseInt(document.getElementById('annualDays').value) || 0;
+            const dailyCycles = parseFloat(document.getElementById('dailyCycles').value) || 0;
+            const selfPowerConsumptionPerCycle = parseFloat(document.getElementById('selfPowerConsumption').value) || 0;
+            const standbyPowerConsumption = parseFloat(document.getElementById('standbyPowerConsumption').value) || 0;
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const salesPrice = parseFloat(document.getElementById('salesPrice').value) || 0;
+            const frequencyRegulationPrice = parseFloat(document.getElementById('frequencyRegulationPrice').value) || 0;
+            const capacityPrice = parseFloat(document.getElementById('capacityPrice').value) || 0;
+            const vatRate = parseFloat(document.getElementById('vatRate').value) / 100 || 0;
+            const incomeTaxRate = parseFloat(document.getElementById('incomeTaxRate').value) / 100 || 0;
+            const depreciationYears = parseInt(document.getElementById('depreciationYears').value) || 0;
+            const discountRate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
+            
+            const efficiencyData = calculateEfficiencyAndCapacity();
+            const investmentData = calculateInitialInvestment();
+            
+            const capacityInputs = document.querySelectorAll('.capacity-input');
+            yearlyCapacity = [];
+            capacityInputs.forEach(input => {
+                yearlyCapacity.push(parseFloat(input.value) / 100 || 1);
+            });
+            
+            const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) / 100 || 0;
+            const insuranceCost = investmentData.totalInitialInvestment * insuranceRate;
+            const operationCost = parseFloat(document.getElementById('operationCost').value) || 0;
+            const laborCost = parseFloat(document.getElementById('laborCost').value) || 0;
+            const platformCost = parseFloat(document.getElementById('platformCost').value) || 0;
+            const overhaulCost = parseFloat(document.getElementById('overhaulCost').value) || 0;
+            
+            const annualDepreciation = investmentData.totalInitialInvestment / depreciationYears;
+            const frequencyRegulationRevenue = frequencyRegulationPrice * systemPower / 10000;
+            const capacityRevenue = capacityPrice * systemPower * 1000 / 10000;
+            
+            yearlyData = [];
+            let cumulativeCashFlow = -investmentData.totalInitialInvestment;
+            let totalChargeCost = 0;
+            
+            for (let year = 1; year <= analysisYears; year++) {
+                const capacityRatio = yearlyCapacity[year - 1] || 1;
+                const effectiveCapacity = totalCapacity * dod * capacityRatio;
+                
+                const selfPowerAnnual = (selfPowerConsumptionPerCycle * dailyCycles + standbyPowerConsumption) * annualDays / 1000;
+                const chargeAmount = (effectiveCapacity / efficiencyData.chargeEfficiency) * annualDays * dailyCycles + selfPowerAnnual;
+                const dischargeAmount = (effectiveCapacity * efficiencyData.dischargeEfficiency) * annualDays * dailyCycles - selfPowerAnnual;
+                
+                const purchaseCost = chargeAmount * purchasePrice * 1000 / 10000;
+                const salesRevenue = dischargeAmount * salesPrice * 1000 / 10000;
+                totalChargeCost += purchaseCost;
+                
+                const freqRegRevenue = year <= depreciationYears ? frequencyRegulationRevenue : 0;
+                const capRevenue = year <= depreciationYears ? capacityRevenue : 0;
+                
+                let otherRevenue = 0;
+                revenues.forEach(revenue => {
+                    otherRevenue += parseFloat(revenue.amount) || 0;
+                });
+                
+                let subsidyRevenue = 0;
+                subsidies.forEach(subsidy => {
+                    if (year <= (parseInt(subsidy.years) || 0)) {
+                        subsidyRevenue += parseFloat(subsidy.amount) || 0;
+                    }
+                });
+                
+                let annualOperationCost = insuranceCost + operationCost + laborCost + platformCost + overhaulCost;
+                operationCosts.forEach(cost => {
+                    annualOperationCost += parseFloat(cost.amount) || 0;
+                });
+                
+                const depreciation = year <= depreciationYears ? annualDepreciation : 0;
+                
+                const vat = (salesRevenue + freqRegRevenue + capRevenue - purchaseCost) * vatRate;
+                const profitBeforeTax = salesRevenue + freqRegRevenue + capRevenue + otherRevenue + subsidyRevenue - purchaseCost - annualOperationCost - depreciation - Math.max(0, vat);
+                const incomeTax = Math.max(0, profitBeforeTax * incomeTaxRate);
+                const netProfit = profitBeforeTax - incomeTax;
+                
+                const cashFlow = netProfit + depreciation;
+                cumulativeCashFlow += cashFlow;
+                
+                yearlyData.push({
+                    year,
+                    capacityRatio: capacityRatio * 100,
+                    chargeAmount,
+                    dischargeAmount,
+                    purchaseCost,
+                    salesRevenue,
+                    freqRegRevenue,
+                    capRevenue,
+                    otherRevenue,
+                    subsidyRevenue,
+                    annualOperationCost,
+                    depreciation,
+                    vat: Math.max(0, vat),
+                    profitBeforeTax,
+                    incomeTax,
+                    netProfit,
+                    cashFlow,
+                    cumulativeCashFlow,
+                    totalChargeCost
+                });
+            }
+            
+            return yearlyData;
+        }
+        
+        // 计算财务指标
+        function calculateFinancialIndicators() {
+            const startYear = parseInt(document.getElementById('startYear').value) || 1;
+            const endYear = parseInt(document.getElementById('endYear').value) || yearlyData.length;
+            const discountRate = parseFloat(document.getElementById('discountRate').value) / 100 || 0;
+            const residualValueRate = parseFloat(document.getElementById('residualValueRate').value) / 100 || 0;
+            const investmentData = calculateInitialInvestment();
+            
+            document.getElementById('displayStartYear').textContent = startYear;
+            document.getElementById('displayEndYear').textContent = endYear;
+            
+            let totalChargeAmount = 0;
+            let totalDischargeAmount = 0;
+            let totalOperationCost = 0;
+            let totalChargeCost = 0;
+            let totalRevenue = 0;
+            let npv = -investmentData.totalInitialInvestment;
+            let paybackPeriod = -1;
+            const cashFlows = [-investmentData.totalInitialInvestment];
+            
+            const residualValue = investmentData.totalInitialInvestment * residualValueRate;
+            
+            yearlyData.forEach((data, index) => {
+                if (data.year >= startYear && data.year <= endYear) {
+                    totalChargeAmount += data.chargeAmount;
+                    totalDischargeAmount += data.dischargeAmount;
+                    totalOperationCost += data.annualOperationCost;
+                    totalChargeCost += data.purchaseCost;
+                    totalRevenue += data.salesRevenue + data.freqRegRevenue + data.capRevenue + data.otherRevenue + data.subsidyRevenue;
+                }
+                
+                npv += data.cashFlow / Math.pow(1 + discountRate, data.year);
+                cashFlows.push(data.cashFlow);
+                
+                if (paybackPeriod < 0 && data.cumulativeCashFlow >= 0) {
+                    const prevData = yearlyData[index - 1];
+                    if (prevData) {
+                        paybackPeriod = index + (Math.abs(prevData.cumulativeCashFlow) / data.cashFlow);
+                    } else {
+                        paybackPeriod = index + 1;
+                    }
+                }
+            });
+            
+            const lcos = (investmentData.totalInitialInvestment * 10000 + totalOperationCost * 10000 + totalChargeCost * 10000) / (totalDischargeAmount * 1000);
+            const lcoe = (investmentData.totalInitialInvestment * 10000 + totalOperationCost * 10000 - residualValue * 10000) / (totalDischargeAmount * 1000);
+            
+            const irr = calculateIRR(cashFlows);
+            
+            document.getElementById('totalChargeAmount').textContent = totalChargeAmount.toFixed(2);
+            document.getElementById('totalDischargeAmount').textContent = totalDischargeAmount.toFixed(2);
+            document.getElementById('lcoe').textContent = lcoe.toFixed(4);
+            document.getElementById('lcos').textContent = lcos.toFixed(4);
+            document.getElementById('npv').textContent = (npv * 10000).toFixed(0);
+            document.getElementById('irr').textContent = (irr * 100).toFixed(2);
+            document.getElementById('paybackPeriod').textContent = paybackPeriod > 0 ? paybackPeriod.toFixed(2) : '未回收';
+        }
+        
+        // 计算IRR
+        function calculateIRR(cashFlows) {
+            let irr = 0.1;
+            let npv = 0;
+            let iterations = 0;
+            const maxIterations = 1000;
+            const tolerance = 0.0001;
+            
+            while (iterations < maxIterations) {
+                npv = 0;
+                for (let i = 0; i < cashFlows.length; i++) {
+                    npv += cashFlows[i] / Math.pow(1 + irr, i);
+                }
+                
+                if (Math.abs(npv) < tolerance) {
+                    return irr;
+                }
+                
+                if (npv > 0) {
+                    irr += 0.001;
+                } else {
+                    irr -= 0.001;
+                }
+                
+                iterations++;
+            }
+            
+            return irr;
+        }
+        
+        // 更新详细表格
+        function updateDetailedTable() {
+            const tbody = document.querySelector('#detailedTable tbody');
+            tbody.innerHTML = '';
+            
+            yearlyData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.year}</td>
+                    <td>${data.capacityRatio.toFixed(1)}%</td>
+                    <td>${data.chargeAmount.toFixed(2)}</td>
+                    <td>${data.dischargeAmount.toFixed(2)}</td>
+                    <td>${(data.purchaseCost * 10000).toFixed(0)}</td>
+                    <td>${(data.salesRevenue * 10000).toFixed(0)}</td>
+                    <td>${(data.freqRegRevenue * 10000).toFixed(0)}</td>
+                    <td>${(data.capRevenue * 10000).toFixed(0)}</td>
+                    <td>${(data.otherRevenue * 10000).toFixed(0)}</td>
+                    <td>${(data.subsidyRevenue * 10000).toFixed(0)}</td>
+                    <td>${(data.annualOperationCost * 10000).toFixed(0)}</td>
+                    <td>${(data.depreciation * 10000).toFixed(0)}</td>
+                    <td>${(data.vat * 10000).toFixed(0)}</td>
+                    <td>${(data.profitBeforeTax * 10000).toFixed(0)}</td>
+                    <td>${(data.incomeTax * 10000).toFixed(0)}</td>
+                    <td>${(data.netProfit * 10000).toFixed(0)}</td>
+                    <td>${(data.cashFlow * 10000).toFixed(0)}</td>
+                    <td>${(data.cumulativeCashFlow * 10000).toFixed(0)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // 执行敏感性分析
+        function performSensitivityAnalysis() {
+            const range = parseFloat(document.getElementById('sensitivityRange').value) / 100 || 0.2;
+            const step = parseFloat(document.getElementById('sensitivityStep').value) / 100 || 0.05;
+            
+            sensitivityData = [];
+            
+            for (let i = -range; i <= range; i += step) {
+                const result = calculateSensitivityAtPoint(i);
+                sensitivityData.push({
+                    change: (i * 100).toFixed(0),
+                    purchasePrice: result.purchasePrice,
+                    salesPrice: result.salesPrice,
+                    investment: result.investment,
+                    capacity: result.capacity
+                });
+            }
+            
+            updateSensitivityTable();
+            updateSensitivityChart();
+        }
+        
+        function calculateSensitivityAtPoint(change) {
+            const originalPurchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const originalSalesPrice = parseFloat(document.getElementById('salesPrice').value) || 0;
+            const originalTotalCapacity = parseFloat(document.getElementById('totalCapacity').value) || 0;
+            const investmentData = calculateInitialInvestment();
+            
+            document.getElementById('purchasePrice').value = originalPurchasePrice * (1 + change);
+            calculateAll();
+            const purchasePriceIRR = parseFloat(document.getElementById('irr').textContent) || 0;
+            
+            document.getElementById('purchasePrice').value = originalPurchasePrice;
+            document.getElementById('salesPrice').value = originalSalesPrice * (1 + change);
+            calculateAll();
+            const salesPriceIRR = parseFloat(document.getElementById('irr').textContent) || 0;
+            
+            document.getElementById('salesPrice').value = originalSalesPrice;
+            document.getElementById('totalCapacity').value = originalTotalCapacity * (1 + change);
+            calculateAll();
+            const capacityIRR = parseFloat(document.getElementById('irr').textContent) || 0;
+            
+            document.getElementById('totalCapacity').value = originalTotalCapacity;
+            
+            const investment = investmentData.totalInitialInvestment;
+            const tempInputs = {
+                cellPrice: parseFloat(document.getElementById('cellPrice').value) || 0,
+                dcIntegrationPrice: parseFloat(document.getElementById('dcIntegrationPrice').value) || 0
+            };
+            document.getElementById('cellPrice').value = tempInputs.cellPrice * (1 + change);
+            document.getElementById('dcIntegrationPrice').value = tempInputs.dcIntegrationPrice * (1 + change);
+            calculateAll();
+            const investmentIRR = parseFloat(document.getElementById('irr').textContent) || 0;
+            
+            document.getElementById('cellPrice').value = tempInputs.cellPrice;
+            document.getElementById('dcIntegrationPrice').value = tempInputs.dcIntegrationPrice;
+            calculateAll();
+            
+            return {
+                purchasePrice: purchasePriceIRR.toFixed(2),
+                salesPrice: salesPriceIRR.toFixed(2),
+                investment: investmentIRR.toFixed(2),
+                capacity: capacityIRR.toFixed(2)
+            };
+        }
+        
+        function updateSensitivityTable() {
+            const tbody = document.querySelector('#sensitivityTable tbody');
+            tbody.innerHTML = '';
+            
+            sensitivityData.forEach(data => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${data.change}%</td>
+                    <td>${data.purchasePrice}%</td>
+                    <td>${data.salesPrice}%</td>
+                    <td>${data.investment}%</td>
+                    <td>${data.capacity}%</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // 更新图表
+        function updateCharts() {
+            updateCashFlowChart();
+            updateProfitChart();
+            updateInvestmentPieChart();
+            updateCumulativeCashFlowChart();
+        }
+        
+        function updateCashFlowChart() {
+            const ctx = document.getElementById('cashFlowChart').getContext('2d');
+            if (cashFlowChart) {
+                cashFlowChart.destroy();
+            }
+            cashFlowChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: yearlyData.map(d => '第' + d.year + '年'),
+                    datasets: [{
+                        label: '年度现金流量（万元）',
+                        data: yearlyData.map(d => d.cashFlow),
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function updateProfitChart() {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+            if (profitChart) {
+                profitChart.destroy();
+            }
+            profitChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => '第' + d.year + '年'),
+                    datasets: [{
+                        label: '年度净利润（万元）',
+                        data: yearlyData.map(d => d.netProfit),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function updateInvestmentPieChart() {
+            const ctx = document.getElementById('investmentPieChart').getContext('2d');
+            if (investmentPieChart) {
+                investmentPieChart.destroy();
+            }
+            const investmentData = calculateInitialInvestment();
+            investmentPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['直流侧', '交流侧', '电缆', '变电站', '土地', '施工', '其他'],
+                    datasets: [{
+                        data: [
+                            investmentData.dcSideInvestment,
+                            investmentData.acSideInvestment,
+                            investmentData.cableInvestment,
+                            investmentData.substationInvestment,
+                            investmentData.landInvestment,
+                            investmentData.constructionInvestment,
+                            investmentData.otherInvestment
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)',
+                            'rgba(199, 199, 199, 0.5)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function updateCumulativeCashFlowChart() {
+            const ctx = document.getElementById('cumulativeCashFlowChart').getContext('2d');
+            if (cumulativeCashFlowChart) {
+                cumulativeCashFlowChart.destroy();
+            }
+            cumulativeCashFlowChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearlyData.map(d => '第' + d.year + '年'),
+                    datasets: [{
+                        label: '累计现金流量（万元）',
+                        data: yearlyData.map(d => d.cumulativeCashFlow),
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: '盈亏平衡点',
+                        data: yearlyData.map(() => 0),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function updateSensitivityChart() {
+            const ctx = document.getElementById('sensitivityChart').getContext('2d');
+            if (sensitivityChart) {
+                sensitivityChart.destroy();
+            }
+            sensitivityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sensitivityData.map(d => d.change + '%'),
+                    datasets: [{
+                        label: '购电电价',
+                        data: sensitivityData.map(d => parseFloat(d.purchasePrice)),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: '售电电价',
+                        data: sensitivityData.map(d => parseFloat(d.salesPrice)),
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: '初始投资',
+                        data: sensitivityData.map(d => parseFloat(d.investment)),
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }, {
+                        label: '系统容量',
+                        data: sensitivityData.map(d => parseFloat(d.capacity)),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'IRR (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 保存配置
+        function saveConfig() {
+            const config = {
+                totalCapacity: document.getElementById('totalCapacity').value,
+                systemPower: document.getElementById('systemPower').value,
+                dcContainerCount: document.getElementById('dcCabinCount').value,
+                dod: document.getElementById('dod').value,
+                annualDays: document.getElementById('annualDays').value,
+                dailyCycles: document.getElementById('dailyCycles').value,
+                dcEfficiency: document.getElementById('dcEfficiency').value,
+                pcsEfficiency: document.getElementById('pcsEfficiency').value,
+                transformerEfficiency: document.getElementById('transformerEfficiency').value,
+                lineLoss: document.getElementById('lineLoss').value,
+                selfPowerConsumption: document.getElementById('selfPowerConsumption').value,
+                standbyPowerConsumption: document.getElementById('standbyPowerConsumption').value,
+                analysisYears: document.getElementById('analysisYears').value,
+                startYear: document.getElementById('startYear').value,
+                endYear: document.getElementById('endYear').value,
+                dcCabinCapacity: document.getElementById('dcCabinCapacity').value,
+                dcCabinCount: document.getElementById('dcCabinCount').value,
+                cellPrice: document.getElementById('cellPrice').value,
+                dcIntegrationPrice: document.getElementById('dcIntegrationPrice').value,
+                pcsUnitPrice: document.getElementById('pcsUnitPrice').value,
+                pcsCount: document.getElementById('pcsCount').value,
+                transformerPrice: document.getElementById('transformerPrice').value,
+                integratedMachineCount: document.getElementById('integratedMachineCount').value,
+                emsPrice: document.getElementById('emsPrice').value,
+                dcCableUnitPrice: document.getElementById('dcCableUnitPrice').value,
+                dcCableLength: document.getElementById('dcCableLength').value,
+                commCableUnitPrice: document.getElementById('commCableUnitPrice').value,
+                commCableLength: document.getElementById('commCableLength').value,
+                distCableUnitPrice: document.getElementById('distCableUnitPrice').value,
+                distCableLength: document.getElementById('distCableLength').value,
+                acCableUnitPrice: document.getElementById('acCableUnitPrice').value,
+                acCableLength: document.getElementById('acCableLength').value,
+                fireCableUnitPrice: document.getElementById('fireCableUnitPrice').value,
+                fireCableLength: document.getElementById('fireCableLength').value,
+                mainTransformerCount: document.getElementById('mainTransformerCount').value,
+                mainTransformerUnitPrice: document.getElementById('mainTransformerUnitPrice').value,
+                secondaryEquipmentPrice: document.getElementById('secondaryEquipmentPrice').value,
+                primaryEquipmentPrice: document.getElementById('primaryEquipmentPrice').value,
+                auxTransformerPrice: document.getElementById('auxTransformerPrice').value,
+                landArea: document.getElementById('landArea').value,
+                landUnitPrice: document.getElementById('landUnitPrice').value,
+                designFee: document.getElementById('designFee').value,
+                supervisionFee: document.getElementById('supervisionFee').value,
+                civilWorkFee: document.getElementById('civilWorkFee').value,
+                fireConstructionFee: document.getElementById('fireConstructionFee').value,
+                securityConstructionFee: document.getElementById('securityConstructionFee').value,
+                intermediaryFee: document.getElementById('intermediaryFee').value,
+                transportFee: document.getElementById('transportFee').value,
+                purchasePrice: document.getElementById('purchasePrice').value,
+                salesPrice: document.getElementById('salesPrice').value,
+                frequencyRegulationPrice: document.getElementById('frequencyRegulationPrice').value,
+                capacityPrice: document.getElementById('capacityPrice').value,
+                insuranceRate: document.getElementById('insuranceRate').value,
+                operationCost: document.getElementById('operationCost').value,
+                laborCost: document.getElementById('laborCost').value,
+                platformCost: document.getElementById('platformCost').value,
+                overhaulCost: document.getElementById('overhaulCost').value,
+                vatRate: document.getElementById('vatRate').value,
+                incomeTaxRate: document.getElementById('incomeTaxRate').value,
+                depreciationYears: document.getElementById('depreciationYears').value,
+                discountRate: document.getElementById('discountRate').value,
+                residualValueRate: document.getElementById('residualValueRate').value,
+                otherCosts,
+                revenues,
+                operationCosts,
+                subsidies,
+                yearlyCapacity: Array.from(document.querySelectorAll('.capacity-input')).map(input => input.value)
+            };
+            localStorage.setItem('energyStorageConfig', JSON.stringify(config));
+            alert('配置已保存！');
+        }
+        
+        // 加载配置
+        function loadConfig() {
+            const configStr = localStorage.getItem('energyStorageConfig');
+            if (!configStr) {
+                alert('没有找到已保存的配置！');
+                return;
+            }
+            
+            const config = JSON.parse(configStr);
+            
+            document.getElementById('totalCapacity').value = config.totalCapacity || 10;
+            document.getElementById('systemPower').value = config.systemPower || 5;
+            document.getElementById('dcCabinCount').value = config.dcContainerCount || 2;
+            document.getElementById('dod').value = config.dod || 90;
+            document.getElementById('annualDays').value = config.annualDays || 365;
+            document.getElementById('dailyCycles').value = config.dailyCycles || 1;
+            document.getElementById('dcEfficiency').value = config.dcEfficiency || 98;
+            document.getElementById('pcsEfficiency').value = config.pcsEfficiency || 96;
+            document.getElementById('transformerEfficiency').value = config.transformerEfficiency || 99;
+            document.getElementById('lineLoss').value = config.lineLoss || 2;
+            document.getElementById('selfPowerConsumption').value = config.selfPowerConsumption || 1;
+            document.getElementById('standbyPowerConsumption').value = config.standbyPowerConsumption || 10;
+            document.getElementById('analysisYears').value = config.analysisYears || 20;
+            document.getElementById('startYear').value = config.startYear || 1;
+            document.getElementById('endYear').value = config.endYear || 20;
+            document.getElementById('dcCabinCapacity').value = config.dcCabinCapacity || 5000;
+            document.getElementById('dcCabinCount').value = config.dcCabinCount || 2;
+            document.getElementById('cellPrice').value = config.cellPrice || 0.8;
+            document.getElementById('dcIntegrationPrice').value = config.dcIntegrationPrice || 0.3;
+            document.getElementById('pcsUnitPrice').value = config.pcsUnitPrice || 300;
+            document.getElementById('pcsCount').value = config.pcsCount || 2;
+            document.getElementById('transformerPrice').value = config.transformerPrice || 80;
+            document.getElementById('integratedMachineCount').value = config.integratedMachineCount || 1;
+            document.getElementById('emsPrice').value = config.emsPrice || 50;
+            document.getElementById('dcCableUnitPrice').value = config.dcCableUnitPrice || 200;
+            document.getElementById('dcCableLength').value = config.dcCableLength || 100;
+            document.getElementById('commCableUnitPrice').value = config.commCableUnitPrice || 50;
+            document.getElementById('commCableLength').value = config.commCableLength || 100;
+            document.getElementById('distCableUnitPrice').value = config.distCableUnitPrice || 150;
+            document.getElementById('distCableLength').value = config.distCableLength || 100;
+            document.getElementById('acCableUnitPrice').value = config.acCableUnitPrice || 300;
+            document.getElementById('acCableLength').value = config.acCableLength || 100;
+            document.getElementById('fireCableUnitPrice').value = config.fireCableUnitPrice || 80;
+            document.getElementById('fireCableLength').value = config.fireCableLength || 100;
+            document.getElementById('mainTransformerCount').value = config.mainTransformerCount || 1;
+            document.getElementById('mainTransformerUnitPrice').value = config.mainTransformerUnitPrice || 200;
+            document.getElementById('secondaryEquipmentPrice').value = config.secondaryEquipmentPrice || 100;
+            document.getElementById('primaryEquipmentPrice').value = config.primaryEquipmentPrice || 150;
+            document.getElementById('auxTransformerPrice').value = config.auxTransformerPrice || 30;
+            document.getElementById('landArea').value = config.landArea || 1000;
+            document.getElementById('landUnitPrice').value = config.landUnitPrice || 500;
+            document.getElementById('designFee').value = config.designFee || 30;
+            document.getElementById('supervisionFee').value = config.supervisionFee || 20;
+            document.getElementById('civilWorkFee').value = config.civilWorkFee || 80;
+            document.getElementById('fireConstructionFee').value = config.fireConstructionFee || 40;
+            document.getElementById('securityConstructionFee').value = config.securityConstructionFee || 30;
+            document.getElementById('intermediaryFee').value = config.intermediaryFee || 20;
+            document.getElementById('transportFee').value = config.transportFee || 30;
+            document.getElementById('purchasePrice').value = config.purchasePrice || 0.4;
+            document.getElementById('salesPrice').value = config.salesPrice || 0.8;
+            document.getElementById('frequencyRegulationPrice').value = config.frequencyRegulationPrice || 60;
+            document.getElementById('capacityPrice').value = config.capacityPrice || 200;
+            document.getElementById('insuranceRate').value = config.insuranceRate || 0.5;
+            document.getElementById('operationCost').value = config.operationCost || 20;
+            document.getElementById('laborCost').value = config.laborCost || 30;
+            document.getElementById('platformCost').value = config.platformCost || 5;
+            document.getElementById('overhaulCost').value = config.overhaulCost || 15;
+            document.getElementById('vatRate').value = config.vatRate || 13;
+            document.getElementById('incomeTaxRate').value = config.incomeTaxRate || 25;
+            document.getElementById('depreciationYears').value = config.depreciationYears || 10;
+            document.getElementById('discountRate').value = config.discountRate || 8;
+            document.getElementById('residualValueRate').value = config.residualValueRate || 5;
+            
+            otherCosts = config.otherCosts || [];
+            revenues = config.revenues || [];
+            operationCosts = config.operationCosts || [];
+            subsidies = config.subsidies || [];
+            
+            generateCapacityTable();
+            if (config.yearlyCapacity) {
+                const capacityInputs = document.querySelectorAll('.capacity-input');
+                config.yearlyCapacity.forEach((value, index) => {
+                    if (capacityInputs[index]) {
+                        capacityInputs[index].value = value;
+                    }
+                });
+            }
+            
+            updateOtherCostTable();
+            updateRevenueTable();
+            updateOperationCostTable();
+            updateSubsidyTable();
+            
+            alert('配置已加载！');
+        }
+        
+        // 重置配置
+        function resetConfig() {
+            if (confirm('确定要重置所有配置吗？')) {
+                localStorage.removeItem('energyStorageConfig');
+                location.reload();
+            }
+        }
+        
+        // 导出到Excel
+        function exportToExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            const investmentData = calculateInitialInvestment();
+            const efficiencyData = calculateEfficiencyAndCapacity();
+            
+            const ws1Data = [
+                ['项目', '值'],
+                ['系统总容量（MWh）', document.getElementById('totalCapacity').value],
+                ['系统功率（MW）', document.getElementById('systemPower').value],
+                ['直流侧集装箱数量', document.getElementById('dcContainerCount').value],
+                ['放电深度（%）', document.getElementById('dod').value],
+                ['充电效率（%）', efficiencyData.chargeEfficiency * 100],
+                ['放电效率（%）', efficiencyData.dischargeEfficiency * 100],
+                ['总初始投资（元）', investmentData.totalInitialInvestment * 10000]
+            ];
+            const ws1 = XLSX.utils.aoa_to_sheet(ws1Data);
+            XLSX.utils.book_append_sheet(wb, ws1, '基础参数');
+            
+            const ws2Data = [
+                ['年份', '剩余容量（%）', '充电量（MWh）', '放电量（MWh）', '净利润（元）', '现金流量（元）', '累计现金流量（元）']
+            ];
+            yearlyData.forEach(data => {
+                ws2Data.push([
+                    data.year,
+                    data.capacityRatio.toFixed(1),
+                    data.chargeAmount.toFixed(2),
+                    data.dischargeAmount.toFixed(2),
+                    (data.netProfit * 10000).toFixed(0),
+                    (data.cashFlow * 10000).toFixed(0),
+                    (data.cumulativeCashFlow * 10000).toFixed(0)
+                ]);
+            });
+            const ws2 = XLSX.utils.aoa_to_sheet(ws2Data);
+            XLSX.utils.book_append_sheet(wb, ws2, '年度数据');
+            
+            const ws3Data = [
+                ['财务指标', '值'],
+                ['LCOE（元/kWh）', document.getElementById('lcoe').textContent],
+                ['LCOS（元/kWh）', document.getElementById('lcos').textContent],
+                ['NPV（元）', document.getElementById('npv').textContent],
+                ['IRR（%）', document.getElementById('irr').textContent],
+                ['投资回收期（年）', document.getElementById('paybackPeriod').textContent],
+                ['总充电量（MWh）', document.getElementById('totalChargeAmount').textContent],
+                ['总放电量（MWh）', document.getElementById('totalDischargeAmount').textContent]
+            ];
+            const ws3 = XLSX.utils.aoa_to_sheet(ws3Data);
+            XLSX.utils.book_append_sheet(wb, ws3, '财务指标');
+            
+            XLSX.writeFile(wb, '储能财务测算结果.xlsx');
+        }
+        
+        // 保存配置（支持命名）
+        function saveConfig() {
+            const configName = document.getElementById('configName').value.trim();
+            if (!configName) {
+                alert('请输入配置名称！');
+                return;
+            }
+            
+            const config = {
+                name: configName,
+                totalCapacity: document.getElementById('totalCapacity').value,
+                systemPower: document.getElementById('systemPower').value,
+                dcCabinCount: document.getElementById('dcCabinCount').value,
+                dod: document.getElementById('dod').value,
+                annualDays: document.getElementById('annualDays').value,
+                dailyCycles: document.getElementById('dailyCycles').value,
+                dcEfficiency: document.getElementById('dcEfficiency').value,
+                pcsEfficiency: document.getElementById('pcsEfficiency').value,
+                transformerEfficiency: document.getElementById('transformerEfficiency').value,
+                lineLoss: document.getElementById('lineLoss').value,
+                selfPowerConsumption: document.getElementById('selfPowerConsumption').value,
+                standbyPowerConsumption: document.getElementById('standbyPowerConsumption').value,
+                analysisYears: document.getElementById('analysisYears').value,
+                startYear: document.getElementById('startYear').value,
+                endYear: document.getElementById('endYear').value,
+                dcCabinCapacity: document.getElementById('dcCabinCapacity').value,
+                dcCabinCount: document.getElementById('dcCabinCount').value,
+                cellPrice: document.getElementById('cellPrice').value,
+                dcIntegrationPrice: document.getElementById('dcIntegrationPrice').value,
+                pcsUnitPrice: document.getElementById('pcsUnitPrice').value,
+                pcsCount: document.getElementById('pcsCount').value,
+                transformerPrice: document.getElementById('transformerPrice').value,
+                integratedMachineCount: document.getElementById('integratedMachineCount').value,
+                emsPrice: document.getElementById('emsPrice').value,
+                dcCableUnitPrice: document.getElementById('dcCableUnitPrice').value,
+                dcCableLength: document.getElementById('dcCableLength').value,
+                commCableUnitPrice: document.getElementById('commCableUnitPrice').value,
+                commCableLength: document.getElementById('commCableLength').value,
+                distCableUnitPrice: document.getElementById('distCableUnitPrice').value,
+                distCableLength: document.getElementById('distCableLength').value,
+                acCableUnitPrice: document.getElementById('acCableUnitPrice').value,
+                acCableLength: document.getElementById('acCableLength').value,
+                fireCableUnitPrice: document.getElementById('fireCableUnitPrice').value,
+                fireCableLength: document.getElementById('fireCableLength').value,
+                mainTransformerCount: document.getElementById('mainTransformerCount').value,
+                mainTransformerUnitPrice: document.getElementById('mainTransformerUnitPrice').value,
+                secondaryEquipmentPrice: document.getElementById('secondaryEquipmentPrice').value,
+                primaryEquipmentPrice: document.getElementById('primaryEquipmentPrice').value,
+                auxTransformerPrice: document.getElementById('auxTransformerPrice').value,
+                landArea: document.getElementById('landArea').value,
+                landUnitPrice: document.getElementById('landUnitPrice').value,
+                designFee: document.getElementById('designFee').value,
+                supervisionFee: document.getElementById('supervisionFee').value,
+                civilWorkFee: document.getElementById('civilWorkFee').value,
+                fireConstructionFee: document.getElementById('fireConstructionFee').value,
+                securityConstructionFee: document.getElementById('securityConstructionFee').value,
+                intermediaryFee: document.getElementById('intermediaryFee').value,
+                transportFee: document.getElementById('transportFee').value,
+                purchasePrice: document.getElementById('purchasePrice').value,
+                salesPrice: document.getElementById('salesPrice').value,
+                frequencyRegulationPrice: document.getElementById('frequencyRegulationPrice').value,
+                capacityPrice: document.getElementById('capacityPrice').value,
+                insuranceRate: document.getElementById('insuranceRate').value,
+                operationCost: document.getElementById('operationCost').value,
+                laborCost: document.getElementById('laborCost').value,
+                platformCost: document.getElementById('platformCost').value,
+                overhaulCost: document.getElementById('overhaulCost').value,
+                vatRate: document.getElementById('vatRate').value,
+                incomeTaxRate: document.getElementById('incomeTaxRate').value,
+                depreciationYears: document.getElementById('depreciationYears').value,
+                discountRate: document.getElementById('discountRate').value,
+                residualValueRate: document.getElementById('residualValueRate').value,
+                otherCosts,
+                revenues,
+                operationCosts,
+                subsidies,
+                yearlyCapacity: Array.from(document.querySelectorAll('.capacity-input')).map(input => input.value)
+            };
+            
+            const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+            savedConfigs[configName] = config;
+            localStorage.setItem('energyStorageConfigs', JSON.stringify(savedConfigs));
+            
+            alert('配置 "' + configName + '" 已保存！');
+            document.getElementById('configName').value = '';
+        }
+        
+        // 显示加载对话框
+        function showLoadDialog() {
+            const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+            const configNames = Object.keys(savedConfigs);
+            
+            if (configNames.length === 0) {
+                alert('没有已保存的配置！');
+                return;
+            }
+            
+            let html = '<div class="config-list">';
+            configNames.forEach(name => {
+                html += '<div class="config-item">';
+                html += '<span>' + name + '</span>';
+                html += '<div>';
+                html += '<button onclick="loadNamedConfig(\'' + name + '\')">加载</button> ';
+                html += '<button class="remove-btn" onclick="deleteConfig(\'' + name + '\')">删除</button>';
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '<button onclick="closeModal()">关闭</button>';
+            
+            showModal('加载配置', html);
+        }
+        
+        // 加载命名配置
+        function loadNamedConfig(configName) {
+            const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+            const config = savedConfigs[configName];
+            
+            if (!config) {
+                alert('配置不存在！');
+                return;
+            }
+            
+            document.getElementById('totalCapacity').value = config.totalCapacity || 10;
+            document.getElementById('systemPower').value = config.systemPower || 5;
+            document.getElementById('dcCabinCount').value = config.dcCabinCount || 2;
+            document.getElementById('dod').value = config.dod || 90;
+            document.getElementById('annualDays').value = config.annualDays || 365;
+            document.getElementById('dailyCycles').value = config.dailyCycles || 1;
+            document.getElementById('dcEfficiency').value = config.dcEfficiency || 98;
+            document.getElementById('pcsEfficiency').value = config.pcsEfficiency || 96;
+            document.getElementById('transformerEfficiency').value = config.transformerEfficiency || 99;
+            document.getElementById('lineLoss').value = config.lineLoss || 2;
+            document.getElementById('selfPowerConsumption').value = config.selfPowerConsumption || 1;
+            document.getElementById('standbyPowerConsumption').value = config.standbyPowerConsumption || 10;
+            document.getElementById('analysisYears').value = config.analysisYears || 20;
+            document.getElementById('startYear').value = config.startYear || 1;
+            document.getElementById('endYear').value = config.endYear || 20;
+            document.getElementById('dcCabinCapacity').value = config.dcCabinCapacity || 5000;
+            document.getElementById('dcCabinCount').value = config.dcCabinCount || 2;
+            document.getElementById('cellPrice').value = config.cellPrice || 0.8;
+            document.getElementById('dcIntegrationPrice').value = config.dcIntegrationPrice || 0.3;
+            document.getElementById('pcsUnitPrice').value = config.pcsUnitPrice || 300;
+            document.getElementById('pcsCount').value = config.pcsCount || 2;
+            document.getElementById('transformerPrice').value = config.transformerPrice || 80;
+            document.getElementById('integratedMachineCount').value = config.integratedMachineCount || 1;
+            document.getElementById('emsPrice').value = config.emsPrice || 50;
+            document.getElementById('dcCableUnitPrice').value = config.dcCableUnitPrice || 200;
+            document.getElementById('dcCableLength').value = config.dcCableLength || 100;
+            document.getElementById('commCableUnitPrice').value = config.commCableUnitPrice || 50;
+            document.getElementById('commCableLength').value = config.commCableLength || 100;
+            document.getElementById('distCableUnitPrice').value = config.distCableUnitPrice || 150;
+            document.getElementById('distCableLength').value = config.distCableLength || 100;
+            document.getElementById('acCableUnitPrice').value = config.acCableUnitPrice || 300;
+            document.getElementById('acCableLength').value = config.acCableLength || 100;
+            document.getElementById('fireCableUnitPrice').value = config.fireCableUnitPrice || 80;
+            document.getElementById('fireCableLength').value = config.fireCableLength || 100;
+            document.getElementById('mainTransformerCount').value = config.mainTransformerCount || 1;
+            document.getElementById('mainTransformerUnitPrice').value = config.mainTransformerUnitPrice || 200;
+            document.getElementById('secondaryEquipmentPrice').value = config.secondaryEquipmentPrice || 100;
+            document.getElementById('primaryEquipmentPrice').value = config.primaryEquipmentPrice || 150;
+            document.getElementById('auxTransformerPrice').value = config.auxTransformerPrice || 30;
+            document.getElementById('landArea').value = config.landArea || 1000;
+            document.getElementById('landUnitPrice').value = config.landUnitPrice || 500;
+            document.getElementById('designFee').value = config.designFee || 30;
+            document.getElementById('supervisionFee').value = config.supervisionFee || 20;
+            document.getElementById('civilWorkFee').value = config.civilWorkFee || 80;
+            document.getElementById('fireConstructionFee').value = config.fireConstructionFee || 40;
+            document.getElementById('securityConstructionFee').value = config.securityConstructionFee || 30;
+            document.getElementById('intermediaryFee').value = config.intermediaryFee || 20;
+            document.getElementById('transportFee').value = config.transportFee || 30;
+            document.getElementById('purchasePrice').value = config.purchasePrice || 0.4;
+            document.getElementById('salesPrice').value = config.salesPrice || 0.8;
+            document.getElementById('frequencyRegulationPrice').value = config.frequencyRegulationPrice || 60;
+            document.getElementById('capacityPrice').value = config.capacityPrice || 200;
+            document.getElementById('insuranceRate').value = config.insuranceRate || 0.5;
+            document.getElementById('operationCost').value = config.operationCost || 20;
+            document.getElementById('laborCost').value = config.laborCost || 30;
+            document.getElementById('platformCost').value = config.platformCost || 5;
+            document.getElementById('overhaulCost').value = config.overhaulCost || 15;
+            document.getElementById('vatRate').value = config.vatRate || 13;
+            document.getElementById('incomeTaxRate').value = config.incomeTaxRate || 25;
+            document.getElementById('depreciationYears').value = config.depreciationYears || 10;
+            document.getElementById('discountRate').value = config.discountRate || 8;
+            document.getElementById('residualValueRate').value = config.residualValueRate || 5;
+            
+            otherCosts = config.otherCosts || [];
+            revenues = config.revenues || [];
+            operationCosts = config.operationCosts || [];
+            subsidies = config.subsidies || [];
+            
+            generateCapacityTable();
+            if (config.yearlyCapacity) {
+                const capacityInputs = document.querySelectorAll('.capacity-input');
+                config.yearlyCapacity.forEach((value, index) => {
+                    if (capacityInputs[index]) {
+                        capacityInputs[index].value = value;
+                    }
+                });
+            }
+            
+            updateOtherCostTable();
+            updateRevenueTable();
+            updateOperationCostTable();
+            updateSubsidyTable();
+            
+            closeModal();
+            calculateAll();
+            alert('配置 "' + configName + '" 已加载！');
+        }
+        
+        // 删除配置
+        function deleteConfig(configName) {
+            if (confirm('确定要删除配置 "' + configName + '" 吗？')) {
+                const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+                delete savedConfigs[configName];
+                localStorage.setItem('energyStorageConfigs', JSON.stringify(savedConfigs));
+                showLoadDialog();
+            }
+        }
+        
+        // 显示对比对话框
+        function showCompareDialog() {
+            const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+            const configNames = Object.keys(savedConfigs);
+            
+            if (configNames.length < 2) {
+                alert('需要至少2个保存的配置才能进行对比！');
+                return;
+            }
+            
+            let html = '<p>选择要对比的配置（至少2个）：</p>';
+            html += '<div class="config-list">';
+            configNames.forEach(name => {
+                html += '<div class="config-item">';
+                html += '<label><input type="checkbox" class="compare-checkbox" value="' + name + '"> ' + name + '</label>';
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '<button onclick="performCompare()">开始对比</button> ';
+            html += '<button onclick="closeModal()">关闭</button>';
+            
+            showModal('对比配置', html);
+        }
+        
+        // 执行对比
+        function performCompare() {
+            const checkboxes = document.querySelectorAll('.compare-checkbox:checked');
+            const selectedNames = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (selectedNames.length < 2) {
+                alert('请选择至少2个配置进行对比！');
+                return;
+            }
+            
+            const savedConfigs = JSON.parse(localStorage.getItem('energyStorageConfigs') || '{}');
+            
+            let compareData = [];
+            selectedNames.forEach(name => {
+                const config = savedConfigs[name];
+                calculateAllFromConfig(config);
+                const investmentData = calculateInitialInvestment();
+                const efficiencyData = calculateEfficiencyAndCapacity();
+                calculateYearlyData();
+                calculateFinancialIndicators();
+                
+                compareData.push({
+                    name: name,
+                    totalCapacity: config.totalCapacity,
+                    systemPower: config.systemPower,
+                    initialInvestment: investmentData.totalInitialInvestment * 10000,
+                    lcoe: document.getElementById('lcoe').textContent,
+                    lcos: document.getElementById('lcos').textContent,
+                    npv: document.getElementById('npv').textContent,
+                    irr: document.getElementById('irr').textContent,
+                    paybackPeriod: document.getElementById('paybackPeriod').textContent
+                });
+            });
+            
+            let html = '<table class="compare-table"><thead><tr><th>指标</th>';
+            selectedNames.forEach(name => {
+                html += '<th>' + name + '</th>';
+            });
+            html += '</tr></thead><tbody>';
+            
+            html += '<tr><td>系统容量(MWh)</td>';
+            compareData.forEach(d => { html += '<td>' + d.totalCapacity + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>系统功率(MW)</td>';
+            compareData.forEach(d => { html += '<td>' + d.systemPower + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>初始投资(元)</td>';
+            compareData.forEach(d => { html += '<td>' + d.initialInvestment.toLocaleString() + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>LCOE(元/kWh)</td>';
+            compareData.forEach(d => { html += '<td>' + d.lcoe + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>LCOS(元/kWh)</td>';
+            compareData.forEach(d => { html += '<td>' + d.lcos + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>NPV(元)</td>';
+            compareData.forEach(d => { html += '<td>' + parseInt(d.npv).toLocaleString() + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>IRR(%)</td>';
+            compareData.forEach(d => { html += '<td>' + d.irr + '</td>'; });
+            html += '</tr>';
+            
+            html += '<tr><td>回收期(年)</td>';
+            compareData.forEach(d => { html += '<td>' + d.paybackPeriod + '</td>'; });
+            html += '</tr>';
+            
+            html += '</tbody></table>';
+            html += '<button onclick="closeModal()">关闭</button>';
+            
+            showModal('对比结果', html);
+        }
+        
+        // 根据配置计算
+        function calculateAllFromConfig(config) {
+            document.getElementById('totalCapacity').value = config.totalCapacity || 10;
+            document.getElementById('systemPower').value = config.systemPower || 5;
+            document.getElementById('dod').value = config.dod || 90;
+            document.getElementById('annualDays').value = config.annualDays || 365;
+            document.getElementById('dailyCycles').value = config.dailyCycles || 1;
+            document.getElementById('dcEfficiency').value = config.dcEfficiency || 98;
+            document.getElementById('pcsEfficiency').value = config.pcsEfficiency || 96;
+            document.getElementById('transformerEfficiency').value = config.transformerEfficiency || 99;
+            document.getElementById('lineLoss').value = config.lineLoss || 2;
+            document.getElementById('selfPowerConsumption').value = config.selfPowerConsumption || 1;
+            document.getElementById('standbyPowerConsumption').value = config.standbyPowerConsumption || 10;
+            document.getElementById('analysisYears').value = config.analysisYears || 20;
+            document.getElementById('startYear').value = config.startYear || 1;
+            document.getElementById('endYear').value = config.endYear || 20;
+            document.getElementById('dcCabinCapacity').value = config.dcCabinCapacity || 5000;
+            document.getElementById('dcCabinCount').value = config.dcCabinCount || 2;
+            document.getElementById('cellPrice').value = config.cellPrice || 0.8;
+            document.getElementById('dcIntegrationPrice').value = config.dcIntegrationPrice || 0.3;
+            document.getElementById('pcsUnitPrice').value = config.pcsUnitPrice || 300;
+            document.getElementById('pcsCount').value = config.pcsCount || 2;
+            document.getElementById('transformerPrice').value = config.transformerPrice || 80;
+            document.getElementById('integratedMachineCount').value = config.integratedMachineCount || 1;
+            document.getElementById('emsPrice').value = config.emsPrice || 50;
+            document.getElementById('dcCableUnitPrice').value = config.dcCableUnitPrice || 200;
+            document.getElementById('dcCableLength').value = config.dcCableLength || 100;
+            document.getElementById('commCableUnitPrice').value = config.commCableUnitPrice || 50;
+            document.getElementById('commCableLength').value = config.commCableLength || 100;
+            document.getElementById('distCableUnitPrice').value = config.distCableUnitPrice || 150;
+            document.getElementById('distCableLength').value = config.distCableLength || 100;
+            document.getElementById('acCableUnitPrice').value = config.acCableUnitPrice || 300;
+            document.getElementById('acCableLength').value = config.acCableLength || 100;
+            document.getElementById('fireCableUnitPrice').value = config.fireCableUnitPrice || 80;
+            document.getElementById('fireCableLength').value = config.fireCableLength || 100;
+            document.getElementById('mainTransformerCount').value = config.mainTransformerCount || 1;
+            document.getElementById('mainTransformerUnitPrice').value = config.mainTransformerUnitPrice || 200;
+            document.getElementById('secondaryEquipmentPrice').value = config.secondaryEquipmentPrice || 100;
+            document.getElementById('primaryEquipmentPrice').value = config.primaryEquipmentPrice || 150;
+            document.getElementById('auxTransformerPrice').value = config.auxTransformerPrice || 30;
+            document.getElementById('landArea').value = config.landArea || 1000;
+            document.getElementById('landUnitPrice').value = config.landUnitPrice || 500;
+            document.getElementById('designFee').value = config.designFee || 30;
+            document.getElementById('supervisionFee').value = config.supervisionFee || 20;
+            document.getElementById('civilWorkFee').value = config.civilWorkFee || 80;
+            document.getElementById('fireConstructionFee').value = config.fireConstructionFee || 40;
+            document.getElementById('securityConstructionFee').value = config.securityConstructionFee || 30;
+            document.getElementById('intermediaryFee').value = config.intermediaryFee || 20;
+            document.getElementById('transportFee').value = config.transportFee || 30;
+            document.getElementById('purchasePrice').value = config.purchasePrice || 0.4;
+            document.getElementById('salesPrice').value = config.salesPrice || 0.8;
+            document.getElementById('frequencyRegulationPrice').value = config.frequencyRegulationPrice || 60;
+            document.getElementById('capacityPrice').value = config.capacityPrice || 200;
+            document.getElementById('insuranceRate').value = config.insuranceRate || 0.5;
+            document.getElementById('operationCost').value = config.operationCost || 20;
+            document.getElementById('laborCost').value = config.laborCost || 30;
+            document.getElementById('platformCost').value = config.platformCost || 5;
+            document.getElementById('overhaulCost').value = config.overhaulCost || 15;
+            document.getElementById('vatRate').value = config.vatRate || 13;
+            document.getElementById('incomeTaxRate').value = config.incomeTaxRate || 25;
+            document.getElementById('depreciationYears').value = config.depreciationYears || 10;
+            document.getElementById('discountRate').value = config.discountRate || 8;
+            document.getElementById('residualValueRate').value = config.residualValueRate || 5;
+            
+            otherCosts = config.otherCosts || [];
+            revenues = config.revenues || [];
+            operationCosts = config.operationCosts || [];
+            subsidies = config.subsidies || [];
+            
+            generateCapacityTable();
+            if (config.yearlyCapacity) {
+                const capacityInputs = document.querySelectorAll('.capacity-input');
+                config.yearlyCapacity.forEach((value, index) => {
+                    if (capacityInputs[index]) {
+                        capacityInputs[index].value = value;
+                    }
+                });
+            }
+            
+            updateOtherCostTable();
+            updateRevenueTable();
+            updateOperationCostTable();
+            updateSubsidyTable();
+        }
+        
+        // 显示模态框
+        function showModal(title, content) {
+            let modalOverlay = document.getElementById('modalOverlay');
+            let modal = document.getElementById('modal');
+            let modalTitle = document.getElementById('modalTitle');
+            let modalContent = document.getElementById('modalContent');
+            
+            if (!modalOverlay) {
+                modalOverlay = document.createElement('div');
+                modalOverlay.id = 'modalOverlay';
+                modalOverlay.className = 'modal-overlay';
+                modalOverlay.onclick = closeModal;
+                document.body.appendChild(modalOverlay);
+                
+                modal = document.createElement('div');
+                modal.id = 'modal';
+                modal.className = 'modal';
+                modal.onclick = function(e) { e.stopPropagation(); };
+                document.body.appendChild(modal);
+            }
+            
+            modalTitle = document.getElementById('modalTitle');
+            modalContent = document.getElementById('modalContent');
+            
+            if (!modalTitle) {
+                modal.innerHTML = '<h2 id="modalTitle"></h2><div id="modalContent"></div><button onclick="closeModal()">关闭</button>';
+                modalTitle = document.getElementById('modalTitle');
+                modalContent = document.getElementById('modalContent');
+            }
+            
+            modalTitle.textContent = title;
+            modalContent.innerHTML = content;
+            
+            modalOverlay.style.display = 'block';
+            modal.style.display = 'block';
+        }
+        
+        // 关闭模态框
+        function closeModal() {
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modal = document.getElementById('modal');
+            if (modalOverlay) modalOverlay.style.display = 'none';
+            if (modal) modal.style.display = 'none';
+        }
+        
+        // 加载配置（保留兼容性）
+        function loadConfig() {
+            showLoadDialog();
+        }
+        
+        // 初始化
+        window.onload = function() {
+            generateCapacityTable();
+            calculateAll();
+        };
+    
+        // ========== 电芯管理系统 ==========
+        const cellModels = {
+            'CALB314B-5.0': {
+                name: 'CALB314B-5.0',
+                capacity: 5.0,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 96.1, 93.2, 90.6, 88.2, 86.0, 83.9, 81.9, 80.0, 78.2, 76.5, 74.9, 73.4, 72.0, 70.7, 69.5, 68.4, 67.4, 66.5, 65.7]
+            },
+            'CALB392-6.25': {
+                name: 'CALB392-6.25',
+                capacity: 6.25,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 97.0, 94.5, 92.3, 90.3, 88.5, 86.8, 85.2, 83.7, 82.3, 81.0, 79.8, 78.7, 77.7, 76.8, 76.0, 75.3, 74.7, 74.2, 73.8]
+            },
+            'CATL588-6.26': {
+                name: 'CATL588-6.26',
+                capacity: 6.26,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 95.9, 93.0, 90.4, 88.0, 85.8, 83.7, 81.7, 79.8, 78.0, 76.3, 74.7, 73.2, 71.8, 70.5, 69.3, 68.2, 67.2, 66.3, 65.5]
+            },
+            'CATL565-6': {
+                name: 'CATL565-6',
+                capacity: 6.0,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 96.0, 93.1, 90.5, 88.1, 85.9, 83.8, 81.8, 79.9, 78.1, 76.4, 74.8, 73.3, 71.9, 70.6, 69.4, 68.3, 67.3, 66.4, 65.6]
+            },
+            '640A-6.68': {
+                name: '640A-6.68',
+                capacity: 6.68,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 97.5, 95.2, 93.1, 91.2, 89.4, 87.7, 86.1, 84.6, 83.2, 81.9, 80.7, 79.6, 78.6, 77.7, 76.9, 76.2, 75.6, 75.1, 74.7]
+            },
+            '中车 648-6.9': {
+                name: '中车 648-6.9',
+                capacity: 6.9,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 97.2, 94.7, 92.5, 90.5, 88.6, 86.8, 85.1, 83.5, 82.0, 80.6, 79.3, 78.1, 77.0, 76.0, 75.1, 74.3, 73.6, 73.0, 72.5]
+            },
+            'CALB314-5.0': {
+                name: 'CALB314-5.0',
+                capacity: 5.0,
+                dcEfficiency: 0.9746794344808963,
+                attenuation: [100, 97.2, 94.7, 92.5, 90.5, 88.6, 86.8, 85.1, 83.5, 82.0, 80.6, 79.3, 78.1, 77.0, 76.0, 75.1, 74.3, 73.6, 73.0, 72.5]
+            }
+        };
+        
+        let customCellModels = JSON.parse(localStorage.getItem('customCellModels') || '{}');
+        let currentCellModel = null;
+        
+        function loadCellModel() {
+            const modelId = document.getElementById('cellModel').value;
+            if (modelId === 'custom') {
+                showCellManager();
+                return;
+            }
+            
+            const model = cellModels[modelId] || customCellModels[modelId];
+            if (model) {
+                currentCellModel = model;
+                // 自动填充容量
+                document.getElementById('totalCapacity').value = model.capacity;
+                // 自动填充直流侧效率
+                document.getElementById('dcEfficiency').value = (model.dcEfficiency * 100).toFixed(1);
+                // 生成衰减表
+                generateAttenuationTable(model.attenuation);
+                alert('✅ 已加载电芯型号：' + model.name);
+            }
+        }
+        
+        function generateAttenuationTable(attenuation) {
+            const years = attenuation.length;
+            const tbody = document.querySelector('#capacityTable tbody');
+            tbody.innerHTML = '';
+            
+            for (let i = 0; i < years; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td><input type="number" class="capacity-input" step="0.1" value="${attenuation[i].toFixed(1)}"></td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+        
+        function showCellManager() {
+            const html = `
+                <div class="modal-overlay" id="cellManagerModal" onclick="if(event.target===this) closeModal('cellManagerModal')">
+                    <div class="modal" style="max-width: 900px;">
+                        <h2>🔧 电芯管理</h2>
+                        <button onclick="closeModal('cellManagerModal')" style="float: right;">✕ 关闭</button>
+                        
+                        <div style="margin: 20px 0;">
+                            <h3>添加自定义电芯</h3>
+                            <div class="form-group">
+                                <label>电芯型号名称：</label>
+                                <input type="text" id="newCellName" placeholder="例如：我的电芯-10MWh" style="width: 250px;">
+                            </div>
+                            <div class="form-group">
+                                <label>容量（MWh）：</label>
+                                <input type="number" id="newCellCapacity" step="0.1" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label>直流侧效率（%）：</label>
+                                <input type="number" id="newCellEfficiency" step="0.1" value="97.5">
+                            </div>
+                            <br>
+                            <button onclick="addCustomCell()" class="success">➕ 添加电芯</button>
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <h3>我的自定义电芯</h3>
+                            <div id="customCellList" class="config-list">
+                                ${renderCustomCellList()}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+        
+        function renderCustomCellList() {
+            const models = customCellModels;
+            if (Object.keys(models).length === 0) {
+                return '<p style="color: #999; text-align: center;">暂无自定义电芯</p>';
+            }
+            
+            let html = '';
+            for (const [id, model] of Object.entries(models)) {
+                html += `
+                    <div class="config-item">
+                        <div>
+                            <strong>${model.name}</strong> - ${model.capacity}MWh, 效率${(model.dcEfficiency*100).toFixed(1)}%
+                        </div>
+                        <div>
+                            <button onclick="selectCustomCell('${id}')" class="success">选择</button>
+                            <button onclick="deleteCustomCell('${id}')" class="remove-btn">删除</button>
+                        </div>
+                    </div>
+                `;
+            }
+            return html;
+        }
+        
+        function addCustomCell() {
+            const name = document.getElementById('newCellName').value;
+            const capacity = parseFloat(document.getElementById('newCellCapacity').value);
+            const efficiency = parseFloat(document.getElementById('newCellEfficiency').value) / 100;
+            
+            if (!name) {
+                alert('请输入电芯型号名称');
+                return;
+            }
+            
+            const id = 'custom_' + Date.now();
+            customCellModels[id] = {
+                name: name,
+                capacity: capacity,
+                dcEfficiency: efficiency,
+                attenuation: [100, 98, 96, 94, 92, 90, 88, 86, 84, 82, 80, 78, 76, 74, 72, 70, 68, 66, 64, 62]
+            };
+            
+            localStorage.setItem('customCellModels', JSON.stringify(customCellModels));
+            
+            // 刷新列表
+            document.getElementById('customCellList').innerHTML = renderCustomCellList();
+            
+            // 添加到下拉框
+            const select = document.getElementById('cellModel');
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = name + ' (自定义)';
+            select.insertBefore(option, select.lastElementChild);
+            
+            alert('✅ 已添加自定义电芯：' + name);
+        }
+        
+        function selectCustomCell(id) {
+            const model = customCellModels[id];
+            if (model) {
+                currentCellModel = model;
+                document.getElementById('cellModel').value = id;
+                document.getElementById('totalCapacity').value = model.capacity;
+                document.getElementById('dcEfficiency').value = (model.dcEfficiency * 100).toFixed(1);
+                generateAttenuationTable(model.attenuation);
+                closeModal('cellManagerModal');
+                alert('✅ 已选择：' + model.name);
+            }
+        }
+        
+        function deleteCustomCell(id) {
+            if (confirm('确定删除这个自定义电芯吗？')) {
+                delete customCellModels[id];
+                localStorage.setItem('customCellModels', JSON.stringify(customCellModels));
+                document.getElementById('customCellList').innerHTML = renderCustomCellList();
+                
+                // 从下拉框移除
+                const select = document.getElementById('cellModel');
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === id) {
+                        select.remove(i);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        function showAttenuationTable() {
+            const html = `
+                <div class="modal-overlay" id="attenuationModal" onclick="if(event.target===this) closeModal('attenuationModal')">
+                    <div class="modal" style="max-width: 600px;">
+                        <h2>📊 电芯衰减曲线</h2>
+                        <button onclick="closeModal('attenuationModal')" style="float: right;">✕ 关闭</button>
+                        
+                        <div style="margin: 20px 0;">
+                            <p><strong>当前电芯：</strong>${currentCellModel ? currentCellModel.name : '未选择'}</p>
+                            <table style="width: 100%; margin-top: 15px;">
+                                <thead>
+                                    <tr>
+                                        <th>年份</th>
+                                        <th>容量保持率（%）</th>
+                                        <th>年衰减（%）</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateAttenuationRows()}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+        
+        function generateAttenuationRows() {
+            if (!currentCellModel) return '<tr><td colspan="3">请先选择电芯型号</td></tr>';
+            
+            let html = '';
+            const attenuation = currentCellModel.attenuation;
+            for (let i = 0; i < attenuation.length; i++) {
+                const decline = i === 0 ? 0 : (attenuation[i-1] - attenuation[i]).toFixed(2);
+                html += `
+                    <tr>
+                        <td>第${i+1}年</td>
+                        <td>${attenuation[i].toFixed(1)}%</td>
+                        <td>${decline}%</td>
+                    </tr>
+                `;
+            }
+            return html;
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.remove();
+            }
+        }
+</script>
+</body>
+</html>

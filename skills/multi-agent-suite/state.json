@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-09T22:36:24.305443",
+  "updated_at": "2026-03-14T11:24:10.797935",
   "agents": {
     "alpha": {
       "id": "alpha",
@@ -156,6 +156,52 @@
         "summaries",
         "feishu",
         "alerts"
+      ]
+    },
+    "product": {
+      "id": "product",
+      "name": "Product",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "requirements_analysis",
+        "prd_writing",
+        "user_story",
+        "prioritization",
+        "market_research",
+        "ux_design"
+      ]
+    },
+    "architect": {
+      "id": "architect",
+      "name": "Architect",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "system_design",
+        "architecture",
+        "er_diagram",
+        "api_design",
+        "tech_stack",
+        "performance",
+        "scalability"
+      ]
+    },
+    "orchestrator": {
+      "id": "orchestrator",
+      "name": "Orchestrator",
+      "role": "builder",
+      "status": "idle",
+      "current_task": null,
+      "capabilities": [
+        "project_management",
+        "task_decomposition",
+        "resource_allocation",
+        "progress_tracking",
+        "risk_management",
+        "team_coordination"
       ]
     }
   },

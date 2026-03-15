@@ -1,0 +1,205 @@
+{
+  "skill_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill",
+  "timestamp": "2026-03-13T12:57:41.605028",
+  "is_safe": false,
+  "threats": [
+    {
+      "type": "dangerous_operation",
+      "severity": "critical",
+      "description": "系统命令执行",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 38,
+      "code_snippet": "os.system(cmd)",
+      "recommendation": "避免使用os.system，使用subprocess并验证输入"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "critical",
+      "description": "shell=True危险调用",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 41,
+      "code_snippet": "subprocess.call(cmd, shell=True)",
+      "recommendation": "避免使用shell=True"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "critical",
+      "description": "eval执行",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 27,
+      "code_snippet": "result = eval(user_input)",
+      "recommendation": "避免使用eval，使用ast.literal_eval或json.loads"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "high",
+      "description": "网络请求",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 105,
+      "code_snippet": "response = urllib.request.urlopen(url)",
+      "recommendation": "验证URL安全性"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "high",
+      "description": "文件写入",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 164,
+      "code_snippet": "with open(path, 'w') as f:",
+      "recommendation": "验证写入路径"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "medium",
+      "description": "Pickle反序列化",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 63,
+      "code_snippet": "obj = pickle.loads(data)",
+      "recommendation": "避免反序列化不可信数据"
+    },
+    {
+      "type": "dangerous_operation",
+      "severity": "medium",
+      "description": "YAML不安全加载",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 74,
+      "code_snippet": "config = yaml.load(config_str)",
+      "recommendation": "使用yaml.safe_load"
+    },
+    {
+      "type": "unsafe_deserialization",
+      "severity": "critical",
+      "description": "使用pickle进行反序列化",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 63,
+      "code_snippet": "obj = pickle.loads(data)",
+      "recommendation": "避免反序列化不可信数据，使用json替代"
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "cwe_id": "CWE-502",
+      "name": "不安全的反序列化 (Pickle反序列化)",
+      "severity": "critical",
+      "description": "反序列化不可信数据可能导致任意代码执行",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 63,
+      "code_snippet": "obj = pickle.loads(data)",
+      "remediation": "使用安全的序列化格式如JSON，或使用yaml.safe_load",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/502.html",
+        "https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data"
+      ]
+    },
+    {
+      "cwe_id": "CWE-502",
+      "name": "不安全的反序列化 (YAML不安全加载)",
+      "severity": "critical",
+      "description": "反序列化不可信数据可能导致任意代码执行",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 74,
+      "code_snippet": "config = yaml.load(config_str)",
+      "remediation": "使用安全的序列化格式如JSON，或使用yaml.safe_load",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/502.html",
+        "https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data"
+      ]
+    },
+    {
+      "cwe_id": "CWE-798",
+      "name": "硬编码凭证 (硬编码密码)",
+      "severity": "high",
+      "description": "敏感信息硬编码在源代码中",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 16,
+      "code_snippet": "PASSWORD = \"super_secret_password_123\"",
+      "remediation": "使用环境变量或安全的密钥管理服务",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/798.html",
+        "https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_password"
+      ]
+    },
+    {
+      "cwe_id": "CWE-798",
+      "name": "硬编码凭证 (硬编码密钥)",
+      "severity": "high",
+      "description": "敏感信息硬编码在源代码中",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 15,
+      "code_snippet": "API_KEY = \"sk-1234567890abcdef\"",
+      "remediation": "使用环境变量或安全的密钥管理服务",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/798.html",
+        "https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_password"
+      ]
+    },
+    {
+      "cwe_id": "CWE-798",
+      "name": "硬编码凭证 (硬编码令牌)",
+      "severity": "high",
+      "description": "敏感信息硬编码在源代码中",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 17,
+      "code_snippet": "SECRET_TOKEN = \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+      "remediation": "使用环境变量或安全的密钥管理服务",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/798.html",
+        "https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_password"
+      ]
+    },
+    {
+      "cwe_id": "CWE-338",
+      "name": "不安全的随机数 (伪随机数用于安全目的)",
+      "severity": "medium",
+      "description": "使用不安全的随机数生成器用于安全敏感操作",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 139,
+      "code_snippet": "return random.random()",
+      "remediation": "使用secrets模块进行加密安全随机数生成",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/338.html"
+      ]
+    },
+    {
+      "cwe_id": "CWE-916",
+      "name": "使用不充分的哈希 (MD5哈希)",
+      "severity": "medium",
+      "description": "使用已被破解的哈希算法",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 151,
+      "code_snippet": "return hashlib.md5(password.encode()).hexdigest()",
+      "remediation": "使用SHA-256或更强的哈希算法",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/916.html"
+      ]
+    },
+    {
+      "cwe_id": "CWE-532",
+      "name": "敏感数据插入日志 (打印密码)",
+      "severity": "medium",
+      "description": "敏感信息可能被记录到日志中",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 127,
+      "code_snippet": "print(f\"Error occurred: {error}, Password: {PASSWORD}\")",
+      "remediation": "避免在日志中记录敏感信息",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/532.html"
+      ]
+    },
+    {
+      "cwe_id": "CWE-377",
+      "name": "不安全的临时文件 (不安全的临时文件创建)",
+      "severity": "medium",
+      "description": "使用不安全的临时文件创建方式",
+      "file_path": "/mnt/okcomputer/output/openclaw_guardian/examples/unsafe_skill/__init__.py",
+      "line_number": 163,
+      "code_snippet": "path = tempfile.mktemp()",
+      "remediation": "使用tempfile.mkstemp或NamedTemporaryFile",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/377.html"
+      ]
+    }
+  ],
+  "warnings": [],
+  "risk_score": 100
+}

@@ -1,0 +1,44 @@
+{
+  "name": "月度销售报告",
+  "category": "sales",
+  "type": "combination",
+  "description": "标准的月度销售数据分析报告模板",
+  "sections": [
+    {
+      "type": "header",
+      "title": "销售概览",
+      "level": 1
+    },
+    {
+      "type": "kpi",
+      "metrics": ["销售额", "利润", "客户数"]
+    },
+    {
+      "type": "chart",
+      "chart_type": "line",
+      "title": "销售趋势",
+      "data_source": "sales_data"
+    },
+    {
+      "type": "chart",
+      "chart_type": "bar",
+      "title": "产品销售对比",
+      "data_source": "sales_data"
+    },
+    {
+      "type": "chart",
+      "chart_type": "pie",
+      "title": "市场占比",
+      "data_source": "market_share"
+    },
+    {
+      "type": "table",
+      "title": "详细数据",
+      "data_source": "sales_data"
+    }
+  ],
+  "styles": {
+    "primary_color": "#4A90E2",
+    "accent_color": "#2ECC71"
+  }
+}

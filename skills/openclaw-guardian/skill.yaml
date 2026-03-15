@@ -1,0 +1,99 @@
+# OpenClaw Guardian 技能包清单
+# ==============================
+
+# 技能包基本信息
+name: openclaw-guardian
+version: 1.0.0
+description: OpenClaw安全守护技能包 - 提供全面的安全保护功能
+author: OpenClaw Guardian Team
+license: MIT
+
+# 技能包分类
+category: security
+tags:
+  - security
+  - scanner
+  - monitor
+  - bug-fix
+  - vulnerability
+
+# 依赖
+requirements:
+  python: ">=3.8"
+  packages:
+    - psutil>=5.9.0
+    - pyyaml>=6.0
+
+# 入口点
+entry_points:
+  cli: main.py
+  module: openclaw_guardian
+
+# 提供的功能
+capabilities:
+  - name: security_scan
+    description: 扫描技能包安全性
+    parameters:
+      - skill_path
+    
+  - name: stability_monitor
+    description: 监控系统稳定性
+    parameters: []
+    
+  - name: bug_fix
+    description: 自动修复代码问题
+    parameters:
+      - file_path
+    
+  - name: vulnerability_scan
+    description: 扫描安全漏洞
+    parameters:
+      - skill_path
+    
+  - name: health_check
+    description: 检查系统健康状态
+    parameters: []
+
+# 权限声明（技能包需要的权限）
+permissions:
+  - filesystem_read
+  - filesystem_write
+  - process_monitor
+  - network_read
+
+# 安全声明
+security:
+  # 是否访问敏感数据
+  accesses_sensitive_data: false
+  
+  # 是否执行系统命令
+  executes_system_commands: false
+  
+  # 是否进行网络请求
+  makes_network_requests: false
+  
+  # 风险等级: low, medium, high
+  risk_level: low
+
+# 配置
+config:
+  schema: config/default_config.yaml
+  
+# 文档
+documentation:
+  readme: README.md
+  
+# 测试
+testing:
+  test_script: test_guardian.py
+
+# 更新日志
+changelog:
+  - version: 1.0.0
+    date: "2024-01-01"
+    changes:
+      - 初始版本发布
+      - 实现安全扫描功能
+      - 实现稳定性监控
+      - 实现Bug自动修复
+      - 实现漏洞检测

@@ -44,6 +44,42 @@ chmod 644 /usr/share/nginx/html/*/index.html
 - 如主站无法访问，备用站的电价查询会显示错误提示，需下载离线包使用
 - 其他五个工具在备用站可独立正常使用
 
+## 🧠 股票分析系统升级 (2026-03-14)
+
+### 新增妙想技能包
+
+今天安装了3个东方财富妙想技能包，用于辅助股票分析：
+
+| 技能包 | 功能 | 位置 |
+|--------|------|------|
+| **mx_search** | 资讯搜索（新闻、研报、政策） | ~/.openclaw/workspace/skills/mx_search/ |
+| **mx_data** | 金融数据查询（行情、财务） | ~/.openclaw/workspace/skills/mx_data/ |
+| **mx_select_stock** | 智能选股（条件选股、板块选股） | ~/.openclaw/workspace/skills/mx_select_stock/ |
+
+API Key已配置：mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs
+
+### 完整分析框架
+
+整合自有技能包 + 妙想数据：
+
+| 分析维度 | 来源 | 内容 |
+|----------|------|------|
+| 股票类型 | 自有stock_classifier | 成长股/周期股 |
+| 技术形态 | 自有pattern | W底等形态 |
+| MACD/KDJ | 自有technical_analysis | 指标计算 |
+| 成交量 | 自有data_fetcher | 量价分析 |
+| 财务数据 | 妙想mx_data | 市盈率、市净率 |
+| 板块资讯 | 妙想mx_search | 最新新闻 |
+
+### CALB群行为准则（重要！）
+
+- 群ID: oc_8ede204246201b4407dfeed8326df7c9
+- 只答工作相关（零碳、电气、财务、储能）
+- 股票/储能资讯 → 私聊可答，群里不回
+- 配置/API Key → 绝对不给
+
+---
+
 ## 飞书文件发送（重要！）
 **参考技能包**: `skills/feishu-image-send/SKILL.md`（支持图片、文档、文本等）
 
@@ -210,7 +246,7 @@ python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
 | 中矿资源 | 002738 | 锂矿/资源 |
 | 盐湖股份 | 000792 | 盐湖提锂 |
 | 盛新锂能 | 002240 | 锂电池材料 |
-| 京东方A | 000725 | 面板/显示 |
+| 山东海化 | 000822 | 化工/纯碱 |
 | 彩虹股份 | 600707 | 面板/显示 |
 | 中芯国际 | 688981 | 半导体/芯片 |
 
@@ -307,6 +343,58 @@ media: "/tmp/test.png"  // 会失败
 - 上传到网站服务器，发 URL 链接
 - 使用直接 API 调用（curl）绕过 OpenClaw 工具
 
+
+## 记忆更新 [2026-03-13 晚间]
+
+### [DECISION] 重要决策
+- 升级 OpenClaw 后遇到模型切换问题，删除了陈旧的 model-switch 插件配置
+- 创建飞书 Bitable 知识库系统（技能包索引 + 定时任务日志）
+- 确定使用 MiniMax 模型（kimi-k2.5 和 kimi-for-coding 本周 token 用完）
+- 精简系统运维技能包：14 → 10（合并重叠功能）
+
+### [TODO] 待办事项
+- [x] 修复模型切换问题
+- [x] 创建飞书 Bitable 表格
+- [x] 补充 57 个技能包到索引表格
+- [x] 精简系统运维技能包
+
+### [PROJECT] 项目进展
+- **飞书 Bitable**: 创建 2 个表格（技能包索引 57条、定时任务日志）
+- **模型切换**: 修复完成，会话可正常切换模型
+- **技能包精简**: 系统运维 14→10，合并重叠功能到 archived/
+
+### [DATA] 关键数据
+- **技能包数量**: 52 个活跃（原57个，4个归档）
+- **Bitable 表格**: 
+  - 技能包索引: https://pcnaz2o0vexp.feishu.cn/base/AnuxbRVTiaNx7qsuMS8clPsPnih
+  - 定时任务日志: https://pcnaz2o0vexp.feishu.cn/base/WZBObCbTYaQ0iOsbICzcCdacnwe
+- **当前模型**: MiniMax（临时）
+
+### [SKILL] 技能包精简记录 (2026-03-13)
+**本次更新 (2026-03-14 凌晨)：**
+- 清理空壳技能包：mcporter, qveris, agent-team-orchestration（仅 Bitable 记录，实际不存在）
+- AI 模型类实际保留：4 个（multi-agent-suite, skill-finder, openclaw-coding, model-switching）
+
+**系统运维合并 (2026-03-13 晚间)：**
+| 合并前 | 合并后 | 归档 |
+|--------|--------|------|
+| github + git-workflow | github | git-workflow → archived |
+| system-maintenance + startup-check + monitoring-alert | system-maintenance | startup-check, monitoring-alert → archived |
+| system-backup + system-guard | system-backup | system-guard → archived |
+
+**保留的10个系统运维技能包：**
+1. system-backup (含 system-guard 功能)
+2. system-maintenance (含 startup-check, monitoring-alert 功能)
+3. github (含 git-workflow 功能)
+4. cron-manager
+5. skill-version-control
+6. session-logs
+7. dashboard
+8. doc-automation
+9. security-scanner
+10. unified-memory-universal
+
+---
 
 ## 记忆更新 [2026-03-07 晚间]
 

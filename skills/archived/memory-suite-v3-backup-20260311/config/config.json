@@ -1,0 +1,46 @@
+{
+  "version": "3.0.0",
+  "workspace": "/Users/zhaoruicn/.openclaw/workspace",
+  "memory_dir": "/Users/zhaoruicn/.openclaw/workspace/memory",
+  "modules": {
+    "real_time": {
+      "enabled": true,
+      "interval_minutes": 10,
+      "max_snapshots": 50
+    },
+    "archiver": {
+      "enabled": true,
+      "archive_days": 7,
+      "permanent_days": 30,
+      "compress_days": 90,
+      "delete_days": 365
+    },
+    "indexer": {
+      "enabled": true,
+      "interval_hours": 1
+    },
+    "analyzer": {
+      "enabled": true,
+      "daily_report": true,
+      "weekly_report": true,
+      "monthly_report": true
+    },
+    "qa": {
+      "enabled": true
+    },
+    "kb_sync": {
+      "enabled": true
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "on_archive": true,
+    "on_error": true
+  },
+  "scheduler": {
+    "real-time": "*/10 * * * *",
+    "index": "0 * * * *",
+    "archive": "30 0 * * *",
+    "analyze": "0 1 * * *"
+  }
+}

@@ -1,0 +1,94 @@
+# OpenClaw Guardian 默认配置
+# ==========================
+
+# 日志配置
+log_level: INFO
+log_file: logs/guardian.log
+
+# 监控配置
+monitoring:
+  interval: 60  # 监控间隔（秒）
+  enabled: true
+
+# 安全配置
+security:
+  # 白名单技能哈希列表
+  whitelist: []
+  
+  # 黑名单技能哈希列表
+  blacklist: []
+  
+  # 允许的模块列表（为空表示允许所有）
+  allowed_modules: []
+  
+  # 禁止的模块列表
+  blocked_modules:
+    - ctypes
+    - mmap
+    - resource
+    - pty
+    - gc
+    - sysconfig
+  
+  # 是否允许安装中等风险的技能包
+  allow_medium_risk: false
+
+# 稳定性配置
+stability:
+  # 资源使用阈值
+  thresholds:
+    cpu_warning: 70.0
+    cpu_critical: 90.0
+    memory_warning: 75.0
+    memory_critical: 90.0
+    disk_warning: 80.0
+    disk_critical: 95.0
+  
+  # 检查间隔（秒）
+  check_interval: 5
+  
+  # 自动保护
+  auto_protect: true
+  
+  # 历史记录最大数量
+  max_history: 1000
+  
+  # 警报最大数量
+  max_alerts: 100
+
+# Bug修复配置
+bug_fix:
+  # 自动修复
+  auto_fix: true
+  
+  # 修复前备份
+  backup_before_fix: true
+  
+  # 自动修复的严重级别
+  fix_severity:
+    - low
+    - medium
+
+# 漏洞扫描配置
+vulnerability:
+  # 扫描的严重级别
+  severity_filter:
+    - critical
+    - high
+    - medium
+    - low
+  
+  # 包含的文件模式
+  include_patterns:
+    - "*.py"
+  
+  # 排除的文件模式
+  exclude_patterns:
+    - "test_*.py"
+    - "*_test.py"
+
+# 报告目录
+reports_dir: reports
+
+# 备份目录
+backup_dir: backups

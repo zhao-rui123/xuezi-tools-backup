@@ -1,0 +1,147 @@
+{
+  "built_at": "2026-03-15T01:00:00.458233",
+  "entities": [
+    "category:20260308工作记录",
+    "category:20260309工作记录",
+    "category:备份结构说明v21",
+    "category:第二阶段完成报告phase2completionreport",
+    "entry:kb_0013",
+    "entry:kb_0011",
+    "category:20260309待办事项",
+    "entry:kb_0019",
+    "category:20260311记忆日志",
+    "entry:kb_0002",
+    "entry:kb_0010",
+    "category:20260310记忆日志",
+    "category:系统整体改造方案v20全面重构",
+    "entry:kb_0009",
+    "entry:kb_0003",
+    "category:kiloagent定时任务通知配置",
+    "category:记忆系统整体改造方案",
+    "category:20260305记忆",
+    "entry:kb_0004",
+    "category:20260304记忆",
+    "category:定时任务状态检查报告",
+    "category:统一记忆系统自我进化系统最终完成报告",
+    "category:第一阶段完成报告phase1completionreport",
+    "entry:kb_0017",
+    "category:20260307记忆",
+    "entry:kb_0001",
+    "entry:kb_0012",
+    "category:第三阶段完成报告phase3completionreport",
+    "entry:kb_0015",
+    "entry:kb_0014",
+    "entry:kb_0006",
+    "category:三大系统记忆管理测试报告",
+    "category:20260306记忆",
+    "entry:kb_0018",
+    "entry:kb_0016",
+    "entry:kb_0007",
+    "entry:kb_0005",
+    "entry:kb_0008"
+  ],
+  "relations": [
+    {
+      "from": "entry:kb_0001",
+      "to": "category:定时任务状态检查报告",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0002",
+      "to": "category:20260306记忆",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0003",
+      "to": "category:系统整体改造方案v20全面重构",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0004",
+      "to": "category:20260307记忆",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0005",
+      "to": "category:第一阶段完成报告phase1completionreport",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0006",
+      "to": "category:20260308工作记录",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0007",
+      "to": "category:三大系统记忆管理测试报告",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0008",
+      "to": "category:kiloagent定时任务通知配置",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0009",
+      "to": "category:备份结构说明v21",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0010",
+      "to": "category:20260309工作记录",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0011",
+      "to": "category:20260309待办事项",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0012",
+      "to": "category:第三阶段完成报告phase3completionreport",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0013",
+      "to": "category:统一记忆系统自我进化系统最终完成报告",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0014",
+      "to": "category:20260304记忆",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0015",
+      "to": "category:第二阶段完成报告phase2completionreport",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0016",
+      "to": "category:记忆系统整体改造方案",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0017",
+      "to": "category:20260310记忆日志",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0018",
+      "to": "category:20260311记忆日志",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:kb_0019",
+      "to": "category:20260305记忆",
+      "type": "belongs_to"
+    }
+  ],
+  "stats": {
+    "total_entities": 38,
+    "total_relations": 19,
+    "categories": 19,
+    "tags": 0,
+    "entries": 19
+  }
+}

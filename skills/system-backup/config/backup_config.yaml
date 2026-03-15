@@ -1,0 +1,70 @@
+# 备份配置文件
+# 修改此文件以自定义备份行为
+
+# 备份目录设置
+backup:
+  # 备份目标目录 (挂载的外部存储)
+  target_dir: "/Volumes/cu/ocu"
+  
+  # 源目录
+  source:
+    memory: "/Users/zhaoruicn/.openclaw/workspace/memory"
+    skills: "/Users/zhaoruicn/.openclaw/workspace/skills"
+  
+  # 保留天数
+  retention_days: 30
+  
+  # 压缩包名称前缀
+  archive_prefix: "openclaw-backup"
+
+# 重试设置
+retry:
+  # 最大重试次数
+  max_attempts: 3
+  
+  # 重试间隔 (秒)
+  delay_seconds: 5
+
+# 校验设置
+verify:
+  # 是否启用MD5校验
+  md5_enabled: true
+  
+  # 是否启用解压测试
+  decompress_test_enabled: true
+
+# 通知设置
+notification:
+  # 是否启用通知
+  enabled: true
+  
+  # 通知方式: "kilo" 或 "simple"
+  method: "simple"
+  
+  # Kilo通知Agent路径 (可选)
+  kilo_path: "~/.openclaw/workspace/skills/multi-agent-suite/agents/kilo_v2.py"
+
+# 日志设置
+logging:
+  # 日志文件路径
+  log_file: "/tmp/backup.log"
+  
+  # 日志级别: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+
+# 排除规则
+exclude:
+  patterns:
+    - "__pycache__"
+    - "*.pyc"
+    - ".DS_Store"
+    - "*.backup"
+    - "*.tmp"
+
+# 安全设置
+safety:
+  # 最小可用磁盘空间 (GB)
+  min_free_space_gb: 1
+  
+  # 锁文件路径 (防止并发备份)
+  lock_file: "/tmp/backup.lock"

@@ -1,0 +1,16 @@
+{
+  "name": "趋势图模板",
+  "category": "business",
+  "type": "chart",
+  "description": "用于展示时间序列趋势的折线图模板",
+  "chart_type": "line",
+  "config": {
+    "smooth": true,
+    "fill_area": false,
+    "show_points": true,
+    "animation": true,
+    "colors": ["#4A90E2", "#E24A4A", "#2ECC71"],
+    "grid": true,
+    "legend": true
+  }
+}

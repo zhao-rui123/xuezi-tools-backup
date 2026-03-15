@@ -1,0 +1,366 @@
+{
+  "dev-20260309-211600": {
+    "id": "dev-20260309-211600",
+    "title": "小龙虾之家升级版",
+    "description": "添加游戏室和餐厅，优化UI",
+    "requirements": [
+      "9宫格像素房子",
+      "数据统计面板",
+      "成就系统"
+    ],
+    "workflow": [
+      {
+        "stage": "requirement_confirm",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "requirement_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "task_assign",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "parallel_dev",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "dev_preview",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "code_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "user_accept",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "backup_rollback",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "unified_deploy",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "deliver_doc",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "iteration",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      }
+    ],
+    "current_stage": 0,
+    "requirement_doc": "",
+    "design_doc": "",
+    "code_files": [],
+    "test_report": "",
+    "deploy_doc": "",
+    "created_at": "2026-03-09T21:16:00.009732",
+    "started_at": null,
+    "completed_at": null,
+    "version": "1.0.0",
+    "backup_tag": ""
+  },
+  "dev-20260309-212552": {
+    "id": "dev-20260309-212552",
+    "title": "智能投资分析平台",
+    "description": "AI驱动的股票分析平台，整合数据处理、AI预测、可视化",
+    "requirements": [
+      "股票数据采集",
+      "AI预测模型",
+      "实时可视化",
+      "用户系统",
+      "报告生成"
+    ],
+    "workflow": [
+      {
+        "stage": "requirement_confirm",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "requirement_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "task_assign",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "parallel_dev",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "dev_preview",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "code_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "user_accept",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "backup_rollback",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "unified_deploy",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "deliver_doc",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "iteration",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      }
+    ],
+    "current_stage": 0,
+    "requirement_doc": "",
+    "design_doc": "",
+    "code_files": [],
+    "test_report": "",
+    "deploy_doc": "",
+    "created_at": "2026-03-09T21:25:52.394077",
+    "started_at": null,
+    "completed_at": null,
+    "version": "1.0.0",
+    "backup_tag": ""
+  },
+  "dev-20260314-111757": {
+    "id": "dev-20260314-111757",
+    "title": "测试任务",
+    "description": "",
+    "requirements": [],
+    "workflow": [
+      {
+        "stage": "requirement_confirm",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "requirement_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "task_assign",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "parallel_dev",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "dev_preview",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "code_review",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "user_accept",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "backup_rollback",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "unified_deploy",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "deliver_doc",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      },
+      {
+        "stage": "iteration",
+        "status": "pending",
+        "assigned_to": null,
+        "started_at": null,
+        "completed_at": null,
+        "notes": "",
+        "deliverables": []
+      }
+    ],
+    "current_stage": 0,
+    "requirement_doc": "",
+    "design_doc": "",
+    "code_files": [],
+    "test_report": "",
+    "deploy_doc": "",
+    "created_at": "2026-03-14T11:17:57.667219",
+    "started_at": null,
+    "completed_at": null,
+    "version": "1.0.0",
+    "backup_tag": ""
+  }
+}

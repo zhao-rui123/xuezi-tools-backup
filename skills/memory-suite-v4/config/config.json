@@ -1,0 +1,70 @@
+{
+  "version": "4.0.0",
+  "workspace": "/Users/zhaoruicn/.openclaw/workspace",
+  "memory_dir": "/Users/zhaoruicn/.openclaw/workspace/memory",
+  "knowledge_dir": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base",
+  "modules": {
+    "real_time": {
+      "enabled": true,
+      "interval_minutes": 10,
+      "max_snapshots": 50
+    },
+    "archiver": {
+      "enabled": true,
+      "archive_days": 7,
+      "permanent_days": 30,
+      "compress_days": 90,
+      "delete_days": 365
+    },
+    "indexer": {
+      "enabled": true,
+      "interval_hours": 1
+    },
+    "analyzer": {
+      "enabled": true,
+      "daily_report": true,
+      "weekly_report": true,
+      "monthly_report": true
+    },
+    "qa": {
+      "enabled": true
+    },
+    "evolution": {
+      "enabled": true,
+      "daily_analysis": true,
+      "long_term_planning": true,
+      "monthly_report": true,
+      "skill_evaluation": true,
+      "notify_on_complete": true
+    },
+    "knowledge": {
+      "enabled": true,
+      "graph_building": true,
+      "auto_import": true,
+      "sync_enabled": true,
+      "sync_direction": "bidirectional",
+      "conflict_resolution": "newer_wins"
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "on_archive": true,
+    "on_error": true,
+    "on_evolution_complete": true,
+    "on_knowledge_sync": true
+  },
+  "scheduler": {
+    "daily-init": "0 0 * * *",
+    "real-time": "*/10 * * * *",
+    "index": "0 * * * *",
+    "archive": "30 0 * * *",
+    "analyze-daily": "0 1 * * *",
+    "evolution-daily": "0 23 * * *",
+    "evolution-monthly": "0 2 1 * *",
+    "evolution-report": "0 9 2 * *",
+    "skill-eval": "0 22 * * 0",
+    "knowledge-graph": "0 1 * * *",
+    "knowledge-sync": "0 6 * * *",
+    "knowledge-import": "0 6 * * *"
+  }
+}
