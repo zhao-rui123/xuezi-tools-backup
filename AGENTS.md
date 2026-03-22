@@ -76,8 +76,8 @@ Before doing anything else:
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
 3. **⚠️ 加载会话快照**: 执行以下命令加载上下文：
-   ```python
-   python3 -c "import sys; sys.path.insert(0, 'skills/unified-memory'); from session_recovery import on_session_start; result = on_session_start(); print(result if result else '无恢复内容')"
+   ```bash
+   python3 ~/.openclaw/workspace/scripts/session-snapshot.py load
    ```
 4. **⚠️ 报告恢复状态**: 向用户报告恢复的任务: "根据自动保存记录（x分钟前），你最后在做：xxx"
 5. **⚠️ 如果快照显示有任务**: 询问用户是否继续该任务
@@ -289,14 +289,64 @@ This is a starting point. Add your own conventions, style, and rules as you figu
 
 ### 流程步骤
 
-1. **先云服务器测试** - 上传到云服务器验证代码正确性
-2. **本地git commit** - 测试成功后提交备份
-3. **征求用户意见** - 是否改本地 + 回滚时间
-4. **用户同意后再改** - 确认后再动手
-5. **成功后取消回滚** - 任务完成
+1. **云OpenClaw测试代码** - 用云服务器测试代码/配置/功能
+2. **测试成功 → 本地git commit** - 提交备份
+3. **征求用户意见** - 是否改本地 + 是否设置回滚 + 回滚时间
+4. **用户同意后 → 本地修改**
+5. **测试成功 → 取消回滚** / **测试失败 → 等待回滚时间**
 
 ### 示例
 ```
 ❌ 错误流程：直接本地改 → 改坏了
-✅ 正确流程：云服务器测试 → git commit → 征求意见 → 同意后再改 → 取消回滚
+✅ 正确流程：云测试OK → git commit → 征求意见 → 同意后改 → 成功取消回滚
 ```
+
+---
+
+## Claude Code 使用规范（2026-03-22）
+
+### 调用方式
+```bash
+# 基础调用（无交互，直接返回结果）
+claude --add-dir <工作目录> --print "任务描述" 2>&1
+
+# 带权限控制
+claude --add-dir <目录> --allowed-tools Bash,Read,Write --print "任务"
+
+# 允许所有工具（慎用）
+claude --add-dir <目录> --dangerously-skip-permissions --print "任务"
+```
+
+### 关键参数
+| 参数 | 用途 |
+|------|------|
+| `--add-dir` | 添加允许访问的目录 |
+| `--print` | 非交互模式，输出到stdout |
+| `--allowed-tools` | 细粒度工具权限控制 |
+| `--dangerously-skip-permissions` | 跳过权限检查（仅测试用） |
+| `--continue` | 断点续传（交互模式） |
+
+### 文件引用
+```bash
+# @符号快速引用文件内容
+claude --print "Summarize @MEMORY.md in 3 points"
+
+# 支持模糊匹配
+claude --print "Explain @storage-layout.js"
+```
+
+### 工作流
+1. 我(Orchestrator) → 分析需求，拆解任务
+2. Claude Code(Builder) → 执行写代码
+3. 我(Reviewer) → 审核质量，测试验证
+4. 交付
+
+### 权限控制最佳实践
+- 敏感目录用 `--allowed-tools Bash,Read,Edit` 限制
+- 禁止 Write 时不要加 `Edit`
+- 生产环境优先用 `--allowed-tools` 而非 `--dangerously-skip-permissions`
+
+### 注意事项
+- `!前缀` 不支持，用 `--print "bash命令"` 代替
+- Plan Mode (Shift+Tab) 需要交互模式
+- `/init` 需要项目有现有文件才能生成CLAUDE.md

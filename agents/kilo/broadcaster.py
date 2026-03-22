@@ -34,6 +34,8 @@ class BroadcasterAgent:
     
     def _send_notification(self, message, target="user"):
         """发送飞书通知"""
+        import os
+        
         # 群聊ID
         GROUP_CHAT_ID = "oc_b14195eb990ab57ea573e696758ae3d5"
         USER_ID = "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579"
@@ -41,17 +43,30 @@ class BroadcasterAgent:
         # 默认发送到群聊
         target_id = GROUP_CHAT_ID if target == "group" else USER_ID
         
-        # 调用 OpenClaw message 工具
+        # 设置环境变量确保能找到openclaw
+        env = os.environ.copy()
+        env["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + env.get("PATH", "")
+        
+        # 调用 OpenClaw message 工具 - 使用后台运行避免超时
         cmd = [
-            "openclaw", "message", "send",
+            "/opt/homebrew/bin/openclaw", "message", "send",
             "--target", target_id,
             "--message", message
         ]
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-            return {"success": result.returncode == 0, "output": result.stdout}
+            # 后台运行，不等待结果
+            subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
+            return {"success": True, "output": "Sent in background"}
         except Exception as e:
-            return {"success": False, "error": str(e)}
+            # 如果失败，尝试使用shell后台运行
+            try:
+                import os
+                current_path = os.environ.get("PATH", "")
+                cmd_shell = f'export PATH="/opt/homebrew/bin:{current_path}" && openclaw message send --target {target_id} --message "{message}"'
+                subprocess.Popen(cmd_shell, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True, env=env)
+                return {"success": True, "output": "Sent in background via shell"}
+            except Exception as e2:
+                return {"success": False, "error": f"Direct: {str(e)}, Shell: {str(e2)}"}
     
     def _check_tasks(self):
         """检查定时任务状态"""

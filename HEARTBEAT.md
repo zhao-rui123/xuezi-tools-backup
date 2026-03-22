@@ -5,24 +5,24 @@
 ### 通知策略
 **每天早上 8:00 统一发送任务汇总通知**
 
-### 监控任务清单
+### 监控任务清单（与 task_monitor.py 保持一致）
 | 时间 | 任务名称 | 日志文件 | 类型 |
 |------|----------|----------|------|
-| 00:30 | 每日记忆归档 | /tmp/ums-daily.log | 每日 |
-| 01:00 | 知识图谱自动更新 | /tmp/ums-graph.log | 每日 |
-| 01:00 | 每日知识同步 | /tmp/kb-integration.log | 每日 |
-| 01:00 | 统一记忆系统归档 | /memory/cron.log | 每日 |
 | 22:00 | 每日备份 | /tmp/backup_cron.log | 每日 |
-| 23:00 | 每日自我进化 | /tmp/evolution-daily.log | 每日 |
+| 23:00 | 每日自我进化 | /tmp/memory-suite.log | 每日 |
+| 00:30 | 每日记忆归档 | /tmp/memory-suite.log | 每日 |
+| 01:00 | 知识图谱自动更新 | /tmp/memory-suite.log | 每日 |
+| 03:00 | 日志轮转 | /tmp/memory-suite-maintenance.log | 每日 |
+| 06:00 | 每日知识同步 | /tmp/memory-suite.log | 每日 |
 | 02:00 (周日) | 系统维护 | /tmp/system-maintenance.log | 周日 |
 | 03:00 (周日) | OUC清理 | /tmp/ouc-cleanup.log | 周日 |
 | 03:00 (周一) | 文件清理 | /tmp/file-cleanup.log | 周一 |
 | 04:00 (周一) | 每周安全扫描 | /tmp/system-guard-scan.log | 周一 |
-| 05:00 (周一) | 每周知识库维护 | /tmp/kb-maintenance.log | 周一 |
+| 06:30 (周一) | 健康检查 | /tmp/memory-suite-maintenance.log | 周一 |
 | 03:00 (每月1号) | 月度归档备份 | /tmp/backup_archive.log | 月度 |
-| 02:00 (每月1号) | 月度记忆深度分析 | /tmp/ums-monthly.log | 月度 |
-| 08:00 (每月1号) | 每月深度进化 | /tmp/evolution-monthly.log | 月度 |
-| 09:00 (每月2号) | 自我进化报告 | /tmp/evolution-report.log | 月度 |
+| 02:00 (每月1号) | 月度记忆深度分析 | /tmp/memory-suite.log | 月度 |
+| 08:00 (每月1号) | 每月深度进化 | /tmp/memory-suite.log | 月度 |
+| 09:00 (每月2号) | 自我进化报告 | /tmp/memory-suite.log | 月度 |
 
 ### 执行流程
 1. 每天早上 8:00 的 heartbeat 触发检查
@@ -41,8 +41,8 @@
 🌅 凌晨任务 (00:00-08:00):
   • 每日记忆归档 (00:30): ✅
   • 知识图谱自动更新 (01:00): ✅
-  • 每日知识同步 (01:00): ✅
-  • 统一记忆系统归档 (01:00): ✅
+  • 日志轮转 (03:00): ✅
+  • 每日知识同步 (06:00): ✅
 
 📅 周日任务: (仅周日显示)
   • 系统维护 (02:00): ✅
@@ -51,7 +51,7 @@
 📅 周一任务: (仅周一显示)
   • 文件清理 (03:00): ✅
   • 每周安全扫描 (04:00): ✅
-  • 每周知识库维护 (05:00): ✅
+  • 健康检查 (06:30): ✅
 
 📆 月度任务: (仅1号显示)
   • 月度归档备份 (03:00): ✅
@@ -109,4 +109,4 @@
 - 生成 summary/daily/YYYY-MM-DD-summary.md
 
 ---
-*此文件由系统自动维护*
+*此文件由系统自动维护 - 2026-03-21 更新：与 task_monitor.py 保持一致*

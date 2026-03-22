@@ -16,6 +16,74 @@
     "multi-search-engine": {
       "version": "2.0.1",
       "installedAt": 1772984043778
+    },
+    "data-analyst": {
+      "version": "1.0.0",
+      "installedAt": 1773680244271
+    },
+    "ontology": {
+      "version": "0.1.2",
+      "installedAt": 1773684398150
+    },
+    "openclaw-backup": {
+      "version": "1.0.0",
+      "installedAt": 1773684811857
+    },
+    "image-cog": {
+      "version": "1.0.2",
+      "installedAt": 1774059259212
+    },
+    "cellcog": {
+      "version": "1.0.21",
+      "installedAt": 1774059279074
+    },
+    "image-edit": {
+      "version": "1.0.0",
+      "installedAt": 1774059644417
+    },
+    "image-process": {
+      "version": "0.1.0",
+      "installedAt": 1774061181758
+    },
+    "imagemagick": {
+      "version": "1.0.0",
+      "installedAt": 1774061129520
+    },
+    "screenshot-capture": {
+      "version": "1.0.0",
+      "installedAt": 1774061136917
+    },
+    "photo-restoration": {
+      "version": "1.0.0",
+      "installedAt": 1774061142637
+    },
+    "photo-colorization": {
+      "version": "1.0.0",
+      "installedAt": 1774061147271
+    },
+    "screenshot-skill": {
+      "version": "1.0.1",
+      "installedAt": 1774061151526
+    },
+    "image-ocr": {
+      "version": "1.0.0",
+      "installedAt": 1774061155892
+    },
+    "image-optimizer-tool": {
+      "version": "1.0.0",
+      "installedAt": 1774061161487
+    },
+    "image-highlight-cropper": {
+      "version": "1.0.0",
+      "installedAt": 1774061166271
+    },
+    "image-router": {
+      "version": "0.1.0",
+      "installedAt": 1774061171033
+    },
+    "powerpoint-pptx": {
+      "version": "1.0.1",
+      "installedAt": 1774147399379
     }
   }
 }

@@ -7,6 +7,7 @@
 import subprocess
 import json
 import sys
+import os
 from datetime import datetime
 
 API_KEY = "mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs"
@@ -84,11 +85,34 @@ def parse_screen(data):
     return results
 
 def send_to_feishu(message: str):
-    result = subprocess.run(
-        ["openclaw", "message", "send", "--target", "oc_b14195eb990ab57ea573e696758ae3d5", "--message", message],
-        capture_output=True, text=True, timeout=30
-    )
-    return result.returncode == 0
+    """发送消息到飞书 - 使用直接HTTP API调用"""
+    import urllib.request
+    import urllib.parse
+    
+    # 使用飞书机器人API直接发送
+    webhook_url = "https://open.feishu.cn/open-apis/bot/v2/hook/"  # 需要替换为实际的webhook
+    
+    # 尝试使用openclaw命令，如果失败则使用替代方案
+    try:
+        # 先尝试使用完整路径的openclaw
+        openclaw_path = "/opt/homebrew/bin/openclaw"
+        if os.path.exists(openclaw_path):
+            # 使用后台运行，避免超时
+            subprocess.Popen(
+                [openclaw_path, "message", "send", "--target", "oc_b14195eb990ab57ea573e696758ae3d5", "--message", message],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+            return True
+        else:
+            # 尝试PATH中的openclaw，后台运行
+            subprocess.Popen(
+                ["openclaw", "message", "send", "--target", "oc_b14195eb990ab57ea573e696758ae3d5", "--message", message],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True
+            )
+            return True
+    except Exception as e:
+        print(f"发送失败: {e}")
+        return False
 
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"

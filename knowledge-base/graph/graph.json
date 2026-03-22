@@ -1,94 +1,85 @@
 {
-  "built_at": "2026-03-15T01:00:00.458233",
+  "built_at": "2026-03-22T01:00:00.917356",
   "entities": [
-    "category:20260308工作记录",
-    "category:20260309工作记录",
-    "category:备份结构说明v21",
-    "category:第二阶段完成报告phase2completionreport",
-    "entry:kb_0013",
-    "entry:kb_0011",
-    "category:20260309待办事项",
-    "entry:kb_0019",
-    "category:20260311记忆日志",
-    "entry:kb_0002",
-    "entry:kb_0010",
-    "category:20260310记忆日志",
-    "category:系统整体改造方案v20全面重构",
-    "entry:kb_0009",
-    "entry:kb_0003",
-    "category:kiloagent定时任务通知配置",
-    "category:记忆系统整体改造方案",
-    "category:20260305记忆",
-    "entry:kb_0004",
-    "category:20260304记忆",
-    "category:定时任务状态检查报告",
-    "category:统一记忆系统自我进化系统最终完成报告",
-    "category:第一阶段完成报告phase1completionreport",
-    "entry:kb_0017",
-    "category:20260307记忆",
-    "entry:kb_0001",
-    "entry:kb_0012",
-    "category:第三阶段完成报告phase3completionreport",
-    "entry:kb_0015",
-    "entry:kb_0014",
-    "entry:kb_0006",
-    "category:三大系统记忆管理测试报告",
-    "category:20260306记忆",
-    "entry:kb_0018",
     "entry:kb_0016",
-    "entry:kb_0007",
+    "entry:kb_0012",
+    "category:backup",
+    "category:20260309待办事项",
+    "entry:kb_0017",
+    "entry:feishu_cron_股票推送",
+    "entry:kb_0015",
+    "entry:kb_0004",
+    "entry:kb_0001",
+    "entry:kb_0008",
     "entry:kb_0005",
-    "entry:kb_0008"
+    "entry:kb_0002",
+    "entry:kb_0003",
+    "category:cron",
+    "entry:kb_0014",
+    "tag:飞书同步",
+    "entry:kb_0006",
+    "category:memory",
+    "entry:kb_0013",
+    "category:reports",
+    "entry:kb_0018",
+    "entry:feishu_cron_健康检查",
+    "entry:kb_0019",
+    "entry:kb_0010",
+    "category:system",
+    "entry:kb_0009",
+    "entry:kb_0007",
+    "entry:feishu_cron_每日备份",
+    "entry:kb_0011"
   ],
   "relations": [
     {
       "from": "entry:kb_0001",
-      "to": "category:定时任务状态检查报告",
+      "to": "category:cron",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0002",
-      "to": "category:20260306记忆",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0003",
-      "to": "category:系统整体改造方案v20全面重构",
+      "to": "category:system",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0004",
-      "to": "category:20260307记忆",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0005",
-      "to": "category:第一阶段完成报告phase1completionreport",
+      "to": "category:reports",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0006",
-      "to": "category:20260308工作记录",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0007",
-      "to": "category:三大系统记忆管理测试报告",
+      "to": "category:system",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0008",
-      "to": "category:kiloagent定时任务通知配置",
+      "to": "category:cron",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0009",
-      "to": "category:备份结构说明v21",
+      "to": "category:backup",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0010",
-      "to": "category:20260309工作记录",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
@@ -98,50 +89,80 @@
     },
     {
       "from": "entry:kb_0012",
-      "to": "category:第三阶段完成报告phase3completionreport",
+      "to": "category:reports",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0013",
-      "to": "category:统一记忆系统自我进化系统最终完成报告",
+      "to": "category:system",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0014",
-      "to": "category:20260304记忆",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0015",
-      "to": "category:第二阶段完成报告phase2completionreport",
+      "to": "category:reports",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0016",
-      "to": "category:记忆系统整体改造方案",
+      "to": "category:system",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0017",
-      "to": "category:20260310记忆日志",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0018",
-      "to": "category:20260311记忆日志",
+      "to": "category:memory",
       "type": "belongs_to"
     },
     {
       "from": "entry:kb_0019",
-      "to": "category:20260305记忆",
+      "to": "category:memory",
       "type": "belongs_to"
+    },
+    {
+      "from": "entry:feishu_cron_每日备份",
+      "to": "category:backup",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:feishu_cron_每日备份",
+      "to": "tag:飞书同步",
+      "type": "tagged_with"
+    },
+    {
+      "from": "entry:feishu_cron_健康检查",
+      "to": "category:cron",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:feishu_cron_健康检查",
+      "to": "tag:飞书同步",
+      "type": "tagged_with"
+    },
+    {
+      "from": "entry:feishu_cron_股票推送",
+      "to": "category:cron",
+      "type": "belongs_to"
+    },
+    {
+      "from": "entry:feishu_cron_股票推送",
+      "to": "tag:飞书同步",
+      "type": "tagged_with"
     }
   ],
   "stats": {
-    "total_entities": 38,
-    "total_relations": 19,
-    "categories": 19,
-    "tags": 0,
-    "entries": 19
+    "total_entities": 29,
+    "total_relations": 25,
+    "categories": 6,
+    "tags": 1,
+    "entries": 22
   }
 }

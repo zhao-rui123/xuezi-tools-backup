@@ -23,5 +23,44 @@
   "2026-03-15_08:30-english": {
     "time": "2026-03-15T09:50:15.778698",
     "status": "unknown"
+  },
+  "daily_report_2026-03-16": {
+    "time": "2026-03-16T08:00:01.073112",
+    "success_count": 1,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-17": {
+    "time": "2026-03-17T08:33:08.860637",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-18": {
+    "time": "2026-03-18T08:00:00.757714",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "2026-03-18_08:30-english": {
+    "time": "2026-03-18T19:11:47.386786",
+    "status": "unknown"
+  },
+  "daily_report_2026-03-19": {
+    "time": "2026-03-19T08:00:00.415067",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-20": {
+    "time": "2026-03-20T08:00:00.889098",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-21": {
+    "time": "2026-03-21T08:00:00.401418",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-22": {
+    "time": "2026-03-22T08:00:01.216003",
+    "success_count": 6,
+    "failed_count": 0
   }
 }

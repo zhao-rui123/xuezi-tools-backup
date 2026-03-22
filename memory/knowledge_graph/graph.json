@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-10T01:00:01.673581",
+  "timestamp": "2026-03-17T02:12:00",
   "entities": {
     "aedb315f5643": {
       "id": "aedb315f5643",
@@ -27,7 +27,7 @@
     "1e7a38815abe": {
       "id": "1e7a38815abe",
       "name": "定时任务修复",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -40,7 +40,7 @@
     "58df68531d8b": {
       "id": "58df68531d8b",
       "name": "电价查询",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -74,7 +74,7 @@
     "052393e49ef9": {
       "id": "052393e49ef9",
       "name": "3. 完整",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -87,7 +87,7 @@
     "7f876e8afe87": {
       "id": "7f876e8afe87",
       "name": "雪球API整合",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -100,7 +100,7 @@
     "d3bc42400c4d": {
       "id": "d3bc42400c4d",
       "name": "Stock Analysis Pro v2.1.0 技能包",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -113,7 +113,7 @@
     "3b21e7595c48": {
       "id": "3b21e7595c48",
       "name": "晚间备份",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -126,7 +126,7 @@
     "85ac956513cb": {
       "id": "85ac956513cb",
       "name": "stock_analyzer_fusion",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -139,7 +139,7 @@
     "22ac1f4cf509": {
       "id": "22ac1f4cf509",
       "name": "stock_feishu_push_fusion",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -152,7 +152,7 @@
     "0ce35df12c7f": {
       "id": "0ce35df12c7f",
       "name": "stock_pattern_recognition",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -165,7 +165,7 @@
     "7f6ce475e856": {
       "id": "7f6ce475e856",
       "name": "stock_valuation_screener",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -178,7 +178,7 @@
     "72734aee11b2": {
       "id": "72734aee11b2",
       "name": "stock_deep_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -191,7 +191,7 @@
     "6813381cb816": {
       "id": "6813381cb816",
       "name": "test_xueqiu_*",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -204,7 +204,7 @@
     "84fb3f09e381": {
       "id": "84fb3f09e381",
       "name": "stock_classifier",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -217,7 +217,7 @@
     "d3bd10478e1b": {
       "id": "d3bd10478e1b",
       "name": "cyclical_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -230,7 +230,7 @@
     "72342e12bdfc": {
       "id": "72342e12bdfc",
       "name": "growth_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -243,7 +243,7 @@
     "fa42505a7740": {
       "id": "fa42505a7740",
       "name": "value_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -256,7 +256,7 @@
     "f64b230eaf77": {
       "id": "f64b230eaf77",
       "name": "enhanced_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -269,7 +269,7 @@
     "b3d2a73be916": {
       "id": "b3d2a73be916",
       "name": "data_fetcher",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -282,7 +282,7 @@
     "eba7ee01bf14": {
       "id": "eba7ee01bf14",
       "name": "pattern_recognition",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -295,7 +295,7 @@
     "f19b539b3456": {
       "id": "f19b539b3456",
       "name": "valuation",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -308,7 +308,7 @@
     "94d74ab1e17a": {
       "id": "94d74ab1e17a",
       "name": "deep_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -321,7 +321,7 @@
     "1aa502e05552": {
       "id": "1aa502e05552",
       "name": "daily_report",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -334,7 +334,7 @@
     "bef888728b51": {
       "id": "bef888728b51",
       "name": "yfinance_client",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -347,7 +347,7 @@
     "cf4912003e4c": {
       "id": "cf4912003e4c",
       "name": "enterprise_tax_calculator",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -360,7 +360,7 @@
     "145682dec048": {
       "id": "145682dec048",
       "name": "project_investment_tax",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -373,7 +373,7 @@
     "a7234559e407": {
       "id": "a7234559e407",
       "name": "safety_guard",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -386,7 +386,7 @@
     "cde93024195c": {
       "id": "cde93024195c",
       "name": "audit_logger",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -399,7 +399,7 @@
     "f4aad5e4b288": {
       "id": "f4aad5e4b288",
       "name": "enable-safety",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -412,7 +412,7 @@
     "1504fe996a3d": {
       "id": "1504fe996a3d",
       "name": "- `enterprise_tax_calculator.py` - 企业经营税务计算",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -425,7 +425,7 @@
     "cdc8e51f1f87": {
       "id": "cdc8e51f1f87",
       "name": "- 输入：CAPEX（各项投资）+ OPEX（运营成本）+ 收入预测",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -438,7 +438,7 @@
     "e4962149ba35": {
       "id": "e4962149ba35",
       "name": "- `safety_guard.py` - 危险操作确认",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -540,7 +540,7 @@
     "afa9c9ba7415": {
       "id": "afa9c9ba7415",
       "name": "stock_analyzer",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -553,7 +553,7 @@
     "54bfa0ced321": {
       "id": "54bfa0ced321",
       "name": "使用新浪财经免费API获取实时行情，暂不需要购买付费数据源",
-      "type": "decision",
+      "type": "concept",
       "properties": {
         "category": "decision"
       },
@@ -566,7 +566,7 @@
     "ab978dc59027": {
       "id": "ab978dc59027",
       "name": "1. 小龙虾之家 - AI助手工作状态看板",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -579,7 +579,7 @@
     "a44fbe41e4fc": {
       "id": "a44fbe41e4fc",
       "name": "2. 记忆文件管理",
-      "type": "project",
+      "type": "system",
       "properties": {
         "category": "project"
       },
@@ -592,7 +592,7 @@
     "cdb6a3026a5c": {
       "id": "cdb6a3026a5c",
       "name": "6. 统一记忆",
-      "type": "project",
+      "type": "system",
       "properties": {
         "category": "project"
       },
@@ -605,7 +605,7 @@
     "008f272fcef6": {
       "id": "008f272fcef6",
       "name": "统一记忆",
-      "type": "project",
+      "type": "system",
       "properties": {
         "category": "project"
       },
@@ -619,7 +619,7 @@
     "5bc56e97daa8": {
       "id": "5bc56e97daa8",
       "name": "记忆文件永久保留，不清理",
-      "type": "decision",
+      "type": "system",
       "properties": {
         "category": "decision"
       },
@@ -632,7 +632,7 @@
     "a1b162b26d8f": {
       "id": "a1b162b26d8f",
       "name": "3. 统一记忆",
-      "type": "project",
+      "type": "system",
       "properties": {
         "category": "project"
       },
@@ -645,7 +645,7 @@
     "4d6990ebe720": {
       "id": "4d6990ebe720",
       "name": "5. 多Agent协作增强",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -658,7 +658,7 @@
     "9beecfe53376": {
       "id": "9beecfe53376",
       "name": "小龙虾之家",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -671,7 +671,7 @@
     "5eede63b333f": {
       "id": "5eede63b333f",
       "name": "晚间工作 -",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -684,7 +684,7 @@
     "ad87dbc83ad3": {
       "id": "ad87dbc83ad3",
       "name": "auto_archive",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -697,7 +697,7 @@
     "39d09178a806": {
       "id": "39d09178a806",
       "name": "importance_scorer",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -710,7 +710,7 @@
     "b376f645154a": {
       "id": "b376f645154a",
       "name": "semantic_search",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -723,7 +723,7 @@
     "2d1cd64505aa": {
       "id": "2d1cd64505aa",
       "name": "cron_tasks",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -736,7 +736,7 @@
     "c61a24b866bb": {
       "id": "c61a24b866bb",
       "name": "yfinance-stock, memory-search, openclaw-memory-kit, nano-pdf, report-generator",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -749,7 +749,7 @@
     "aedf5c0fcdd6": {
       "id": "aedf5c0fcdd6",
       "name": "44个核心 + 4套件 + 5运维 = 53个",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -819,7 +819,7 @@
     "6ee15a311e46": {
       "id": "6ee15a311e46",
       "name": "🔧 电价查询",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -832,7 +832,7 @@
     "99aa7d459575": {
       "id": "99aa7d459575",
       "name": "股票筛选",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -846,7 +846,7 @@
     "1756ef34aff5": {
       "id": "1756ef34aff5",
       "name": "/opt/stock-screener/backend/services/stock_screener",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -859,7 +859,7 @@
     "fd8495a20b81": {
       "id": "fd8495a20b81",
       "name": "/opt/stock-screener/backend/services/technical_analysis",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -872,7 +872,7 @@
     "fdbda02a449c": {
       "id": "fdbda02a449c",
       "name": "| 技能包 | 位置 | 内容 |",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -902,7 +902,7 @@
     "b22e35409e73": {
       "id": "b22e35409e73",
       "name": "1. 江西10MWh储能",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -915,7 +915,7 @@
     "2ef17e769b81": {
       "id": "2ef17e769b81",
       "name": "电价网站",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -928,7 +928,7 @@
     "8889d0b87307": {
       "id": "8889d0b87307",
       "name": "河南储能",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -941,7 +941,7 @@
     "fdf848d8646b": {
       "id": "fdf848d8646b",
       "name": "工商业储能",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -954,7 +954,7 @@
     "959767e797e4": {
       "id": "959767e797e4",
       "name": "./workspace/project/main",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -967,7 +967,7 @@
     "0ca8140fc20a": {
       "id": "0ca8140fc20a",
       "name": "~/.openclaw/workspace/backup_memory",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -980,7 +980,7 @@
     "ef98d32a6861": {
       "id": "ef98d32a6861",
       "name": "2026-02-20 储能循环次数计算",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -993,7 +993,7 @@
     "b6529024cffd": {
       "id": "b6529024cffd",
       "name": "`http://106.54.25.161/energy-bill-simple/`",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -1006,7 +1006,7 @@
     "28fe93e72d51": {
       "id": "28fe93e72d51",
       "name": "多Agent协作",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1019,7 +1019,7 @@
     "098ce5ab02aa": {
       "id": "098ce5ab02aa",
       "name": "2026-02-25 晚",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1032,7 +1032,7 @@
     "afbdf4c59a82": {
       "id": "afbdf4c59a82",
       "name": "1. 完整",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1045,7 +1045,7 @@
     "69a462c28148": {
       "id": "69a462c28148",
       "name": "2. 4阶段",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1058,7 +1058,7 @@
     "63fecba4d913": {
       "id": "63fecba4d913",
       "name": "3. 线下",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1071,7 +1071,7 @@
     "b8fa220f76a2": {
       "id": "b8fa220f76a2",
       "name": "5. 监控告警",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1084,7 +1084,7 @@
     "018a8fcad775": {
       "id": "018a8fcad775",
       "name": "7. 用户反馈",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1097,7 +1097,7 @@
     "507437ffd670": {
       "id": "507437ffd670",
       "name": "量化模拟炒股",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1110,7 +1110,7 @@
     "9ab70aebe4ad": {
       "id": "9ab70aebe4ad",
       "name": "储能电站不规则土地智能排布",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1123,7 +1123,7 @@
     "9ce285b330b4": {
       "id": "9ce285b330b4",
       "name": "国网电费清单处理",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1136,7 +1136,7 @@
     "4c057cb62860": {
       "id": "4c057cb62860",
       "name": "10-Agent协作",
-      "type": "project",
+      "type": "concept",
       "properties": {
         "category": "project"
       },
@@ -1149,7 +1149,7 @@
     "c259ee2085e9": {
       "id": "c259ee2085e9",
       "name": "pm命令",
-      "type": "skill",
+      "type": "concept",
       "properties": {
         "category": "skill"
       },
@@ -1158,476 +1158,62 @@
       ],
       "created_at": "2026-03-10T01:00:01.673196",
       "updated_at": "2026-03-10T01:00:01.673196"
+    },
+    "sys_001": {
+      "id": "sys_001",
+      "name": "知识库系统",
+      "type": "project",
+      "properties": {
+        "category": "system"
+      },
+      "sources": [
+        "knowledge-base/"
+      ],
+      "created_at": "2026-03-16T20:25:00",
+      "updated_at": "2026-03-16T20:25:00"
+    },
+    "sys_002": {
+      "id": "sys_002",
+      "name": "记忆系统",
+      "type": "system",
+      "properties": {
+        "category": "system"
+      },
+      "sources": [
+        "memory/"
+      ],
+      "created_at": "2026-03-16T20:25:00",
+      "updated_at": "2026-03-16T20:25:00"
+    },
+    "proj_001": {
+      "id": "proj_001",
+      "name": "测算工具全税务版",
+      "type": "project",
+      "properties": {
+        "category": "project"
+      },
+      "sources": [
+        "light-storage-charging/"
+      ],
+      "created_at": "2026-03-16T20:25:00",
+      "updated_at": "2026-03-16T20:25:00"
     }
   },
-  "relations": [
-    {
-      "source": "052393e49ef9",
-      "target": "cdc8e51f1f87",
-      "type": "uses",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
+  "relations": {
+    "储能_电价查询": {
+      "from": "储能",
+      "to": "电价查询",
+      "type": "依赖"
     },
-    {
-      "source": "85ac956513cb",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
+    "测算工具_储能": {
+      "from": "测算工具",
+      "to": "储能",
+      "type": "应用"
     },
-    {
-      "source": "85ac956513cb",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "85ac956513cb",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "22ac1f4cf509",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "22ac1f4cf509",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "22ac1f4cf509",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "0ce35df12c7f",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "0ce35df12c7f",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "0ce35df12c7f",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "7f6ce475e856",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "7f6ce475e856",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "7f6ce475e856",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "72734aee11b2",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "72734aee11b2",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "72734aee11b2",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "eba7ee01bf14",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "eba7ee01bf14",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "eba7ee01bf14",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f19b539b3456",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f19b539b3456",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f19b539b3456",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "94d74ab1e17a",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "94d74ab1e17a",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "94d74ab1e17a",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "145682dec048",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "145682dec048",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "a7234559e407",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "a7234559e407",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "cde93024195c",
-      "target": "2b83a14784e9",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "cde93024195c",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "cde93024195c",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f4aad5e4b288",
-      "target": "2b83a14784e9",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f4aad5e4b288",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "f4aad5e4b288",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "cdc8e51f1f87",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "cdc8e51f1f87",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "e4962149ba35",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "e4962149ba35",
-      "target": "86e02ad60c16",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-07.md"
-      ]
-    },
-    {
-      "source": "afa9c9ba7415",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-03.md"
-      ]
-    },
-    {
-      "source": "afa9c9ba7415",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-03.md"
-      ]
-    },
-    {
-      "source": "afa9c9ba7415",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-03.md"
-      ]
-    },
-    {
-      "source": "c61a24b866bb",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "2026-03-09.md"
-      ]
-    },
-    {
-      "source": "1756ef34aff5",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026-02-22.md"
-      ]
-    },
-    {
-      "source": "fd8495a20b81",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026-02-22.md"
-      ]
-    },
-    {
-      "source": "fdbda02a449c",
-      "target": "2b83a14784e9",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026-02-22.md"
-      ]
-    },
-    {
-      "source": "fdbda02a449c",
-      "target": "db974238714c",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026-02-22.md"
-      ]
-    },
-    {
-      "source": "0ca8140fc20a",
-      "target": "2b83a14784e9",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026/03/2026-03-01.md"
-      ]
-    },
-    {
-      "source": "0ca8140fc20a",
-      "target": "aedb315f5643",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026/03/2026-03-01.md"
-      ]
-    },
-    {
-      "source": "0ca8140fc20a",
-      "target": "901d93e8d66b",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026/03/2026-03-01.md"
-      ]
-    },
-    {
-      "source": "0ca8140fc20a",
-      "target": "b670629695f1",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026/03/2026-03-01.md"
-      ]
-    },
-    {
-      "source": "0ca8140fc20a",
-      "target": "7714e5cf3c18",
-      "type": "implements",
-      "properties": {},
-      "sources": [
-        "archive/2026/03/2026-03-01.md"
-      ]
+    "知识库_记忆系统": {
+      "from": "知识库",
+      "to": "记忆系统",
+      "type": "包含"
     }
-  ]
+  }
 }

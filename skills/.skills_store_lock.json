@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "skills": {
+    "data-analyst": {
+      "name": "Data Analyst",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=data-analyst",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "ontology": {
+      "name": "Ontology",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=ontology",
+      "source": "skillhub",
+      "version": "0.1.2"
+    },
+    "openclaw-backup": {
+      "name": "OpenClaw Backup",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=openclaw-backup",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "image-cog": {
+      "name": "image-cog",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-cog",
+      "source": "skillhub",
+      "version": "1.0.2"
+    },
+    "cellcog": {
+      "name": "cellcog",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=cellcog",
+      "source": "skillhub",
+      "version": "1.0.21"
+    },
+    "image-edit": {
+      "name": "Image Editing",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-edit",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "image-process": {
+      "name": "Image Process",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-process",
+      "source": "skillhub",
+      "version": "0.1.0"
+    },
+    "imagemagick": {
+      "name": "ImageMagick Operations",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=imagemagick",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "screenshot-capture": {
+      "name": "Screenshot Capture",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=screenshot-capture",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "photo-restoration": {
+      "name": "Photo Restoration",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=photo-restoration",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "photo-colorization": {
+      "name": "Photo Colorization",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=photo-colorization",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "screenshot-skill": {
+      "name": "Screenshot Skill",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=screenshot-skill",
+      "source": "skillhub",
+      "version": "1.0.1"
+    },
+    "image-ocr": {
+      "name": "Image Ocr",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-ocr",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "image-optimizer-tool": {
+      "name": "Image Optimizer Tool",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-optimizer-tool",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "image-highlight-cropper": {
+      "name": "Image Highlight Cropper",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-highlight-cropper",
+      "source": "skillhub",
+      "version": "1.0.0"
+    },
+    "image-router": {
+      "name": "ImageRouter",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=image-router",
+      "source": "skillhub",
+      "version": "0.1.0"
+    },
+    "powerpoint-pptx": {
+      "name": "Powerpoint / PPTX",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=powerpoint-pptx",
+      "source": "skillhub",
+      "version": "1.0.1"
+    }
+  }
+}

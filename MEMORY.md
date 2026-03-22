@@ -104,7 +104,54 @@ API Key已配置：mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs
 
 ---
 
-## 🚨 会话恢复机制（已更新 v3.0）
+## 记忆更新 [2026-03-20]
+
+### [DECISION] 重要决策
+- **模型配置修复**：MiniMax 模型 id 改为 `minimax-cn/MiniMax-M2.7`（带前缀）
+- **Kimi Coding API Key 更新**：换成了新 key `sk-kimi-vmWHuNEuueGIo1Cc9zRy7PTTrQLIs3gAEgHkDCUMphSbXpcb6xAiwznaIs5KSKQn`
+
+### [DATA] 模型配置状态
+| 模型 | 命令 | API Key |
+|------|------|---------|
+| minimax-cn/MiniMax-M2.7 | `/model MiniMax-M2.7` | sk-cp-... |
+| bailian/kimi-k2.5 | `/model k2.5` | sk-sp-... |
+| bailian/qwen3.5-plus | `/model qwen` | sk-sp-... |
+| kimi-coding/k2p5 | `/model k2p5` | sk-kimi-vmWHu... ✅新 |
+
+### 问题解决
+- **问题**：MiniMax 显示 M2/M2.1 而不是 M2.7
+- **原因**：模型 id 缺少 `minimax-cn/` 前缀，匹配到了内置别名
+- **修复**：改为 `minimax-cn/MiniMax-M2.7` 后正常
+
+## 记忆更新 [2026-03-15]
+
+### [DECISION] 重要决策
+- 股票筛选从akshare迁移到东方财富妙想API
+- 自选股报告16:30定时推送，筛选报告20:00推送
+
+### [TODO] 待办事项
+- [x] 修复云服务器股票筛选
+- [x] 安装mx_selfselect skill
+- [x] 配置定时报告任务
+- [ ] 测试妙想API获取K线数据
+- [ ] 运行 screen_v4.py update 更新缓存
+- [ ] 验证 pageSize=500 是否有效
+
+### [PROJECT] 项目进展
+- **自选股系统**：6只自选股（锂矿+面板+半导体）
+- **定时推送**：16:30自选股报告，20:00筛选报告
+- **小说群**：oc_0c0c985c9ed4a8e98030d848240ac6bf
+- **股票筛选系统v2**：升级到缓存优先机制
+
+### [DATA] 关键数据
+- **今日筛选结果**：
+  - 月线MACD+KDJ金叉：3只（派诺科技、开滦股份、宁波建工）
+  - 周线MACD+KDJ金叉：6只（中国交建、山东路桥等）
+- **自选股**：盐湖股份、盛新锂能、赣锋锂业、山东海化、彩虹股份、中矿资源
+- **股票筛选系统v2升级**：
+  - 新增缓存机制（pageSize=500）
+  - 每天最多1000只股票缓存
+  - 待验证缓存是否有效
 
 ### 问题场景
 - AI 意外卡死，只能打 `/new` 强制新建
@@ -228,9 +275,11 @@ python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
 1. **需求确认**（Orchestrator）- 整理功能清单、评估任务等级
 2. **任务分配**（Orchestrator）- 拆解任务、明确输出路径
 3. **并行开发**（Builders）- 子Agent在本地创建文件
-4. **审查验证**（Reviewers）- 功能测试、代码审查、文件完整性检查
-5. **统一部署**（Orchestrator）- 使用 `scp` 上传到服务器
-6. **迭代优化**（循环）- 根据反馈继续完善
+4. **代码审查** - 使用 openclaw-coding 技能包审查代码质量
+5. **安全扫描** - 使用 security-scanner 技能包检查安全隐患
+6. **审查验证**（Reviewers）- 功能测试、代码审查、文件完整性检查
+7. **统一部署**（Orchestrator）- 使用 `scp` 上传到服务器
+8. **迭代优化**（循环）- 根据反馈继续完善
 
 **成功案例**：
 - **储能电站不规则土地智能排布系统** - http://106.54.25.161/storage-layout-ai/
@@ -537,6 +586,33 @@ media: "/tmp/test.png"  // 会失败
 
 ---
 
+## 记忆更新 [2026-03-20 晚间]
+
+### [DECISION] 重要决策
+- 修复 OpenClaw 模型名称配置问题（minimax-cn/MiniMax-M2.7）
+- 更新 kimi-coding API Key（新的可用 key）
+
+### [TODO] 待办事项
+- [ ] 继续跟踪璞泰来/贝特瑞股票走势
+- [ ] 验证 MiniMax-M2.7 模型稳定性
+
+### [PROJECT] 项目进展
+- **股票分析**：新增璞泰来、贝特瑞负极材料分析能力
+
+### [DATA] 关键数据
+- **璞泰来 (603659)**：总市值675亿，PE 28.6，PB 3.3，2024净利润11.9亿
+- **贝特瑞 (920185)**：总市值335亿，PE 37.3，PB 2.63，2024净利润9.3亿
+- **伊朗局势**：美以袭击伊朗进入第16-17天，油价上涨至110美元
+- **Intel 358H**：Arc B390核显(12 Xe核心)，核显性能提升77%
+
+### [STOCK] 股票分析结论
+**贝特瑞 vs 璞泰来**：
+- 估值：贝特瑞更便宜（PB 2.63 vs 3.3）
+- 成本：贝特瑞天然石墨不受石油价格影响
+- 逻辑：油价上涨→新能源需求增加→贝特瑞更受益
+
+---
+
 ## 安全与隐私准则 [2026-03-07 更新]
 
 ### 🔐 技能包分享安全规范
@@ -744,3 +820,436 @@ mv openclaw.json.bak openclaw.json
 - 故意改错配置会挂 → 验证恢复流程OK
 - 云服务器改坏不影响本地
 - 双保险更安全
+
+
+## 🔴 开发规则（必须遵守）
+
+### 标准开发流程
+1. 用户提出需求
+2. 我理解并写出方案
+3. **让用户确认**
+4. 用户说"去做吧" → 再开始开发
+5. 开发完成 → 让用户测试确认
+
+### 违反规则=猪
+- 不确认就改 = 猪
+- 用户没同意就做 = 猪
+- 擅自行动 = 猪
+
+
+
+---
+
+## 🔴 开发规则（永远记住）
+
+**需求确认流程：**
+1. 用户提出需求
+2. 我理解需求，写出方案
+3. **让用户确认（用户没说"去做吧"就不行动）**
+4. 开发
+5. 测试确认
+
+**违反=猪**：不确认就改、用户没说去做就行动
+
+- 开始新任务前手动保存：`ss "任务描述"`
+
+---
+
+## 🧠 模型配置 (2026-03-20 更新)
+
+### 当前模型命令
+
+| 命令 | 模型 | 说明 |
+|------|------|------|
+| `/model MiniMax-M2.7` | minimax-cn/MiniMax-M2.7 | 主用模型 |
+| `/model k2.5` | bailian/kimi-k2.5 | 百炼Kimi |
+| `/model qwen` | bailian/qwen3.5-plus | 通义千问 |
+| `/model k2p5` | kimi-coding/k2p5 | Kimi Coding |
+
+### 修复记录
+
+**问题**：模型名称不匹配，显示 M2/M2.1 而不是 M2.7
+**原因**：配置里模型 id 缺少 `minimax-cn/` 前缀，导致匹配到 OpenClaw 内置别名
+**修复**：
+- `openclaw.json`: 模型 id 从 `MiniMax-M2.7` 改为 `minimax-cn/MiniMax-M2.7`
+- `models.json`: 同上
+- `kimi-coding`: 更新 API Key 为 `sk-kimi-vmWHuNEuueGIo1Cc9zRy7PTTrQLIs3gAEgHkDCUMphSbXpcb6xAiwznaIs5KSKQn`
+
+---
+
+## 记忆更新 [2026-03-20 晚间]
+
+### [DECISION] 重要决策
+- 模型配置修复：minimax-cn/MiniMax-M2.7 模型 id 加了前缀，解决显示不一致问题
+- Kimi Coding API Key 更新：新 key `sk-kimi-vmWHuNEuueGIo1Cc9zRy7PTTrQLIs3gAEgHkDCUMphSbXpcb6xAiwznaIs5KSKQn`
+- 确定当前4个可用模型：MiniMax-M2.7, kimi-k2.5, qwen3.5-plus, kimi-for-coding
+
+### [PROJECT] 项目进展
+- **股票分析**：完成了璞泰来(603659) vs 贝特瑞(920185)估值对比分析
+- **地缘政治分析**：伊朗局势升级，美以冲突持续，油价影响分析
+
+### [DATA] 关键数据
+- **璞泰来**：股价31.60元，市值675亿，PE 28.6，PB 3.3，2024年净利润11.9亿
+- **贝特瑞**：股价29.45元，市值335亿，PE 37.3，PB 2.63，2024年净利润9.3亿
+- **伊朗局势**：美以袭击伊朗第16-17天，每天消耗约19亿美元
+- **油价**：目前约80-110美元区间
+
+### [STOCK] 投资分析结论
+- 贝特瑞估值更低（PB 2.63 vs 3.3），天然石墨不受石油价格影响
+- 伊朗冲突升级→油价上涨→新能源需求增加→贝特瑞受益
+- 但全球经济衰退概率上升（35-40%），需控制仓位
+- 建议：等局势明朗再入场，若买入贝特瑞不超过30%仓位
+
+### [TODO] 待办事项
+- [ ] 继续观察伊朗局势发展
+- [ ] 关注油价是否突破130美元
+- [ ] 关注霍尔木兹是否被封锁
+
+
+---
+
+## 记忆更新 [2026-03-21 上午]
+
+### [ANALYSIS] 比亚迪 (002594) 最新分析
+
+#### 核心事件：第二代刀片电池+兆瓦闪充 (2026-03-05)
+| 技术指标 | 数据 |
+|---------|------|
+| 10%-70%充电时间 | 5分钟 |
+| 10%-97%充电时间 | 9分钟 |
+| 零下30度充电 | 12分钟 |
+| 最高续航 | 1036km |
+
+#### 销量数据 (2026年2月)
+- 总销量：19.0万辆（春节因素）
+- 海外销量：10.1万辆（+50%），首次超越国内！
+- 海外占比：53%
+
+#### 储能出海
+- 保加利亚500MWh：已投运
+- 沙特12.5GWh：建设中
+
+#### [STOCK] 综合结论
+- 原油涨价整体利好比亚迪
+- 机构PE目标：16-24倍
+- 2026年净利润预期：400-486亿
+- 闪充技术+全产业链+储能出海三驱动
+
+### [INFO] 定时任务状态
+- 2026-03-20凌晨任务均未执行，仅备份成功
+
+---
+
+## 记忆更新 [2026-03-21 下午]
+
+### [STOCK] 比亚迪2026-2027目标价
+- **2026E净利润**：450-486亿（主流券商预测）
+- **目标价**：110-120元（当前103元，空间8-17%）
+- **催化剂**：闪充技术放量、海外工厂盈利、新产品周期
+- **风险**：价格战、原材料涨价、贸易壁垒
+
+### [STOCK] 负极材料行业市占率（2025年）
+| 排名 | 企业 | 出货量 | 特点 |
+|------|------|--------|------|
+| 1 | 贝特瑞 | 59.5万吨 | 全球第一 |
+| 2 | 杉杉股份 | 51.8万吨 | 国内第二 |
+| 3 | 中科星城 | 37.3万吨 | 第三 |
+| 4 | 尚太科技 | ~30万吨 | 高增长 |
+| 5 | 凯金新能源 | ~20万吨 | 未上市 |
+| 6 | 璞泰来 | 14.3万吨 | 增速放缓 |
+
+### [STOCK] 硅基负极技术路线
+- CVD硅碳：贝特瑞最领先，已量产
+- SiO氧化亚硅：贝特瑞、杉杉成熟量产
+- 多孔碳+Si：贝特瑞中试
+
+### [STOCK] 各公司2026 PE与目标价
+| 企业 | 2026 PE | 目标价 | 空间 |
+|------|---------|--------|------|
+| 尚太科技 | 15x | 90-100元 | +25-30% |
+| 杉杉股份 | 扭亏 | 16-20元 | +30-50% |
+| 璞泰来 | 21x | 32-37元 | +5-17% |
+| 贝特瑞 | 18-20x | 28-32元 | 一般 |
+
+---
+
+## 🏠 房产研究报告 [2026-03-21]
+
+### 正弘澜庭叙（惠济区）
+- **位置**：惠济区花园路东侧，迎宾路街道
+- **学校划片**：惠济区迎宾路小学 + 郑州四中实验学校（惠济区最好学校之一）
+- **价格**：约1.3-1.6万/㎡（二手房）
+- **特点**：次新房+品质好+物业优+学区佳
+- **配套**：2号线金达路站、福都广场
+
+### 正弘璟云筑（北龙湖北）
+- **位置**：北龙湖北岸·杨金片区核心
+- **价格**：约1.5-1.6万/㎡（精装）
+- **户型**：105-143㎡（2梯2户/1梯1户）
+- **配套**：4号线+规划6/20号线、金水区实验小学、四十七中东校区
+- **生态**：北龙湖、龙子湖、2湖3湿地4河7公园
+- **定位**：北龙湖改善盘，性价比高于南岸
+
+### 正弘系产品线
+| 产品 | 区域 | 价格 | 定位 |
+|------|------|------|------|
+| 正弘澜庭叙 | 惠济区 | 1.3-1.6万/㎡ | 改善 |
+| 正弘璟云筑 | 北龙湖北 | 1.5-1.6万/㎡ | 改善精装 |
+| 正弘序 | 高新区 | 2.3万/㎡ | 四代住宅大平层 |
+
+---
+
+## 🔥 MiniMax图片生成API（2026-03-21 新增）
+
+### 重要发现
+**Token Plan的Key可以直接用于图片生成！**
+
+### API配置
+| 项目 | 内容 |
+|------|------|
+| **API地址** | `https://api.minimaxi.com/v1/image_generation` |
+| **模型** | `image-01` |
+| **认证** | Bearer Token |
+| **Key格式** | `sk-cp-TaEn7XZHReif66...`（Token Plan的Key即可） |
+
+### 调用示例
+```bash
+curl -X POST "https://api.minimaxi.com/v1/image_generation" \
+  -H "Authorization: Bearer 你的TokenPlan Key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "image-01",
+    "prompt": "图片描述",
+    "aspect_ratio": "16:9",
+    "response_format": "url",
+    "n": 1
+  }'
+```
+
+### 参数
+- `model`: image-01
+- `prompt`: 图片描述（英文效果更好）
+- `aspect_ratio`: 1:1、16:9、4:3、3:2、9:16 等
+- `n`: 1-9张
+- `style_type`: 漫画、元气、中世纪、水彩
+
+### 雪子的Key（已验证可用）
+- 格式：sk-cp-TaEn7XZHReif66-VaxR-UZJuHCoYYYqho4xu6pV22L3MtAL9oImB0iubia4dRjZDN-0avV5_rSS2ggBC6w2gHYz1tYN0semS3mps1PrA9lS-16qJhoh8l3Q
+- 用途：M2.7对话 + 图片生成（Token Plan额度）
+
+
+---
+
+## 🎨 MiniMax图生图功能（2026-03-21 新增）
+
+### API信息
+| 项目 | 内容 |
+|------|------|
+| **API地址** | `https://api.minimaxi.com/v1/image_generation` |
+| **模型** | `image-01` |
+| **认证** | Bearer Token（Token Plan Key即可） |
+
+### 图生图参数
+```json
+{
+  "model": "image-01",
+  "prompt": "描述词",
+  "aspect_ratio": "1:1",
+  "response_format": "url",
+  "subject_reference": [
+    {
+      "type": "character",
+      "image_file": "data:image/jpeg;base64,<base64编码>"
+    }
+  ]
+}
+```
+
+### 限制
+- **只支持单张照片参考**（不能用多张）
+- 需要照片的base64编码
+- 图片需小于10MB
+
+### Python调用示例
+```python
+import requests
+import base64
+
+with open('photo.jpg', 'rb') as f:
+    img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+response = requests.post(
+    "https://api.minimaxi.com/v1/image_generation",
+    headers={"Authorization": "Bearer <Key>"},
+    json={
+        "model": "image-01",
+        "prompt": "描述场景",
+        "aspect_ratio": "1:1",
+        "response_format": "url",
+        "subject_reference": [{
+            "type": "character",
+            "image_file": f"data:image/jpeg;base64,{img_base64}"
+        }]
+    }
+)
+```
+
+
+---
+
+## 记忆更新 [2026-03-21 晚间]
+
+### [BREAKTHROUGH] MiniMax图片生成API接入
+
+#### API信息
+- **API地址**: `https://api.minimaxi.com/v1/image_generation`
+- **模型**: `image-01`
+- **Key**: Token Plan的Key (sk-cp-xxx) 可用
+- **认证**: Bearer Token
+
+#### 图生图参数（subject_reference）
+```python
+{
+    "model": "image-01",
+    "prompt": "场景描述",
+    "subject_reference": [{
+        "type": "character",
+        "image_file": "data:image/jpeg;base64,<照片base64>"
+    }]
+}
+```
+
+#### 限制
+- 只支持单张照片参考
+- 不能同时用多张（需要分步生成）
+- 真实人物泳装照拒绝
+- 政治人物体育恶搞场景可以
+
+#### 成功案例
+- 特朗普湖人23号隔扣 ✅
+- 永野一夏和服照 ✅
+- 永野一夏隔扣特朗普 ✅
+
+
+---
+
+## 记忆更新 [2026-03-22 上午]
+
+### [DECISION] 重要决策
+- **PPT制作工作流**：
+  - 雪子用Kimi深度思考生成内容框架
+  - 我用powerpoint-pptx + MiniMax生图组装PPT
+  - 发送PPTX给雪子本地编辑
+- **深度思考方案**：Kimi有原生深度思考，MiniMax无原生支持
+
+### [TODO] 待办事项
+- [ ] 安装 powerpoint-pptx 技能包
+- [ ] 整理PPT提示词模板文档
+
+### [PROJECT] 项目进展
+- **照片处理**：成功4x放大+云南大理洱海风景背景
+- **PPT制作系统**：确定工作流，等待安装powerpoint-pptx
+
+### [SKILL] 技能包更新
+- **已整理PPT技能包清单**：19个，推荐powerpoint-pptx
+- **已使用image-process**：放大、去背景、换背景
+
+
+---
+
+## 📊 PPT智能生成系统 (2026-03-22)
+
+### 工作流程
+
+```
+1️⃣ Kimi深度思考 → 生成PPT内容大纲（用户自己操作）
+         ↓
+2️⃣ 用户发送内容给我
+         ↓
+3️⃣ 我套用模板 + MiniMax生成配图 → 生成完整PPTX
+         ↓
+4️⃣ 发送PPTX给用户
+```
+
+### 模板文件
+
+| 文件 | 路径 | 说明 |
+|------|------|------|
+| 用户模板 | `/Users/zhaoruicn/.openclaw/media/inbound/中东部地区中型化工园区深度零碳解决方案---354689ed-b505-4ab4-a5a1-0f38fe6c7e40.pptx` | 用户提供的参考模板，46页 |
+| 精美模板V2 | `/Users/zhaoruicn/.openclaw/workspace/zero_carbon_template_v2.pptx` | 我按模板风格做的演示模板，5页 |
+
+### 模板特点
+
+- **配色**：深蓝(#0A2864) + 翠绿(#00B488) 渐变
+- **比例**：16:9宽屏
+- **元素**：渐变背景、装饰圆形、卡片布局、彩色标签
+- **结构**：封面、目录、章节页、内容页（含数据卡片/双栏）、结尾页
+- **页码**：右下角标注
+
+### 技术实现
+
+```python
+# python-pptx 生成PPT
+from pptx import Presentation
+from pptx.util import Inches, Pt
+from pptx.dml.color import RGBColor
+
+# MiniMax生成配图
+curl -X POST "https://api.minimaxi.com/v1/image_generation" \
+  -H "Authorization: Bearer <Token Plan Key>" \
+  -d '{"model":"image-01","prompt":"...","aspect_ratio":"16:9"}'
+```
+
+### 提示词模板（发给Kimi）
+
+```
+请帮我深度思考并生成一份关于【主题】的PPT大纲和详细内容。
+
+要求：
+1. 生成一个完整的PPT框架（列出每一页的标题）
+2. 每页填充详细内容要点（bullet points形式）
+3. 标注需要配图的位置和图片描述
+4. 给出整体风格建议
+
+主题：【你的主题】
+```
+
+### 已安装技能
+
+- `powerpoint-pptx` - PPTX编辑技能
+- `python-pptx` - Python PPT生成库（版本1.0.2）
+
+### 记住要点
+
+1. 用户先去Kimi深度思考生成内容
+2. 用户发送内容给我
+3. 我使用python-pptx套模板生成PPTX
+4. 用MiniMax image-01生成配图并插入
+5. 发送完整PPT给用户
+
+
+## 记忆更新 [2026-03-22 傍晚]
+
+### [DECISION] Claude Code Orchestrator 模式确立
+- **我(Orchestrator)**：统筹协调、分析需求、审核质量
+- **Claude Code(Builder)**：执行写代码、改配置等执行任务
+- **工作流程**：需求分析→架构设计→雪子确认→Claude Code执行→我审核→交付
+- **配置修改**：优先派给Claude Code，更稳定不易出错
+- **代码审查**：Claude Code可做代码质量/安全审查（已验证）
+
+### [PROJECT] Claude Code 集成
+- Claude Code v2.1.81 已安装，配置MiniMax M2.7 API
+- 命令：`claude --add-dir <dir> --dangerously-skip-permissions --print "<task>"`
+- 项目目录：~/.openclaw/workspace/projects/
+- 验证案例：计算器程序(网页版)、技能包审查、云服务器审查
+
+### [PROJECT] 审查工作完成
+- 技能包审查：62个，补充4个SKILL.md，删除2个空壳
+- OpenClaw配置审查：发现API密钥明文(暂缓修复)、配置重复
+- 云服务器网站审查：117个文件，中风险2个(stock XSS、dashboard IP)，暂不修复
+
+### [PROJECT] 系统架构确定
+- Mac mini：服务器角色，24小时运行OpenClaw+Claude Code
+- 笔记本(天选Air AMD 350)：外出用飞书app连接我
+- Claude Code：仅在Mac mini上运行，我作为调度入口
+

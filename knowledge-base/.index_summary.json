@@ -1,0 +1,32 @@
+{
+  "total": 19,
+  "categories": {
+    "cron": 2,
+    "memory": 8,
+    "system": 7,
+    "backup": 1,
+    "20260309待办事项": 1
+  },
+  "recent": [
+    {
+      "title": "2026-03-05",
+      "category": "memory"
+    },
+    {
+      "title": "2026-03-11",
+      "category": "memory"
+    },
+    {
+      "title": "2026-03-10",
+      "category": "memory"
+    },
+    {
+      "title": "2026-03-10-system-redesign-proposal",
+      "category": "system"
+    },
+    {
+      "title": "phase2_completion_report",
+      "category": "system"
+    }
+  ]
+}

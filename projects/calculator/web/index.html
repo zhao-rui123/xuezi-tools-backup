@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0d0d0f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .calculator {
+      background: #16161a;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05);
+      width: 340px;
+    }
+
+    .display {
+      background: #0d0d0f;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      text-align: right;
+      min-height: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .display-expression {
+      color: #5c5c6a;
+      font-size: 14px;
+      min-height: 20px;
+      word-break: break-all;
+    }
+
+    .display-result {
+      color: #e8e8ed;
+      font-size: 32px;
+      font-weight: 300;
+      word-break: break-all;
+      line-height: 1.2;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      background: #1e1e24;
+      border: none;
+      border-radius: 10px;
+      color: #c0c0cc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      padding: 18px 0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:hover {
+      background: #28282f;
+    }
+
+    button:active {
+      background: #323238;
+      transform: scale(0.96);
+    }
+
+    button.fn {
+      background: #1a1a20;
+      color: #7eb8f7;
+      font-size: 14px;
+    }
+
+    button.fn:hover {
+      background: #222228;
+    }
+
+    button.op {
+      background: #2a2a35;
+      color: #c9a0ff;
+    }
+
+    button.op:hover {
+      background: #35354a;
+    }
+
+    button.equals {
+      background: #7c5cff;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    button.equals:hover {
+      background: #8d70ff;
+    }
+
+    button.equals:active {
+      background: #6a4aee;
+    }
+
+    button.clear {
+      color: #ff7b7b;
+    }
+
+    button.span2 {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <div class="display-expression" id="expression"></div>
+      <div class="display-result" id="result">0</div>
+    </div>
+    <div class="buttons">
+      <button class="clear" onclick="clearAll()">AC</button>
+      <button class="fn" onclick="backspace()">DEL</button>
+      <button class="fn" onclick="input('(')">(</button>
+      <button class="fn" onclick="input(')')">)</button>
+
+      <button class="fn" onclick="fn('sin')">sin</button>
+      <button class="fn" onclick="fn('cos')">cos</button>
+      <button class="fn" onclick="fn('tan')">tan</button>
+      <button class="op" onclick="input('^')">^</button>
+
+      <button class="fn" onclick="fn('log')">log</button>
+      <button class="fn" onclick="fn('sqrt')">√</button>
+      <button class="fn" onclick="input('PI')">π</button>
+      <button class="op" onclick="input('/')">÷</button>
+
+      <button onclick="input('7')">7</button>
+      <button onclick="input('8')">8</button>
+      <button onclick="input('9')">9</button>
+      <button class="op" onclick="input('*')">×</button>
+
+      <button onclick="input('4')">4</button>
+      <button onclick="input('5')">5</button>
+      <button onclick="input('6')">6</button>
+      <button class="op" onclick="input('-')">−</button>
+
+      <button onclick="input('1')">1</button>
+      <button onclick="input('2')">2</button>
+      <button onclick="input('3')">3</button>
+      <button class="op" onclick="input('+')">+</button>
+
+      <button onclick="input('0')" class="span2">0</button>
+      <button onclick="input('.')">.</button>
+      <button class="equals" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const resultEl = document.getElementById('result');
+    const expressionEl = document.getElementById('expression');
+    let expression = '';
+    let lastResult = null;
+
+    function updateDisplay() {
+      resultEl.textContent = expression || '0';
+      expressionEl.textContent = expression;
+    }
+
+    function input(val) {
+      if (lastResult !== null && !isOperator(val)) {
+        expression = '';
+        lastResult = null;
+      }
+      if (lastResult !== null && isOperator(val)) {
+        expression = lastResult.toString();
+        lastResult = null;
+      }
+      expression += val;
+      updateDisplay();
+    }
+
+    function isOperator(val) {
+      return ['+', '-', '*', '/', '^'].includes(val);
+    }
+
+    function fn(name) {
+      let val = resultEl.textContent;
+      if (val === '0' || lastResult !== null) {
+        val = lastResult !== null ? lastResult.toString() : '0';
+        expression = '';
+        lastResult = null;
+      }
+      let r;
+      const n = parseFloat(val);
+      switch(name) {
+        case 'sin': r = Math.sin(n * Math.PI / 180); break;
+        case 'cos': r = Math.cos(n * Math.PI / 180); break;
+        case 'tan': r = Math.tan(n * Math.PI / 180); break;
+        case 'log': r = Math.log10(n); break;
+        case 'sqrt': r = Math.sqrt(n); break;
+      }
+      lastResult = r;
+      expression = `${name}(${val})`;
+      updateDisplay();
+    }
+
+    function clearAll() {
+      expression = '';
+      lastResult = null;
+      updateDisplay();
+    }
+
+    function backspace() {
+      if (lastResult !== null) {
+        lastResult = null;
+        expression = '';
+      } else {
+        expression = expression.slice(0, -1);
+      }
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        let expr = expression
+          .replace(/×/g, '*')
+          .replace(/÷/g, '/')
+          .replace(/−/g, '-')
+          .replace(/π/g, Math.PI.toString())
+          .replace(/\^/g, '**');
+
+        // safety: only allow numbers, operators, parentheses, dot
+        if (!/^[\d+\-*/().%\s]+$/.test(expr)) {
+          resultEl.textContent = 'Error';
+          return;
+        }
+
+        const r = Function('"use strict"; return (' + expr + ')')();
+        lastResult = r;
+        resultEl.textContent = typeof r === 'number' && !isFinite(r) ? 'Error' : r;
+      } catch(e) {
+        resultEl.textContent = 'Error';
+        lastResult = null;
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      const key = e.key;
+      if (key >= '0' && key <= '9') input(key);
+      else if (key === '.') input('.');
+      else if (key === '+') input('+');
+      else if (key === '-') input('-');
+      else if (key === '*') input('*');
+      else if (key === '/') input('/');
+      else if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
+      else if (key === 'Backspace') backspace();
+      else if (key === 'Escape') clearAll();
+      else if (key === '(') input('(');
+      else if (key === ')') input(')');
+      else if (key === '^') input('^');
+    });
+  </script>
+</body>
+</html>

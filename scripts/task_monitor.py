@@ -15,6 +15,7 @@ MEMORY_DIR = WORKSPACE / "memory"
 NOTIFICATION_FILE = MEMORY_DIR / "task_notifications.json"
 
 # 每日任务（22:00-08:00）→ 每天早上8点统一汇总
+# 注意：Memory Suite v4.0 的任务日志都在 /tmp/memory-suite.log 中
 DAILY_TASKS = {
     "22:00-backup": {
         "name": "每日备份",
@@ -24,33 +25,38 @@ DAILY_TASKS = {
     },
     "23:00-evolution": {
         "name": "每日自我进化",
-        "log_file": "/tmp/evolution-daily.log",
+        "log_file": "/tmp/memory-suite.log",  # Memory Suite v4.0 统一日志
         "schedule": "23:00",
-        "group": "night"
+        "group": "night",
+        "log_pattern": "evolution-daily"  # 在日志中搜索的关键词
     },
     "00:30-ums-daily": {
         "name": "每日记忆归档",
-        "log_file": "/tmp/ums-daily.log",
+        "log_file": "/tmp/memory-suite.log",  # Memory Suite v4.0 统一日志
         "schedule": "00:30",
-        "group": "early"
+        "group": "early",
+        "log_pattern": "archive"
     },
     "01:00-knowledge-graph": {
         "name": "知识图谱自动更新",
-        "log_file": "/tmp/ums-graph.log",
+        "log_file": "/tmp/memory-suite.log",  # Memory Suite v4.0 统一日志
         "schedule": "01:00",
-        "group": "early"
+        "group": "early",
+        "log_pattern": "knowledge-graph"
     },
     "01:00-kb-sync": {
         "name": "每日知识同步",
-        "log_file": "/tmp/kb-integration.log",
-        "schedule": "01:00",
-        "group": "early"
+        "log_file": "/tmp/memory-suite.log",  # Memory Suite v4.0 统一日志
+        "schedule": "06:00",  # 实际执行时间是6:00
+        "group": "early",
+        "log_pattern": "knowledge-sync"
     },
-    "01:00-ums-cron": {
-        "name": "统一记忆系统归档",
-        "log_file": "/Users/zhaoruicn/.openclaw/workspace/memory/cron.log",
-        "schedule": "01:00",
-        "group": "early"
+    "03:00-log-rotate": {
+        "name": "日志轮转",
+        "log_file": "/tmp/memory-suite-maintenance.log",  # 维护日志
+        "schedule": "03:00",
+        "group": "early",
+        "log_pattern": "统一日志轮转"
     }
 }
 
@@ -72,18 +78,21 @@ SUNDAY_TASKS = {
 MONDAY_TASKS = {
     "03:00-file-cleanup": {
         "name": "文件清理",
-        "log_file": "/tmp/file-cleanup.log",
-        "schedule": "03:00 (周一)"
+        "log_file": "/tmp/memory-suite-maintenance.log",  # Memory Suite v4.0 统一维护日志
+        "schedule": "03:00 (周一)",
+        "log_pattern": "系统清理"
     },
-    "04:00-security-scan": {
-        "name": "每周安全扫描",
-        "log_file": "/tmp/system-guard-scan.log",
-        "schedule": "04:00 (周一)"
+    "04:00-health-check": {
+        "name": "每周健康检查",
+        "log_file": "/tmp/memory-suite-maintenance.log",  # Memory Suite v4.0 统一维护日志
+        "schedule": "04:00 (周一)",
+        "log_pattern": "健康检查"
     },
-    "05:00-kb-maintenance": {
-        "name": "每周知识库维护",
-        "log_file": "/tmp/kb-maintenance.log",
-        "schedule": "05:00 (周一)"
+    "06:30-analyze-daily": {
+        "name": "每日分析",
+        "log_file": "/tmp/memory-suite.log",  # Memory Suite v4.0 主日志
+        "schedule": "06:30 (周一)",
+        "log_pattern": "analyze-daily"
     }
 }
 
@@ -143,6 +152,7 @@ def save_notifications(data):
 def check_task_status(task_id, task_info, check_date):
     """检查任务在指定日期的状态"""
     log_file = Path(task_info["log_file"])
+    log_pattern = task_info.get("log_pattern")
     
     if not log_file.exists():
         return {"status": "no_log", "time": "-"}
@@ -152,15 +162,68 @@ def check_task_status(task_id, task_info, check_date):
     check_date_start = check_date.replace(hour=0, minute=0, second=0, microsecond=0)
     check_date_end = check_date_start + timedelta(days=1)
     
+    # 如果有日志模式，直接在日志内容中搜索（不依赖文件修改时间）
+    if log_pattern:
+        pass  # 继续搜索模式
     # 检查是否是指定日期完成的
-    if mtime < check_date_start or mtime >= check_date_end:
+    elif mtime < check_date_start or mtime >= check_date_end:
         return {"status": "not_run", "time": "-"}
     
-    # 读取日志最后几行判断状态
     try:
         with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
-            lines = f.readlines()
-            last_lines = ''.join(lines[-20:]) if lines else ""
+            content = f.read()
+            lines = content.split('\n')
+        
+        # 如果有指定日志模式，搜索包含该模式的行
+        if log_pattern:
+            # 查找指定日期内包含模式的行
+            date_str = check_date.strftime("%Y-%m-%d")
+            matching_lines = []
+            for i, line in enumerate(lines):
+                if date_str in line:
+                    # 检查当前行是否包含模式，或者时间匹配
+                    if log_pattern in line:
+                        matching_lines.append((i, line))
+                    else:
+                        # 检查前后几行的上下文
+                        context = ''.join(lines[max(0,i-2):i+3])
+                        if log_pattern in context:
+                            matching_lines.append((i, line))
+            
+            if matching_lines:
+                # 获取最后一个匹配行的索引和行内容
+                last_match_idx, last_match_line = matching_lines[-1]
+                context_lines = lines[last_match_idx:last_match_idx+20]  # 检查后续20行
+                context = '\n'.join(context_lines)
+                
+                if "完成" in context or "success" in context.lower() or "✅" in context:
+                    status = "success"
+                elif "error" in context.lower() or "失败" in context or "❌" in context:
+                    status = "failed"
+                else:
+                    status = "unknown"
+                
+                # 提取时间 - Memory Suite 格式: "2026-03-17 00:30:00 [INFO] ..."
+                time_match = None
+                import re
+                # 匹配 HH:MM 或 HH:MM:SS 格式
+                time_patterns = re.findall(r'(\d{2}:\d{2}:\d{2})', last_match_line)
+                if time_patterns:
+                    time_match = time_patterns[0][:5]  # 取 HH:MM
+                else:
+                    time_patterns = re.findall(r'(\d{2}:\d{2})', last_match_line)
+                    if time_patterns:
+                        time_match = time_patterns[0]
+                
+                return {
+                    "status": status,
+                    "time": time_match if time_match else "-"
+                }
+            else:
+                return {"status": "not_run", "time": "-"}
+        
+        # 默认逻辑：检查最后几行
+        last_lines = '\n'.join(lines[-20:]) if lines else ""
         
         if "完成" in last_lines or "success" in last_lines.lower():
             status = "success"
@@ -273,7 +336,7 @@ def execute_auto_fix(action):
     
     return result
 
-def diagnose_task_failure(task_name, log_file):
+def diagnose_task_failure(task_name, log_file, check_date=None):
     """诊断任务失败原因"""
     diagnosis = {
         "reason": "未知",
@@ -290,9 +353,22 @@ def diagnose_task_failure(task_name, log_file):
     
     try:
         with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = f.readlines()
+        
+        # 如果有日期限制，只检查指定日期的日志
+        if check_date:
+            date_str = check_date.strftime("%Y-%m-%d")
+            log_content = ''.join([l for l in lines if date_str in l])
+        else:
             log_content = f.read()
         
-        # 常见错误模式匹配
+        # 如果没有找到指定日期的日志，说明任务确实没执行
+        if not log_content.strip():
+            diagnosis["reason"] = "任务未执行"
+            diagnosis["suggestion"] = f"在 {date_str} 没有找到任务日志"
+            return diagnosis
+        
+        # 常见错误模式匹配 - 更精确的匹配
         if "No space left" in log_content or "磁盘空间不足" in log_content:
             diagnosis["reason"] = "磁盘空间不足"
             diagnosis["suggestion"] = "清理旧日志文件或扩展磁盘空间"
@@ -424,7 +500,7 @@ def generate_daily_report(check_date=None):
                     break
             
             if log_file:
-                diagnosis = diagnose_task_failure(task["name"], log_file)
+                diagnosis = diagnose_task_failure(task["name"], log_file, check_date)
                 lines.append(f"\n🔍 {task['name']}:")
                 lines.append(f"  原因: {diagnosis['reason']}")
                 lines.append(f"  建议: {diagnosis['suggestion']}")
