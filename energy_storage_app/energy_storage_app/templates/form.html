@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线填写 - CALB工商业储能收资清单</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header h1 {
+            font-size: 1.3em;
+        }
+        .header a {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .header a:hover {
+            background: #00d4ff;
+            color: #1a1a2e;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .progress-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .progress-bar h4 {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        .progress-track {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .required-note {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffc107;
+        }
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 1.2em;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        .required-mark {
+            color: #dc3545;
+            margin-left: 3px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .checkbox-item:hover,
+        .radio-item:hover {
+            background: #e9ecef;
+        }
+        .checkbox-item input,
+        .radio-item input {
+            width: auto;
+        }
+        .inline-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .inline-inputs input {
+            width: 120px;
+        }
+        .inline-inputs span {
+            color: #666;
+        }
+        .file-upload {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload:hover {
+            border-color: #00d4ff;
+            background: rgba(0,212,255,0.05);
+        }
+        .file-upload input {
+            display: none;
+        }
+        .file-upload-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .file-upload-text {
+            color: #666;
+        }
+        .submit-section {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .btn-submit {
+            padding: 15px 50px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .flash-messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        .flash.success { background: #10b981; color: white; }
+        .flash.error { background: #ef4444; color: white; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✏️ CALB工商业储能收资清单 - 在线填写</h1>
+        <a href="/">返回首页</a>
+    </div>
+
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        <div class="progress-bar">
+            <h4>填写进度</h4>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <div class="required-note">
+            <strong>⚠️ 说明：</strong>1）标 * 为必填项；2）照片、图纸（CAD格式）类资料请上传附件。
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" id="mainForm">
+            <!-- 1、基本信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🏢</span> 1、基本信息
+                </div>
+
+                <div class="form-group">
+                    <label>*公司名称</label>
+                    <input type="text" name="company_name" required placeholder="请输入公司全称">
+                </div>
+
+                <div class="form-group">
+                    <label>*项目名称</label>
+                    <input type="text" name="project_name" required placeholder="请输入项目名称">
+                </div>
+
+                <div class="form-group">
+                    <label>*项目地点</label>
+                    <input type="text" name="project_location" required placeholder="请输入项目详细地址">
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group" style="flex: 1;">
+                        <label>*对接人</label>
+                        <input type="text" name="contact_person" required placeholder="姓名">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>*联系方式</label>
+                        <input type="tel" name="contact_phone" required placeholder="电话/手机">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>项目客户行业</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="冶金"> 冶金</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="有色"> 有色</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="机械"> 机械</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="轻工"> 轻工</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="纺织"> 纺织</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="烟草"> 烟草</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="商贸"> 商贸</label>
+                        <label class="checkbox-item"><input type="checkbox" name="industry" value="其他"> 其他</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*车辆吊装路径情况</label>
+                    <textarea name="vehicle_access" required placeholder="说明是否允许大规格的吊车或者板车进入场地"></textarea>
+                </div>
+            </div>
+
+            <!-- 2、配电信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <span>⚡</span> 2、配电信息
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group" style="flex: 1;">
+                        <label>*企业用电性质</label>
+                        <select name="power_type" required>
+                            <option value="">请选择</option>
+                            <option value="大工业">大工业</option>
+                            <option value="一般工商业">一般工商业</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>*计量电压等级</label>
+                        <select name="voltage_level" required>
+                            <option value="">请选择</option>
+                            <option value="35KV">35KV</option>
+                            <option value="10KV">10KV</option>
+                            <option value="380V">380V</option>
+                            <option value="220V">220V</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*主变容量</label>
+                    <div class="inline-inputs">
+                        <input type="number" name="transformer_capacity" required placeholder="容量">
+                        <span>kVA ×</span>
+                        <input type="number" name="transformer_count" placeholder="台数">
+                        <span>台</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*基本电价</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="basic_price" value="需量" required> 需量 ____ 元/kVA×月
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="basic_price" value="容量"> 容量 ____ 元/kVA×月
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*变压器开备情况</label>
+                    <textarea name="transformer_status" required placeholder="例：1000kVA 2台在运行，500kVA 1台备用"></textarea>
+                </div>
+
+                <div class="inline-inputs">
+                    <div class="form-group" style="flex: 1;">
+                        <label>*正常用电天数/年</label>
+                        <input type="number" name="usage_days" required placeholder="天数">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>*储能系统接入电网电压等级</label>
+                        <select name="storage_voltage" required>
+                            <option value="">请选择</option>
+                            <option value="10KV">10KV</option>
+                            <option value="380V">380V</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*用电情况描述</label>
+                    <div style="margin-bottom: 15px;">
+                        <span>（1）用电负荷（KW)：最大 </span>
+                        <input type="number" name="load_max" required style="width: 100px;"> kW
+                        <span>最小 </span>
+                        <input type="number" name="load_min" style="width: 100px;"> kW
+                        <span>平均 </span>
+                        <input type="number" name="load_avg" style="width: 100px;"> kW
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span>（2）全年白天和晚上用电是否均匀：</span>
+                        <input type="text" name="usage_uniform" style="width: 300px;">
+                    </div>
+                    <div>
+                        <span>（3）设备大修每年停工时间：</span>
+                        <input type="text" name="maintenance_time" style="width: 300px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>储能系统接入信息</label>
+                    <textarea name="backup_interval" placeholder="有无备用间隔供储能系统接入：☐有 ☐无，描述："></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>*储能及配电房之间的距离</label>
+                    <div class="inline-inputs">
+                        <span>距离</span>
+                        <input type="number" name="storage_distance" required style="width: 120px;">
+                        <span>米（电缆路径）</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3、其他信息 -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📝</span> 3、其他信息
+                </div>
+                <div class="form-group">
+                    <label>补充信息</label>
+                    <textarea name="other_info" placeholder="如有其他需要补充的信息，请在此填写" style="min-height: 150px;"></textarea>
+                </div>
+            </div>
+
+            <!-- 4、项目收资清单 -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📁</span> 4、项目收资清单
+                </div>
+
+                <div class="form-group">
+                    <label>*储能系统安装位置照片</label>
+                    <div class="file-upload" onclick="document.getElementById('file1').click()">
+                        <input type="file" id="file1" name="location_photo" accept="image/*" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">📷</div>
+                        <div class="file-upload-text" id="file1-text">点击上传图片文件</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*储能系统安装位置平面布局图 <span class="note-badge">CAD图纸</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file2').click()">
+                        <input type="file" id="file2" name="location_layout" accept=".dxf,.dwg,.pdf" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">📐</div>
+                        <div class="file-upload-text" id="file2-text">点击上传CAD文件</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>储能系统安装位置地下管线图 <span class="note-badge">CAD图纸</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file3').click()">
+                        <input type="file" id="file3" name="underground_pipeline" accept=".dxf,.dwg,.pdf" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">🔧</div>
+                        <div class="file-upload-text" id="file3-text">点击上传CAD文件</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*储能系统接入的变压器设备参数</label>
+                    <textarea name="transformer_params" required placeholder="请详细描述变压器参数"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>*以日为单位负载功率数据（最近6个月） <span class="note-badge">国网app可查看</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file4').click()">
+                        <input type="file" id="file4" name="load_data" accept=".xlsx,.xls,.csv,.pdf" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">📊</div>
+                        <div class="file-upload-text" id="file4-text">点击上传数据文件(Excel/CSV/PDF)</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*近12个月电费单（基本电费+电度电费） <span class="note-badge">电业局打印</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file5').click()">
+                        <input type="file" id="file5" name="electricity_bill" accept=".pdf,.xlsx,.xls,.jpg,.png" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">🧾</div>
+                        <div class="file-upload-text" id="file5-text">点击上传电费单文件</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*企业用电电气一次图 <span class="note-badge">CAD图纸</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file6').click()">
+                        <input type="file" id="file6" name="electrical_drawing" accept=".dxf,.dwg,.pdf" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">⚡</div>
+                        <div class="file-upload-text" id="file6-text">点击上传CAD文件</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>*配电室电气一次接线图 <span class="note-badge">CAD图纸</span></label>
+                    <div class="file-upload" onclick="document.getElementById('file7').click()">
+                        <input type="file" id="file7" name="distribution_drawing" accept=".dxf,.dwg,.pdf" onchange="handleFileSelect(this)">
+                        <div class="file-upload-icon">🔌</div>
+                        <div class="file-upload-text" id="file7-text">点击上传CAD文件</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="btn-submit">📤 提交收资清单</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleFileSelect(input) {
+            const fileName = input.files[0]?.name || '未选择文件';
+            const textId = input.id + '-text';
+            document.getElementById(textId).textContent = '已选择: ' + fileName;
+            document.getElementById(textId).style.color = '#10b981';
+        }
+
+        // 进度条更新
+        document.getElementById('mainForm').addEventListener('input', function() {
+            const requiredFields = document.querySelectorAll('[required]');
+            let filledCount = 0;
+            requiredFields.forEach(field => {
+                if (field.value.trim()) filledCount++;
+            });
+            const progress = (filledCount / requiredFields.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        });
+
+        // 3秒后自动隐藏flash消息
+        setTimeout(() => {
+            document.querySelectorAll('.flash').forEach(el => {
+                el.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

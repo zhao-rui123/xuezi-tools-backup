@@ -41,7 +41,7 @@ def main():
     print("开始Tushare选股筛选...")
     
     # 自选股列表
-    self_stocks = ["000792.SZ", "002240.SZ", "002460.SZ", "000822.SZ", "600707.SZ", "002738.SZ"]
+    self_stocks = ["002594.SZ", "002460.SZ", "002240.SZ", "600707.SZ", "000725.SZ", "000688.SZ", "08174.HK", "01772.HK"]
     
     results = []
     for code in self_stocks:
@@ -63,7 +63,7 @@ def main():
     print(msg)
     
     subprocess.run([
-        "openclaw", "message", "send",
+        "openclaw", "message", "send", "--channel", "feishu",
         "--target", GROUP_ID,
         "--message", msg
     ], capture_output=True, timeout=30)

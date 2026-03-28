@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "markdown-proxy": {
+      "source": "joeseesun/markdown-proxy",
+      "sourceType": "github",
+      "computedHash": "c2139eb8c3988335a1336fa6063892fbf6c9a65087f7d1dd29d32c979862ba1a"
+    }
+  }
+}

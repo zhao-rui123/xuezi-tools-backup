@@ -1,8 +1,0 @@
-# 小龙虾房子看板定时任务
-# 添加到 crontab: crontab -e
-
-# 每晚22:00推送飞书总结
-0 22 * * * cd ~/.openclaw/workspace/agent-dashboard-v2 && python3 daily_push.py >> /tmp/lobster_cron.log 2>&1
-
-# 每小时记录一次房间时间（防止重启丢失）
-0 * * * * cd ~/.openclaw/workspace/agent-dashboard-v2 && python3 -c "from tracker import get_tracker; get_tracker().save_data()" >> /tmp/lobster_cron.log 2>&1

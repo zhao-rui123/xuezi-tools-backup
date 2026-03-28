@@ -20,12 +20,12 @@ from stock_pattern_recognition import analyze_patterns
 FEISHU_USER_ID = "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579"
 
 WATCHLIST = [
-    ("002738", "中矿资源", "sz", "锂矿/资源"),
+    ("002594", "比亚迪", "sz", "新能源汽车"),
     ("002460", "赣锋锂业", "sz", "锂电池/新能源"),
-    ("000792", "盐湖股份", "sz", "盐湖提锂"),
     ("002240", "盛新锂能", "sz", "锂电池材料"),
-    ("000822", "山东海化", "sz", "化工/纯碱"),
     ("600707", "彩虹股份", "sh", "面板/显示"),
+    ("000725", "京东方A", "sz", "面板/显示"),
+    ("000688", "国城矿业", "sz", "有色金属"),
 ]
 
 MARKET_INDICES = {
@@ -347,7 +347,7 @@ def send_report(report):
         env['PATH'] = '/opt/homebrew/bin:' + env.get('PATH', '')
         
         result = subprocess.run(
-            ['openclaw', 'message', 'send', 
+            ['openclaw', 'message', 'send', '--channel', 'feishu',
              '--target', FEISHU_USER_ID,
              '--message', report],
             capture_output=True,

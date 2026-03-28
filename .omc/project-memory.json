@@ -1,0 +1,349 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774636744896,
+  "projectRoot": "/Users/zhaoruicn/.openclaw/workspace",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      },
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "18.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "5.0.8",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc && vite build",
+      "preview": "vite preview"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "assets",
+      "scripts"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "__pycache__": {
+      "path": "__pycache__",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1774636744882,
+      "keyFiles": [
+        "stock_analyzer_pro.cpython-314.pyc",
+        "stock_deep_analysis.cpython-314.pyc",
+        "stock_feishu_push_fusion.cpython-314.pyc",
+        "stock_mixed_push.cpython-314.pyc",
+        "stock_pattern_recognition.cpython-314.pyc"
+      ]
+    },
+    "agents": {
+      "path": "agents",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744882,
+      "keyFiles": []
+    },
+    "archive": {
+      "path": "archive",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744882,
+      "keyFiles": []
+    },
+    "assets": {
+      "path": "assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1774636744885,
+      "keyFiles": []
+    },
+    "auto-test-generator": {
+      "path": "auto-test-generator",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744886,
+      "keyFiles": []
+    },
+    "config": {
+      "path": "config",
+      "purpose": "Configuration files",
+      "fileCount": 1,
+      "lastAccessed": 1774636744886,
+      "keyFiles": [
+        "xueqiu.ini"
+      ]
+    },
+    "dashboard": {
+      "path": "dashboard",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774636744886,
+      "keyFiles": [
+        "dashboard_20260309.html"
+      ]
+    },
+    "electricity": {
+      "path": "electricity",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774636744886,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "energy_storage_app": {
+      "path": "energy_storage_app",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744886,
+      "keyFiles": []
+    },
+    "knowledge-base": {
+      "path": "knowledge-base",
+      "purpose": null,
+      "fileCount": 15,
+      "lastAccessed": 1774636744886,
+      "keyFiles": [
+        "Claude_Code_Workflow_Guide.md",
+        "Data_Analysis_Capability_Guide.md",
+        "Data_Analysis_Quick_Start.md",
+        "GUIDE.md",
+        "INDEX.md"
+      ]
+    },
+    "landing-zhongchuanghang": {
+      "path": "landing-zhongchuanghang",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774636744887,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "logs": {
+      "path": "logs",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1774636744887,
+      "keyFiles": [
+        "alert_state.json",
+        "alert_system.log",
+        "phase3_scheduler.log",
+        "phase3_scheduler_report.md",
+        "stock_push.log"
+      ]
+    },
+    "memory": {
+      "path": "memory",
+      "purpose": null,
+      "fileCount": 34,
+      "lastAccessed": 1774636744887,
+      "keyFiles": [
+        "2026-03-20.md",
+        "2026-03-21.md",
+        "2026-03-22.json",
+        "2026-03-22.md",
+        "2026-03-23.json"
+      ]
+    },
+    "minimax-output": {
+      "path": "minimax-output",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744887,
+      "keyFiles": []
+    },
+    "plugins": {
+      "path": "plugins",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744887,
+      "keyFiles": []
+    },
+    "reports": {
+      "path": "reports",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1774636744887,
+      "keyFiles": [
+        "OpenClaw系统全景报告.docx",
+        "clawhub-skills-report.md",
+        "new-skills-report.md",
+        "skills-dev-summary.md",
+        "xueqiu-integration-complete.md"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 43,
+      "lastAccessed": 1774636744888,
+      "keyFiles": [
+        "auto-save-session.sh",
+        "backup-check.sh",
+        "backup-server-website-full.sh",
+        "backup-server-website.sh",
+        "context-health.sh"
+      ]
+    },
+    "security-guard-skill": {
+      "path": "security-guard-skill",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1774636744888,
+      "keyFiles": [
+        "openclaw_guardian.tar.gz",
+        "zizw8kWK"
+      ]
+    },
+    "services": {
+      "path": "services",
+      "purpose": "Business logic services",
+      "fileCount": 1,
+      "lastAccessed": 1774636744888,
+      "keyFiles": [
+        "__init__.py"
+      ]
+    },
+    "skills": {
+      "path": "skills",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1774636744888,
+      "keyFiles": [
+        "INDEX.md",
+        "PRUNING_REPORT_2026-03-23.md",
+        "SKILL.md",
+        "SKILL_PACKAGE_REVIEW.md",
+        "_meta.json"
+      ]
+    },
+    "summary": {
+      "path": "summary",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774636744888,
+      "keyFiles": []
+    },
+    "tmp": {
+      "path": "tmp",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774636744888,
+      "keyFiles": [
+        "phase2_cleanup.log"
+      ]
+    },
+    "venv": {
+      "path": "venv",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1774636744889,
+      "keyFiles": [
+        "pyvenv.cfg"
+      ]
+    },
+    "electricity/api": {
+      "path": "electricity/api",
+      "purpose": "API routes",
+      "fileCount": 2,
+      "lastAccessed": 1774636744889,
+      "keyFiles": [
+        "price-data.js",
+        "prices.json"
+      ]
+    },
+    "electricity/assets": {
+      "path": "electricity/assets",
+      "purpose": "Static assets",
+      "fileCount": 12,
+      "lastAccessed": 1774636744890,
+      "keyFiles": [
+        "index-B-fEN_Ph.css",
+        "index-B2BCUyfQ.js",
+        "index-B2d_ZBer.css"
+      ]
+    },
+    "landing-zhongchuanghang/assets": {
+      "path": "landing-zhongchuanghang/assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1774636744890,
+      "keyFiles": []
+    },
+    "venv/bin": {
+      "path": "venv/bin",
+      "purpose": "Executable scripts",
+      "fileCount": 14,
+      "lastAccessed": 1774636744892,
+      "keyFiles": [
+        "Activate.ps1",
+        "activate",
+        "activate.csh"
+      ]
+    },
+    "venv/lib": {
+      "path": "venv/lib",
+      "purpose": "Library code",
+      "fileCount": 1,
+      "lastAccessed": 1774636744892,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

@@ -53,7 +53,7 @@ fi
 
 # 4. 检查 OpenClaw 状态
 echo "[4/4] 检查 OpenClaw 状态..."
-if pgrep -f "openclaw.*gateway" > /dev/null; then
+if launchctl list | grep -q "ai.openclaw.gateway"; then
     echo "  ✅ Gateway 运行中"
 else
     echo "  ⚠️ Gateway 未运行"

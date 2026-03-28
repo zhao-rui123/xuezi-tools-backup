@@ -17,7 +17,7 @@ else
 fi
 
 # 使用Python调用飞书API添加记录
-python3 << PYEOF
+python3 << 'PYEOF'
 import json
 import os
 from datetime import datetime
@@ -38,15 +38,11 @@ if token:
             "任务名称": "每日知识同步",
             "执行时间": timestamp,
             "状态": "✅ 成功",
-            "日志摘要": "$TASK",
-            "备注": "$(date '+%Y-%m-%d %H:%M')"
+            "日志摘要": "日常对话",
+            "备注": datetime.now().strftime("%Y-%m-%d %H:%M")
         }
     }
-    # 发送请求（简化版）
-    print("同步完成: $TASK")
+    print("同步完成")
 else:
     print("无飞书Token，跳过同步")
 PYEOF
-else
-    echo "无今日记忆文件"
-fi

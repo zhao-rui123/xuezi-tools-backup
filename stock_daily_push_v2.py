@@ -187,7 +187,7 @@ def send_report(report):
         env['PATH'] = '/opt/homebrew/bin:' + env.get('PATH', '')
         
         result = subprocess.run(
-            ['openclaw', 'message', 'send', 
+            ['openclaw', 'message', 'send', '--channel', 'feishu',
              '--target', FEISHU_USER_ID,
              '--message', report],
             capture_output=True,

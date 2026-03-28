@@ -242,6 +242,10 @@ ss "正在做的任务"
 - 定时任务汇总 (01:00)
 - 系统告警推送
 
+**⚠️ 重要规则：所有通知默认发送到广播群，不要发到私聊！**
+- 广播群ID: `oc_b14195eb990ab57ea573e696758ae3d5`
+- 用户ID: `ou_5a7b7ec0339ffe0c1d5bb6c5bc162579` (仅备用)
+
 **文件位置**:
 - 主脚本: `~/.openclaw/workspace/agents/kilo/broadcaster.py`
 - 配置文档: `~/.openclaw/workspace/memory/KILO_NOTIFICATION_SETUP.md`
@@ -289,17 +293,16 @@ python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
 
 ## 自选股列表
 
-| 股票名称 | 代码 | 行业 |
-|---------|------|------|
-| 赣锋锂业 | 002460 | 锂电池/新能源 |
-| 中矿资源 | 002738 | 锂矿/资源 |
-| 盐湖股份 | 000792 | 盐湖提锂 |
-| 盛新锂能 | 002240 | 锂电池材料 |
-| 山东海化 | 000822 | 化工/纯碱 |
-| 彩虹股份 | 600707 | 面板/显示 |
-| 中芯国际 | 688981 | 半导体/芯片 |
+| 股票名称 | 代码 | 市场 | 行业 |
+|---------|------|------|------|
+| 比亚迪 | 002594 | A股 | 新能源汽车 |
+| 比亚迪 | 08174.HK | 港股 | 新能源汽车 |
+| 赣锋锂业 | 002460 | A股 | 锂电池/新能源 |
+| 盛新锂能 | 002240 | A股 | 锂电池材料 |
+| 京东方A | 000725 | A股 | 面板/显示 |
+| 国城矿业 | 000688 | A股 | 矿业/铅锌 |
 
-**主题**: 锂矿+面板+半导体，新能源与硬科技产业链布局
+**主题**: 新能源汽车+面板显示+锂电材料
 
 ---
 
@@ -1252,4 +1255,430 @@ curl -X POST "https://api.minimaxi.com/v1/image_generation" \
 - Mac mini：服务器角色，24小时运行OpenClaw+Claude Code
 - 笔记本(天选Air AMD 350)：外出用飞书app连接我
 - Claude Code：仅在Mac mini上运行，我作为调度入口
+
+
+## 记忆更新 [2026-03-22 晚间]
+
+### [PROJECT] 微信插件安装
+- 安装了 `@tencent-weixin/openclaw-weixin` 插件
+- 连接成功但微信消息延迟严重，响应太慢
+- 决定放弃微信通道，继续只用飞书
+
+### [DECISION] 渠道决策
+- 微信插件保留但不使用
+- 主要沟通渠道：飞书（响应快）
+- 微信插件命令：`openclaw channels list`
+
+## 记忆更新 [2026-03-22 晚间] - 补充
+
+### [DECISION] 微信插件放弃
+- 微信插件反应太慢，聊天界面找不到入口
+- 决定放弃微信通道，继续只用飞书
+- 插件保留不卸载
+
+### [PROJECT] Claude Code + OpenClaw 协作模式
+- Claude Code v2.1.81 已配置MiniMax M2.7
+- 我作为Orchestrator统筹协调，Claude Code作为Builder执行
+- 简单任务直接写，复杂任务派给Claude Code
+- OpenClaw安全审查暂缓（API密钥明文问题）
+
+## 记忆更新 [2026-03-22 晚间] - 补充
+
+### [DECISION] 重要决策
+- 微信插件完全移除（延迟严重，无法正常使用）
+- 广播通知修复：所有脚本添加 `--channel feishu` 参数
+- 以后只用飞书作为主要沟通渠道
+
+### [PROJECT] 系统修复
+修复了以下脚本的飞书通知问题：
+- stock_report.py
+- tushare_screener.py
+- stock_eastmoney_push.py
+- stock_daily_push_v2.py
+- stock_daily_push_v3.py
+- stock_feishu_push_fusion.py
+- broadcaster.py (kilo广播专员)
+
+### [TODO] 待办事项
+- [x] 移除微信插件
+- [x] 修复所有飞书通知脚本
+
+## 记忆更新 [2026-03-22 晚间-补充]
+
+### [DECISION] 微信插件放弃
+- 微信插件连接成功但延迟严重
+- 决定放弃微信通道，继续只用飞书
+- 插件已删除（extensions目录已移除）
+
+### [FIX] 飞书通知修复
+- 问题：多个脚本发飞书消息时缺少 `--channel feishu`
+- 修复脚本：stock_report.py, tushare_screener.py, stock_eastmoney_push.py, stock_daily_push_v2/v3.py, stock_feishu_push_fusion.py, broadcaster.py
+- 所有发飞书消息的脚本现在都显式指定 `--channel feishu`
+
+---
+
+## MiniMax官方Skills仓库 (2026-03-23 新增)
+
+**来源**: https://github.com/MiniMax-AI/skills/
+**克隆位置**: `~/.openclaw/workspace/skills/minimax-skills/`
+**链接位置**: `~/.openclaw/workspace/skills/`
+
+### 已安装的10个Skill
+
+| Skill | 功能 | API需求 |
+|-------|------|--------|
+| minimax-pdf | PDF生成/填写/重排版（设计系统、色板、模板） | 部分需要 |
+| minimax-xlsx | Excel处理（XML模板，零损坏编辑，财务格式化） | 不需要 |
+| minimax-docx | Word处理（OpenXML SDK、C#） | 不需要 |
+| pptx-generator | PPT生成/编辑（PptxGenJS、设计系统） | 部分需要 |
+| frontend-dev | React/Next.js + Framer Motion/GSAP/Three.js | 需要 |
+| fullstack-dev | 全栈架构设计（12-Factor、Clean Architecture） | 不需要 |
+| android-native-dev | Android原生开发（Kotlin/Jetpack Compose） | 不需要 |
+| ios-application-dev | iOS开发（UIKit/SwiftUI） | 不需要 |
+| shader-dev | GLSL着色器（Ray Marching/Fluid/Particle） | 不需要 |
+| gif-sticker-maker | GIF制作（MiniMax图生视频） | 需要 |
+
+### 关键使用流程
+
+**1. minimax-pdf（CREATE/REFORMAT/FILL三模式）**
+```bash
+bash scripts/make.sh run --title "标题" --type proposal --accent "#2D5F8A" --content content.json --out report.pdf
+```
+
+**2. minimax-xlsx（READ/CREATE/EDIT/FIX/VALIDATE）**
+- READ: `xlsx_reader.py` + pandas
+- CREATE: XML模板 → 编辑XML → `xlsx_pack.py`
+- EDIT: XML unpack → edit → pack（绝不破坏原文件）
+- 核心规则：只修改指定单元格，其他不动
+
+**3. pptx-generator**
+- 尺寸: 10" x 5.625" (16:9)
+- 中文字体: Microsoft YaHei
+- 英文字体: Arial
+- 创建: PptxGenJS
+- 编辑: XML操作
+
+**4. frontend-dev（5步工作流）**
+1. 设计工程（UI设计）
+2. 动效系统（Framer Motion/GSAP）
+3. AI媒体生成（图/视频/音频）
+4. 说服文案（AIDA框架）
+5. 生成艺术（p5.js/Three.js）
+
+**5. fullstack-dev（6步开发流程）**
+1. 需求收集（Stack/DB/Auth/Real-time）
+2. 架构决策
+3. 后端开发
+4. 前端开发
+5. 集成测试
+6. 部署上线
+
+### Claude Code使用方式
+Claude Code不能直接触发skill，但可以**读取SKILL.md作为指导**，遵循skill里的工作流程和最佳实践。
+
+### 已删除重复Skill
+- office-pro（被minimax-pdf/xlsx/docx替代）
+- powerpoint-pptx（被pptx-generator替代）
+
+---
+
+## 记忆更新 [2026-03-24 晚间]
+
+### [WARNING] OpenClaw 升级警告 ⚠️
+- **问题**：新版本 OpenClaw 有严重问题
+- **决策**：禁止升级当前版本
+- **建议**：保持当前稳定版本，等待问题修复后再考虑升级
+
+
+---
+
+## 记忆更新 [2026-03-24]
+
+### [DECISION] 重要决策
+- **任务分流规则**：主对话只做协调，Claude Code和子Agent执行具体任务
+- **OpenClaw禁止升级**：新版本有严重破坏性重构问题，保持2026.3.13版本
+
+### [PROJECT] 山东电力现货储能套利分析
+- **数据来源**：雪子发送的2026现货.xlsx（山东1-3月现货市场数据，81天）
+- **策略对比**：
+  - 策略A（动态循环，价差≥200元/MWh）：日均1次，81%天数可执行
+  - 策略B（固定4h充+4h放）：日均价差457元/MWh，**最优**
+- **关键发现**：2月份充电均价-19元/MWh（负电价，充电赚钱！）
+- **100MWh系统**：每日收益约18万元，月收益约500万元
+
+### [DATA] 股票换仓分析
+- **操作**：卖40%中矿资源→赣锋锂业，周一清仓中矿→比亚迪
+- **结果**：换仓亏损1.9% vs 持有不动亏损9.4%，超额收益7.5%
+
+### [FIX] PPT发送路径
+- 飞书发文件：必须用workspace目录，不能用/tmp/
+- 正确路径：`/Users/zhaoruicn/.openclaw/workspace/xxx.pptx`
+
+
+---
+
+## 记忆更新 [2026-03-24 晚间-补充]
+
+### [WARNING] OpenClaw 新版本严重问题 ⚠️
+- **问题**：3.14+版本破坏性重构，插件瘫痪
+- **当前版本**：OpenClaw 2026.3.13 (61d171a) ✅ 稳定
+- **决策**：禁止升级，等待修复
+
+### [PROJECT] Claude Code 使用
+- 雪子在笔记本上通过 Trae 安装了 Claude Code
+- 雪子自己先用懂，再教我怎么更好地调用
+- 结论：OpenClaw(图形中枢) + Claude Code(命令行代码) 组合够用，不需要 Trae
+
+### [DATA] 今日关键发现
+- 山东现货储能：固定4h+4h策略最优，2月充电均价-19元/MWh（负电价）
+- 股票换仓：上周换仓操作减少亏损7.5%（超额收益）
+
+## 网站备份位置 (2026-03-25 新增)
+
+### 服务器备份
+- **路径**: `/usr/share/nginx/html/downloads/website_backup_20260325_174925.tar.gz`
+- **下载**: http://106.54.25.161/downloads/website_backup_20260325_174925.tar.gz
+- **大小**: 376 MB
+- **内容**: 包含主页(index.html)、全税务版测算(calculation.html)、储能收资清单等全部模块
+
+### 恢复方法
+```bash
+# 1. 下载备份
+sshpass -p 'Zr123456' scp root@106.54.25.161:/usr/share/nginx/html/downloads/website_backup_20260325_174925.tar.gz /tmp/
+
+# 2. 解压覆盖
+tar -xzvf website_backup_20260325_174925.tar.gz -C /usr/share/nginx/html/
+```
+
+### GitHub备份
+- **仓库**: https://github.com/zhao-rui123/xuezi-tools-backup
+- **原始index.html**: https://raw.githubusercontent.com/zhao-rui123/xuezi-tools-backup/main/index.html
+
+## 记忆更新 [2026-03-26 早间]
+
+### [DECISION] 重要决策
+- 默认模型改为 MiniMax-M2.7（bailian模型弃用，智商低）
+- Kimi Coding API Key 配置成功：
+  - Key: `sk-kimi-AMBdWAslYVqmYGINg6rdjZfLeVUkGmkDhHVPgmNlhRarVu7erJra3xjDLR7t6YY8`
+  - 端点: `https://api.kimi.com/coding`（非标准moonshot API）
+  - 配置位置: `providers.kimi-coding.apiKey`
+- 旧的两个 Kimi Key 已删除（已失效）
+
+### [PROJECT] 双电脑协同
+- 计划用 Tailscale 组网实现 Mac mini + 笔记本协同
+- 晚上回家测试（Mac mini + 笔记本都装 Tailscale）
+
+### [DATA] 模型状态
+| 模型 | 状态 | 用途 |
+|------|------|------|
+| minimax-cn/MiniMax-M2.7 | ✅ 默认 | 日常对话 |
+| kimi-coding/k2p5 | ✅ 可用 | 代码任务 |
+| bailian/kimi-k2.5 | ❌ 少用 | - |
+
+### [NOTE] Kimi Coding 配置要点（重要！）
+- 端点：`https://api.kimi.com/coding`
+- 格式：`anthropic-messages`
+- 必须配置 `apiKey` 在 `providers.kimi-coding` 下
+- 环境变量 `KIMI_API_KEY` 无效
+
+## 深度思考实现方式 [2026-03-26]
+
+### Claude Code 深度思考方法
+Claude Code 有独立的深度思考机制，不依赖模型原生 CoT（思维链）。
+
+**结论：MiniMax M2.7 + Claude Code = 可实现深度思考**
+
+之前错误认为 MiniMax M2.7 没有深度思考就做不了复杂推理，这是错的。
+
+Claude Code 内部有 `--thinking` 参数会自动启用思考模式分析问题，不管接什么模型。
+
+### 组合方式
+| 组件 | 作用 |
+|------|------|
+| MiniMax M2.7 | 默认模型，日常对话、调度 |
+| Claude Code | 复杂推理、代码任务（自带深度思考） |
+| kimi-coding/k2p5 | 代码辅助（已配置新key） |
+
+---
+
+## 🤖 Claude Code 双模型工作流程（2026-03-27）
+
+### 核心理念
+**官方模型做架构设计+验收，MiniMax模型做执行，雪子助手做调度+部署**
+
+### 工作流程
+```
+雪子下发任务
+    ↓
+1️⃣ Claude官方模型(Sonnet 4.6) → 任务分解 + 架构设计
+    ↓ 输出：架构图、任务清单、文件清单
+2️⃣ Claude MiniMax模型 → 执行开发
+    ↓ 输出：完成的代码
+3️⃣ Claude官方模型(Sonnet 4.6) → 验收审查
+    ↓ 输出：验收报告、问题清单
+4️⃣ 雪子助手(我) → 部署上线
+    ↓ 输出：上线确认
+```
+
+### 模型分工
+| 模型 | 角色 | 配置路径 |
+|------|------|---------|
+| **Claude官方 (Sonnet 4.6)** | 架构设计 + 验收 | `~/.claude/settings.json` (当前) |
+| **Claude MiniMax** | 主力执行 | `~/.claude/settings-minimax.json` (备份) |
+
+### Claude Code配置
+- **当前激活**: Claude官方 (Sonnet 4.6) - `~/.claude/settings.json`
+- **备份**: MiniMax配置 - `~/.claude/settings-minimax.json`
+- **切换命令**: `cp ~/.claude/settings-minimax.json ~/.claude/settings.json`
+
+### oh-my-claude 插件（已安装 2026-03-27）
+- Agents: document-writer, explore, frontend-ui-ux-engineer, librarian, multimodal-looker, oracle, sisyphus
+- Hooks: comment-checker, context-monitor, keyword-detector, think-mode, todo-continuation
+- Commands: sis.md
+
+### 适用场景
+- 大型Web应用开发
+- 多模块系统设计
+- 需要架构审查的复杂项目
+- 代码质量要求高的任务
+
+### 不适用场景
+- 简单问答（直接回答）
+- 已有明确步骤的任务（直接执行）
+- 紧急小修小改（快速处理）
+
+
+## 图片识别规则 [2026-03-26 更新]
+
+### 图片识别方式对比
+| 方式 | 准确率 | 适用场景 |
+|------|--------|---------|
+| OpenClaw 内置 VL-01 | 一般 | 简单图片（截图、照片） |
+| Claude Code + MiniMax MCP | ✅ 高 | **复杂图表（K线图、数据图）** |
+
+### 规则
+**优先使用 Claude Code + MiniMax MCP 进行图片识别**
+
+原因：
+- Claude Code 集成 MiniMax 的 `understand_image` 工具
+- 对复杂图表（股票K线、数据报表等）识别准确率更高
+- 赣锋锂业测试：OpenClaw识别错误，Claude Code正确
+
+### 触发条件
+- 用户发送图片并要求分析
+- 涉及复杂图表、数据图片
+- OpenClaw 内置识别结果存疑时
+
+### 使用方法
+```bash
+claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
+```
+
+---
+
+## 📋 双模型工作流实战案例：开发中创新航引流页面 (2026-03-27)
+
+### 项目背景
+为中创新航(CALB)开发储能业务引流页面，整合4个现有工具模块入口
+
+### 需求清单
+1. 公司名：中创新航（CALB）
+2. 主标题：中创新航储能业务工具包
+3. 包含4个模块：
+   - 电价查询：http://106.54.25.161/electricity/
+   - 测算工具包：http://106.54.25.161/calculation.html
+   - 工商储电费清单：http://106.54.25.161/energy-bill-v3/
+   - 储能收资：http://106.54.25.161:5002/
+4. 版权：2026年3月，中创新航工商业业务
+
+### 执行流程
+
+```
+雪子下发任务
+    ↓
+1️⃣ Claude官方(Sonnet 4.6) → 架构设计
+    - 输出：页面结构、文件布局、技术方案
+    ↓
+2️⃣ Claude MiniMax → 执行开发
+    - 创建 landing-zhongchuanghang/ 目录
+    - 编写 index.html（深色玻璃拟态风格）
+    - 上传到服务器
+    ↓
+3️⃣ Claude官方(Sonnet 4.6) → 验收审查
+    - 7项验收清单全部通过
+    ↓
+4️⃣ 雪子助手(我) → 部署上线
+    - 修复权限问题
+    - 生成二维码
+    - 发送至飞书
+```
+
+### 成果交付
+| 项目 | 内容 |
+|------|------|
+| **网页地址** | http://106.54.25.161/landing-zhongchuanghang/ |
+| **文件位置** | /usr/share/nginx/html/landing-zhongchuanghang/ |
+| **二维码** | landing-qrcode.png |
+
+### 技术亮点
+- 深色玻璃拟态风格与主页一致
+- 响应式布局（PC/手机）
+- DNS预解析加速
+- SEO meta标签完整
+- 粒子背景动效
+
+### 经验总结
+1. **官方模型做架构+验收**，MiniMax做执行，分工明确
+2. **先设计再开发**，避免返工
+3. **权限问题**：上传服务器后需 chmod 755
+4. **二维码生成**：使用qrcode库
+
+### Claude Code配置切换命令
+```bash
+# 切换到MiniMax（执行用）
+cp ~/.claude/settings-minimax.json ~/.claude/settings.json
+
+# 切换到官方Sonnet（架构/验收用）
+# 使用 timesniper转发 或 云端OpenClaw
+```
+
+---
+
+## 🚀 能力升级：Claude Multi-Agent系统 (2026-03-27)
+
+### 新增能力
+通过oh-my-claude，Claude Code现在支持Multi-Agent并行调度
+
+### Agent团队
+**sisyphus** - 主调度器（orchestrator）
+自动调度7个专业agent并行工作：
+| Agent | 专长 | 调用方式 |
+|-------|------|---------|
+| `sisyphus` | 主调度器，任务分解 | `claude --agent sisyphus` |
+| `oracle` | 战略咨询、架构决策 | `claude --agent oracle` |
+| `librarian` | 文档搜索、GitHub研究 | `claude --agent librarian` |
+| `explore` | 代码库探索 | `claude --agent explore` |
+| `frontend-ui-ux-engineer` | UI/UX设计 | `claude --agent frontend-ui-ux-engineer` |
+| `document-writer` | 技术文档写作 | `claude --agent document-writer` |
+| `multimodal-looker` | 图片/PDF/视觉分析 | `claude --agent multimodal-looker` |
+
+### 使用场景
+- 复杂任务分解和并行执行
+- 需要多专业协作的项目
+- 大型代码库分析和重构
+- 文档体系建设
+
+### 调用示例
+```bash
+claude --agent sisyphus "设计一个电商系统架构"
+# sisyphus会自动调度各专业agent
+```
+
+### 与OpenClaw Multi-Agent的关系
+| 系统 | 角色 |
+|------|------|
+| **OpenClaw Multi-Agent** | 雪子助手调度层，我管理 |
+| **oh-my-claude Agents** | Claude Code执行层，任务执行 |
+
+两者互补，共同实现复杂任务处理
 

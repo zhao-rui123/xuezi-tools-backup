@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>已提交记录 - CALB工商业储能收资清单</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.3em; }
+        .header a {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .header a:hover { background: #00d4ff; color: #1a1a2e; }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .toolbar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .toolbar h2 { color: #1a1a2e; }
+        .btn-export {
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-export:hover { opacity: 0.9; }
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+        tr:hover { background: #f8f9fa; }
+        .action-btn {
+            padding: 6px 15px;
+            background: #e9ecef;
+            color: #333;
+            border: none;
+            border-radius: 15px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .action-btn:hover { background: #00d4ff; color: white; }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+        .empty-state .icon { font-size: 4em; margin-bottom: 20px; }
+        .flash-messages {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        .flash.success { background: #10b981; color: white; }
+        .flash.error { background: #ef4444; color: white; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 已提交的收资清单</h1>
+        <a href="/">返回首页</a>
+    </div>
+
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        <div class="toolbar">
+            <h2>共 {{ submissions|length }} 条记录</h2>
+            {% if submissions %}
+            <a href="/submissions/export" class="btn-export">📥 导出全部数据</a>
+            {% endif %}
+        </div>
+
+        <div class="table-container">
+            {% if submissions %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>提交ID</th>
+                        <th>提交时间</th>
+                        <th>公司名称</th>
+                        <th>项目名称</th>
+                        <th>项目地点</th>
+                        <th>对接人</th>
+                        <th>联系方式</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sub in submissions %}
+                    <tr>
+                        <td><strong>{{ sub.id }}</strong></td>
+                        <td>{{ sub.submit_time }}</td>
+                        <td>{{ sub.company_name or '-' }}</td>
+                        <td>{{ sub.project_name or '-' }}</td>
+                        <td>{{ sub.project_location or '-' }}</td>
+                        <td>{{ sub.contact_person or '-' }}</td>
+                        <td>{{ sub.contact_phone or '-' }}</td>
+                        <td><a href="/submissions/{{ sub.id }}" class="action-btn">查看详情</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <div class="icon">📭</div>
+                <h3>暂无提交记录</h3>
+                <p>还没有人提交收资清单，快去<a href="/form" style="color: #00d4ff;">填写表单</a>吧！</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll('.flash').forEach(el => {
+                el.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中创新航储能业务工具包</title>
+    <meta name="description" content="中创新航为您提供电价查询、储能测算、电费清单管理等一站式工商业储能业务服务。">
+    <meta name="keywords" content="电价查询,储能测算,电费清单,能源管理,工商业储能">
+    <meta name="robots" content="index,follow">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="http://106.54.25.161">
+    <link rel="dns-prefetch" href="http://106.54.25.161">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e1b4b;
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+        
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+        
+        .bg-circle-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent-blue);
+            top: -200px;
+            left: -200px;
+        }
+        
+        .bg-circle-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent-purple);
+            bottom: -150px;
+            right: -150px;
+        }
+        
+        .bg-circle-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-cyan);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .logo-icon {
+            font-size: 24px;
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Modules Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        
+        .module-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+        
+        .module-card:hover::before {
+            opacity: 1;
+        }
+        
+        .module-card.card-1 { --card-color: #3b82f6; }
+        .module-card.card-2 { --card-color: #10b981; }
+        .module-card.card-3 { --card-color: #8b5cf6; }
+        .module-card.card-4 { --card-color: #f59e0b; }
+        
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .card-tag {
+            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--card-color);
+            font-weight: 500;
+            transition: gap 0.3s;
+        }
+        
+        .module-card:hover .card-link {
+            gap: 12px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px 16px;
+            }
+        }
+        
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); opacity: 0.3; }
+            50% { transform: translateY(-20px); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="bg-circle bg-circle-1"></div>
+        <div class="bg-circle bg-circle-2"></div>
+        <div class="bg-circle bg-circle-3"></div>
+    </div>
+    
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-text" style="font-size:28px;font-weight:700;letter-spacing:2px;">CALB</span>
+            </div>
+        </header>
+        
+        <!-- Hero -->
+        <section class="hero">
+            <h1 class="hero-title">中创新航储能业务工具包</h1>
+            <p class="hero-subtitle">一站式工商业储能业务服务，助力企业能源管理数字化升级</p>
+        </section>
+        
+        <!-- Modules Grid -->
+        <section class="modules-grid">
+            <!-- 电价查询 -->
+            <a href="http://106.54.25.161/electricity/" class="module-card card-1" target="_blank" rel="noopener">
+                <div class="card-icon">⚡</div>
+                <h2 class="card-title">电价查询</h2>
+                <p class="card-desc">分时电价实时查询与分析，覆盖全国31省份电价数据</p>
+                <div class="card-tags">
+                    <span class="card-tag">实时数据</span>
+                    <span class="card-tag">全国覆盖</span>
+                    <span class="card-tag">历史对比</span>
+                </div>
+                <span class="card-link">立即使用 →</span>
+            </a>
+            
+            <!-- 测算工具包 -->
+            <a href="http://106.54.25.161/calculation.html" class="module-card card-2" target="_blank" rel="noopener">
+                <div class="card-icon">🧮</div>
+                <h2 class="card-title">测算工具包</h2>
+                <p class="card-desc">储能投资与收益测算，支持IRR、回收期、度电成本分析</p>
+                <div class="card-tags">
+                    <span class="card-tag">IRR分析</span>
+                    <span class="card-tag">收益测算</span>
+                    <span class="card-tag">多场景</span>
+                </div>
+                <span class="card-link">立即使用 →</span>
+            </a>
+            
+            <!-- 工商储电费清单 -->
+            <a href="http://106.54.25.161/energy-bill-v3/" class="module-card card-3" target="_blank" rel="noopener">
+                <div class="card-icon">📋</div>
+                <h2 class="card-title">工商储电费清单</h2>
+                <p class="card-desc">储能电站电费清单管理，智能分析负荷曲线与储能优化</p>
+                <div class="card-tags">
+                    <span class="card-tag">负荷分析</span>
+                    <span class="card-tag">清单管理</span>
+                    <span class="card-tag">智能推荐</span>
+                </div>
+                <span class="card-link">立即使用 →</span>
+            </a>
+            
+            <!-- 储能收资 -->
+            <a href="http://106.54.25.161:5002/" class="module-card card-4" target="_blank" rel="noopener">
+                <div class="card-icon">📊</div>
+                <h2 class="card-title">储能收资</h2>
+                <p class="card-desc">储能项目数据收集与管理，标准化流程提升效率</p>
+                <div class="card-tags">
+                    <span class="card-tag">项目管理</span>
+                    <span class="card-tag">数据收集</span>
+                    <span class="card-tag">流程管理</span>
+                </div>
+                <span class="card-link">立即使用 →</span>
+            </a>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">© 2026年3月，中创新航工商业业务</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Preconnect to improve loading
+        function preconnectDomains() {
+            const domains = [
+                'http://106.54.25.161',
+                'http://106.54.25.161:5002'
+            ];
+            
+            domains.forEach(domain => {
+                const dnsPrefetch = document.createElement('link');
+                dnsPrefetch.rel = 'dns-prefetch';
+                dnsPrefetch.href = domain;
+                document.head.appendChild(dnsPrefetch);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            preconnectDomains();
+        });
+    </script>
+</body>
+</html>

@@ -62,5 +62,25 @@
     "time": "2026-03-22T08:00:01.216003",
     "success_count": 6,
     "failed_count": 0
+  },
+  "daily_report_2026-03-23": {
+    "time": "2026-03-23T08:00:01.052524",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-24": {
+    "time": "2026-03-24T08:00:01.364570",
+    "success_count": 8,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-25": {
+    "time": "2026-03-25T08:00:00.587658",
+    "success_count": 6,
+    "failed_count": 0
+  },
+  "daily_report_2026-03-26": {
+    "time": "2026-03-26T08:00:00.580738",
+    "success_count": 6,
+    "failed_count": 0
   }
 }

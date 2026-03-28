@@ -1,0 +1,10 @@
+{
+  "date": "2026-03-25",
+  "summary": "归档 → mx_search（API失效）",
+  "from_memory": [
+    "备用搜索 → multi-search-engine（Bing等，无需API）",
+    "归档 → mx_search（API失效）"
+  ],
+  "task_count": 2,
+  "timestamp": "2026-03-25T23:30:00.373078"
+}

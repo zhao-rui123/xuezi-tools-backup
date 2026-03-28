@@ -4,5 +4,6 @@
   "api_url": "https://mkapi2.dfcfs.com/finskillshub/api/claw/news-search",
   "api_key": "mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs",
   "enabled": true,
-  "installed_at": "2026-03-14"
+  "installed_at": "2026-03-14",
+  "updated_at": "2026-03-25"
 }

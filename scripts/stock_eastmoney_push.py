@@ -40,7 +40,7 @@ def parse_results(data: dict) -> list:
 def send_to_feishu(message: str):
     """发送到飞书"""
     cmd = [
-        "openclaw", "message", "send",
+        "openclaw", "message", "send", "--channel", "feishu",
         "--target", "oc_b14195eb990ab57ea573e696758ae3d5",
         "--message", message
     ]

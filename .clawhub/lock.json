@@ -84,6 +84,14 @@
     "powerpoint-pptx": {
       "version": "1.0.1",
       "installedAt": 1774147399379
+    },
+    "minimax-understand-image": {
+      "version": "1.0.3",
+      "installedAt": 1774242311484
+    },
+    "minimax-web-search": {
+      "version": "1.0.7",
+      "installedAt": 1774242509815
     }
   }
 }

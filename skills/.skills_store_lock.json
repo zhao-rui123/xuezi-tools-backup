@@ -102,6 +102,18 @@
       "zip_url": "https://lightmake.site/api/v1/download?slug=powerpoint-pptx",
       "source": "skillhub",
       "version": "1.0.1"
+    },
+    "minimax-understand-image": {
+      "name": "minimax-understand-image",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=minimax-understand-image",
+      "source": "skillhub",
+      "version": "1.0.3"
+    },
+    "minimax-web-search": {
+      "name": "minimax-web-search",
+      "zip_url": "https://lightmake.site/api/v1/download?slug=minimax-web-search",
+      "source": "skillhub",
+      "version": "1.0.7"
     }
   }
 }

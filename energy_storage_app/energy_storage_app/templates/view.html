@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线查看 - CALB工商业储能收资清单</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.5em;
+        }
+        .header a {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #00d4ff;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .header a:hover {
+            background: #00d4ff;
+            color: #1a1a2e;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #00d4ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            font-size: 1.5em;
+        }
+        .required-note {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffc107;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            width: 200px;
+        }
+        td {
+            background: white;
+        }
+        .required {
+            color: #dc3545;
+            margin-left: 5px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .checkbox-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .info-text {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .checklist li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+        .note-badge {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📋 CALB工商业储能收资清单 - 在线查看</h1>
+        <a href="/">返回首页</a>
+    </div>
+
+    <div class="container">
+        <div class="required-note">
+            <strong>说明：</strong>1）标 * 为必填项；2）照片、图纸（CAD格式）类资料请另以附件形式发送。
+        </div>
+
+        <!-- 1、基本信息 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">🏢</span>
+                1、基本信息
+            </div>
+            <table>
+                <tr>
+                    <th>*公司名称</th>
+                    <td colspan="5"></td>
+                </tr>
+                <tr>
+                    <th>*项目名称</th>
+                    <td></td>
+                    <th>*项目地点</th>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th>*对接人</th>
+                    <td></td>
+                    <th>*联系方式</th>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <th>项目客户行业</th>
+                    <td colspan="5">
+                        <div class="checkbox-group">
+                            <span class="checkbox-item">☐ 冶金</span>
+                            <span class="checkbox-item">☐ 有色</span>
+                            <span class="checkbox-item">☐ 机械</span>
+                            <span class="checkbox-item">☐ 轻工</span>
+                            <span class="checkbox-item">☐ 纺织</span>
+                            <span class="checkbox-item">☐ 烟草</span>
+                            <span class="checkbox-item">☐ 商贸</span>
+                            <span class="checkbox-item">☐ 其他</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>*车辆吊装路径情况</th>
+                    <td colspan="5">
+                        是否允许大规格的吊车或者板车进入：
+                        <div class="info-text">______________________________</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 2、配电信息 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">⚡</span>
+                2、配电信息
+            </div>
+            <table>
+                <tr>
+                    <th>*企业用电性质</th>
+                    <td>
+                        <div class="checkbox-group">
+                            <span class="checkbox-item">☐ 大工业</span>
+                            <span class="checkbox-item">☐ 一般工商业</span>
+                        </div>
+                    </td>
+                    <th>*计量电压等级</th>
+                    <td colspan="3">
+                        <div class="checkbox-group">
+                            <span class="checkbox-item">☐ 35KV</span>
+                            <span class="checkbox-item">☐ 10KV</span>
+                            <span class="checkbox-item">☐ 380V</span>
+                            <span class="checkbox-item">☐ 220V</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>*主变容量(kVA)</th>
+                    <td>______ kVA × ______ 台</td>
+                    <th>*基本电价</th>
+                    <td colspan="3">
+                        <div class="checkbox-group">
+                            <span class="checkbox-item">☐ 需量 ______ 元/kVA×月</span>
+                            <span class="checkbox-item">☐ 容量 ______ 元/kVA×月</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>*变压器开备情况</th>
+                    <td colspan="5">______ kVA ______ 台在运行，______ kVA ______ 台备用。</td>
+                </tr>
+                <tr>
+                    <th>*正常用电天数/年</th>
+                    <td>______ 天/年</td>
+                    <th>*储能系统接入电网电压等级</th>
+                    <td colspan="3">
+                        <div class="checkbox-group">
+                            <span class="checkbox-item">☐ 10KV</span>
+                            <span class="checkbox-item">☐ 380V</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>*用电情况描述</th>
+                    <td colspan="5">
+                        <div style="margin-bottom: 10px;">
+                            （1）用电负荷（KW)：最大 ______ 最小 ______ 平均 ______
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            （2）全年白天和晚上用电是否均匀：________________________
+                        </div>
+                        <div>
+                            （3）设备大修每年停工时间：________________________
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>储能系统接入信息</th>
+                    <td colspan="5">
+                        有无备用间隔供储能系统接入：☐有 ☐无，描述：________________________
+                    </td>
+                </tr>
+                <tr>
+                    <th>*储能及配电房之间的距离</th>
+                    <td colspan="5">
+                        距离：______ 米（电缆路径）
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 3、其他信息 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📝</span>
+                3、其他信息
+            </div>
+            <table>
+                <tr>
+                    <th>其他补充信息</th>
+                    <td colspan="5" style="height: 150px; vertical-align: top;">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 4、项目收资清单 -->
+        <div class="section">
+            <div class="section-title">
+                <span class="icon">📁</span>
+                4、项目收资清单
+            </div>
+            <ul class="checklist">
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*储能系统安装位置照片</strong>
+                        <span class="note-badge">图片格式</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*储能系统安装位置平面布局图</strong>
+                        <span class="note-badge">CAD图纸</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>储能系统安装位置地下管线图</strong>
+                        <span class="note-badge">CAD图纸</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*储能系统接入的变压器设备参数</strong>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*以日为单位负载功率数据（最近6个月）</strong>
+                        <span class="note-badge">国网app可查看</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*近12个月电费单（基本电费+电度电费）</strong>
+                        <span class="note-badge">电业局打印</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*企业用电电气一次图</strong>
+                        <span class="note-badge">CAD图纸</span>
+                    </div>
+                </li>
+                <li>
+                    <span>☐</span>
+                    <div>
+                        <strong>*配电室电气一次接线图</strong>
+                        <span class="note-badge">CAD图纸</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; padding: 30px 0;">
+            <a href="/form" style="display: inline-block; padding: 15px 40px; background: linear-gradient(90deg, #00d4ff, #00ff88); color: white; text-decoration: none; border-radius: 30px; font-size: 1.1em; font-weight: bold;">
+                ✏️ 在线填写此表格
+            </a>
+            <br><br>
+            <a href="/download/template" style="color: #666; text-decoration: none;">
+                📥 下载Excel模板
+            </a>
+        </div>
+    </div>
+</body>
+</html>

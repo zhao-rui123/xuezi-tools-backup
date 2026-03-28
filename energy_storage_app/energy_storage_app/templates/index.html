@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALB工商业储能收资清单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .card a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        .card a:hover {
+            opacity: 0.9;
+        }
+        .info-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .info-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info-section li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .info-section li:before {
+            content: "✓";
+            color: #00ff88;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            margin-top: 50px;
+            padding: 20px;
+        }
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .flash {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+        .flash.success {
+            background: #10b981;
+            color: white;
+        }
+        .flash.error {
+            background: #ef4444;
+            color: white;
+        }
+        .flash.warning {
+            background: #f59e0b;
+            color: white;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>CALB工商业储能收资清单</h1>
+            <p>在线查看、填写、下载 - 企业用户侧储能项目资料收集系统</p>
+        </div>
+
+        <div class="cards">
+            <div class="card" onclick="location.href='/view'">
+                <div class="card-icon">📋</div>
+                <h3>在线查看表格</h3>
+                <p>在浏览器中直接查看收资清单表格内容，无需下载</p>
+                <a href="/view">立即查看</a>
+            </div>
+
+            <div class="card" onclick="location.href='/form'">
+                <div class="card-icon">✏️</div>
+                <h3>在线填写</h3>
+                <p>直接在网页上填写收资信息，提交后自动保存</p>
+                <a href="/form">开始填写</a>
+            </div>
+
+            <div class="card" onclick="location.href='/download/template'">
+                <div class="card-icon">📥</div>
+                <h3>下载Excel模板</h3>
+                <p>下载Excel模板，线下填写后可通过网页上传提交</p>
+                <a href="/download/template">立即下载</a>
+            </div>
+
+            <div class="card" onclick="location.href='/import'">
+                <div class="card-icon">📤</div>
+                <h3>上传Excel提交</h3>
+                <p>下载模板填写后，上传Excel文件批量导入提交</p>
+                <a href="/import">上传Excel</a>
+            </div>
+
+            <div class="card" onclick="location.href='/submissions'">
+                <div class="card-icon">📊</div>
+                <h3>查看已提交</h3>
+                <p>查看所有已提交的收资清单记录，支持导出</p>
+                <a href="/submissions">查看记录</a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📌 使用说明</h2>
+            <ul>
+                <li>标 * 的项目为必填项，请确保填写完整</li>
+                <li>照片、图纸（CAD格式）类资料请以附件形式上传</li>
+                <li>提交的数据可在"查看已提交"页面进行管理和导出</li>
+                <li>所有数据将保存在服务器本地，请妥善保管提交记录</li>
+                <li>如需修改已提交的信息，请联系管理员</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>CALB工商业储能收资清单系统 | 技术支持</p>
+        </div>
+    </div>
+
+    <script>
+        // 3秒后自动隐藏flash消息
+        setTimeout(() => {
+            document.querySelectorAll('.flash').forEach(el => {
+                el.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 3000);
+    </script>
+</body>
+</html>

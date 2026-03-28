@@ -5,7 +5,7 @@
 #
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
-export HOME="/Users/YOUR_USERNAME"
+export HOME="/Users/zhaoruicn"
 
 BACKUP_DIR="/Volumes/cu/ocu"
 LOG_FILE="/tmp/backup_memory.log"
@@ -13,8 +13,8 @@ DATE=$(date +%Y%m%d)
 DATETIME=$(date +%Y%m%d_%H%M%S)
 
 # 源目录
-MEMORY_SOURCE="/Users/YOUR_USERNAME/.openclaw/workspace/memory"
-WORKSPACE_SKILLS_SOURCE="/Users/YOUR_USERNAME/.openclaw/workspace/skills"
+MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
+WORKSPACE_SKILLS_SOURCE="/Users/zhaoruicn/.openclaw/workspace/skills"
 
 # 日志函数
 log() {
@@ -205,6 +205,15 @@ create_archive() {
         --exclude='*.pyc' \
         --exclude='.DS_Store' \
         --exclude='*.backup' \
+        --exclude='venv' \
+        --exclude='node_modules' \
+        --exclude='image-process/node_modules' \
+        --exclude='electricity-v2' \
+        --exclude='electricity-price-v2' \
+        --exclude='projects' \
+        --exclude='*.log' \
+        --exclude='.git' \
+        --exclude='.svn' \
         -C "$BACKUP_DIR" \
         memory-backup/ \
         skills-backup/ \
