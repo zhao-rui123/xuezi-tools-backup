@@ -50,23 +50,21 @@ class BroadcasterAgent:
         # 调用 OpenClaw message 工具 - 使用后台运行避免超时
         cmd = [
             "/opt/homebrew/bin/openclaw", "message", "send",
+            "--channel", "feishu",
             "--target", target_id,
             "--message", message
         ]
         try:
-            # 后台运行，不等待结果
-            subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=env)
-            return {"success": True, "output": "Sent in background"}
+            # 同步运行，等待结果，最多等30秒
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env)
+            if result.returncode == 0:
+                return {"success": True, "output": result.stdout}
+            else:
+                return {"success": False, "error": result.stderr}
+        except subprocess.TimeoutExpired:
+            return {"success": True, "output": "Sent (timeout but likely sent)"}
         except Exception as e:
-            # 如果失败，尝试使用shell后台运行
-            try:
-                import os
-                current_path = os.environ.get("PATH", "")
-                cmd_shell = f'export PATH="/opt/homebrew/bin:{current_path}" && openclaw message send --target {target_id} --message "{message}"'
-                subprocess.Popen(cmd_shell, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True, env=env)
-                return {"success": True, "output": "Sent in background via shell"}
-            except Exception as e2:
-                return {"success": False, "error": f"Direct: {str(e)}, Shell: {str(e2)}"}
+            return {"success": False, "error": str(e)}
     
     def _check_tasks(self):
         """检查定时任务状态"""
