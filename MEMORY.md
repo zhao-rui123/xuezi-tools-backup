@@ -1548,26 +1548,23 @@ Claude Code 内部有 `--thinking` 参数会自动启用思考模式分析问题
 - 紧急小修小改（快速处理）
 
 
-## 图片识别规则 [2026-03-26 更新]
+## 图片识别规则 [2026-03-28 更新]
 
 ### 图片识别方式对比
 | 方式 | 准确率 | 适用场景 |
 |------|--------|---------|
-| OpenClaw 内置 VL-01 | 一般 | 简单图片（截图、照片） |
-| Claude Code + MiniMax MCP | ✅ 高 | **复杂图表（K线图、数据图）** |
+| Claude Code + MiniMax MCP | ✅ 高 | **所有图片** |
 
 ### 规则
-**优先使用 Claude Code + MiniMax MCP 进行图片识别**
+**统一使用 Claude Code + MiniMax MCP 模式**
 
 原因：
+- 我们只偶尔用到图片识别，用最准确的
 - Claude Code 集成 MiniMax 的 `understand_image` 工具
 - 对复杂图表（股票K线、数据报表等）识别准确率更高
-- 赣锋锂业测试：OpenClaw识别错误，Claude Code正确
 
 ### 触发条件
-- 用户发送图片并要求分析
-- 涉及复杂图表、数据图片
-- OpenClaw 内置识别结果存疑时
+- **所有图片识别需求**（不再区分场景）
 
 ### 使用方法
 ```bash
