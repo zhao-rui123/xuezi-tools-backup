@@ -36,17 +36,36 @@ verify_backup() {
     return 1  # 备份无效
 }
 
+# 验证压缩包完整性
+verify_archive() {
+    local latest="$BACKUP_DIR/latest"
+    if [ -f "$latest" ]; then
+        tar -tzf "$latest" > /dev/null 2>&1
+        return $?
+    fi
+    return 1
+}
+
 # 执行验证
 if verify_backup; then
     size=$(du -h "$BACKUP_DIR/latest" 2>/dev/null | cut -f1)
-    memory_files=$(find /Volumes/cu/ocu/memory -type f 2>/dev/null | wc -l)
-    skills_files=$(find /Volumes/cu/ocu/skills -type f 2>/dev/null | wc -l)
+    
+    # 使用正确的备份目录路径
+    memory_files=$(find /Volumes/cu/ocu/memory-backup/daily -type f 2>/dev/null | wc -l)
+    skills_files=$(find /Volumes/cu/ocu/skills-backup/core -type f 2>/dev/null | wc -l)
+    
+    # 验证压缩包完整性
+    if verify_archive; then
+        archive_status="✅ 完整"
+    else
+        archive_status="⚠️ 损坏"
+    fi
     
     send_message "✅ 备份验证通过 ($(date '+%Y-%m-%d %H:%M'))
 
-📁 Memory: $memory_files 个文件
-📁 Skills: $skills_files 个文件
-💾 压缩包: $size
+📁 Memory备份: $memory_files 个文件
+📁 Skills备份: $skills_files 个文件
+💾 压缩包: $size ($archive_status)
 
 备份完整可用，数据安全。"
 else

@@ -10,6 +10,9 @@
 # 备份检查 (22:05)
 05 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-check.sh >> /tmp/backup_check.log 2>&1
 
+# 云端备份同步 (22:35) - 备份后同步到腾讯云
+35 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/cloud-backup-sync.sh >> /tmp/cloud-backup.log 2>&1
+
 # ========== 夜间任务 (22:00-06:00) ==========
 # 每日自我进化 (23:00) - 使用memory-suite调度器
 00 23 * * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-daily >> /tmp/memory-suite.log 2>&1
@@ -50,15 +53,15 @@
 # 每日任务汇总 (每天08:05)
 05 08 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/daily-task-report.sh >> /tmp/daily_task_report.log 2>&1
 
-# ========== 月度任务 ==========
-# 月度归档备份 (每月1号03:00)
-00 03 1 * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_archive.log 2>&1
-
+# ========== 月度任务 (已优化时间避免重叠) ==========
 # 月度记忆深度分析 (每月1号02:00)
 00 02 1 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run analyze-daily >> /tmp/memory-suite.log 2>&1
 
-# 每月深度进化 (每月1号08:00)
-00 08 1 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-monthly >> /tmp/memory-suite.log 2>&1
+# 月度归档备份 (每月1号04:00) - 从03:00调整
+00 04 1 * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_archive.log 2>&1
+
+# 每月深度进化 (每月1号10:00) - 从08:00调整，错开早高峰
+00 10 1 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-monthly >> /tmp/memory-suite.log 2>&1
 
 # 自我进化报告 (每月2号09:00)
 00 09 2 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-report >> /tmp/memory-suite.log 2>&1

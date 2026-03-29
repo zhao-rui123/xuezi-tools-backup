@@ -1,8 +1,11 @@
 #!/bin/bash
 #
-# 重新整理的每日备份脚本 v2.2
+# 重新整理的每日备份脚本 v2.3
 # 清晰的目录结构 + 备份清单 + Kilo通知
+# v2.3: 添加set -e确保错误时退出
 #
+
+set -e  # 任何命令失败立即退出
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
 export HOME="/Users/zhaoruicn"
@@ -325,4 +328,3 @@ cleanup_old_backups
 send_notification "$memory_count" "$skills_count" "success"
 
 log "========== 备份完成 =========="
-log "ALL BACKUPS COMPLETED SUCCESSFULLY"
