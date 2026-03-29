@@ -1,0 +1,22 @@
+# ============================================================
+# 雪子助手 - 精简版 crontab（新 ops 架构）
+# 2026-03-29 实施
+# 说明：ops/ 目录位于 ~/.openclaw/ops/（不在 workspace）
+# ============================================================
+
+# 每日任务调度（每天22:00触发）
+00 22 * * * /Users/zhaoruicn/.openclaw/ops/bin/task-scheduler.sh run daily >> /tmp/ops_tasks.log 2>&1
+
+# 每周任务调度（每周日02:00触发）
+00 02 * * 0 /Users/zhaoruicn/.openclaw/ops/bin/task-scheduler.sh run weekly >> /tmp/ops_tasks.log 2>&1
+
+# 每月任务调度（每月1号02:00触发）
+00 02 1 * * /Users/zhaoruicn/.openclaw/ops/bin/task-scheduler.sh run monthly >> /tmp/ops_tasks.log 2>&1
+
+# ========== 独立业务任务（直接执行）==========
+
+# 股票自选股日报推送（工作日16:30）
+30 16 * * 1-5 cd /Users/zhaoruicn/.openclaw/workspace && /opt/homebrew/bin/python3 scripts/stock_push_fast.py >> /tmp/stock_push.log 2>&1
+
+# 早安问候（每天08:00）
+00 08 * * * /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py --task send --message '🔔 早安！系统状态正常' --target group >> /tmp/kilo_notify.log 2>&1
