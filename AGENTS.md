@@ -44,30 +44,193 @@
 
 ---
 
-## 🤖 Claude Code 双模型工作流程
+## 🤖 Claude 多Agent开发架构
 
-### 核心理念
-**官方模型做架构设计+验收，MiniMax模型做执行，雪子助手做调度+部署**
+### 分层结构
+```
+雪子 → 我（主调度）
+          ↓
+    官方Sonnet（架构/审核）
+          ↓ 背后调度
+    Claude sisyphus团队（7个专业Agent）
+          ↓
+    MiniMax Claude Code（执行开发）
+          ↓ 内部并行
+    OpenClaw子Agent（部署上线）
+          ↓
+    我 → 向雪子汇报
+```
 
-### 工作流程
+### Agent团队构成
+
+| 层级 | 执行者 | 职责 | token消耗 |
+|------|--------|------|-----------|
+| **主调度** | 我（雪子助手） | 需求分析、任务分配、汇总结果、部署决策 | - |
+| **架构/审核** | 官方Sonnet 4.6 | 架构设计、验收审查，背后有sisyphus团队支撑 | 20% |
+| **执行开发** | MiniMax Claude Code | 主力开发，内部可并行subagent | 80% |
+| **部署操作** | OpenClaw子Agent | 文件上传、权限设置、服务重启 | 几乎0 |
+
+### Claude sisyphus团队（官方模型背后）
+| Agent | 专长 |
+|-------|------|
+| `sisyphus` | 主调度器，自动分解任务并调度其他Agent |
+| `oracle` | 战略咨询、架构决策 |
+| `librarian` | 文档搜索、GitHub研究 |
+| `explore` | 代码库探索 |
+| `frontend-ui-ux-engineer` | UI/UX设计 |
+| `document-writer` | 技术文档写作 |
+| `multimodal-looker` | 图片/PDF/视觉分析 |
+
+### 完整工作流程（带汇报节点）
+
 ```
 雪子下发任务
-    ↓
-1️⃣ Claude官方模型(Sonnet 4.6) → 任务分解 + 架构设计
+    ↓ 📋 汇报：向雪子确认需求
+1️⃣ 官方Sonnet → 架构设计（背后调用sisyphus团队）
     ↓ 输出：架构图、任务清单、文件清单
-2️⃣ Claude MiniMax模型 → 执行开发
+2️⃣ MiniMax Claude Code → 执行开发（内部可并行subagent）
     ↓ 输出：完成的代码
-3️⃣ Claude官方模型(Sonnet 4.6) → 验收审查
-    ↓ 输出：验收报告、问题清单
-4️⃣ 雪子助手(我) → 部署上线
-    ↓ 输出：上线确认
+3️⃣ 官方Sonnet → 验收审查
+    ↓ 通过/不通过
+4️⃣ 我（决策）→ 部署 or 返工
+    ↓ ⚠️ 关键里程碑汇报（遇到问题/重大进展）
+5️⃣ OpenClaw子Agent → 部署上线
+    ↓
+6️⃣ 我 → ✅ 任务完成汇报
 ```
 
-### 模型分工
-| 模型 | 角色 | 配置路径 |
-|------|------|---------|
-| **Claude官方 (Sonnet 4.6)** | 架构设计 + 验收 | `~/.claude/settings.json` |
-| **Claude MiniMax** | 主力执行 | `~/.claude/settings-minimax.json` |
+### 汇报节点
+
+| 节点 | 时机 | 内容 |
+|------|------|------|
+| **📋 任务启动** | 开始时 | "开始做 xxx，预计 yyy" |
+| **⚠️ 关键里程碑** | 遇到问题/重大进展 | "已完成 zzz，遇到问题是..." |
+| **✅ 任务完成** | 部署成功后 | "xxx 已上线，地址是..." |
+
+### 🛡️ Claude Code 防被杀流程（⚠️ 铁律）
+
+**问题**：exec有超时限制，Claude任务在exec里运行会被杀掉
+
+**✅ 正确做法：用 sessions_spawn 后台运行**
+
+```python
+# 错误做法（会被杀）
+exec("claude --print '大任务'")
+
+# 正确做法（后台运行，不被杀）
+sessions_spawn(
+    task="任务描述",
+    runtime="subagent",
+    model="minimax-cn/MiniMax-M2.7",
+    runTimeoutSeconds=600  # 根据任务预估时间设置
+)
+```
+
+**工作流程：**
+
+```
+1️⃣ 需求确认 → 拆分模块（每个模块5-10分钟）
+2️⃣ sessions_spawn 启动模块1（后台）
+3️⃣ 模块1完成 → git commit → sessions_spawn 启动模块2
+4️⃣ 模块2完成 → git commit → sessions_spawn 启动模块3
+...（以此类推）
+5️⃣ 每完成一个模块 → 向雪子汇报进度
+6️⃣ 遇到问题 → 立即汇报，不憋着
+```
+
+**关键原则：**
+- ❌ 不要在 exec 里直接运行 Claude Code（大任务必挂）
+- ✅ 用 sessions_spawn 每个模块单独后台运行
+- ✅ 每个模块完成后 git commit（防丢进度）
+- ✅ 做到哪发到哪，不要等全部完成（用户等不及）
+- ✅ 遇到问题立即汇报（不等到最后）
+
+3. **保存点机制**
+   ```bash
+   # 在每个关键节点保存进度（Claude子Agent会自动执行）
+   ```
+
+**超时后的处理流程：**
+```
+检测到超时 → 查看git commit记录 → 确认完成的模块 → 继续下一个模块
+```
+
+### Token消耗比例
+```
+官方Sonnet：20%（架构设计 + 验收审查）
+MiniMax：80%（实际开发干活）
+子Agent：几乎0（只是文件操作）
+```
+
+### 任务分流规则（自动判断）
+
+**我根据任务复杂度自动选择流程：**
+
+| 任务类型 | 判断标准 | 使用流程 |
+|---------|---------|---------|
+| **普通任务** | 单个文件、简单功能、已有思路 | sessions_spawn 分模块流程 |
+| **复杂任务** | 多模块、新领域、没有明确思路 | sessions_spawn + Superpowers 规划 |
+
+**普通任务特征：**
+- 单个文件修改
+- 简单脚本/工具
+- 已有类似项目参考
+- 雪子给了明确需求
+
+**复杂任务特征：**
+- 全新领域，没有经验
+- 需要架构设计
+- 雪子只有模糊想法
+- 多模块并行开发
+
+---
+
+### 复杂任务：三层模型 + sessions_spawn + Superpowers 整合流程
+
+```
+雪子：有个想法...
+    ↓
+1️⃣ Claude官方模型 → 架构设计 + Superpowers规划
+    ↓ 输出：架构图、模块划分、任务清单
+2️⃣ MiniMax Claude → 执行开发（sessions_spawn分模块）
+    ↓ 输出：完成的代码
+3️⃣ Claude官方模型 → 验收审查
+    ↓ 通过/不通过
+4️⃣ 我 → 部署上线
+    ↓
+5️⃣ ✅ 向雪子汇报
+```
+
+**⚠️ 模型分配（铁律）：**
+| 阶段 | 模型 |
+|------|------|
+| 架构设计 + Superpowers规划 | Claude官方（Sonnet 4.6） |
+| 执行开发 | MiniMax Claude Code |
+| 验收审查 | Claude官方（Sonnet 4.6） |
+
+**Superpowers 命令：**
+- `/superpowers:brainstorm` - 头脑风暴，厘清需求
+- `/superpowers:write-plan` - 生成详细执行计划
+- `/superpowers:execute-plan` - 批量执行计划
+
+---
+
+### 普通任务：sessions_spawn 分模块流程
+
+```
+雪子：任务...
+    ↓
+我：需求确认 → 拆分模块
+    ↓
+sessions_spawn 模块1（后台）
+    ↓
+git commit → sessions_spawn 模块2
+...（以此类推）
+    ↓
+每完成一个 → 发送成果给雪子
+```
+
+---
 
 ### 适用场景
 - 大型Web应用开发
@@ -80,14 +243,6 @@
 - 已有明确步骤的任务（直接执行）
 - 紧急小修小改（快速处理）
 
-### 图片识别规则
-**统一使用 Claude Code + MiniMax MCP 模式**
-
-使用方法：
-```bash
-claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
-```
-
 ### Claude Code 调用方式
 ```bash
 # 基础调用（无交互，直接返回结果）
@@ -98,6 +253,9 @@ claude --add-dir <目录> --allowed-tools Bash,Read,Write --print "任务"
 
 # 允许所有工具（慎用）
 claude --add-dir <目录> --dangerously-skip-permissions --print "任务"
+
+# 调用特定Agent（如图片分析）
+claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
 ```
 
 ---
@@ -217,4 +375,4 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 ---
 
-*此文件由雪子和雪子助手共同维护 - 最后更新：2026-03-28*
+*此文件由雪子和雪子助手共同维护 - 最后更新：2026-03-28 晚间*
