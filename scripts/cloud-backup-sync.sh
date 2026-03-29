@@ -1,6 +1,6 @@
 #!/bin/bash
 # 云端备份同步脚本
-# 将本地备份同步到腾讯云服务器
+# 将本地备份同步到腾讯云服务器，保留最近7天
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
 export HOME="/Users/zhaoruicn"
@@ -10,6 +10,7 @@ REMOTE_DIR="/data/openclaw-backups"
 SSH_KEY="$HOME/.ssh/id_ed25519"
 REMOTE_HOST="root@106.54.25.161"
 LOG_FILE="/tmp/cloud-backup.log"
+MAX_DAYS=7
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
@@ -28,19 +29,14 @@ if [ ! -f "$BACKUP_DIR/latest" ]; then
     exit 1
 fi
 
-# 检查远程目录是否存在
-if ! ssh -i "$SSH_KEY" -o ConnectTimeout=10 "$REMOTE_HOST" "test -d $REMOTE_DIR" 2>/dev/null; then
-    log "远程目录不存在，创建中..."
-    ssh -i "$SSH_KEY" "$REMOTE_HOST" "mkdir -p $REMOTE_DIR" 2>/dev/null
-fi
-
-# 同步备份
-log "开始云端同步..."
+# 获取最新备份文件
 latest_file=$(readlink -f "$BACKUP_DIR/latest")
 archive_name=$(basename "$latest_file")
 
-if rsync -avz --progress -e "ssh -i $SSH_KEY -o ConnectTimeout=30" \
-    "$latest_file" "$REMOTE_HOST:$REMOTE_DIR/" 2>&1 | tail -5; then
+# 同步备份
+log "开始云端同步: $archive_name"
+if rsync -avz -e "ssh -i $SSH_KEY -o ConnectTimeout=30" \
+    "$latest_file" "$REMOTE_HOST:$REMOTE_DIR/" 2>&1 | tail -3; then
     log "✅ 云端同步成功: $archive_name"
     size=$(du -h "$latest_file" | cut -f1)
     send_notify "☁️ 云端备份同步成功 | $archive_name | $size"
@@ -49,3 +45,11 @@ else
     send_notify "⚠️ 云端备份同步失败，请检查"
     exit 1
 fi
+
+# 清理远程端过期备份（保留最近7天）
+log "清理远程端过期备份（保留最近$MAX_DAYS天）..."
+ssh -i "$SSH_KEY" "$REMOTE_HOST" "cd $REMOTE_DIR && ls -1t openclaw-backup-*.tar.gz 2>/dev/null | tail -n +\$((MAX_DAYS+1)) | xargs -r rm -f" 2>/dev/null
+
+# 显示远程端保留的备份
+remote_count=$(ssh -i "$SSH_KEY" "$REMOTE_HOST" "ls -1t $REMOTE_DIR/openclaw-backup-*.tar.gz 2>/dev/null | wc -l" 2>/dev/null)
+log "远程端当前备份数量: $remote_count"
