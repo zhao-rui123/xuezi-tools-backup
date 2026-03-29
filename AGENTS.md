@@ -243,19 +243,105 @@ git commit → sessions_spawn 模块2
 - 已有明确步骤的任务（直接执行）
 - 紧急小修小改（快速处理）
 
-### Claude Code 调用方式
+### Claude Code 调用方式（⚠️ 重要更新 2026-03-29）
+
+**⚠️ 铁律：大任务必须用 sessions_spawn 后台运行，禁止 exec 里直接跑！**
+
+#### 正确的调用方式：sessions_spawn（后台持久会话）
+
+```javascript
+// ✅ 大任务用这个（不会被超时杀）
+sessions_spawn(
+    task="任务描述",
+    runtime="subagent",
+    model="minimax-cn/MiniMax-M2.7",  // 执行用 MiniMax，便宜！
+    runTimeoutSeconds=600  // 按预估时间设置
+)
+```
+
+#### exec 只用来做快速验证（简单命令）
+
 ```bash
-# 基础调用（无交互，直接返回结果）
-claude --add-dir <工作目录> --print "任务描述" 2>&1
+# ✅ 简单测试/验证可以用 exec
+claude --print --dangerously-skip-permissions "say yes" 2>&1
 
-# 带权限控制
-claude --add-dir <目录> --allowed-tools Bash,Read,Write --print "任务"
+# ❌ 大任务不要用 exec（必被超时杀）
+# exec("claude --print '大任务'")  // 错误！
+```
 
-# 允许所有工具（慎用）
-claude --add-dir <目录> --dangerously-skip-permissions --print "任务"
+#### sessions_spawn 工作流程
 
-# 调用特定Agent（如图片分析）
-claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
+```
+1️⃣ 需求确认 → 拆分模块（每个模块5-10分钟）
+2️⃣ sessions_spawn 启动模块1（后台）
+3️⃣ 模块1完成 → git commit → sessions_spawn 启动模块2
+4️⃣ 模块2完成 → git commit → sessions_spawn 启动模块3
+...（以此类推）
+5️⃣ 每完成一个模块 → 向雪子汇报进度
+6️⃣ 遇到问题 → 立即汇报，不憋着
+```
+
+#### 四层模型分工（重要！）
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    我（主调度）                           │
+│              需求分析 → 任务分配 → 部署决策                │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  1️⃣ 官方Sonnet（via timesniper）                        │
+│  职责：整理架构、任务规划、Superpowers                    │
+│  消耗：贵，只用做设计思考                                │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  2️⃣ MiniMax Claude Code（执行开发）                      │
+│  职责：写代码、调试、交付功能                            │
+│  消耗：便宜，主要干活                                   │
+│  插件：22个Skills、7个Agents、MiniMax MCP识图           │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  3️⃣ 官方Sonnet（via timesniper）                        │
+│  职责：验收审查、代码审核、质量把关                       │
+│  消耗：贵，只做审核                                     │
+└─────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────┐
+│  4️⃣ OpenClaw 子Agent                                   │
+│  职责：文件上传、权限设置、服务重启、部署上线              │
+│  消耗：几乎0                                           │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### 模型配置说明
+
+| 配置文件 | 用途 |
+|---------|------|
+| `~/.claude/settings.json` (官方) | 架构设计、验收审查（timesniper + Opus） |
+| `~/.claude/settings-minimax.json` | 执行开发（MiniMax M2.7） |
+
+切换命令：
+```bash
+# 切换到 MiniMax（执行用）
+cp ~/.claude/settings-minimax.json ~/.claude/settings.json
+
+# 切换到官方（架构/审核用）
+# 需要手动编辑或用备份恢复
+```
+
+#### 快速验证（exec）
+
+```bash
+# 测试 CC 是否正常
+claude --print --dangerously-skip-permissions "say yes" 2>&1
+
+# 测试 oh-my-claude
+claude --print --dangerously-skip-permissions "oh-my-claude:status" 2>&1
+
+# 测试 MCP 识图
+claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：这是什么" 2>&1
 ```
 
 ---

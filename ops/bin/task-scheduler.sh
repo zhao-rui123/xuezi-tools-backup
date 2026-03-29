@@ -309,12 +309,14 @@ main() {
 
     # 发送汇总通知
     local details=""
-    for r in "${results[@]}"; do
-        IFS=':' read -r tid status ec <<< "$r"
-        if [ "$status" != "SUCCESS" ]; then
-            details="${details}• $tid ($status)\n"
-        fi
-    done
+    if [ ${#results[@]} -gt 0 ]; then
+        for r in "${results[@]}"; do
+            IFS=':' read -r tid status ec <<< "$r"
+            if [ "$status" != "SUCCESS" ]; then
+                details="${details}• $tid ($status)\n"
+            fi
+        done
+    fi
 
     if [ "$failure_count" -gt 0 ]; then
         notify_task_summary "$success_count" "$failure_count" "$details"

@@ -1,0 +1,55 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/zhaoruicn/.openclaw/workspace/.claude/hooks/comment-checker.js"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/zhaoruicn/.openclaw/workspace/.claude/hooks/context-monitor.js"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/zhaoruicn/.openclaw/workspace/.claude/hooks/keyword-detector.js"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/zhaoruicn/.openclaw/workspace/.claude/hooks/think-mode.js"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node /Users/zhaoruicn/.openclaw/workspace/.claude/hooks/todo-continuation.js"
+          }
+        ]
+      }
+    ]
+  }
+}

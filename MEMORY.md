@@ -39,60 +39,73 @@ chmod 644 /usr/share/nginx/html/*/index.html
 - **更新方式**: 用户告知需要更新的省份 → 我修改数据 → 重新部署 → 更新GitHub备份
 - **数据来源**: 各省发改委/电网公司官方文件
 
-## 🤖 Claude 多Agent开发架构（2026-03-28 重要更新）
+## 🤖 Claude 多Agent开发架构（2026-03-29 更新）
 
-### ⚠️ 铁律：模型分配
-- **架构设计 + 验收审查** → Claude官方模型（Sonnet 4.6）
-- **执行开发** → MiniMax Claude Code
+### 四层模型分工（核心原则）
 
-### ⚠️ Claude Code 防被杀流程
-
-### ⚠️ 任务分流规则
-
-### ⚠️ 三层模型架构
-
-### ⚠️ 铁律：所有Claude开发必须用此流程
-
-**只要涉及Claude Code开发，必须：**
-1. 需求确认 → 拆模块 → sessions_spawn后台执行 → 每个模块commit
-2. 禁止在一个exec里做太多事情（会被超时杀流程）
-3. 遇到问题立即汇报
-
-**正确姿势：**
-```
-任务分块 → 后台运行 → commit → 继续下一个 → 汇报
-```
-
-**错误姿势：**
-```
-exec里运行Claude Code做大任务 → 超时被杀 → 进度丢失
-```
-
-### 分层结构
 ```
 雪子 → 我（主调度）
           ↓
-    官方Sonnet（架构/审核，背后有sisyphus团队）
+    官方Sonnet（timesniper）→ 整理架构/规划
           ↓
-    MiniMax Claude Code（执行开发）
+    MiniMax Claude Code → 干活/执行开发
           ↓
-    OpenClaw子Agent（部署上线）
+    官方Sonnet（timesniper）→ 检查/验收审查
+          ↓
+    OpenClaw 子Agent → 部署上线
           ↓
     我 → 向雪子汇报
 ```
 
-### Agent团队
-| 层级 | 执行者 | 职责 | token消耗 |
-|------|--------|------|-----------|
-| 主调度 | 我 | 需求分析、任务分配、部署决策 | - |
-| 架构/审核 | 官方Sonnet 4.6 | 架构设计、验收审查 | 20% |
-| 执行开发 | MiniMax Claude Code | 主力开发 | 80% |
-| 部署操作 | OpenClaw子Agent | 文件上传、权限设置 | 几乎0 |
+| 层级 | 模型 | 用途 | 费用 |
+|------|------|------|------|
+| 1️⃣ 架构规划 | 官方 Opus via timesniper | 整理架构、Superpowers规划 | 贵，少用 |
+| 2️⃣ 执行开发 | MiniMax M2.7 | 写代码、调试、交付功能 | 便宜，干活主力 |
+| 3️⃣ 验收审查 | 官方 Opus via timesniper | 代码审核、质量把关 | 贵，少用 |
+| 4️⃣ 部署上线 | OpenClaw 子Agent | 文件上传、权限、服务重启 | 几乎0 |
 
-### 完整工作流程（带汇报节点）
+### ⚠️ Claude Code 调用铁律（2026-03-29 更新）
+
+**大任务必须用 sessions_spawn 后台运行，禁止 exec 里直接跑！**
+
+```javascript
+// ✅ 正确做法
+sessions_spawn(
+    task="任务描述",
+    runtime="subagent",
+    model="minimax-cn/MiniMax-M2.7",  // 干活用 MiniMax
+    runTimeoutSeconds=600
+)
+
+// ❌ 错误做法（会被超时杀）
+exec("claude --print '大任务'")
+```
+
+### Claude Code 配置（2026-03-29 更新）
+
+| 配置文件 | 模型 | 用途 |
+|---------|------|------|
+| `~/.claude/settings.json` | 官方 Opus via timesniper | 架构/审核 |
+| `~/.claude/settings-minimax.json` | MiniMax M2.7 | 执行开发 |
+
+**已安装插件**：
+- oh-my-claude（7 agents: sisyphus, oracle, librarian, explore, frontend-ui-ux-engineer, document-writer, multimodal-looker）
+- 22个 Skills（写代码、文档、数据分析等）
+- minimax-mcp（图像理解）
+- minimax-skills
+
+**切换命令**：
+```bash
+# 执行开发 → MiniMax
+cp ~/.claude/settings-minimax.json ~/.claude/settings.json
+
+# 架构/审核 → 官方（需手动编辑）
+```
+
+### 完整工作流程
 1. 📋 向雪子确认需求
-2. 官方Sonnet → 架构设计（调用sisyphus团队）
-3. MiniMax Claude Code → 执行开发
+2. 官方Sonnet → 架构设计 + Superpowers规划
+3. MiniMax Claude Code → sessions_spawn 分模块执行开发
 4. 官方Sonnet → 验收审查
 5. 我（决策）→ 部署 or 返工
 6. OpenClaw子Agent → 部署上线
@@ -1049,3 +1062,51 @@ claude --agent sisyphus "设计一个电商系统架构"
 
 两者互补，共同实现复杂任务处理
 
+
+## 记忆更新 [2026-03-29 下午]
+
+### [DECISION] 重要决策 - Excel重新生成
+- 用户反馈Excel"太简单"要求重新生成
+- 需要包含：全国31省完整梯队、全国投资地图、敏感性分析
+- 已完成：全国省份数据研究（31省）✅
+- 等待：现货市场价格数据搜索结果
+
+### [DATA] 模式一修正计算（含税）
+**10MWh，衰减1.5%，增值税13%，所得税25%**
+
+| 指标 | 含税门槛 |
+|------|---------|
+| IRR=8% | ≥ 0.6006 元/kWh |
+| IRR=10% | ≥ 0.6979 元/kWh |
+
+### [DATA] 模式二修正计算（含税）
+**1MW+3MWh，衰减1.5%，增值税13%，所得税25%**
+
+| 含税储能卖电价 | IRR |
+|---------------|-----|
+| 0.65元 | 2.29% |
+| 1.00元 | 7.63% |
+| IRR=10%门槛 | ≥ 1.1744元（基本不可能）|
+
+**纯光伏直售IRR（含税）**：
+| 电价 | IRR |
+|------|-----|
+| 0.40元 | 9.31% |
+| 0.50元 | 13.01% |
+
+### [FINDING] 关键发现
+- **含税后模式二经济性极差**，IRR=10%需要储能卖电≥1.17元
+- **纯光伏直售（不加储能）反而更划算**，0.4元/kWh时IRR=9.31%
+- 模式二加储能只有在储能卖电≥1.0元时才勉强可行
+
+### [TODO] 待办
+- [ ] 等待现货市场价格搜索结果
+- [ ] 用含税数据+现货市场价格重新生成Excel
+- [ ] Excel路径：/Users/zhaoruicn/.openclaw/workspace/工商业储能市场开拓分析_最终版.xlsx
+- [P0] 修复 task-scheduler.sh 第217行变量引用（task_ids[@]: unbound variable）
+- [ ] 补跑周日未执行的9个cron任务
+
+### [PROJECT] Excel生成任务
+- 用户需求：专业版，用于领导汇报
+- 后台搜索会话：agent:claude:subagent:e793e8c1-c3ed-4ea7-b91a-73a28b89fe4f（现货价格搜索）
+- 已知省份梯队：山西/广东/浙江/山东/江苏/河南/安徽/河北为第一梯队

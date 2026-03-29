@@ -1,0 +1,11 @@
+{
+  "date": "2026-03-29",
+  "summary": "Claude Code配置已修复，切换到Opus+timesniper，官方插件已恢复",
+  "manual_note": "Claude Code配置已修复，切换到Opus+timesniper，官方插件已恢复",
+  "from_memory": [
+    "影响：full-backups 最近成功是 Mar 27，Mar 28 失败",
+    "症状：tar -czf 失败（可能是SIP/权限问题）"
+  ],
+  "task_count": 2,
+  "timestamp": "2026-03-29T12:10:01.363067"
+}
