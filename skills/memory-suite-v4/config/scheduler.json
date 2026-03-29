@@ -2,13 +2,8 @@
   "tasks": {
     "real-time": {
       "enabled": true,
-      "last_run": "2026-03-27T07:40:00.380996",
-      "last_result": {
-        "success": true,
-        "result": {
-          "snapshot_path": "/Users/zhaoruicn/.openclaw/workspace/memory/snapshots/snapshot_20260327_074000.json"
-        }
-      }
+      "last_run": null,
+      "last_result": null
     },
     "daily-init": {
       "enabled": true,
@@ -52,8 +47,15 @@
     },
     "knowledge-graph": {
       "enabled": true,
-      "last_run": null,
-      "last_result": null
+      "last_run": "2026-03-29T08:34:57.081776",
+      "last_result": {
+        "success": true,
+        "result": {
+          "entities": 29,
+          "relations": 25,
+          "graph_path": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/graph/graph.json"
+        }
+      }
     },
     "knowledge-sync": {
       "enabled": true,
