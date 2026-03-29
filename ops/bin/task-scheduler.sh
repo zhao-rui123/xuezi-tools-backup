@@ -90,20 +90,38 @@ get_task_config() {
     local field="$2"
     local mode="$3"
 
-    # 简单文本解析
-    awk -v id="$task_id" -v field="$field" '
+    awk -v id="$task_id" -v field="$field" -v mode="$mode" '
 BEGIN { in_task=0 }
-/^[[:space:]]*-[[:space:]]+id:/ {
-    if ($3 == "\"" id "\"" || $3 == id) in_task=1
+/^daily:|^weekly:|^monthly:/ {
+    current_mode=$1; gsub(/:/,"",current_mode)
+}
+current_mode == mode && /^[[:space:]]*-[[:space:]]+id:/ {
+    val = $0; sub(/^[^:]+id:[ \t]*/, "", val)
+    gsub(/^[ \t]+|[ \t]+$/, "", val)
+    gsub(/^"|"$/, "", val)
+    if (val == id) in_task=1
     else in_task=0
 }
-in_task && $1 == field ":" {
-    # Remove leading/trailing whitespace and quotes
+in_task && $0 ~ "^[[:space:]]*" field ":[ \t]*" {
+    sub(/^[[:space:]]*[^:]+:[ \t]*/, "", $0)
     gsub(/^[ \t]+|[ \t]+$/, "", $0)
-    gsub(/^"|"$/, "", $0)
-    gsub(/^\[|\]$/, "", $0)
-    gsub(/, */, "|", $0)
-    print $0
+    # 处理带引号的字符串数组: ["a", "b", "c"]
+    if (match($0, /^\[.*\]$/)) {
+        # 提取数组内容并解析每个元素
+        content = substr($0, 2, length($0)-2)  # 去掉首尾[]
+        n = split(content, items, /",[ \t]*"/)
+        # 去掉每个元素的首尾引号
+        result = ""
+        for (i = 1; i <= n; i++) {
+            gsub(/^[ \t]*"|"[ \t]*$/, "", items[i])
+            result = result (result ? "|" : "") items[i]
+        }
+        print result
+    } else {
+        # 普通字符串值
+        gsub(/^"|"$/, "", $0)
+        print $0
+    }
     exit
 }
 ' "$TASKS_CONF"
@@ -151,9 +169,11 @@ EOF
     fi
 
     if [[ -n "$args" ]]; then
-        # 替换参数中的占位符
-        args="${args//|/ }"
-        cmd="$cmd $args"
+        # 替换参数中的|为空格，并将每个参数用引号包裹（保留空格）
+        local IFS='|'
+        for arg in $args; do
+            cmd="$cmd \"$arg\""
+        done
     fi
 
     # 执行
@@ -278,16 +298,31 @@ main() {
         timeout="${timeout:-300}"
         cwd="${cwd:-$HOME/.openclaw/workspace}"
 
-        # 构建脚本路径
-        if [[ "$script" == /* ]]; then
-            script="$script"
-        elif [[ "$script" == *.py ]]; then
+        # 判断是否为解释器模式（script是python3等解释器，args第一项是脚本路径）
+        if [[ "$script" == python* ]]; then
+            # 解释器模式：args第一项是脚本路径
+            local actual_script
+            actual_script=$(echo "$args" | tr '|' ' ' | awk '{print $1}')
+            if [[ "$actual_script" == /* ]]; then
+                script="$actual_script"
+            else
+                script="$HOME/.openclaw/workspace/$actual_script"
+            fi
+            # args中移除第一项（脚本路径），保留剩余参数
+            args=$(echo "$args" | tr '|' ' ' | awk '{$1=""; print $0}' | sed 's/^ //')
+        elif [[ "$script" == /* ]]; then
+            # 绝对路径，保持不变
+            :
+        elif [[ "$script" == */* ]]; then
+            # 包含斜杠的路径，相对于workspace
             script="$HOME/.openclaw/workspace/$script"
         else
+            # 不含斜杠的脚本，放到scripts/目录
             script="$HOME/.openclaw/workspace/scripts/$script"
         fi
 
-        if [ ! -f "$script" ]; then
+        # 验证脚本存在（解释器模式除外）
+        if [[ "$interpreter" != python* ]] && [[ "$script" != python* ]] && [ ! -f "$script" ]; then
             log "[跳过] 脚本不存在: $script"
             continue
         fi

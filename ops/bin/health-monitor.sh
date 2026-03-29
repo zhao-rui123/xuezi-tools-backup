@@ -95,16 +95,17 @@ check_disk() {
 check_memory() {
     hlog "[检查] 内存使用率..."
 
+    # macOS: 使用 top 获取实际内存使用百分比
     local mem_usage
-    mem_usage=$(vm_stat | awk '/Pages active/ {print $3}' | tr -d '.' 2>/dev/null)
+    mem_usage=$(top -l 1 | grep "PhysMem" | awk '{print $2}' | sed 's/G//; s/M//' | head -1)
     if [ -z "$mem_usage" ]; then
-        mem_usage=$(top -l 1 | grep "PhysMem" | awk '{print $2}' | tr -d 'M')
+        # 备用：使用 vm_stat 计算
+        local page_size active_pages total_pages
+        page_size=$(pagesize 2>/dev/null || echo "16384")
+        active_pages=$(vm_stat | awk '/Pages active/ {print $3}' | tr -d '.')
+        total_pages=$(sysctl -n hw.pagesize 2>/dev/null && sysctl -n hw.memsize 2>/dev/null | awk -v ps="$page_size" '{print $1/ps}')
+        mem_usage=$(awk "BEGIN {printf \"%.0f\", $active_pages/$total_pages*100}")
     fi
-
-    local mem_total
-    mem_total=$(sysctl -n hw.memsize 2>/dev/null | awk '{print $1/1024/1024/1024}')
-    local mem_used
-    mem_used=$(memory_pressure 2>/dev/null | head -1 || echo "unknown")
 
     if [ "${mem_usage:-0}" -ge "${ALERT_MEMORY_CRITICAL:-90}" ]; then
         hlog "⚠️ 内存使用率 ${mem_usage}% (严重)"
