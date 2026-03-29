@@ -5,7 +5,7 @@
 
 # ========== 每日备份 ==========
 # 每日备份 (22:00)
-00 22 * * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_cron.log 2>&1
+00 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-with-retry.sh >> /tmp/backup_cron.log 2>&1
 
 # 备份检查 (22:05)
 05 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-check.sh >> /tmp/backup_check.log 2>&1
