@@ -235,15 +235,37 @@ create_archive() {
 send_notification() {
     local memory_count=$1
     local skills_count=$2
+    local status="$3"  # "success" or "failure"
     
-    # 获取压缩包大小
+    # 验证备份有效性
     local backup_size="未知"
+    local is_valid=false
+    
     if [ -f "$BACKUP_DIR/full-backups/latest" ]; then
-        backup_size=$(du -h "$BACKUP_DIR/full-backups/latest" 2>/dev/null | cut -f1)
+        local latest_file=$(readlink -f "$BACKUP_DIR/full-backups/latest" 2>/dev/null)
+        if [ -f "$latest_file" ]; then
+            backup_size=$(du -h "$latest_file" 2>/dev/null | cut -f1)
+            local file_date=$(stat -f "%Sm" -t "%Y%m%d" "$latest_file" 2>/dev/null || stat -c "%y" "$latest_file" 2>/dev/null | cut -d' ' -f1 | tr -d '-')
+            local today=$(date +%Y%m%d)
+            
+            # 检查是否是今天的备份且大小 > 100KB
+            if [ "$file_date" = "$today" ] && [ -s "$latest_file" ]; then
+                local size_bytes=$(stat -f "%z" "$latest_file" 2>/dev/null || stat -c "%s" "$latest_file" 2>/dev/null)
+                if [ "$size_bytes" -gt 102400 ]; then
+                    is_valid=true
+                fi
+            fi
+        fi
     fi
     
-    # 构建通知消息（极简版）
-    local message="💾 备份完成 | $(date '+%m-%d %H:%M') | Memory:$memory_count | Skills:$skills_count | $backup_size"
+    # 构建通知消息
+    local message=""
+    if [ "$status" = "failure" ] || [ "$is_valid" = false ]; then
+        message="⚠️ 备份异常 | $(date '+%m-%d %H:%M') | Memory:$memory_count | Skills:$skills_count | $backup_size | 需检查"
+        log "备份验证失败: size=$backup_size, is_valid=$is_valid"
+    else
+        message="💾 备份完成 | $(date '+%m-%d %H:%M') | Memory:$memory_count | Skills:$skills_count | $backup_size"
+    fi
     
     # 使用 broadcaster.py 直接发送到群聊
     python3 ~/.openclaw/workspace/agents/kilo/broadcaster.py \
@@ -290,13 +312,17 @@ skills_count=$(backup_skills_categorized)
 generate_manifest
 
 # 5. 创建压缩包
-create_archive
+if ! create_archive; then
+    log "压缩包创建失败，发送异常通知..."
+    send_notification "$memory_count" "$skills_count" "failure"
+    exit 1
+fi
 
 # 6. 清理旧备份
 cleanup_old_backups
 
 # 7. 发送通知 (通过Kilo)
-send_notification "$memory_count" "$skills_count"
+send_notification "$memory_count" "$skills_count" "success"
 
 log "========== 备份完成 =========="
 log "ALL BACKUPS COMPLETED SUCCESSFULLY"
