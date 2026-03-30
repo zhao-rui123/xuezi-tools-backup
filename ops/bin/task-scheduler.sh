@@ -321,8 +321,8 @@ main() {
             script="$HOME/.openclaw/workspace/scripts/$script"
         fi
 
-        # 验证脚本存在（解释器模式除外）
-        if [[ "$interpreter" != python* ]] && [[ "$script" != python* ]] && [ ! -f "$script" ]; then
+        # 验证脚本存在
+        if [[ "$script" != python* ]] && [ ! -f "$script" ]; then
             log "[跳过] 脚本不存在: $script"
             continue
         fi
