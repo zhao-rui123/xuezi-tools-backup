@@ -159,28 +159,29 @@ EOF
     local start_time
     start_time=$(date +%s)
     local exit_code=0
+    log "[DEBUG-ARGS] task_id=$task_id args=|$args|"
 
-    # 构建命令
-    local cmd=""
+    # 构建命令（使用数组避免引号嵌套问题）
+    local -a cmd_arr
     if [[ "$script" == *.py ]]; then
-        cmd="/opt/homebrew/bin/python3 $script"
+        cmd_arr=("/opt/homebrew/bin/python3" "$script")
     else
-        cmd="bash $script"
+        cmd_arr=("bash" "$script")
     fi
 
     if [[ -n "$args" ]]; then
-        # 替换参数中的|为空格，并将每个参数用引号包裹（保留空格）
         local IFS='|'
         for arg in $args; do
-            cmd="$cmd \"$arg\""
+            cmd_arr+=("$arg")
         done
     fi
 
+
     # 执行
     if [[ -n "$cwd" ]]; then
-        (cd "$cwd" && eval "$cmd" >> "$task_log" 2>&1) &
+        (cd "$cwd" && "${cmd_arr[@]}" >> "$task_log" 2>&1) &
     else
-        (eval "$cmd" >> "$task_log" 2>&1) &
+        ("${cmd_arr[@]}" >> "$task_log" 2>&1) &
     fi
 
     local pid=$!

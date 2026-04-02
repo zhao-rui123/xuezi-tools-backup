@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/opt/homebrew/bin/python3
 """
 股票自选股快速推送脚本 v2
 本地获取新浪API数据，速度快
