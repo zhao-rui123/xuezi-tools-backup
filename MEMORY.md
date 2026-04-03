@@ -17,7 +17,44 @@
 7. **电费清单处理器** - 自动处理国网电费清单和负荷曲线，计算储能最优容量
 8. **小龙虾之家** 🦞 - AI助手工作状态可视化看板
 
-## 备份信息
+## 🚀 雪子知识库 (XueziKB) - 大型开发项目 [2026-04-03 启动]
+
+### 项目概述
+- **目标**: 个人AI知识管理 + 智能秘书一体化平台
+- **用途**: 会议纪要 + 随手记 + 知识管理 + AI问答
+- **数据存储**: 腾讯云服务器（106.54.25.161）
+- **预计周期**: Phase 1(11-12周) → Phase 2(6-8周) → Phase 3(4-6周)
+
+### 用户定位
+- **当前用户**：雪子
+- **未来扩展**：家人（多用户，数据隔离）
+- **架构原则**：所有数据以 userId 隔离
+
+### 技术栈
+- 前端: React + TypeScript + Vite
+- 后端: Node.js + Express + Prisma ORM
+- 数据库: PostgreSQL 15
+- 全文搜索: Elasticsearch 8.x
+- 向量检索: Qdrant
+- AI: MiniMax API
+- 推送: 飞书 Webhook
+
+### 项目位置
+- 本地: `~/.openclaw/workspace/xuezi-kb/`
+- 项目日志: `~/.openclaw/workspace/xuezi-kb/PROJECT_LOG.md`
+- 架构文档: `~/.openclaw/workspace/docs/xuezi-knowledge-base-architecture-v2.md`
+- 服务器: `/opt/xuezi-kb/`
+
+### 开发进度
+| Phase | 内容 | 状态 |
+|-------|------|------|
+| Phase 1 | 核心基础（笔记系统） | 进行中 |
+| Phase 2 | 增强功能（文件/模板/便签等） | 待开始 |
+| Phase 3 | AI能力（RAG/图谱/日程） | 待开始 |
+
+**当前进行中**: P1-2 用户认证系统
+
+### 备份信息
 - **备份文件**: `xuezi-tools-backup.tar.gz` (2.0MB)
 - **备份位置**: 
   - 腾讯云服务器: `/usr/share/nginx/html/xuezi-tools-backup.tar.gz`
