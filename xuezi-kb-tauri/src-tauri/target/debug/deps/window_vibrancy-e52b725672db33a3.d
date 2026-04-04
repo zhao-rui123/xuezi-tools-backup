@@ -1,0 +1,9 @@
+/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/debug/deps/window_vibrancy-e52b725672db33a3.d: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/lib.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/mod.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/internal.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/ns_visual_effect_view_tagged.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/windows.rs
+
+/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/debug/deps/libwindow_vibrancy-e52b725672db33a3.rmeta: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/lib.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/mod.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/internal.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/ns_visual_effect_view_tagged.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/windows.rs
+
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/lib.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/mod.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/internal.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/macos/ns_visual_effect_view_tagged.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/window-vibrancy-0.6.0/src/windows.rs:

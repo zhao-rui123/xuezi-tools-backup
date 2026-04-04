@@ -1,0 +1,7 @@
+/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/debug/deps/event_listener-40f7a05b9ee7a1db.d: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/lib.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/intrusive.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/notify.rs
+
+/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/debug/deps/libevent_listener-40f7a05b9ee7a1db.rmeta: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/lib.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/intrusive.rs /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/notify.rs
+
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/lib.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/intrusive.rs:
+/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/event-listener-5.4.1/src/notify.rs:

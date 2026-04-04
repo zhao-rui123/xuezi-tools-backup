@@ -1,0 +1,3 @@
+[submodule "xuezi-kb"]
+	path = xuezi-kb
+	url = https://github.com/zhao-rui123/xuezi-kb.git

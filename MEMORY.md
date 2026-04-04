@@ -17,42 +17,9 @@
 7. **电费清单处理器** - 自动处理国网电费清单和负荷曲线，计算储能最优容量
 8. **小龙虾之家** 🦞 - AI助手工作状态可视化看板
 
-## 🚀 雪子知识库 (XueziKB) - 大型开发项目 [2026-04-03 启动]
+## 🚀 雪子知识库 (XueziKB) - 项目已终止 [2026-04-04]
 
-### 项目概述
-- **目标**: 个人AI知识管理 + 智能秘书一体化平台
-- **用途**: 会议纪要 + 随手记 + 知识管理 + AI问答
-- **数据存储**: 腾讯云服务器（106.54.25.161）
-- **预计周期**: Phase 1(11-12周) → Phase 2(6-8周) → Phase 3(4-6周)
-
-### 用户定位
-- **当前用户**：雪子
-- **未来扩展**：家人（多用户，数据隔离）
-- **架构原则**：所有数据以 userId 隔离
-
-### 技术栈
-- 前端: React + TypeScript + Vite
-- 后端: Node.js + Express + Prisma ORM
-- 数据库: PostgreSQL 15
-- 全文搜索: Elasticsearch 8.x
-- 向量检索: Qdrant
-- AI: MiniMax API
-- 推送: 飞书 Webhook
-
-### 项目位置
-- 本地: `~/.openclaw/workspace/xuezi-kb/`
-- 项目日志: `~/.openclaw/workspace/xuezi-kb/PROJECT_LOG.md`
-- 架构文档: `~/.openclaw/workspace/docs/xuezi-knowledge-base-architecture-v2.md`
-- 服务器: `/opt/xuezi-kb/`
-
-### 开发进度
-| Phase | 内容 | 状态 |
-|-------|------|------|
-| Phase 1 | 核心基础（笔记系统） | 进行中 |
-| Phase 2 | 增强功能（文件/模板/便签等） | 待开始 |
-| Phase 3 | AI能力（RAG/图谱/日程） | 待开始 |
-
-**当前进行中**: P1-2 用户认证系统
+项目于2026-04-04终止，原因：需求不清晰，执行效果差。
 
 ### 备份信息
 - **备份文件**: `xuezi-tools-backup.tar.gz` (2.0MB)
@@ -722,3 +689,41 @@ Claude Code 内部有 `--thinking` 参数会自动启用思考模式分析问题
 - 股票监控项目偷懒没用Opus做架构审核，虽然结果OK但不规范
 - **规则**：复杂项目必须走完整流程：Opus架构 → MiniMax开发 → Opus验收
 - 已写入SOUL.md、AGENTS.md、MEMORY.md
+
+## ⚠️ 雪子知识库开发铁律（2026-04-03 强调）
+
+### 必须严格遵守的开发流程
+```
+雪子需求
+    ↓
+Opus架构设计 → 雪子确认
+    ↓
+MiniMax执行开发
+    ↓
+Opus验收审查 → 雪子确认
+    ↓
+部署上线
+```
+
+### 7个专业Agent组合方式
+- sisyphus：任务分解
+- oracle：战略咨询、架构决策
+- librarian：文档搜索、GitHub研究
+- explore：代码库探索
+- frontend-ui-ux-engineer：UI/UX设计
+- document-writer：技术文档写作
+- multimodal-looker：图片/PDF/视觉分析
+
+### 绝对禁止的行为
+1. 不确认方向就执行
+2. 跳过Opus审核环节
+3. 自己判断架构/技术方案
+4. 觉得流程麻烦想走捷径
+
+### 违反教训
+- 今天：网页版完全不需要，我做了
+- 股票分析：跳过Opus审核流程
+- 打包问题：一直没彻底解决
+
+### 核心原则
+**所有决定必须经过雪子确认。没有捷径可走。**
