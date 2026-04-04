@@ -727,3 +727,64 @@ Opus验收审查 → 雪子确认
 
 ### 核心原则
 **所有决定必须经过雪子确认。没有捷径可走。**
+
+## 雪子知识库 (XueziKB) 项目重启 [2026-04-04]
+
+### 技术决策
+- Windows端：WinUI 3 独立项目（C#）
+- Android端：Android Studio + Kotlin + Jetpack Compose
+- 共享类库：.NET Standard Library
+- 本地数据库：SQLite
+- 云端API：Python FastAPI + SQLite
+- 架构文档：v6版本，已生成
+
+### 当前状态
+- 架构文档v6已生成，等待雪子确认
+- 项目暂停中
+
+### 雪子的指示
+- 独立客户端，不要Electron浏览器模式
+- 低并发同步场景
+
+---
+
+## 🌐 坚果云WebDAV访问Obsidian [2026-04-04]
+
+### 连接信息
+- **账号**: 1034440765@qq.com
+- **服务器**: https://dav.jianguoyun.com/dav/
+- **密码**: ai7eaer5mv2gixex
+- **Vault路径**: /BOSI/zhaorui/（即坚果云/BOSI/zhaorui/）
+
+### 使用方式
+- 通过WebDAV直接读取/搜索雪子的Obsidian笔记
+- 脚本位置: ~/.openclaw/workspace/obsidian-webdav/webdav.sh
+- 配置: ~/.openclaw/workspace/obsidian-webdav/config.env
+
+### 当前笔记结构
+```
+/BOSI/zhaorui/
+├── .obsidian/           # Obsidian配置
+├── 创建链接.md
+├── 工作/
+│   └── 2026.4.4.md     # 待办事项
+├── 未命名/
+└── 欢迎.md
+```
+
+### 可用命令
+```bash
+# 列出文件
+~/.openclaw/workspace/obsidian-webdav/webdav.sh list
+
+# 读取笔记
+~/.openclaw/workspace/obsidian-webdav/webdav.sh read <文件名>
+
+# 搜索
+~/.openclaw/workspace/obsidian-webdav/webdav.sh search <关键词>
+```
+
+### 用途
+- AI可以搜索雪子的Obsidian笔记内容
+- 跨记忆关联（我的记忆 + 雪子的笔记）
+- 工作记录同步
