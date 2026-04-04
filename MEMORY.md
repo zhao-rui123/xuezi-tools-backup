@@ -17,23 +17,26 @@
 7. **电费清单处理器** - 自动处理国网电费清单和负荷曲线，计算储能最优容量
 8. **小龙虾之家** 🦞 - AI助手工作状态可视化看板
 
-## 🚀 雪子知识库 (XueziKB) - 项目已终止 [2026-04-04]
+## 🚀 雪子知识库 (XueziKB) - 方案已废弃 [2026-04-04]
 
-项目于2026-04-04终止，原因：需求不清晰，执行效果差。
+### 历史
+- 原计划：独立Windows/Android客户端 + 云端API
+- 2026-04-04：决定废弃，改用 Obsidian + 坚果云方案
 
-### 备份信息
+### 当前方案
+- **Obsidian** 作为笔记工具（Windows已安装）
+- **坚果云** 作为同步服务（WebDAV已配置）
+- **我（雪子助手）** 通过WebDAV增强搜索和整理
+
+### 备份信息（仅保留参考）
 - **备份文件**: `xuezi-tools-backup.tar.gz` (2.0MB)
 - **备份位置**: 
   - 腾讯云服务器: `/usr/share/nginx/html/xuezi-tools-backup.tar.gz`
   - GitHub仓库: https://github.com/zhao-rui123/xuezi-tools-backup
-- **最后备份时间**: 2026-02-20
 
-## 恢复方法
+### 恢复方法（参考）
 ```bash
-# 解压到网站目录
 tar -xzvf xuezi-tools-backup.tar.gz -C /usr/share/nginx/html/
-
-# 设置权限
 chmod -R 755 /usr/share/nginx/html/*
 chmod 644 /usr/share/nginx/html/*/index.html
 ```
@@ -728,23 +731,16 @@ Opus验收审查 → 雪子确认
 ### 核心原则
 **所有决定必须经过雪子确认。没有捷径可走。**
 
-## 雪子知识库 (XueziKB) 项目重启 [2026-04-04]
+## 雪子知识库 (XueziKB) - 项目终止，方案作废 [2026-04-04]
 
-### 技术决策
-- Windows端：WinUI 3 独立项目（C#）
-- Android端：Android Studio + Kotlin + Jetpack Compose
-- 共享类库：.NET Standard Library
-- 本地数据库：SQLite
-- 云端API：Python FastAPI + SQLite
-- 架构文档：v6版本，已生成
+### 决策
+- 2026-04-04 决定：放弃独立客户端开发
+- 原因：Obsidian + 坚果云 + WebDAV 方案更简单实用
 
-### 当前状态
-- 架构文档v6已生成，等待雪子确认
-- 项目暂停中
-
-### 雪子的指示
-- 独立客户端，不要Electron浏览器模式
-- 低并发同步场景
+### 已删除内容
+- 云端FastAPI服务：已删除 `/opt/xuezi-kb/xuezi-kb-cloud/`
+- PM2进程：xuezi-kb-cloud 已删除
+- nginx配置：/kb-cloud/ 路由已移除
 
 ---
 
