@@ -88,3 +88,15 @@ ssh -i ~/.ssh/id_ed25519 root@106.54.25.161 "free -h; df -h /; ps aux --sort=-%c
 - 内存 > 80% → 发送告警到飞书
 - 磁盘 > 70% → 发送告警到飞书
 - SSH失败登录 > 100次 → 自动封禁可疑IP
+
+## Cron任务管理 (2026-04-04 更新)
+
+### openclaw cron 统一管理
+| 任务ID | 名称 | 调度 | 说明 |
+|--------|------|------|------|
+| 9358a51d... | daily-backup | 每天22:00 | AI执行备份+主动排查 |
+| 82001b2e... | ouc-cleanup | 每周日03:00 | OUC文件夹清理 |
+| ee4e1e55... | obsidian-weekly-sync | 每周日09:00 | Obsidian笔记整理 |
+
+### crontab 保留（系统级备份）
+- 22:00备份：双保险，Gateway停了也有执行

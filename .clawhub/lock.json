@@ -92,6 +92,18 @@
     "minimax-web-search": {
       "version": "1.0.7",
       "installedAt": 1774242509815
+    },
+    "glmv-caption": {
+      "version": "1.0.2",
+      "installedAt": 1775310979525
+    },
+    "glmv-doc-based-writing": {
+      "version": "1.0.1",
+      "installedAt": 1775311082126
+    },
+    "glmocr": {
+      "version": "1.0.3",
+      "installedAt": 1775311262085
     }
   }
 }

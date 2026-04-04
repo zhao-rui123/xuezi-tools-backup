@@ -1,0 +1,151 @@
+{
+  "stock_code": "002460.SZ",
+  "market": "sz",
+  "fetch_time": "2026-04-04T23:11:17.642810",
+  "kline_source": "eastmoney",
+  "financials": {
+    "currentPrice": 79.75,
+    "previousClose": 79.93,
+    "trailingPE": 103.67,
+    "priceToBook": 3.7,
+    "marketCap": 167211378719.0,
+    "fiftyTwoWeekHigh": 82.19,
+    "fiftyTwoWeekLow": 78.8,
+    "shortName": "赣锋锂业"
+  },
+  "technicals": {
+    "close": 79.75,
+    "ma5": 79.1,
+    "ma20": 71.91,
+    "vol_ratio": 0.97,
+    "rsi": 65.9,
+    "macd_hist": 1.1217,
+    "prev_macd_hist": 1.1984,
+    "ma60": 69.61,
+    "ma_status": "多头排列",
+    "macd_status": "动能减弱",
+    "rsi_status": "中性"
+  },
+  "capital_flow_label": "北向资金",
+  "capital_flow_summary": {
+    "type": "北向资金",
+    "consecutive_days": 0,
+    "direction": "净卖出",
+    "recent_total_万股": 0.0
+  },
+  "main_capital_flow": {
+    "recent_days": [
+      {
+        "date": "2026-04-03",
+        "main_net_inflow": -127374320.0,
+        "retail_net_inflow": -104985568.0
+      }
+    ],
+    "total_main_net_inflow": -127374320.0,
+    "direction": "主力净流出",
+    "consecutive_days": 1
+  },
+  "cls_news": [],
+  "analyst_reports": [
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 2,
+      "title": "高价硫磺及税补计提影响公司全年利润，公司长期成长趋势仍强",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821024967",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821024967_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年报点评：高压电器与其他粉体高增亮眼，期待新产能逐步释放增量",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821024515",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821024515_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "增持",
+      "change": 3,
+      "title": "2025年报点评：铜价上涨+中标价格下行影响，2025年盈利承压",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821024509",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821024509_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "增持",
+      "change": 3,
+      "title": "25年归母同比高增87.69%，内增外拓塑造企业长期生命力",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821024491",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821024491_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "25年报点评：油运业绩大涨，重视公司龙头地位与周期共振",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821024236",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821024236_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 2,
+      "title": "聚焦核心业务，2025年收入利润再创新高",
+      "date": "2026-04-04",
+      "infoCode": "AP202604041821022327",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604041821022327_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年报点评：环卫新能源销量自身占比增至69%，剔除股权出售影响后业绩大增73%",
+      "date": "2026-04-03",
+      "infoCode": "AP202604031821018481",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604031821018481_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年报点评：短期承压，坚持高分红",
+      "date": "2026-04-03",
+      "infoCode": "AP202604031821018434",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604031821018434_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年业绩点评：颐莲变革成效显著，瑷尔博士调整升级放量可期",
+      "date": "2026-04-03",
+      "infoCode": "AP202604031821018373",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604031821018373_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 2,
+      "title": "模式动物业绩加速兑现，AI赋能抗体开发",
+      "date": "2026-04-03",
+      "infoCode": "AP202604031821018028",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604031821018028_1.pdf"
+    }
+  ],
+  "report_chart_pages": [],
+  "ir_presentation_pages": [],
+  "adr": {},
+  "macro": {},
+  "charts": {
+    "kline": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002460_20260404_2311/kline_em.png",
+    "kline_intraday": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002460_20260404_2311/kline_intraday.png",
+    "valuation": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002460_20260404_2311/valuation.png"
+  },
+  "chart_count": 3
+}
