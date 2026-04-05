@@ -784,3 +784,92 @@ Opus验收审查 → 雪子确认
 - AI可以搜索雪子的Obsidian笔记内容
 - 跨记忆关联（我的记忆 + 雪子的笔记）
 - 工作记录同步
+
+## 🧹 系统大清理 [2026-04-04]
+
+### 今晚完成的清理
+1. **技能包清理**：删除了 stock-suite、stock-monitor、glmocr/glmv-caption/glmv-doc-based-writing
+2. **保留的技能包**：
+   - `glmv-stock-analyst` — 智谱股票分析（主力）
+   - `mx_select_stock` — 东方财富妙想选股
+3. **Workspace清理**：70+个旧文档 → 10个（保留7天内的）
+4. **Git快照**：6个备份点，可随时回滚
+
+### 智谱API配置 [2026-04-04]
+- **API Key**: 3ca632d5d7794b7f93359897fb6afe7d.fHjZBEuKZzNkIjns
+- **用途**: glmv-stock-analyst 股票分析报告生成
+- **Token额度**: 注册赠送2500万tokens，20元充值未使用
+
+### 模型快捷切换 [2026-04-04]
+- 脚本位置: `~/bin/switch-model`
+- 命令格式: `switch-model mini|k2.5|qwen|code`
+- 也可直接对话让我切换
+
+### 每周清理规则 [2026-04-04]
+- 每周日OUC清理时，同步清理workspace超过7天的已发送文件
+- 保留：配置文件(skills/scripts/knowledge-base等)
+- 写入位置：HEARTBEAT.md
+
+## 📊 股票分析系统 [2026-04-04 更新]
+
+### 当前系统架构
+- **主力分析**: glmv-stock-analyst（智谱GLM模型 + 东方财富数据）
+- **报告格式**: Markdown → HTML/DOCX（手机友好）
+- **每日推送**: stock_daily_push_v3.py / stock_mixed_push.py（保留）
+
+### 分析流程
+1. 用户说"分析XX股票"
+2. 我调用 fetch_all.py 采集数据
+3. 生成 K线图/分时图/估值图
+4. 搜索精准新闻
+5. 生成 report.md → md2html.py → DOCX
+6. 发送报告到飞书
+
+### glmv-stock-analyst 路径
+- 技能包: `~/.openclaw/workspace/skills/glmv-stock-analyst/`
+- 数据输出: `~/.openclaw/workspace/stock_data_output/{code}_{timestamp}/`
+- Python venv: `~/.openclaw/workspace/skills/glmv-stock-analyst/scripts/venv/`
+
+## Obsidian知识库整合 (2026-04-05)
+
+### 整合架构
+- Obsidian + 坚果云WebDAV同步
+- OpenClaw通过webdav.sh读写笔记
+- PARA Second Brain组织知识
+- memory_search扩展到全文搜索
+
+### 技能包
+- obsidian-daily: 日记增强
+- obsidian-task: 任务管理
+- para-second-brain: PARA知识组织
+
+### PARA目录
+- notes/projects: 活跃项目
+- notes/areas: 持续责任
+- notes/resources: 参考资料
+- notes/archive: 归档
+
+### 配置文档
+- 本地: knowledge-base/Obsidian知识库整合流程.md
+- Obsidian: /雪子助手/技能索引/Obsidian知识库整合流程.md
+
+### 维护
+- 每周日09:00 obsidian-weekly-sync.sh同步
+
+## Obsidian笔记命名规范 v2.0 (2026-04-05)
+
+### 命名格式
+- 项目: `YYYY.MM.DD-领域-项目名称.md`
+- 知识: `YYYY.MM.DD-领域-知识主题.md`
+- 决策: `YYYY.MM.DD-决策-决策主题.md`
+- 工作日志: `YYYY.MM.DD-工作日志.md`
+
+### 示例
+- `2026.04.05-储能-亦庄项目.md`
+- `2026.04.05-股票-赣锋锂业分析.md`
+- `2026.04.05-决策-Obsidian整合方案.md`
+
+### 标签
+- 领域: #储能 #股票 #财务 #电气 #零碳园区
+- 类型: #项目 #知识 #决策 #模板 #待办
+- 状态: #进行中 #已完成 #待回顾 #重要

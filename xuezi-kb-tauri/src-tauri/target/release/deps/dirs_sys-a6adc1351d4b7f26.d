@@ -1,7 +1,0 @@
-/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/release/deps/dirs_sys-a6adc1351d4b7f26.d: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dirs-sys-0.5.0/src/lib.rs
-
-/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/release/deps/libdirs_sys-a6adc1351d4b7f26.rlib: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dirs-sys-0.5.0/src/lib.rs
-
-/Users/zhaoruicn/.openclaw/workspace/xuezi-kb-tauri/src-tauri/target/release/deps/libdirs_sys-a6adc1351d4b7f26.rmeta: /Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dirs-sys-0.5.0/src/lib.rs
-
-/Users/zhaoruicn/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dirs-sys-0.5.0/src/lib.rs:

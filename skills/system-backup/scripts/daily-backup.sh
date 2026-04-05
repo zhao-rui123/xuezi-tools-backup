@@ -55,7 +55,19 @@ perform_backup() {
     mkdir -p "$dest_dir"
     
     # 使用 --checksum 确保内容不同的文件也会被备份，而不是仅依赖时间戳
-    local rsync_output=$(rsync -av --checksum "$source_dir/" "$dest_dir/" 2>&1)
+    # 排除大体积可重建的目录
+    local rsync_output=$(rsync -av --checksum \
+        --exclude='__pycache__' \
+        --exclude='*.pyc' \
+        --exclude='.DS_Store' \
+        --exclude='image-process/' \
+        --exclude='glmv-stock-analyst/venv/' \
+        --exclude='archived/' \
+        --exclude='stock-suite/' \
+        --exclude='stock-analysis-pro/' \
+        --exclude='stock-data-optimizer/' \
+        --exclude='openclaw-data-extractor.backup/' \
+        "$source_dir/" "$dest_dir/" 2>&1)
     local rsync_exit=$?
     
     local transfer_count=$(echo "$rsync_output" | grep -E '^>' | wc -l)
@@ -216,6 +228,12 @@ if backup_with_retry "$WORKSPACE_SKILLS_SOURCE" "$BACKUP_DIR/workspace-skills" "
             --exclude='*.pyc' \
             --exclude='.DS_Store' \
             --exclude='*.backup' \
+            --exclude='image-process/' \
+            --exclude='glmv-stock-analyst/venv/' \
+            --exclude='archived/' \
+            --exclude='stock-suite/' \
+            --exclude='stock-analysis-pro/' \
+            --exclude='stock-data-optimizer/' \
             -C "$BACKUP_DIR" \
             workspace-skills/ 2>/dev/null
         
@@ -226,9 +244,9 @@ if backup_with_retry "$WORKSPACE_SKILLS_SOURCE" "$BACKUP_DIR/workspace-skills" "
             ln -s "$BACKUP_DIR/skills-backup/$BACKUP_NAME" "$LATEST_LINK"
             # 清理旧备份（保留最近30个）
             count=$(ls -1 "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz 2>/dev/null | wc -l)
-            if [ "${count:-0}" -gt 30 ]; then
-                log "Cleaning old tar.gz backups (keeping 30)..."
-                ls -1t "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz | tail -n +31 | xargs rm -f
+            if [ "${count:-0}" -gt 3 ]; then
+                log "Cleaning old tar.gz backups (keeping 3)..."
+                ls -1t "$BACKUP_DIR/skills-backup"/skills-backup-*.tar.gz | tail -n +4 | xargs rm -f
             fi
             ws_skills_info="$ws_skills_info + tar.gz"
         else

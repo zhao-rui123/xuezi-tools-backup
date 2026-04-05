@@ -70,6 +70,49 @@
 ### 执行时间
 每周一早上8点 heartbeat 时执行
 
+### 每周系统清理（周日03:00执行）
+
+**执行脚本：** `~/.openclaw/workspace/scripts/weekly-cleanup.sh`
+
+**清理范围：**
+
+#### 1. OUC备份目录
+- `skills-backup/` - 保留最新3个压缩包
+- `full-backups/` - 保留最新1个
+- `archived/` - 删除超过7天的归档
+- 删除过期manifest文件
+
+**清理规则：**
+- 删除 `*.docx/*.xlsx/*.pptx/*.html/*.pdf` 超过7天的文件
+- 删除 `test*.png/jpg` 测试图片
+- 删除 `*-for-trae.zip` 等给其他工具的备份
+- **保留：所有 *.md 文件**（核心配置永不删除）
+- **保留：skills/、scripts/、knowledge-base/、docs/、obsidian-webdav/
+
+**保留清单（永不删除）：**
+所有 *.md 文件（MEMORY/SOUL/AGENTS/USER/IDENTITY/TOOLS/HEARTBEAT等）
+skills/, scripts/, knowledge-base/, docs/, obsidian-webdav/
+
+#### 3. Claude Code缓存
+- `~/.claude/plugins/cache/` - 可安全清理
+- `~/.claude/backups/` - 保留最新3个
+- `~/.claude/telemetry/` - 可清理旧数据
+
+#### 4. 废弃项目检测
+- 检测是否存在已废弃项目（如xuezi-kb-tauri）
+- 检测是否有重复的技能包备份
+
+**清理规则：**
+- 保留核心配置文件
+- 保留skills/、scripts/、knowledge-base/、docs/等目录
+- 删除超过7天的临时文件、测试文件、旧备份
+
+**保留清单（永不删除）：**
+```
+MEMORY.md, SOUL.md, AGENTS.md, USER.md, IDENTITY.md, TOOLS.md, HEARTBEAT.md
+skills/, scripts/, knowledge-base/, docs/, obsidian-webdav/
+```
+
 ### 巡检项目
 1. **内存使用** - 超过80%告警
 2. **磁盘空间** - 超过70%告警
@@ -95,7 +138,7 @@ ssh -i ~/.ssh/id_ed25519 root@106.54.25.161 "free -h; df -h /; ps aux --sort=-%c
 | 任务ID | 名称 | 调度 | 说明 |
 |--------|------|------|------|
 | 9358a51d... | daily-backup | 每天22:00 | AI执行备份+主动排查 |
-| 82001b2e... | ouc-cleanup | 每周日03:00 | OUC文件夹清理 |
+| 82001b2e... | weekly-cleanup | 每周日03:00 | OpenClaw+CC全系统清理 |
 | ee4e1e55... | obsidian-weekly-sync | 每周日09:00 | Obsidian笔记整理 |
 
 ### crontab 保留（系统级备份）
