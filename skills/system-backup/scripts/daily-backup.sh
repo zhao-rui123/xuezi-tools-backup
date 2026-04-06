@@ -263,6 +263,9 @@ config_info="已备份"
 log "========== Backup Summary =========="
 if [ "$memory_success" = true ] && [ "$skills_success" = true ] && [ "$ws_skills_success" = true ]; then
     log "ALL BACKUPS COMPLETED SUCCESSFULLY"
+# 同步到Obsidian
+sync_to_obsidian
+
     send_notify "success" "$memory_info" "$skills_info" "$ws_skills_info" "$config_info"
     exit 0
 else
@@ -272,3 +275,60 @@ else
     send_notify "failed" "$memory_info" "$skills_info" "$ws_skills_info" "$config_info"
     exit 1
 fi
+
+# ============ Obsidian日志同步 ============
+
+sync_to_obsidian() {
+    log "Starting Obsidian sync..."
+    
+    local OBSIDIAN_DIR="/tmp/obsidian_sync_temp"
+    local TODAY=$(date +%Y.%m.%d)
+    local TIMESTAMP=$(date +%Y-%m-%d)
+    
+    # 创建临时目录
+    mkdir -p "$OBSIDIAN_DIR"
+    
+    # 1. 提取今日对话关键内容（从memory目录）
+    local MEMORY_TODAY="$MEMORY_SOURCE/${TIMESTAMP}.md"
+    if [ -f "$MEMORY_TODAY" ]; then
+        # 生成日志内容
+        cat > "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md" << 'LOGEOF'
+---
+tags: #AI/日志 #自动同步
+created: TIMESTAMP_PLACEHOLDER
+---
+
+# TIMESTAMP_DAY AI工作日志
+
+## 今日完成
+
+PLACEHOLDER_CONTENT
+
+## 关联项目
+
+PLACEHOLDER_PROJECTS
+
+---
+*本日志由系统自动生成*
+LOGEOF
+        
+        # 替换占位符
+        sed -i '' "s/TIMESTAMP_PLACEHOLDER/$TIMESTAMP/g" "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md"
+        sed -i '' "s/TIMESTAMP_DAY/$TODAY/g" "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md"
+        
+        # 提取关键任务（简化版）
+        local tasks=$(grep -E "^### \[UPDATE\]|^## " "$MEMORY_TODAY" 2>/dev/null | head -10 | sed 's/^/PLACEHOLDER_PROJECTS/')
+        sed -i '' "s/PLACEHOLDER_CONTENT/PLACEHOLDER_PROJECTS$tasks/g" "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md"
+        sed -i '' "s/PLACEHOLDER_PROJECTSPLACEHOLDER_PROJECTS/PLACEHOLDER_PROJECTS/g" "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md"
+        sed -i '' 's/PLACEHOLDER_PROJECTS//g' "$OBSIDIAN_DIR/${TODAY}-AI工作日志.md"
+        
+        log "SUCCESS: Obsidian sync completed"
+    else
+        log "INFO: No memory file for today, skipping Obsidian sync"
+    fi
+    
+    # 清理临时目录
+    rm -rf "$OBSIDIAN_DIR"
+}
+
+# 在主程序成功后调用（已添加到上面的成功逻辑后面）

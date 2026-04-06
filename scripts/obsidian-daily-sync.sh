@@ -3,6 +3,7 @@
 # 每天22:00备份后执行
 
 export HOME="/Users/zhaoruicn"
+OBSSIDIAN_DIR="$HOME/.openclaw/workspace/obsidian-webdav"
 MEMORY_SOURCE="/Users/zhaoruicn/.openclaw/workspace/memory"
 
 TODAY=$(date +%Y.%m.%d)
