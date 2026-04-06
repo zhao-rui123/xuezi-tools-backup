@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "huashu-nuwa": {
+      "source": "alchaincyf/nuwa-skill",
+      "sourceType": "github",
+      "computedHash": "e42322cd475377cb03a910ef7f6bab0ecdc7cc8e709f2858aab1a81477df8a4f"
+    },
     "markdown-proxy": {
       "source": "joeseesun/markdown-proxy",
       "sourceType": "github",
