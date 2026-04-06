@@ -1022,3 +1022,17 @@ YYYY.MM.DD-领域-主题.md
 - 标签搜索 → 快速定位
 - 图谱视图 → 知识可视化
 - 坚果云同步 → 跨设备无缝
+
+## ⏰ 定时任务 [2026-04-06]
+
+| 时间 | 任务 | 脚本 |
+|------|------|------|
+| 22:00 | 每日备份 | daily-backup.sh |
+| 22:05 | Obsidian同步 | obsidian-daily-sync.sh |
+| 周日09:00 | Obsidian周整理 | obsidian-weekly-sync.sh |
+
+### Obsidian同步任务
+- 位置: `~/.openclaw/workspace/scripts/obsidian-daily-sync.sh`
+- 执行时间: 每天22:05
+- 内容: 将当日memory同步到Obsidian AI助手日志文件夹
+- 标签: #AI/日志 #自动同步
