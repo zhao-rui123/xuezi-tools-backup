@@ -68,7 +68,6 @@ setup_backup_structure() {
     mkdir -p "$BACKUP_DIR/memory-backup/index"
     mkdir -p "$BACKUP_DIR/memory-backup/config"
     mkdir -p "$BACKUP_DIR/skills-backup/core"
-    mkdir -p "$BACKUP_DIR/skills-backup/archived"
     mkdir -p "$BACKUP_DIR/skills-backup/suites"
     mkdir -p "$FULL_BACKUP_DIR"
     _log "✅ 目录结构创建完成"
@@ -145,7 +144,7 @@ backup_skills_categorized() {
         for item in "$skills_src"/*; do
             [ -e "$item" ] || continue
             case "$(basename "$item")" in
-                archived|suites|README.md) continue ;;
+                archived|suites|README.md|image-process|glmv-stock-analyst|glmv-stock-analyst) continue ;;
                 *)
                     cp -r "$item" "$skills_dst/core/" 2>/dev/null || true
                     count=$((count + $(find "$item" -type f 2>/dev/null | wc -l)))
@@ -154,11 +153,11 @@ backup_skills_categorized() {
         done
     fi
 
-    # 已归档技能
-    if [ -d "$skills_src/archived" ]; then
-        cp -r "$skills_src/archived"/* "$skills_dst/archived/" 2>/dev/null || true
-        count=$((count + $(find "$skills_src/archived" -type f 2>/dev/null | wc -l)))
-    fi
+# 已注释:     # 已归档技能
+# 已注释:     if [ -d "$skills_src/archived" ]; then
+# 已注释:         cp -r "$skills_src/archived"/* "$skills_dst/archived/" 2>/dev/null || true
+# 已注释:         count=$((count + $(find "$skills_src/archived" -type f 2>/dev/null | wc -l)))
+# 已注释:     fi
 
     # 技能包套件
     if [ -d "$skills_src/suites" ]; then
@@ -194,7 +193,6 @@ generate_manifest() {
     },
     "skills": {
       "core": $(find "$BACKUP_DIR/skills-backup/core" -type f 2>/dev/null | wc -l),
-      "archived": $(find "$BACKUP_DIR/skills-backup/archived" -type f 2>/dev/null | wc -l),
       "suites": $(find "$BACKUP_DIR/skills-backup/suites" -type f 2>/dev/null | wc -l)
     }
   }
@@ -210,13 +208,26 @@ create_archive() {
     _log "创建压缩包: $ARCHIVE_NAME..."
     cd "$BACKUP_DIR"
 
-    # 排除不需要的目录
-    local excludes=()
-    for pattern in "${BACKUP_EXCLUDE_PATTERNS[@]}"; do
-        excludes+=("--exclude=$pattern")
-    done
+    # 完全重建 skills-backup 目录，排除 archived
+    rm -rf "$BACKUP_DIR/skills-backup"
+    mkdir -p "$BACKUP_DIR/skills-backup/core"
+    mkdir -p "$BACKUP_DIR/skills-backup/suites"
 
-    # 压缩（使用绝对路径备份workspace配置文件）
+    # 复制需要的技能（排除 archived）
+    if [ -d "$SKILLS_SOURCE" ]; then
+        for item in "$SKILLS_SOURCE"/*; do
+            [ -e "$item" ] || continue
+            case "$(basename "$item")" in
+                archived|suites|README.md|image-process|glmv-stock-analyst) continue ;;
+                *) cp -r "$item" "$BACKUP_DIR/skills-backup/core/" 2>/dev/null || true ;;
+            esac
+        done
+    fi
+    if [ -d "$SKILLS_SOURCE/suites" ]; then
+        cp -r "$SKILLS_SOURCE/suites/"* "$BACKUP_DIR/skills-backup/suites/" 2>/dev/null || true
+    fi
+
+    # 压缩
     if tar czf "$ARCHIVE_PATH" \
         --exclude="*.pyc" \
         --exclude="__pycache__" \
@@ -228,7 +239,7 @@ create_archive() {
         --exclude="*.tmp" \
         --exclude=".DS_Store" \
         memory-backup \
-        skills-backup \
+        skills-backup/ \
         "$WORKSPACE_DIR/AGENTS.md" \
         "$WORKSPACE_DIR/SOUL.md" \
         "$WORKSPACE_DIR/USER.md" \
