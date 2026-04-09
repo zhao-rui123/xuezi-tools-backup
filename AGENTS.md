@@ -117,23 +117,33 @@ MiniMax：80%（实际开发干活）
 子Agent：几乎0（只是文件操作）
 ```
 
-### Claude Code ACP 调用（2026-04-09 新增）
+### Claude Code ACP 调用（⚠️ 重要 - 我必须主动使用）
 
-**真正的 Claude Code 通过 acpx 调用：**
+**当需要调用真正的 Claude Code 时，我必须：**
 
-```bash
-# 命令行直接调用
-acpx claude "任务描述" --approve-all
+1. **检查 Claude GUI 是否运行**
+   ```bash
+   pgrep -x "Claude" && echo "请先关闭 Claude GUI" || continue
+   ```
 
-# 使用指定 session（推荐 --ttl 0 永久保持）
-acpx claude -s my-session --ttl 0 "任务描述" --approve-all
+2. **创建/使用 session**
+   ```bash
+   acpx claude sessions new --name <session名>
+   ```
 
-# 快捷脚本
-~/.openclaw/workspace/scripts/claude-acp.sh my-session "任务描述"
-```
+3. **调用 Claude Code**
+   ```bash
+   acpx claude -s <session名> --ttl 0 --timeout 600 "任务描述" --approve-all
+   ```
 
-**OpenClaw 集成：**
+**使用场景：**
+- 复杂代码任务（多文件、架构设计）
+- 需要深度思考的算法问题
+- 代码评审和重构
+
+**OpenClaw sessions_spawn 调用（推荐）：**
 ```javascript
+// 当我需要 Claude Code 处理复杂任务时
 sessions_spawn({
   task: "任务描述",
   runtime: "acp",
@@ -142,9 +152,22 @@ sessions_spawn({
 })
 ```
 
+**快捷脚本：**
+```bash
+~/.openclaw/workspace/scripts/claude-acp.sh <session名> "任务描述"
+```
+
+**模型切换（根据任务类型）：**
+```bash
+~/.openclaw/workspace/scripts/cc-model-switch.sh opus     # 架构/验收
+~/.openclaw/workspace/scripts/cc-model-switch.sh minimax  # 执行开发
+~/.openclaw/workspace/scripts/cc-model-switch.sh status   # 查看当前
+```
+
 **关键注意事项：**
 - ⚠️ **必须先关闭电脑的 Claude GUI**，Claude Code 只能单实例运行
 - 当前模型: MiniMax-M2.7（通过 ~/.claude/settings.json 配置）
+- 详细文档: `~/.openclaw/workspace/docs/claude-code-workflow.md`
 - 详细文档: `~/.openclaw/workspace/docs/claude-acp-usage.md`
 
 ---
