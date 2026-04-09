@@ -1036,3 +1036,95 @@ Obsidian: 雪子助手/储能专业Agent开发项目.md
 ### 更新机制
 - 每日18:00自动运行 `simulator_daily.sh`
 - 更新到Obsidian: `生活投资/模拟策略/`
+
+## 模型配置 [2026-04-09 更新]
+
+### Opus配置（雪子提供）
+| 项目 | 值 |
+|------|------|
+| Provider | opus-proxy |
+| Base URL | https://timesniper.club |
+| API Key | sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ |
+| 模型 | claude-opus-4-6 |
+| 调用方式 | sessions_spawn(model="opus-proxy/claude-opus-4-6") |
+
+### MiniMax配置（已有）
+| 项目 | 值 |
+|------|------|
+| Provider | minimax-cn |
+| Base URL | https://api.minimaxi.com/anthropic |
+| API Key | sk-cp-TaEn7XZH... |
+| 模型 | MiniMax-M2.7 |
+
+### Claude Code环境变量（给雪子CC用）
+```bash
+ANTHROPIC_AUTH_TOKEN=sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ
+ANTHROPIC_BASE_URL=https://timesniper.club
+ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-6
+ANTHROPIC_MODEL=claude-opus-4-6
+```
+
+### 使用场景
+- 架构设计/算法审核 → Opus (opus-proxy/claude-opus-4-6)
+- 执行开发/日常任务 → MiniMax (minimax-cn/MiniMax-M2.7)
+
+---
+
+## Claude Code ACP 集成 [2026-04-09 新增]
+
+### 配置完成
+通过 acpx 实现 OpenClaw 调用真正的 Claude Code：
+
+| 组件 | 状态 | 路径/命令 |
+|------|------|----------|
+| acpx CLI | ✅ 已安装 | `/opt/homebrew/bin/acpx` v0.5.3 |
+| acpx 配置 | ✅ 已完成 | `~/.acpx/config.json` |
+| OpenClaw ACP | ✅ 已启用 | `~/.openclaw/openclaw.json` |
+| 使用文档 | ✅ 已创建 | `~/.openclaw/workspace/docs/claude-acp-usage.md` |
+| 快捷脚本 | ✅ 已创建 | `~/.openclaw/workspace/scripts/claude-acp.sh` |
+
+### 使用方法
+
+**1. 命令行直接调用**
+```bash
+# 快速调用（自动创建 session）
+acpx claude "任务描述" --approve-all
+
+# 使用指定 session（推荐 --ttl 0 永久保持）
+acpx claude -s my-session --ttl 0 "任务描述" --approve-all
+
+# 长时间任务（10分钟超时）
+acpx claude --timeout 600 "复杂任务" --approve-all
+```
+
+**2. 快捷脚本调用**
+```bash
+~/.openclaw/workspace/scripts/claude-acp.sh my-session "任务描述"
+```
+
+**3. OpenClaw sessions_spawn 调用**
+```javascript
+sessions_spawn({
+  task: "任务描述",
+  runtime: "acp",
+  agentId: "claude",
+  runTimeoutSeconds: 600
+})
+```
+
+### 关键注意事项
+- **必须先关闭电脑的 Claude GUI**，Claude Code 只能单实例运行
+- **当前模型**: MiniMax-M2.7（通过 ~/.claude/settings.json 配置）
+- **默认 TTL**: 300秒（5分钟空闲后关闭），长时间任务用 `--ttl 0`
+
+### 切换到 Opus（未来需要时）
+编辑 `~/.claude/settings.json`:
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://timesniper.club",
+    "ANTHROPIC_AUTH_TOKEN": "sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ",
+    "ANTHROPIC_MODEL": "claude-opus-4-6"
+  }
+}
+```

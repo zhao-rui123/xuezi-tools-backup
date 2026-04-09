@@ -58,11 +58,12 @@ class CycleOptimizer:
 
         all_prices: List[Tuple[datetime, float]] = []
 
-        # 扫描所有列，每2列为一组（日前、实时）
-        col_idx = 1
+        # 扫描所有列，找出"实时"列
+        # col_idx=2对应openpyxl列C=实时（df.iloc[1,2]='实时'）
+        col_idx = 2
         while col_idx < df.shape[1]:
             label = df.iloc[1, col_idx]
-            if label == "日前":
+            if label == "实时":
                 date_val = df.iloc[2, col_idx]
                 if pd.notna(date_val):
                     try:

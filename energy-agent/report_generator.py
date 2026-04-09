@@ -6,6 +6,7 @@
 import json
 from datetime import datetime
 from typing import List, Dict, Any
+from cycle_optimizer import CycleOptimizerResult
 
 
 class ReportGenerator:
@@ -20,7 +21,7 @@ class ReportGenerator:
         """
         self.capacity_mwh = capacity_mwh
 
-    def generate_summary(self, cycles: List[Dict]) -> Dict[str, Any]:
+    def generate_summary(self, cycles: List[CycleOptimizerResult]) -> Dict[str, Any]:
         """
         生成汇总数据
 
@@ -30,7 +31,7 @@ class ReportGenerator:
         Returns:
             包含 total_cycles, total_spread, revenue_wan 的字典
         """
-        total_spread = sum(c['spread'] for c in cycles)
+        total_spread = sum(c.spread for c in cycles)
         # 价差单位是 元/MWh，除以1000转为 万元/MWh，再乘以容量
         revenue_wan = total_spread / 1000 * self.capacity_mwh
 
@@ -41,7 +42,7 @@ class ReportGenerator:
             'capacity_mwh': self.capacity_mwh
         }
 
-    def generate_text(self, cycles: List[Dict]) -> str:
+    def generate_text(self, cycles: List[CycleOptimizerResult]) -> str:
         """
         生成文本格式报告
 
@@ -54,7 +55,7 @@ class ReportGenerator:
         if not cycles:
             return "\n❌ 没有找到值得做的循环\n"
 
-        total_spread = sum(c['spread'] for c in cycles)
+        total_spread = sum(c.spread for c in cycles)
         revenue_wan = total_spread / 1000 * self.capacity_mwh
 
         lines = []
@@ -65,11 +66,11 @@ class ReportGenerator:
 
         for i, c in enumerate(cycles, 1):
             lines.append(f"\n🔄 循环 {i}:")
-            lines.append(f"   充电: {c['charge_start'].strftime('%m-%d %H:%M')} ~ {c['charge_end'].strftime('%H:%M')} ({c['charge_len']}小时)")
-            lines.append(f"         均价: {c['charge_price']:.2f} 元/MWh")
-            lines.append(f"   放电: {c['discharge_start'].strftime('%m-%d %H:%M')} ~ {c['discharge_end'].strftime('%H:%M')} ({c['discharge_len']}小时)")
-            lines.append(f"         均价: {c['discharge_price']:.2f} 元/MWh")
-            lines.append(f"   💰 价差: {c['spread']:.2f} 元/MWh")
+            lines.append(f"   充电: {c.charge_start.strftime('%m-%d %H:%M')} ~ {c.charge_end.strftime('%H:%M')} ({c.charge_len}小时)")
+            lines.append(f"         均价: {c.charge_price:.2f} 元/MWh")
+            lines.append(f"   放电: {c.discharge_start.strftime('%m-%d %H:%M')} ~ {c.discharge_end.strftime('%H:%M')} ({c.discharge_len}小时)")
+            lines.append(f"         均价: {c.discharge_price:.2f} 元/MWh")
+            lines.append(f"   💰 价差: {c.spread:.2f} 元/MWh")
 
         lines.append("\n" + "-" * 80)
         lines.append("📊 汇总:")
@@ -80,13 +81,13 @@ class ReportGenerator:
         # 按天统计
         all_days = set()
         for c in cycles:
-            day = c['charge_start'].date()
+            day = c.charge_start.date()
             all_days.add(day)
         lines.append(f"\n📅 涉及天数: {len(all_days)} 天")
 
         return "\n".join(lines)
 
-    def export_json(self, cycles: List[Dict], output_path: str) -> str:
+    def export_json(self, cycles: List[CycleOptimizerResult], output_path: str) -> str:
         """
         导出JSON格式报告
 
@@ -108,15 +109,15 @@ class ReportGenerator:
 
         for c in cycles:
             data['cycles'].append({
-                'charge_start': c['charge_start'].isoformat(),
-                'charge_end': c['charge_end'].isoformat(),
-                'charge_len': c['charge_len'],
-                'charge_price': round(c['charge_price'], 2),
-                'discharge_start': c['discharge_start'].isoformat(),
-                'discharge_end': c['discharge_end'].isoformat(),
-                'discharge_len': c['discharge_len'],
-                'discharge_price': round(c['discharge_price'], 2),
-                'spread': round(c['spread'], 2)
+                'charge_start': c.charge_start.isoformat(),
+                'charge_end': c.charge_end.isoformat(),
+                'charge_len': c.charge_len,
+                'charge_price': round(c.charge_price, 2),
+                'discharge_start': c.discharge_start.isoformat(),
+                'discharge_end': c.discharge_end.isoformat(),
+                'discharge_len': c.discharge_len,
+                'discharge_price': round(c.discharge_price, 2),
+                'spread': round(c.spread, 2)
             })
 
         with open(output_path, 'w', encoding='utf-8') as f:
@@ -124,7 +125,7 @@ class ReportGenerator:
 
         return output_path
 
-    def export_markdown(self, cycles: List[Dict], output_path: str) -> str:
+    def export_markdown(self, cycles: List[CycleOptimizerResult], output_path: str) -> str:
         """
         导出Markdown格式报告
 
@@ -157,7 +158,7 @@ class ReportGenerator:
         # 按天统计
         all_days = set()
         for c in cycles:
-            all_days.add(c['charge_start'].date())
+            all_days.add(c.charge_start.date())
         lines.append(f"| 涉及天数 | {len(all_days)} 天 |")
 
         if cycles:
@@ -168,9 +169,9 @@ class ReportGenerator:
             lines.append("|---|----------|----------|----------|----------|------|")
 
             for i, c in enumerate(cycles, 1):
-                charge_period = f"{c['charge_start'].strftime('%m-%d %H:%M')}~{c['charge_end'].strftime('%H:%M')}"
-                discharge_period = f"{c['discharge_start'].strftime('%m-%d %H:%M')}~{c['discharge_end'].strftime('%H:%M')}"
-                lines.append(f"| {i} | {charge_period} | {c['charge_price']:.2f} | {discharge_period} | {c['discharge_price']:.2f} | {c['spread']:.2f} |")
+                charge_period = f"{c.charge_start.strftime('%m-%d %H:%M')}~{c.charge_end.strftime('%H:%M')}"
+                discharge_period = f"{c.discharge_start.strftime('%m-%d %H:%M')}~{c.discharge_end.strftime('%H:%M')}"
+                lines.append(f"| {i} | {charge_period} | {c.charge_price:.2f} | {discharge_period} | {c.discharge_price:.2f} | {c.spread:.2f} |")
 
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write("\n".join(lines))

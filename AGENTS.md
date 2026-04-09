@@ -117,6 +117,38 @@ MiniMax：80%（实际开发干活）
 子Agent：几乎0（只是文件操作）
 ```
 
+### Claude Code ACP 调用（2026-04-09 新增）
+
+**真正的 Claude Code 通过 acpx 调用：**
+
+```bash
+# 命令行直接调用
+acpx claude "任务描述" --approve-all
+
+# 使用指定 session（推荐 --ttl 0 永久保持）
+acpx claude -s my-session --ttl 0 "任务描述" --approve-all
+
+# 快捷脚本
+~/.openclaw/workspace/scripts/claude-acp.sh my-session "任务描述"
+```
+
+**OpenClaw 集成：**
+```javascript
+sessions_spawn({
+  task: "任务描述",
+  runtime: "acp",
+  agentId: "claude",
+  runTimeoutSeconds: 600
+})
+```
+
+**关键注意事项：**
+- ⚠️ **必须先关闭电脑的 Claude GUI**，Claude Code 只能单实例运行
+- 当前模型: MiniMax-M2.7（通过 ~/.claude/settings.json 配置）
+- 详细文档: `~/.openclaw/workspace/docs/claude-acp-usage.md`
+
+---
+
 ### 调度决策树
 
 ```
