@@ -17,6 +17,12 @@
 7. **电费清单处理器** - 自动处理国网电费清单和负荷曲线，计算储能最优容量
 8. **小龙虾之家** 🦞 - AI助手工作状态可视化看板
 
+## 🚀 雪子知识库 (XueziKB) - 方案已废弃 [2026-04-04]
+
+### 历史
+- 原计划：独立Windows/Android客户端 + 云端API
+- 2026-04-04：决定废弃，改用 Obsidian + 坚果云方案
+
 ### 当前方案
 - **Obsidian** 作为笔记工具（Windows已安装）
 - **坚果云** 作为同步服务（WebDAV已配置）
@@ -91,6 +97,9 @@ API Key已配置：mkt_zdTwvCWmIr9g4mHoM8sOsaK8M_ffrhinQPP-GAkhTNs
 
 整合自有技能包 + 妙想数据：
 
+| 分析维度 | 来源 | 内容 |
+|----------|------|------|
+| 股票类型 | 自有stock_classifier | 成长股/周期股 |
 | 技术形态 | 自有pattern | W底等形态 |
 | MACD/KDJ | 自有technical_analysis | 指标计算 |
 | 成交量 | 自有data_fetcher | 量价分析 |
@@ -152,10 +161,16 @@ Content-Type: text/plain; charset=utf-8
 正文...
 EOF
 ```
+
+---
+
 ## 问题解决
 - **问题**：MiniMax 显示 M2/M2.1 而不是 M2.7
 - **原因**：模型 id 缺少 `minimax-cn/` 前缀，匹配到了内置别名
 - **修复**：改为 `minimax-cn/MiniMax-M2.7` 后正常
+
+## [PROJECT] 项目进展
+- **股票分析**：新增璞泰来、贝特瑞负极材料分析能力
 
 ## 安全与隐私准则 [2026-03-07 更新]
 
@@ -368,6 +383,9 @@ mv openclaw.json.bak openclaw.json
 
 ## 🧠 模型配置 (2026-03-20 更新)
 
+### 当前模型命令
+
+| 命令 | 模型 | 说明 |
 |------|------|------|
 | `/model MiniMax-M2.7` | minimax-cn/MiniMax-M2.7 | 主用模型 |
 | `/model k2.5` | bailian/kimi-k2.5 | 百炼Kimi |
@@ -439,6 +457,11 @@ mv openclaw.json.bak openclaw.json
 
 ---
 
+## [PROJECT] 项目进展
+- **照片处理**：成功4x放大+云南大理洱海风景背景
+- **PPT制作系统**：确定工作流，等待安装powerpoint-pptx
+
+### [SKILL] 技能包更新
 - **已整理PPT技能包清单**：19个，推荐powerpoint-pptx
 - **已使用image-process**：放大、去背景、换背景
 
@@ -807,6 +830,80 @@ Opus验收审查 → 雪子确认
 - 数据输出: `~/.openclaw/workspace/stock_data_output/{code}_{timestamp}/`
 - Python venv: `~/.openclaw/workspace/skills/glmv-stock-analyst/scripts/venv/`
 
+## Obsidian知识库整合 (2026-04-05)
+
+### 整合架构
+- Obsidian + 坚果云WebDAV同步
+- OpenClaw通过webdav.sh读写笔记
+- PARA Second Brain组织知识
+- memory_search扩展到全文搜索
+
+### 技能包
+- obsidian-daily: 日记增强
+- obsidian-task: 任务管理
+- para-second-brain: PARA知识组织
+
+### PARA目录
+- notes/projects: 活跃项目
+- notes/areas: 持续责任
+- notes/resources: 参考资料
+- notes/archive: 归档
+
+### 配置文档
+- 本地: knowledge-base/Obsidian知识库整合流程.md
+- Obsidian: /雪子助手/技能索引/Obsidian知识库整合流程.md
+
+### 维护
+- 每周日09:00 obsidian-weekly-sync.sh同步
+
+## Obsidian笔记命名规范 v2.0 (2026-04-05)
+
+### 命名格式
+- 项目: `YYYY.MM.DD-领域-项目名称.md`
+- 知识: `YYYY.MM.DD-领域-知识主题.md`
+- 决策: `YYYY.MM.DD-决策-决策主题.md`
+- 工作日志: `YYYY.MM.DD-工作日志.md`
+
+### 示例
+- `2026.04.05-储能-亦庄项目.md`
+- `2026.04.05-股票-赣锋锂业分析.md`
+- `2026.04.05-决策-Obsidian整合方案.md`
+
+### 标签
+- 领域: #储能 #股票 #财务 #电气 #零碳园区
+- 类型: #项目 #知识 #决策 #模板 #待办
+- 状态: #进行中 #已完成 #待回顾 #重要
+
+## Obsidian笔记整理规范（铁律）
+
+### 命名格式
+```
+YYYY.MM.DD-领域-主题.md
+例: 2026.04.05-储能-亦庄项目.md
+```
+
+### 标签要求
+每个笔记、每个条目都要打标签：
+
+#### 顶级标签（文件开头）
+```
+#工作 #知识 #项目 #决策
+```
+
+#### 条目标签（行内）
+```
+#储能 #股票 #GitHub #Obsidian #技能包
+#进行中 #已完成 #待办 #重要
+```
+
+#### 禁止
+- ❌ 空标签
+- ❌ 只有日期没有领域
+- ❌ 条目没有标签
+
+### 示例
+```markdown
+# 2026.04.05 工作日志 #工作 #日常
 
 ## 完成
 - [x] 分析赣锋锂业股票 #股票 #赣锋锂业
@@ -1005,34 +1102,3 @@ Obsidian: 雪子助手/储能专业Agent开发项目.md
 - 每次写日志使用内联标签
 - 不同段落不同标签
 - 定期更新索引
-
-## 策略B v5 模拟盘 [2026-04-09]
-
-### 模拟盘配置
-- **初始资金**: 100万
-- **最大持仓**: 20只
-- **每只金额**: 约5万（均分）
-- **建仓日期**: 2026-04-09
-- **筛选范围**: 全A股5194只
-
-### 策略B v5 规则
-**买入条件**:
-1. MACD.DIF > 0（零轴上方）
-2. MA(5) > MA(20)（均线多头）
-3. CCI(14) > 0
-4. 均量 <= 1.5x MA20（过热过滤）
-5. boll_pos <= 2.0（不追高过滤）
-6. 排除涨停
-
-**卖出条件**:
-- 持有15个交易日 **或**
-- 买入后从最高点回落8%止损
-
-### 持仓文件
-- `~/.openclaw/workspace/simulator/portfolio.json`
-- 核心代码: `~/.openclaw/workspace/simulator/core.py`
-- Obsidian同步: `~/.openclaw/workspace/simulator/update_obsidian.py`
-
-### 更新机制
-- 每日18:00自动运行 `simulator_daily.sh`
-- 更新到Obsidian: `生活投资/模拟策略/`

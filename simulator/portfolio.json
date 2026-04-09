@@ -1,0 +1,409 @@
+{
+  "cash": 20379.0,
+  "positions": [
+    {
+      "code": "sh600007",
+      "name": "中国国贸",
+      "buy_price": 21.34,
+      "shares": 2300,
+      "buy_date": "2026-04-09",
+      "high_price": 21.34,
+      "current_price": 21.34,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600015",
+      "name": "华夏银行",
+      "buy_price": 7.42,
+      "shares": 6700,
+      "buy_date": "2026-04-09",
+      "high_price": 7.42,
+      "current_price": 7.42,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600026",
+      "name": "中远海能",
+      "buy_price": 26.07,
+      "shares": 1900,
+      "buy_date": "2026-04-09",
+      "high_price": 26.07,
+      "current_price": 26.07,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600062",
+      "name": "华润双鹤",
+      "buy_price": 18.56,
+      "shares": 2600,
+      "buy_date": "2026-04-09",
+      "high_price": 18.56,
+      "current_price": 18.56,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600066",
+      "name": "宇通客车",
+      "buy_price": 36.71,
+      "shares": 1300,
+      "buy_date": "2026-04-09",
+      "high_price": 36.71,
+      "current_price": 36.71,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600080",
+      "name": "金花股份",
+      "buy_price": 8.8,
+      "shares": 5600,
+      "buy_date": "2026-04-09",
+      "high_price": 8.8,
+      "current_price": 8.8,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600099",
+      "name": "林海股份",
+      "buy_price": 11.31,
+      "shares": 4400,
+      "buy_date": "2026-04-09",
+      "high_price": 11.31,
+      "current_price": 11.31,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600125",
+      "name": "铁龙物流",
+      "buy_price": 6.84,
+      "shares": 7300,
+      "buy_date": "2026-04-09",
+      "high_price": 6.84,
+      "current_price": 6.84,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600127",
+      "name": "金健米业",
+      "buy_price": 7.35,
+      "shares": 6800,
+      "buy_date": "2026-04-09",
+      "high_price": 7.35,
+      "current_price": 7.35,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600132",
+      "name": "重庆啤酒",
+      "buy_price": 57.12,
+      "shares": 800,
+      "buy_date": "2026-04-09",
+      "high_price": 57.12,
+      "current_price": 57.12,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600176",
+      "name": "中国巨石",
+      "buy_price": 27.35,
+      "shares": 1800,
+      "buy_date": "2026-04-09",
+      "high_price": 27.35,
+      "current_price": 27.35,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600196",
+      "name": "复星医药",
+      "buy_price": 26.8,
+      "shares": 1800,
+      "buy_date": "2026-04-09",
+      "high_price": 26.8,
+      "current_price": 26.8,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600222",
+      "name": "太龙药业",
+      "buy_price": 7.35,
+      "shares": 6800,
+      "buy_date": "2026-04-09",
+      "high_price": 7.35,
+      "current_price": 7.35,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600234",
+      "name": "科新发展",
+      "buy_price": 14.98,
+      "shares": 3300,
+      "buy_date": "2026-04-09",
+      "high_price": 14.98,
+      "current_price": 14.98,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600251",
+      "name": "冠农股份",
+      "buy_price": 11.07,
+      "shares": 4500,
+      "buy_date": "2026-04-09",
+      "high_price": 11.07,
+      "current_price": 11.07,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600252",
+      "name": "中恒集团",
+      "buy_price": 2.64,
+      "shares": 18900,
+      "buy_date": "2026-04-09",
+      "high_price": 2.64,
+      "current_price": 2.64,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600257",
+      "name": "大湖股份",
+      "buy_price": 7.23,
+      "shares": 6900,
+      "buy_date": "2026-04-09",
+      "high_price": 7.23,
+      "current_price": 7.23,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600276",
+      "name": "恒瑞医药",
+      "buy_price": 57.45,
+      "shares": 800,
+      "buy_date": "2026-04-09",
+      "high_price": 57.45,
+      "current_price": 57.45,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600285",
+      "name": "羚锐制药",
+      "buy_price": 22.18,
+      "shares": 2200,
+      "buy_date": "2026-04-09",
+      "high_price": 22.18,
+      "current_price": 22.18,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600345",
+      "name": "长江通信",
+      "buy_price": 44.93,
+      "shares": 1100,
+      "buy_date": "2026-04-09",
+      "high_price": 44.93,
+      "current_price": 44.93,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    }
+  ],
+  "trades": [
+    {
+      "date": "2026-04-09",
+      "code": "sh600007",
+      "name": "中国国贸",
+      "action": "buy",
+      "price": 21.34,
+      "shares": 2300
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600015",
+      "name": "华夏银行",
+      "action": "buy",
+      "price": 7.42,
+      "shares": 6700
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600026",
+      "name": "中远海能",
+      "action": "buy",
+      "price": 26.07,
+      "shares": 1900
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600062",
+      "name": "华润双鹤",
+      "action": "buy",
+      "price": 18.56,
+      "shares": 2600
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600066",
+      "name": "宇通客车",
+      "action": "buy",
+      "price": 36.71,
+      "shares": 1300
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600080",
+      "name": "金花股份",
+      "action": "buy",
+      "price": 8.8,
+      "shares": 5600
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600099",
+      "name": "林海股份",
+      "action": "buy",
+      "price": 11.31,
+      "shares": 4400
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600125",
+      "name": "铁龙物流",
+      "action": "buy",
+      "price": 6.84,
+      "shares": 7300
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600127",
+      "name": "金健米业",
+      "action": "buy",
+      "price": 7.35,
+      "shares": 6800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600132",
+      "name": "重庆啤酒",
+      "action": "buy",
+      "price": 57.12,
+      "shares": 800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600176",
+      "name": "中国巨石",
+      "action": "buy",
+      "price": 27.35,
+      "shares": 1800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600196",
+      "name": "复星医药",
+      "action": "buy",
+      "price": 26.8,
+      "shares": 1800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600222",
+      "name": "太龙药业",
+      "action": "buy",
+      "price": 7.35,
+      "shares": 6800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600234",
+      "name": "科新发展",
+      "action": "buy",
+      "price": 14.98,
+      "shares": 3300
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600251",
+      "name": "冠农股份",
+      "action": "buy",
+      "price": 11.07,
+      "shares": 4500
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600252",
+      "name": "中恒集团",
+      "action": "buy",
+      "price": 2.64,
+      "shares": 18900
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600257",
+      "name": "大湖股份",
+      "action": "buy",
+      "price": 7.23,
+      "shares": 6900
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600276",
+      "name": "恒瑞医药",
+      "action": "buy",
+      "price": 57.45,
+      "shares": 800
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600285",
+      "name": "羚锐制药",
+      "action": "buy",
+      "price": 22.18,
+      "shares": 2200
+    },
+    {
+      "date": "2026-04-09",
+      "code": "sh600345",
+      "name": "长江通信",
+      "action": "buy",
+      "price": 44.93,
+      "shares": 1100
+    }
+  ],
+  "start_date": "2026-04-09",
+  "last_update": "2026-04-09"
+}
