@@ -1128,3 +1128,19 @@ sessions_spawn({
   }
 }
 ```
+
+### 三层模型工作流
+
+| 阶段 | 模型 | Session | 命令 |
+|------|------|---------|------|
+| **架构设计** | Opus | arch | `cc-model-switch.sh opus && acpx claude -s arch` |
+| **执行开发** | MiniMax | dev | `cc-model-switch.sh minimax && acpx claude -s dev` |
+| **验收审查** | Opus | review | `cc-model-switch.sh opus && acpx claude -s review` |
+
+**标准流程：**
+1. `cc-model-switch.sh opus` → 切换 Opus
+2. `acpx claude -s arch "架构任务" --ttl 0 --approve-all`
+3. `cc-model-switch.sh minimax` → 切换 MiniMax
+4. `acpx claude -s dev "开发任务" --ttl 0 --approve-all`
+5. `cc-model-switch.sh opus` → 切换 Opus
+6. `acpx claude -s review "验收任务" --ttl 0 --approve-all`
