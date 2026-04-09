@@ -1,5 +1,0 @@
-#!/usr/bin/env python3
-"""计算 1+2+3+...+100 的总和"""
-
-result = sum(range(1, 101))
-print(f"1 + 2 + 3 + ... + 100 = {result}")
