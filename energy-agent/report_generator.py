@@ -1,165 +1,198 @@
 #!/usr/bin/env python3
 """
-储能电价分析报告生成器
-输入：CycleOptimizerResult列表 或 PriceLoader数据
-输出：格式化报告（控制台/Markdown/JSON）
+储能电价循环优化报告生成器
+功能：根据优化结果生成文本/JSON/Markdown格式报告
 """
-from dataclasses import dataclass
-from datetime import datetime
-from typing import List, Optional
 import json
+from datetime import datetime
+from typing import List, Dict, Any
 
-@dataclass
-class CycleOptimizerResult:
-    charge_start: datetime
-    charge_end: datetime
-    charge_len: int
-    charge_price: float
-    discharge_start: datetime
-    discharge_end: datetime
-    discharge_len: int
-    discharge_price: float
-    spread: float
-    profit_per_mwh: float
 
 class ReportGenerator:
     """报告生成器"""
 
     def __init__(self, capacity_mwh: float = 100.0):
+        """
+        初始化报告生成器
+
+        Args:
+            capacity_mwh: 储能容量(MWh)，用于计算预估收益
+        """
         self.capacity_mwh = capacity_mwh
 
-    def generate_text(self, cycles: List[CycleOptimizerResult]) -> str:
-        """生成文本格式报告"""
+    def generate_summary(self, cycles: List[Dict]) -> Dict[str, Any]:
+        """
+        生成汇总数据
+
+        Args:
+            cycles: 循环列表
+
+        Returns:
+            包含 total_cycles, total_spread, revenue_wan 的字典
+        """
+        total_spread = sum(c['spread'] for c in cycles)
+        # 价差单位是 元/MWh，除以1000转为 万元/MWh，再乘以容量
+        revenue_wan = total_spread / 1000 * self.capacity_mwh
+
+        return {
+            'total_cycles': len(cycles),
+            'total_spread': round(total_spread, 2),
+            'revenue_wan': round(revenue_wan, 2),
+            'capacity_mwh': self.capacity_mwh
+        }
+
+    def generate_text(self, cycles: List[Dict]) -> str:
+        """
+        生成文本格式报告
+
+        Args:
+            cycles: 循环列表
+
+        Returns:
+            格式化的文本报告
+        """
         if not cycles:
-            return "❌ 没有找到值得做的循环"
+            return "\n❌ 没有找到值得做的循环\n"
+
+        total_spread = sum(c['spread'] for c in cycles)
+        revenue_wan = total_spread / 1000 * self.capacity_mwh
 
         lines = []
-        lines.append("\n" + "=" * 80)
-        lines.append("⚡ 最优充放电循环方案")
+        lines.append("")
+        lines.append("=" * 80)
+        lines.append("⚡ 储能电价循环优化报告")
         lines.append("=" * 80)
 
-        total_profit = 0.0
         for i, c in enumerate(cycles, 1):
             lines.append(f"\n🔄 循环 {i}:")
-            lines.append(f"   充电: {c.charge_start.strftime('%m-%d %H:%M')} ~ {c.charge_end.strftime('%H:%M')} ({c.charge_len}小时)")
-            lines.append(f"         均价: {c.charge_price:.2f} 元/MWh")
-            lines.append(f"   放电: {c.discharge_start.strftime('%m-%d %H:%M')} ~ {c.discharge_end.strftime('%H:%M')} ({c.discharge_len}小时)")
-            lines.append(f"         均价: {c.discharge_price:.2f} 元/MWh")
-            lines.append(f"   💰 价差: {c.spread:.2f} 元/MWh")
-            total_profit += c.spread
+            lines.append(f"   充电: {c['charge_start'].strftime('%m-%d %H:%M')} ~ {c['charge_end'].strftime('%H:%M')} ({c['charge_len']}小时)")
+            lines.append(f"         均价: {c['charge_price']:.2f} 元/MWh")
+            lines.append(f"   放电: {c['discharge_start'].strftime('%m-%d %H:%M')} ~ {c['discharge_end'].strftime('%H:%M')} ({c['discharge_len']}小时)")
+            lines.append(f"         均价: {c['discharge_price']:.2f} 元/MWh")
+            lines.append(f"   💰 价差: {c['spread']:.2f} 元/MWh")
 
         lines.append("\n" + "-" * 80)
-        lines.append(f"📊 汇总:")
+        lines.append("📊 汇总:")
         lines.append(f"   总循环数: {len(cycles)} 个")
-        lines.append(f"   总价差: {total_profit:.2f} 元/MWh")
-        lines.append(f"   假设{self.capacity_mwh}MWh容量：总收益 {total_profit/1000*self.capacity_mwh:.2f} 万元")
+        lines.append(f"   总价差: {total_spread:.2f} 元/MWh")
+        lines.append(f"   预估收益({self.capacity_mwh}MWh): {revenue_wan:.2f} 万元")
 
         # 按天统计
         all_days = set()
         for c in cycles:
-            all_days.add(c.charge_start.date())
+            day = c['charge_start'].date()
+            all_days.add(day)
         lines.append(f"\n📅 涉及天数: {len(all_days)} 天")
 
         return "\n".join(lines)
 
-    def generate_summary(self, cycles: List[CycleOptimizerResult]) -> dict:
-        """生成汇总数据字典"""
-        if not cycles:
-            return {"total_cycles": 0, "total_spread": 0, "revenue_wan": 0}
+    def export_json(self, cycles: List[Dict], output_path: str) -> str:
+        """
+        导出JSON格式报告
 
-        total_spread = sum(c.spread for c in cycles)
-        all_days = set(c.charge_start.date() for c in cycles)
+        Args:
+            cycles: 循环列表
+            output_path: 输出文件路径
 
-        return {
-            "total_cycles": len(cycles),
-            "total_spread": round(total_spread, 2),
-            "revenue_wan": round(total_spread / 1000 * self.capacity_mwh, 2),
-            "days_involved": len(all_days),
-            "avg_spread": round(total_spread / len(cycles), 2) if cycles else 0,
-            "capacity_mwh": self.capacity_mwh
-        }
-
-    def export_json(self, cycles: List[CycleOptimizerResult], output_path: str) -> str:
-        """导出JSON格式报告"""
+        Returns:
+            输出文件路径
+        """
+        summary = self.generate_summary(cycles)
         data = {
-            "version": "1.0",
-            "generated_at": datetime.now().isoformat(),
-            "capacity_mwh": self.capacity_mwh,
-            "summary": self.generate_summary(cycles),
-            "cycles": [
-                {
-                    "charge_start": c.charge_start.isoformat(),
-                    "charge_end": c.charge_end.isoformat(),
-                    "charge_len": c.charge_len,
-                    "charge_price": round(c.charge_price, 2),
-                    "discharge_start": c.discharge_start.isoformat(),
-                    "discharge_end": c.discharge_end.isoformat(),
-                    "discharge_len": c.discharge_len,
-                    "discharge_price": round(c.discharge_price, 2),
-                    "spread": round(c.spread, 2)
-                }
-                for c in cycles
-            ]
+            'version': '1.0',
+            'generated_at': datetime.now().isoformat(),
+            'capacity_mwh': self.capacity_mwh,
+            'summary': summary,
+            'cycles': []
         }
 
-        with open(output_path, "w", encoding="utf-8") as f:
+        for c in cycles:
+            data['cycles'].append({
+                'charge_start': c['charge_start'].isoformat(),
+                'charge_end': c['charge_end'].isoformat(),
+                'charge_len': c['charge_len'],
+                'charge_price': round(c['charge_price'], 2),
+                'discharge_start': c['discharge_start'].isoformat(),
+                'discharge_end': c['discharge_end'].isoformat(),
+                'discharge_len': c['discharge_len'],
+                'discharge_price': round(c['discharge_price'], 2),
+                'spread': round(c['spread'], 2)
+            })
+
+        with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
         return output_path
 
-    def export_markdown(self, cycles: List[CycleOptimizerResult], output_path: str) -> str:
-        """导出Markdown格式报告"""
-        lines = []
-        lines.append("# ⚡ 储能充放电循环方案报告\n")
-        lines.append(f"**生成时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        lines.append(f"**储能容量**: {self.capacity_mwh} MWh\n")
+    def export_markdown(self, cycles: List[Dict], output_path: str) -> str:
+        """
+        导出Markdown格式报告
 
+        Args:
+            cycles: 循环列表
+            output_path: 输出文件路径
+
+        Returns:
+            输出文件路径
+        """
         summary = self.generate_summary(cycles)
-        lines.append(f"**总循环数**: {summary['total_cycles']}\n")
-        lines.append(f"**总价差**: {summary['total_spread']} 元/MWh\n")
-        lines.append(f"**预估收益**: {summary['revenue_wan']} 万元\n")
+        total_spread = summary['total_spread']
+        revenue_wan = summary['revenue_wan']
 
-        lines.append("\n## 📋 循环明细\n")
-        lines.append("| 序号 | 充电开始 | 充电结束 | 充电时长 | 充电均价 | 放电开始 | 放电结束 | 放电时长 | 放电均价 | 价差 |")
-        lines.append("|------|----------|----------|----------|----------|----------|----------|----------|----------|------|")
+        lines = []
+        lines.append("# ⚡ 储能电价循环优化报告")
+        lines.append("")
+        lines.append(f"**生成时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"**储能容量**: {self.capacity_mwh} MWh")
+        lines.append("")
 
-        for i, c in enumerate(cycles, 1):
-            lines.append(
-                f"| {i} | {c.charge_start.strftime('%m-%d %H:%M')} | {c.charge_end.strftime('%H:%M')} | "
-                f"{c.charge_len}h | {c.charge_price:.2f} | {c.discharge_start.strftime('%m-%d %H:%M')} | "
-                f"{c.discharge_end.strftime('%H:%M')} | {c.discharge_len}h | {c.discharge_price:.2f} | {c.spread:.2f} |"
-            )
+        lines.append("## 📊 汇总")
+        lines.append("")
+        lines.append(f"| 指标 | 数值 |")
+        lines.append(f"|------|------|")
+        lines.append(f"| 总循环数 | {len(cycles)} 个 |")
+        lines.append(f"| 总价差 | {total_spread:.2f} 元/MWh |")
+        lines.append(f"| 预估收益 | {revenue_wan:.2f} 万元 |")
 
-        with open(output_path, "w", encoding="utf-8") as f:
+        # 按天统计
+        all_days = set()
+        for c in cycles:
+            all_days.add(c['charge_start'].date())
+        lines.append(f"| 涉及天数 | {len(all_days)} 天 |")
+
+        if cycles:
+            lines.append("")
+            lines.append("## 🔄 循环详情")
+            lines.append("")
+            lines.append("| # | 充电时段 | 充电均价 | 放电时段 | 放电均价 | 价差 |")
+            lines.append("|---|----------|----------|----------|----------|------|")
+
+            for i, c in enumerate(cycles, 1):
+                charge_period = f"{c['charge_start'].strftime('%m-%d %H:%M')}~{c['charge_end'].strftime('%H:%M')}"
+                discharge_period = f"{c['discharge_start'].strftime('%m-%d %H:%M')}~{c['discharge_end'].strftime('%H:%M')}"
+                lines.append(f"| {i} | {charge_period} | {c['charge_price']:.2f} | {discharge_period} | {c['discharge_price']:.2f} | {c['spread']:.2f} |")
+
+        with open(output_path, 'w', encoding='utf-8') as f:
             f.write("\n".join(lines))
 
         return output_path
 
 
 def main():
-    """简单测试"""
-    from datetime import datetime, timedelta
+    """演示用法"""
+    import sys
 
-    # Mock数据测试
-    cycles = [
-        CycleOptimizerResult(
-            charge_start=datetime(2026, 4, 1, 0, 0),
-            charge_end=datetime(2026, 4, 1, 5, 0),
-            charge_len=5,
-            charge_price=200.0,
-            discharge_start=datetime(2026, 4, 1, 6, 0),
-            discharge_end=datetime(2026, 4, 1, 11, 0),
-            discharge_len=5,
-            discharge_price=450.0,
-            spread=250.0,
-            profit_per_mwh=250.0
-        )
-    ]
+    if len(sys.argv) < 2:
+        print("用法: python3 report_generator.py <输出路径>")
+        sys.exit(1)
 
-    gen = ReportGenerator(capacity_mwh=100)
-    print(gen.generate_text(cycles))
-    print("\n📊 汇总:", gen.generate_summary(cycles))
+    output_path = sys.argv[1]
+    gen = ReportGenerator(capacity_mwh=100.0)
+
+    # 生成空报告示例
+    print(gen.generate_text([]))
+    print("\n已生成报告:", output_path)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
