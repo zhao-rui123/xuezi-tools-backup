@@ -1072,75 +1072,37 @@ ANTHROPIC_MODEL=claude-opus-4-6
 
 ## Claude Code ACP 集成 [2026-04-09 新增]
 
-### 配置完成
-通过 acpx 实现 OpenClaw 调用真正的 Claude Code：
-
-| 组件 | 状态 | 路径/命令 |
-|------|------|----------|
+### 核心配置
+| 组件 | 状态 | 路径 |
+|------|------|------|
 | acpx CLI | ✅ 已安装 | `/opt/homebrew/bin/acpx` v0.5.3 |
-| acpx 配置 | ✅ 已完成 | `~/.acpx/config.json` |
-| OpenClaw ACP | ✅ 已启用 | `~/.openclaw/openclaw.json` |
-| 使用文档 | ✅ 已创建 | `~/.openclaw/workspace/docs/claude-acp-usage.md` |
-| 快捷脚本 | ✅ 已创建 | `~/.openclaw/workspace/scripts/claude-acp.sh` |
-
-### 使用方法
-
-**1. 命令行直接调用**
-```bash
-# 快速调用（自动创建 session）
-acpx claude "任务描述" --approve-all
-
-# 使用指定 session（推荐 --ttl 0 永久保持）
-acpx claude -s my-session --ttl 0 "任务描述" --approve-all
-
-# 长时间任务（10分钟超时）
-acpx claude --timeout 600 "复杂任务" --approve-all
-```
-
-**2. 快捷脚本调用**
-```bash
-~/.openclaw/workspace/scripts/claude-acp.sh my-session "任务描述"
-```
-
-**3. OpenClaw sessions_spawn 调用**
-```javascript
-sessions_spawn({
-  task: "任务描述",
-  runtime: "acp",
-  agentId: "claude",
-  runTimeoutSeconds: 600
-})
-```
-
-### 关键注意事项
-- **必须先关闭电脑的 Claude GUI**，Claude Code 只能单实例运行
-- **当前模型**: MiniMax-M2.7（通过 ~/.claude/settings.json 配置）
-- **默认 TTL**: 300秒（5分钟空闲后关闭），长时间任务用 `--ttl 0`
-
-### 切换到 Opus（未来需要时）
-编辑 `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ANTHROPIC_BASE_URL": "https://timesniper.club",
-    "ANTHROPIC_AUTH_TOKEN": "sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ",
-    "ANTHROPIC_MODEL": "claude-opus-4-6"
-  }
-}
-```
+| 模型切换脚本 | ✅ | `~/.openclaw/workspace/scripts/cc-model-switch.sh` |
+| 完整使用指南 | ✅ | `Claude Code ACP调用完整指南.md` (Obsidian) |
 
 ### 三层模型工作流
+| 阶段 | 模型 | Session |
+|------|------|---------|
+| 架构设计 | Opus | arch |
+| 执行开发 | MiniMax | dev |
+| 验收审查 | Opus | review |
 
-| 阶段 | 模型 | Session | 命令 |
-|------|------|---------|------|
-| **架构设计** | Opus | arch | `cc-model-switch.sh opus && acpx claude -s arch` |
-| **执行开发** | MiniMax | dev | `cc-model-switch.sh minimax && acpx claude -s dev` |
-| **验收审查** | Opus | review | `cc-model-switch.sh opus && acpx claude -s review` |
+### 快速命令
+```bash
+# 模型切换
+cc-model-switch.sh opus    # 架构/验收
+cc-model-switch.sh minimax # 执行开发
 
-**标准流程：**
-1. `cc-model-switch.sh opus` → 切换 Opus
-2. `acpx claude -s arch "架构任务" --ttl 0 --approve-all`
-3. `cc-model-switch.sh minimax` → 切换 MiniMax
-4. `acpx claude -s dev "开发任务" --ttl 0 --approve-all`
-5. `cc-model-switch.sh opus` → 切换 Opus
-6. `acpx claude -s review "验收任务" --ttl 0 --approve-all`
+# ACP 调用（必须先关闭 Claude GUI）
+acpx claude -s <session> "任务" --approve-all
+
+# 后台自动驾驶（重要！）
+acpx claude sessions new --name bg-task
+acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
+# 我可以做其他事，acpx 后台自动跑完
+```
+
+### 关键要点
+- **必须关闭 Claude GUI** 才能用 acpx
+- **当前模型**: MiniMax-M2.7（执行开发）
+- **Opus**: 架构设计、验收审查
+- **--no-wait**: 后台自动驾驶，做完一件我可以继续做其他的

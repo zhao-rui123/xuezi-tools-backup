@@ -8,9 +8,9 @@
       "shares": 2300,
       "buy_date": "2026-04-09",
       "high_price": 21.34,
-      "current_price": 21.34,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 21.59,
+      "profit_ratio": 0.0117,
+      "profit_amount": 575.0,
       "hold_days": 0
     },
     {
@@ -20,9 +20,9 @@
       "shares": 6700,
       "buy_date": "2026-04-09",
       "high_price": 7.42,
-      "current_price": 7.42,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 7.32,
+      "profit_ratio": -0.0135,
+      "profit_amount": -670.0,
       "hold_days": 0
     },
     {
@@ -32,9 +32,9 @@
       "shares": 1900,
       "buy_date": "2026-04-09",
       "high_price": 26.07,
-      "current_price": 26.07,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 25.56,
+      "profit_ratio": -0.0196,
+      "profit_amount": -969.0,
       "hold_days": 0
     },
     {
@@ -44,9 +44,9 @@
       "shares": 2600,
       "buy_date": "2026-04-09",
       "high_price": 18.56,
-      "current_price": 18.56,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 18.23,
+      "profit_ratio": -0.0178,
+      "profit_amount": -858.0,
       "hold_days": 0
     },
     {
@@ -56,9 +56,9 @@
       "shares": 1300,
       "buy_date": "2026-04-09",
       "high_price": 36.71,
-      "current_price": 36.71,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 37.58,
+      "profit_ratio": 0.0237,
+      "profit_amount": 1131.0,
       "hold_days": 0
     },
     {
@@ -68,9 +68,9 @@
       "shares": 5600,
       "buy_date": "2026-04-09",
       "high_price": 8.8,
-      "current_price": 8.8,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 8.66,
+      "profit_ratio": -0.0159,
+      "profit_amount": -784.0,
       "hold_days": 0
     },
     {
@@ -80,9 +80,9 @@
       "shares": 4400,
       "buy_date": "2026-04-09",
       "high_price": 11.31,
-      "current_price": 11.31,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 11.13,
+      "profit_ratio": -0.0159,
+      "profit_amount": -792.0,
       "hold_days": 0
     },
     {
@@ -92,9 +92,9 @@
       "shares": 7300,
       "buy_date": "2026-04-09",
       "high_price": 6.84,
-      "current_price": 6.84,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 6.37,
+      "profit_ratio": -0.0687,
+      "profit_amount": -3431.0,
       "hold_days": 0
     },
     {
@@ -104,9 +104,9 @@
       "shares": 6800,
       "buy_date": "2026-04-09",
       "high_price": 7.35,
-      "current_price": 7.35,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 7.49,
+      "profit_ratio": 0.019,
+      "profit_amount": 952.0,
       "hold_days": 0
     },
     {
@@ -116,9 +116,9 @@
       "shares": 800,
       "buy_date": "2026-04-09",
       "high_price": 57.12,
-      "current_price": 57.12,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 55.61,
+      "profit_ratio": -0.0264,
+      "profit_amount": -1208.0,
       "hold_days": 0
     },
     {
@@ -128,9 +128,9 @@
       "shares": 1800,
       "buy_date": "2026-04-09",
       "high_price": 27.35,
-      "current_price": 27.35,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 28.0,
+      "profit_ratio": 0.0238,
+      "profit_amount": 1170.0,
       "hold_days": 0
     },
     {
@@ -140,9 +140,9 @@
       "shares": 1800,
       "buy_date": "2026-04-09",
       "high_price": 26.8,
-      "current_price": 26.8,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 26.56,
+      "profit_ratio": -0.009,
+      "profit_amount": -432.0,
       "hold_days": 0
     },
     {
@@ -152,9 +152,9 @@
       "shares": 6800,
       "buy_date": "2026-04-09",
       "high_price": 7.35,
-      "current_price": 7.35,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 7.15,
+      "profit_ratio": -0.0272,
+      "profit_amount": -1360.0,
       "hold_days": 0
     },
     {
@@ -164,9 +164,9 @@
       "shares": 3300,
       "buy_date": "2026-04-09",
       "high_price": 14.98,
-      "current_price": 14.98,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 15.43,
+      "profit_ratio": 0.03,
+      "profit_amount": 1485.0,
       "hold_days": 0
     },
     {
@@ -176,9 +176,9 @@
       "shares": 4500,
       "buy_date": "2026-04-09",
       "high_price": 11.07,
-      "current_price": 11.07,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 10.94,
+      "profit_ratio": -0.0117,
+      "profit_amount": -585.0,
       "hold_days": 0
     },
     {
@@ -188,9 +188,9 @@
       "shares": 18900,
       "buy_date": "2026-04-09",
       "high_price": 2.64,
-      "current_price": 2.64,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 2.57,
+      "profit_ratio": -0.0265,
+      "profit_amount": -1323.0,
       "hold_days": 0
     },
     {
@@ -200,9 +200,9 @@
       "shares": 6900,
       "buy_date": "2026-04-09",
       "high_price": 7.23,
-      "current_price": 7.23,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 6.98,
+      "profit_ratio": -0.0346,
+      "profit_amount": -1725.0,
       "hold_days": 0
     },
     {
@@ -212,9 +212,9 @@
       "shares": 800,
       "buy_date": "2026-04-09",
       "high_price": 57.45,
-      "current_price": 57.45,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 56.96,
+      "profit_ratio": -0.0085,
+      "profit_amount": -392.0,
       "hold_days": 0
     },
     {
@@ -224,9 +224,9 @@
       "shares": 2200,
       "buy_date": "2026-04-09",
       "high_price": 22.18,
-      "current_price": 22.18,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 21.9,
+      "profit_ratio": -0.0126,
+      "profit_amount": -616.0,
       "hold_days": 0
     },
     {
@@ -236,9 +236,9 @@
       "shares": 1100,
       "buy_date": "2026-04-09",
       "high_price": 44.93,
-      "current_price": 44.93,
-      "profit_ratio": 0,
-      "profit_amount": 0,
+      "current_price": 49.42,
+      "profit_ratio": 0.0999,
+      "profit_amount": 4939.0,
       "hold_days": 0
     }
   ],

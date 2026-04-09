@@ -58,29 +58,45 @@
 | **架构设计** | **Opus** | 系统设计、技术选型、架构决策 |
 | **验收审查** | **Opus** | 质量把关、代码评审、测试验证 |
 | **执行开发** | **MiniMax** | 主力开发干活 |
-| **搜索研究** | **MiniMax** | 代码搜索、文档查找 |
-| **调试修复** | **MiniMax** | Bug定位、问题修复 |
-| **日常任务** | **MiniMax** | 简单任务、快速实现 |
 
 **核心原则：Opus只负责架构设计和验收，其他全部用MiniMax**
 
 ### 🛡️ Claude Code 防被杀流程（⚠️ 铁律）
 
-**问题**：exec有超时限制，Claude任务在exec里运行会被杀掉
-
-**✅ 正确做法：用 sessions_spawn 后台运行**
+**✅ 正确做法：sessions_spawn 后台运行**
 
 ```javascript
-// ✅ 大任务用这个（不会被超时杀）
-sessions_spawn(
-    task="任务描述",
-    runtime="subagent",
-    model="minimax-cn/MiniMax-M2.7",
-    runTimeoutSeconds=600
-)
+sessions_spawn({
+  task: "任务描述",
+  runtime: "subagent",
+  model="minimax-cn/MiniMax-M2.7",
+  runTimeoutSeconds=600
+})
 ```
 
 **❌ 错误做法**：`exec("claude --print '大任务'")` —— 必被超时杀！
+
+### Claude Code ACP 调用（重要！）
+
+**先决条件：必须关闭 Claude GUI**
+
+**快速命令：**
+```bash
+# 模型切换
+cc-model-switch.sh opus    # 架构/验收
+cc-model-switch.sh minimax # 执行开发
+
+# ACP 调用
+acpx claude -s <session> "任务" --approve-all
+
+# 后台自动驾驶（重要！做完一件我可以继续做其他的）
+acpx claude sessions new --name bg-task
+acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
+# 查看状态: acpx claude -s bg-task status
+# 查看结果: tail ~/.acpx/sessions/*.stream.ndjson
+```
+
+**详细文档：** `Claude Code ACP调用完整指南.md` (Obsidian)
 
 ### sessions_spawn 工作流程
 
@@ -88,87 +104,24 @@ sessions_spawn(
 1️⃣ 需求确认 → 拆分模块（每个模块5-10分钟）
 2️⃣ sessions_spawn 启动模块1（后台）
 3️⃣ 模块1完成 → git commit → sessions_spawn 启动模块2
-4️⃣ 模块2完成 → git commit → sessions_spawn 启动模块3
-...（以此类推）
+4️⃣ 遇到问题 → 立即汇报
 5️⃣ 每完成一个模块 → 向雪子汇报进度
-6️⃣ 遇到问题 → 立即汇报，不憋着
 ```
-
-**关键原则**：
-- ❌ 不要在 exec 里直接运行 Claude Code
-- ✅ 用 sessions_spawn 每个模块单独后台运行
-- ✅ 每个模块完成后 git commit（防丢进度）
-- ✅ 做到哪发到哪，不要等全部完成
-- ✅ 遇到问题立即汇报
 
 ### 汇报节点
 
 | 节点 | 时机 | 内容 |
 |------|------|------|
 | **📋 任务启动** | 开始时 | "开始做 xxx，预计 yyy" |
-| **⚠️ 关键里程碑** | 遇到问题/重大进展 | "已完成 zzz，遇到问题是..." |
-| **✅ 任务完成** | 部署成功后 | "xxx 已上线，地址是..." |
+| **⚠️ 关键里程碑** | 遇到问题/重大进展 | "已完成 zzz" |
+| **✅ 任务完成** | 部署成功后 | "xxx 已上线" |
 
 ### Token消耗比例
 
-```
-官方Sonnet：20%（架构设计 + 验收审查）
-MiniMax：80%（实际开发干活）
-子Agent：几乎0（只是文件操作）
-```
-
-### Claude Code ACP 调用（⚠️ 重要 - 我必须主动使用）
-
-**当需要调用真正的 Claude Code 时，我必须：**
-
-1. **检查 Claude GUI 是否运行**
-   ```bash
-   pgrep -x "Claude" && echo "请先关闭 Claude GUI" || continue
-   ```
-
-2. **创建/使用 session**
-   ```bash
-   acpx claude sessions new --name <session名>
-   ```
-
-3. **调用 Claude Code**
-   ```bash
-   acpx claude -s <session名> --ttl 0 --timeout 600 "任务描述" --approve-all
-   ```
-
-**使用场景：**
-- 复杂代码任务（多文件、架构设计）
-- 需要深度思考的算法问题
-- 代码评审和重构
-
-**OpenClaw sessions_spawn 调用（推荐）：**
-```javascript
-// 当我需要 Claude Code 处理复杂任务时
-sessions_spawn({
-  task: "任务描述",
-  runtime: "acp",
-  agentId: "claude",
-  runTimeoutSeconds: 600
-})
-```
-
-**快捷脚本：**
-```bash
-~/.openclaw/workspace/scripts/claude-acp.sh <session名> "任务描述"
-```
-
-**模型切换（根据任务类型）：**
-```bash
-~/.openclaw/workspace/scripts/cc-model-switch.sh opus     # 架构/验收
-~/.openclaw/workspace/scripts/cc-model-switch.sh minimax  # 执行开发
-~/.openclaw/workspace/scripts/cc-model-switch.sh status   # 查看当前
-```
-
-**关键注意事项：**
-- ⚠️ **必须先关闭电脑的 Claude GUI**，Claude Code 只能单实例运行
-- 当前模型: MiniMax-M2.7（通过 ~/.claude/settings.json 配置）
-- 详细文档: `~/.openclaw/workspace/docs/claude-code-workflow.md`
-- 详细文档: `~/.openclaw/workspace/docs/claude-acp-usage.md`
+| 模型 | 用途 | 占比 |
+|------|------|------|
+| Opus | 架构设计 + 验收审查 | 20% |
+| MiniMax | 实际开发干活 | 80% |
 
 ---
 

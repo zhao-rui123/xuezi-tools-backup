@@ -84,6 +84,58 @@ acpx claude -s dev --ttl 0 --timeout 600 "开发任务" --approve-all
 acpx claude -s review --ttl 0 --timeout 600 "验收任务" --approve-all
 ```
 
+### 4. 后台自动驾驶模式（重要！）
+
+使用 `--no-wait` 可以启动后台任务，做完一件事后我可以继续做其他的：
+
+```bash
+# 启动后台任务（立即返回，不阻塞）
+acpx claude -s my-session --no-wait "用 autopilot 模式，开发一个完整的 xxx 系统"
+
+# 我可以做其他事，acpx 在后台自动运行
+
+# 查看状态
+acpx claude -s my-session status
+
+# 查看结果
+tail ~/.acpx/sessions/<session-id>.stream.ndjson | grep -o '"text":"[^"]*"' | tail -10
+```
+
+**优势：**
+| 对比 | 普通调用 | --no-wait 后台调用 |
+|------|----------|-------------------|
+| 我能否同时做其他事 | ❌ 等待完成 | ✅ 可以 |
+| 监控方式 | 被动等待 | 随时查状态 |
+| 适用场景 | 需要实时交互 | autopilot 自动驾驶 |
+
+**工作流：**
+```
+我：启动后台 autopilot
+    ↓
+acpx：自动驾驶运行
+    ↓
+我：继续做其他事
+    ↓
+acpx：跑完
+    ↓
+我：查 stream.ndjson 结果
+```
+
+**示例：**
+```bash
+# 启动后台开发任务
+acpx claude sessions new --name big-project
+acpx claude -s big-project --no-wait "用 autopilot 开发储能项目测算工具"
+
+# 我可以继续做其他事...
+
+# 之后查看进度
+acpx claude -s big-project status
+
+# 查看结果
+tail ~/.acpx/sessions/*.stream.ndjson | grep result
+```
+
 ---
 
 ## OpenClaw 集成
