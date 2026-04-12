@@ -247,6 +247,35 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 
 ---
 
+## 🧠 记忆系统维护规范 (2026-04-12)
+
+### 记忆系统架构
+```
+1. memory/*.md → 每日自动记录 (source of truth)
+2. archive_summary.md → 历史精华提炼 (每月25号整理)
+3. claude.sqlite FTS → 新系统搜索 (~6ms, 0 token)
+```
+
+### 每月整理记忆流程
+- **触发**: 每月25号（或积累满30天）
+- **操作步骤**:
+  1. 读取过去30天的每日md文件
+  2. 提取精华内容 → 更新到 archive_summary.md
+  3. 格式: 项目~时间~具体内容
+  4. 删除已被合并的旧md文件
+  5. 执行 `openclaw memory index --force` 重新索引
+
+### Archive_summary.md 更新规则
+- **结构**: 按项目分类，每个章节带日期
+- **格式**: `### 项目名称 (2026-04-25)`
+- **内容**: 保留具体详情（地址、功能、状态等）
+- **保留**: 技能包清单、定时任务、重要教训
+
+### 下次整理时间
+- **预计**: 2026-04-25（飞书定时消息提醒）
+
+---
+
 ## 🦞 小龙虾之家（已删除）
 
 2026-04-09 用 acpx + autopilot 测试开发了完整版，但最终删除了（雪子说测试不需要网页）。
@@ -1024,3 +1053,60 @@ acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
 - **当前模型**: MiniMax-M2.7（执行开发）
 - **Opus**: 架构设计、验收审查
 - **--no-wait**: 后台自动驾驶，做完一件我可以继续做其他的
+
+## MiniMax MMX-CLI 命令行工具 (2026-04-11 新增)
+
+### 安装
+```bash
+npm install -g mmx-cli
+```
+
+### API Key 配置（已配置）
+```bash
+export MINIMAX_API_KEY="sk-cp-TaEn7XZHReif66-VaxR-UZJuHCoYYYqho4xu6pV22L3MtAL9oImB0iubia4dRjZDN-0avV5_rSS2ggBC6w2gHYz1tYN0semS3mps1PrA9lS-16qJhoh8l3Q"
+# 或
+mmx auth login
+```
+
+### Token Plan 可用功能 ✅
+| 功能 | 命令 | 状态 |
+|------|------|------|
+| 网络搜索 | `mmx search query "关键词"` | ✅ |
+| 语音合成 | `mmx speech synthesize "文本" --voice xxx` | ✅ |
+| 图片生成 | `mmx image generate "描述"` | ✅ |
+| 文本对话 | `mmx text chat "消息"` | ✅ |
+| 图片理解 | `mmx vision describe <图片>` | ✅ |
+| 查看额度 | `mmx quota show` | ✅ |
+
+### 需要 Max Plan 功能 ❌
+| 功能 | 命令 | 状态 |
+|------|------|------|
+| 视频生成 | `mmx video generate` | ❌ 需要Max Plan |
+| 音乐生成 | `mmx music generate` | ❌ 需要高级套餐 |
+
+### 常用命令
+```bash
+# 搜索
+mmx search query "比亚迪最新消息"
+
+# 语音合成
+mmx speech synthesize "你好" --voice female-tianmei --output test.mp3
+
+# 查看可用声音
+mmx speech voices
+
+# 图片理解
+mmx vision describe image.jpg
+
+# 查看额度
+mmx quota show
+
+# 帮助
+mmx --help
+mmx <resource> --help
+```
+
+### 语音合成音色
+- 中文：male-qn-*, female-*
+- 英文：male-*, female-*, clever_boy, cute_girl 等
+- 推荐：female-tianmei（甜妹）、male-qn-badao（霸道）
