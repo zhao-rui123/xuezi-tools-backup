@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-"""
-Core modules for energy storage optimization
-"""
+# Core modules for energy-agent
 from .price_loader import PriceLoader
 
 __all__ = ['PriceLoader']
-__version__ = '1.0.0'
