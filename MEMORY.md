@@ -22,6 +22,26 @@
 - **坚果云** 作为同步服务（WebDAV已配置）
 - **我（雪子助手）** 通过WebDAV增强搜索和整理
 
+### 坚果云WebDAV配置（连接Obsidian）
+| 项目 | 值 |
+|------|------|
+| **账号** | 1034440765@qq.com |
+| **服务器** | https://dav.jianguoyun.com/dav/ |
+| **Vault路径** | /BOSI/zhaorui/ |
+| **密码** | ai7eaer5mv2gixex |
+
+### 坚果云命令
+```bash
+# 列出文件
+~/.openclaw/workspace/obsidian-webdav/webdav.sh list
+
+# 读取笔记
+~/.openclaw/workspace/obsidian-webdav/webdav.sh read <文件名>
+
+# 搜索
+~/.openclaw/workspace/obsidian-webdav/webdav.sh search <关键词>
+```
+
 ### 备份信息（仅保留参考）
 - **备份文件**: `xuezi-tools-backup.tar.gz` (2.0MB)
 - **备份位置**: 
@@ -241,7 +261,7 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 |------|------|------|
 | `/model MiniMax-M2.7` | minimax-cn/MiniMax-M2.7 | 主用模型 |
 | `/model k2.5` | bailian/kimi-k2.5 | 百炼Kimi |
-| `/model qwen` | bailian/qwen3.5-plus | 通义千问 |
+
 | `/model k2p5` | kimi-coding/k2p5 | Kimi Coding |
 
 ### 修复记录
@@ -251,7 +271,7 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 **修复**：
 - `openclaw.json`: 模型 id 从 `MiniMax-M2.7` 改为 `minimax-cn/MiniMax-M2.7`
 - `models.json`: 同上
-- `kimi-coding`: 更新 API Key 为 `sk-kimi-vmWHuNEuueGIo1Cc9zRy7PTTrQLIs3gAEgHkDCUMphSbXpcb6xAiwznaIs5KSKQn`
+- `kimi-coding`: API Key 为 `sk-kimi-2sxCTUilQ9nPKSPAFHcO2gIm7EguvTWvmZwaVclW15ZKwWq4uWZxKAhIWbULJEmD`（2026-04-16 实测有效）
 
 ---
 
@@ -463,3 +483,322 @@ mmx <resource> --help
 - 中文：male-qn-*, female-*
 - 英文：male-*, female-*, clever_boy, cute_girl 等
 - 推荐：female-tianmei（甜妹）、male-qn-badao（霸道）
+
+---
+
+## 韩国V2Ray代理服务器 (2026-04-12 新增)
+
+### 服务器信息
+| 项目 | 值 |
+|------|-----|
+| IP | 43.108.18.71 |
+| 端口 | 10086 |
+| 协议 | VMess |
+| UUID | 8285c54c-994e-4bc0-b923-2ba88cc7a7af |
+| AlterId | 0 |
+| 节点 | 阿里云韩国 |
+| 配置 | 2核2G / 200M带宽 / 不限流量 |
+| 费用 | 68元/年 |
+| 系统 | Ubuntu 22.04 LTS |
+
+### VMess链接
+```
+vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+```
+
+### 配置文件
+- Clash配置: `~/.openclaw/workspace/korea-proxy.yaml`
+- 快捷信息: `~/.openclaw/workspace/korea-v2ray-info.txt`
+
+### 用途
+- 访问 Google / GitHub / YouTube / OpenAI / Gemini 等海外站点
+- Android: Clash for Android / V2RayNG
+- Mac: ClashX / V2RayU
+- 分流: 国内直连，海外代理
+
+### 管理命令
+```bash
+# 服务器SSH
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
+
+# V2Ray状态
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "systemctl status v2ray"
+
+# 重启V2Ray
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "systemctl restart v2ray"
+```
+
+---
+
+## 韩国阿里云服务器 (2026-04-12 新增)
+
+### 服务器信息
+| 项目 | 值 |
+|------|-----|
+| IP | 43.108.18.71 |
+| 价格 | 79元/年（含海外附加费11元）|
+| 配置 | 2核2G / 200M带宽 / 不限流量 |
+| 节点 | 阿里云韩国 |
+| 系统 | Ubuntu 22.04 LTS |
+
+### SSH访问
+```bash
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
+```
+
+### 已安装服务
+1. **V2Ray** - 手机梯子（端口10086, VMess协议）
+2. **Claude Code + CCR + Gemini** - 飞书机器人
+3. **feishu-claude-code** - 飞书WebSocket接收指令
+
+### 飞书机器人
+- 名称: openclaw急救医生
+- App ID: cli_a9184ac97e78dbdf
+- App Secret: C1Y6RQz3c4NxCQXDB2GFDfEwzHoqRUzy
+- 配置: bypassPermissions (ccuser身份，完全权限跳过)
+- 工作目录: /home/ccuser/feishu-workspace
+- 启动: `su - ccuser -c "bash ~/start-fc.sh"`
+
+### V2Ray配置
+- 端口: 10086
+- 协议: VMess
+- UUID: 8285c54c-994e-4bc0-b923-2ba88cc7a7af
+- AlterId: 0
+- VMess链接: vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+
+### 备份
+- 备份位置: /root/*.bak
+- CCR备份: /root/.claude-code-router.bak
+- 应用备份: /root/feishu-claude-code.bak
+
+### 用途
+- 手机梯子（V2RayNG）
+- 飞书Claude Code机器人（Gemini 2.5 Flash）
+- 直连OpenAI/GitHub/Google AI
+- 海外API代理
+
+## 记忆管理规则 (2026-04-12更新)
+- Obsidian文件：可以删除已总结过的文件
+- 本地memory/：禁止删除，只能每月25号归档精华
+
+### 韩国服务器安全加固 (2026-04-12)
+- SSH密码认证：已关闭（PasswordAuthentication no）
+- RootLogin：已改为without-password
+- 管理方式：通过雪子助手（我）统一管理，不给笔记本存SSH密钥
+
+---
+
+## 韩国CC Codex后台调用体系 (2026-04-13)
+
+### 核心工具链（韩国服务器）
+| 工具 | 路径 | 用途 |
+|------|------|------|
+| acpx | /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx | ACP协议客户端，后台任务调度 |
+| codex | PATH中（Node 20） | OpenAI Codex CLI |
+| omx | PATH中（npm global） | oh-my-codex编排层（20个Agent） |
+| ccr | /home/ccuser/.nvm/versions/node/v20.20.2/bin/ccr | Claude Code Router（127.0.0.1:3456） |
+
+### acpx正确用法（关键！）
+```bash
+# 创建持久session
+acpx codex sessions new
+
+# 后台丢任务，立即返回（不超时！）
+acpx codex --no-wait "任务描述" --cwd /项目路径
+
+# 查看状态
+acpx codex status
+
+# 取消任务
+acpx codex cancel
+
+# 查看session列表
+acpx codex sessions
+```
+
+**核心区别**：
+- `codex exec` → 任务在会话里跑，会话超时即终止
+- `acpx --no-wait` → 任务在独立后台进程跑，完全不超时
+
+### oh-my-codex（omx）20个专业Agent
+| Agent | 职责 |
+|-------|------|
+| architect | 系统设计 |
+| planner | 任务拆解 |
+| executor | 代码实现 |
+| analyst | 需求澄清 |
+| critic | 计划/设计审查 |
+| code-reviewer | 全方位代码审查 |
+| security-reviewer | 安全漏洞检查 |
+| debugger | 根因分析 |
+| test-engineer | 测试策略 |
+| researcher | 外部文档调研 |
+| designer | UX/UI设计 |
+| git-master | Git提交策略 |
+| verifier | 完成验证 |
+| team-executor | 团队协作执行 |
+
+### 我调用韩国CC的方法
+```bash
+# SSH到韩国服务器，用完整路径调用acpx
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex sessions new'"
+
+# 后台任务
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex --no-wait \"任务\" --cwd /home/ccuser/codex-workspace'"
+```
+
+### 韩国CC记忆文件位置
+- `/home/ccuser/.claude/memory/acpx-and-oh-my-codex.md`（完整文档）
+
+### 注意事项
+1. acpx必须用完整路径（Node 18环境）
+2. --no-wait依赖已创建的session，先sessions new
+3. ccr服务需手动管理（127.0.0.1:3456）
+
+---
+
+## 股票数据系统 (2026-04-13 更新)
+
+### 数据库
+- 路径：`/Volumes/cu/ocu/stock-screener/cache/tencent_cache.db`
+- 格式：SQLite，约5826只股票
+- 代码格式混用：sh600007 / 001201.SZ
+
+### 增量更新
+```bash
+python3 /Volumes/cu/ocu/stock-screener/incremental_update.py
+```
+- 只更新date < '2026-04-10'的股票
+- 支持混合格式代码
+- 耗时约5-10分钟
+
+### 策略B v5模拟盘
+- Obsidian：`生活投资/模拟策略/模拟盘汇总.md`
+- 本地持仓：`~/.openclaw/workspace/simulator/portfolio.json`
+- 策略程序：`/Volumes/cu/ocu/stock-screener/strategies/strategy_b_final.py`
+
+### 更新模拟盘
+```bash
+cd ~/.openclaw/workspace/simulator && python3 update_obsidian.py
+```
+
+### 完整每日检测
+```bash
+cd ~/.openclaw/workspace/simulator && python3 core.py
+```
+
+### 工作流文档
+- `/Volumes/cu/ocu/stock-screener/README.md`
+
+
+---
+
+## 韩国CC Codex调用更新 (2026-04-14)
+
+### acpx codex ✅已验证可用
+```bash
+# 创建session
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex sessions new --name bg-task"
+
+# 后台调用
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex -s bg-task --no-wait "任务""
+```
+
+### 详细文档
+- ~/.openclaw/workspace/docs/韩国CC-Codex后台调用指南.md
+
+
+## 双CC调度体系 (2026-04-14)
+
+### 我有两个超级助手
+
+| | 本地Claude Code | 韩国Codex |
+|---|---|---|
+| **模型** | MiniMax M2.7 | GPT-5.4 |
+| **上下文** | 较小 | 100万token |
+| **优势** | 中文好、响应快 | 英文编程最强 |
+| **调度方式** | sessions_spawn | acpx codex --no-wait |
+
+### 调度规则（雪子指定）
+- 本地CC → 日常任务、快速调用、中文处理
+- 韩国Codex → 复杂编程、大型项目、英文任务
+
+### 核心记忆
+- 本地CC：sessions_spawn(model="minimax-cn/MiniMax-M2.7")
+- 韩国Codex：acpx codex sessions new + --no-wait
+
+### 位置
+~/.openclaw/workspace/.agents/skills/buffett-perspective/SKILL.md
+
+### 触发词
+- 「用巴菲特的视角」「巴菲特会怎么看」「巴菲特模式」「Buffett perspective」
+- 「帮我用巴菲特的角度想想」「如果巴菲特会怎么做」「切换到巴菲特」
+
+### 6个核心心智模型
+1. 经济护城河 (Economic Moat)
+2. 能力圈 (Circle of Competence)
+3. 市场先生 (Mr. Market)
+4. 复利滚雪球 (Compounding Snowball)
+5. 制度性强制力 (Institutional Imperative)
+6. 所有者思维 (Owner Mindset)
+
+### 8条决策启发式
+- 安全边际规则
+- 管理层诚信优先
+- 打孔卡规则
+- 棒球甜蜜区规则
+- 蟑螂规则
+- 5分钟规则
+- 报纸测试
+- "太难"篮子
+
+### 退出角色
+用户说「退出」「切回正常」「不用扮演了」时恢复正常模式
+
+
+## 备份系统修复记录 (2026-04-15)
+
+### 问题描述
+每日备份(cron任务)连续多天失败，日志显示 Operation not permitted
+
+### 根因分析
+macOS TCC权限限制：cron任务没有完全磁盘访问权限(FDA)，被系统安全机制拦截外置APFS卷写入。
+
+### 修复步骤
+1. 添加FDA权限：系统设置 > 隐私与安全性 > 完全磁盘访问权限 > 添加 /bin/bash、/usr/sbin/cron
+2. 备份脚本升级：v2.3 > v2.4
+   - safe_cp()替代cp 2>/dev/null（不再静默吞错误）
+   - 新增backup_workspace_configs()（备份MEMORY.md等6个核心文件）
+   - 改用白名单SKILLS_TO_BACKUP，只备份memory-suite-v4
+
+### 关键文件
+- 备份脚本：~/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh
+- 备份目标：/Volumes/cu/ocu/
+- 核心配置备份：/Volumes/cu/ocu/workspace-configs/
+
+### 经验教训
+- macOS cron任务默认没有FDA权限，访问外置卷会被TCC拦截
+- mkdir -p对已存在目录不触发TCC，但写入新文件会
+- cp -r 2>/dev/null会静默吞掉所有错误
+
+---
+
+## 本地 Claude Code 调用规范（2026-04-16 记住）
+
+### 调用流程
+1. **检查 GUI 已关闭**：`pgrep -x "Claude" && echo "需关闭" || echo "OK"`
+2. **切换模型**：
+   - `~/.openclaw/workspace/scripts/cc-model-switch.sh opus`（架构/验收）
+   - `~/.openclaw/workspace/scripts/cc-model-switch.sh minimax`（执行开发）
+3. **创建 session**：`acpx claude sessions new --name <session名>`
+4. **执行任务**：
+   - `acpx claude -s <session名> --no-wait "任务"`（后台，不阻塞）
+   - `acpx claude -s <session名> "任务"`（等待结果）
+5. **查看结果**：`tail ~/.acpx/sessions/<id>.stream.ndjson`
+6. **关闭 session**：`acpx claude sessions close <session名>`
+
+### 关键事实
+- acpx 用的是本地 Claude CLI，不是远程服务器
+- `~/.claude/settings.json` 控制模型配置
+- `model: default` = Opus 4.6（已配置在 settings.json）
+- 切 opus 后用完记得切回 minimax，避免影响我自己的响应质量
