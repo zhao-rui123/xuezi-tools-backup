@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from ..core.models import ExecutionResult, ExecutorType, Task, TaskType
+from ..core.retry import DEFAULT_MAX_RETRIES, DEFAULT_RETRY_DELAY, RetryExecutor
 from ..exceptions import DependencyUnavailableError
 from .base import BaseExecutor
 
@@ -29,6 +30,8 @@ class RemoteExecutor(BaseExecutor):
         *,
         acpx_path: str,
         known_hosts: str,
+        max_retries: int = DEFAULT_MAX_RETRIES,
+        retry_delay: float = DEFAULT_RETRY_DELAY,
     ):
         super().__init__(ExecutorType.REMOTE)
         self.host = host
@@ -36,7 +39,10 @@ class RemoteExecutor(BaseExecutor):
         self.ssh_key = os.path.expanduser(ssh_key)
         self.acpx_path = acpx_path
         self.known_hosts = os.path.expanduser(known_hosts)
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
         self._client: Any | None = None
+        self._retry_executor: RetryExecutor | None = None
 
     def _ensure_dependency(self) -> None:
         if paramiko is None:
@@ -135,11 +141,22 @@ class RemoteExecutor(BaseExecutor):
         self.validate_task(task)
         # Clean up closed sessions before each execution
         self._cleanup_closed_sessions()
-        return self._run_argv(
-            self._build_remote_argv(task),
-            timeout=task.timeout,
-            session_id=task.session_name,
-            task_id=task.id if task.no_wait else None,
+        # Wrap with retry executor if retries enabled
+        if self.max_retries <= 1:
+            return self._run_argv(
+                self._build_remote_argv(task),
+                timeout=task.timeout,
+                session_id=task.session_name,
+                task_id=task.id if task.no_wait else None,
+            )
+        if self._retry_executor is None:
+            self._retry_executor = RetryExecutor(
+                self,
+                max_retries=self.max_retries,
+                retry_delay=self.retry_delay,
+                send_alert=True,
+            )
+        return self._retry_executor.execute(task)
         )
 
     def _run_argv(
