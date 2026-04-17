@@ -1,0 +1,15 @@
+韩国阿里云服务器配置备份
+===========================
+服务器IP: 43.108.18.71
+SSH: ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
+
+飞书机器人: openclaw急救医生
+App ID: cli_a9184ac97e78dbdf
+App Secret: C1Y6RQz3c4NxCQXDB2GFDfEwzHoqRUzy
+
+V2Ray VMess链接:
+vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+
+备份位置: /root/*.bak
+当前运行: ccuser身份 (bypassPermissions)
+===========================

@@ -1,0 +1,15 @@
+韩国V2Ray代理 - 阿里云韩国轻量应用服务器
+========================================
+
+服务器IP: 43.108.18.71
+端口: 10086
+协议: VMess
+UUID: 8285c54c-994e-4bc0-b923-2ba88cc7a7af
+AlterId: 0
+
+VMess链接:
+vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+
+========================================
+配置: ~/.openclaw/workspace/korea-proxy.yaml
+========================================

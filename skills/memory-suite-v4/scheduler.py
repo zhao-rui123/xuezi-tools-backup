@@ -157,6 +157,14 @@ class Scheduler:
             enabled=self._is_task_enabled("index", True)
         ))
         
+        # 核心任务 - 中文分词索引
+        self.register_task(Task(
+            name="cn-index",
+            description="更新中文分词倒排索引",
+            handler=self._task_cn_index,
+            enabled=self._is_task_enabled("cn-index", True)
+        ))
+        
         # 核心任务 - 分析
         self.register_task(Task(
             name="analyze-daily",
@@ -329,6 +337,22 @@ class Scheduler:
             
             logger.info(f"基础索引已更新：{index_file}")
             return {"indexed_files": len(memory_files)}
+    
+    def _task_cn_index(self, **kwargs) -> Any:
+        """中文分词索引任务"""
+        logger.info("执行中文分词索引任务...")
+        try:
+            from core.chinese_indexer import ChineseIndexer
+            manager = ChineseIndexer()
+            result = manager.update_index()
+            logger.info(f"中文索引更新完成：{result}")
+            return result
+        except ImportError as e:
+            logger.warning(f"ChineseIndexer 未实现：{e}")
+            return {"status": "degraded", "message": "模块未实现"}
+        except Exception as e:
+            logger.error(f"中文索引任务失败：{e}")
+            return {"status": "error", "error": str(e)}
     
     def _task_analyze_daily(self, **kwargs) -> Any:
         """每日分析任务"""
@@ -590,6 +614,7 @@ def main():
   scheduler run real-time              # 运行实时保存任务
   scheduler run archive                # 运行归档任务
   scheduler run index                  # 运行索引任务
+  scheduler run cn-index              # 运行中文分词索引
   scheduler run analyze-daily          # 运行每日分析
   scheduler run evolution-daily        # 运行每日进化分析
   scheduler run evolution-monthly      # 运行月度规划

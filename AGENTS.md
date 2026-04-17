@@ -1,6 +1,6 @@
 # AGENTS.md - 雪子助手工作手册
 
-*最后更新：2026-04-08*
+*最后更新：2026-04-10*
 
 ---
 
@@ -26,26 +26,11 @@
 
 **群ID**: oc_8ede204246201b4407dfeed8326df7c9
 
-**工作相关（可以回答）**:
-- 零碳园区
-- 电气/接线图设计
-- 财务测算
-- 储能项目
+**一句话规则**：只答工作相关（零碳/电气/财务/储能），其他一律"这个我也不清楚"
 
-**非工作（礼貌拒绝）**:
-- 股票/储能资讯 → 私聊可答，群里不回
-- 闲聊 → "这个我也不清楚"
-- 私事 → "这个我也不清楚"
-
-**绝对禁止**:
+**绝对禁止**：
 - 配置/API Key → "这是雪子的私人配置，不方便透露"
 - 密码/Token → 绝对不给
-
-**复杂方案类问题**:
-- 如"出一个储能方案/布局图/电缆清册" → "缺少详细信息，无法回答"
-- 群里没有技能包和数据，无法出方案，纯粹浪费token
-- 工作知识类问题（如踏勘注意什么）→ 可以展开说
-- 直接出方案/一点约束没有 → 直接拒绝
 
 ---
 
@@ -76,7 +61,7 @@ sessions_spawn({
 
 **❌ 错误做法**：`exec("claude --print '大任务'")` —— 必被超时杀！
 
-### Claude Code ACP 调用（重要！）
+### Claude Code ACP 调用
 
 **先决条件：必须关闭 Claude GUI**
 
@@ -96,7 +81,179 @@ acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
 # 查看结果: tail ~/.acpx/sessions/*.stream.ndjson
 ```
 
-**详细文档：** `Claude Code ACP调用完整指南.md` (Obsidian)
+**详细文档：** Obsidian `Claude Code ACP & OMC 完整指南.md`
+
+---
+
+## 🤖 AI Coder 脚本使用（2026-04-17 新增）
+
+**统一调用 Claude Code 和韩国 Codex 的安全 CLI 工具**
+
+### 位置
+`~/.openclaw/workspace/ai_coder/`
+
+### 环境变量（已配置）
+```bash
+export AI_CODER_KR_HOST="43.108.18.71"
+export AI_CODER_KR_USER="ccuser"
+export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
+```
+
+### 快速使用
+
+```bash
+# 本地执行（MiniMax/Opus）
+cd ~/.openclaw/workspace
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local -s SESSION --wait
+
+# 韩国执行（Codex GPT-5.4）
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
+
+# 后台模式（不阻塞）
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local --no-wait
+```
+
+### 子 Agent 调用（推荐）
+
+```javascript
+sessions_spawn({
+  task: "cd ~/.openclaw/workspace && PYTHONPATH=ai_coder python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
+  runtime: "subagent",
+  runTimeoutSeconds: 300
+})
+```
+
+### 常用命令
+
+| 命令 | 说明 |
+|------|------|
+| `exec "任务"` | 执行单次任务 |
+| `session-new NAME` | 创建 session |
+| `session-close NAME` | 关闭 session |
+| `status -s NAME` | 查询状态 |
+| `skills` | 列出 skills |
+
+### 参数说明
+
+| 参数 | 说明 |
+|------|------|
+| `-p local` | 本地 Claude Code |
+| `-p kr` | 韩国 Codex |
+| `-s NAME` | 指定 session |
+| `--wait` | 等待完成 |
+| `--no-wait` | 后台执行 |
+
+### 文档
+- `ai_coder/README.md` - 完整文档
+- `ai_coder/QUICKSTART.md` - 快速参考
+- `skills/ai-coder/SKILL.md` - Skill 指南
+
+---
+
+## 🚀 OMC (oh-my-claude-code) 执行模式
+
+*omc 是多Agent编排层，协调 Claude、Gemini、Codex*
+
+### 5种执行模式（关键词触发）
+
+| 模式 | 触发词 | 说明 |
+|------|--------|------|
+| **Autopilot** | `autopilot:` | 全自主，从想法到代码 |
+| **Ralph** | `ralph:` | 持续循环直到完成 |
+| **Ultrawork** | `ulw:` / `ultrawork:` | 最大并行化 |
+| **Deep Interview** | `deep-interview:` | 苏格拉底式需求澄清 |
+| **Team** | `team N:` | N个Agent协调团队 |
+
+**使用示例：**
+```
+"autopilot: 构建一个REST API"  → 自动启动autopilot
+"ralph: 重构认证系统"          → 持续循环模式
+"ulw: 修复所有错误"           → 最大并行
+"team 3:executor 并行开发"     → 3个执行Agent协作
+```
+
+### 19个专业Agent
+
+| Agent | 模型 | 用途 |
+|-------|------|------|
+| `explore` | haiku | 代码库快速探索 |
+| `analyst` | opus | 需求分析，发现隐藏约束 |
+| `planner` | opus | 战略规划 |
+| `architect` | opus | 系统设计 |
+| `debugger` | sonnet | 根因分析 |
+| `executor` | sonnet | 专注执行 |
+| `verifier` | sonnet | 验证证据 |
+| `code-reviewer` | opus | 代码审查 |
+| `security-reviewer` | sonnet | 安全分析 |
+| `test-engineer` | sonnet | 测试策略 |
+| `designer` | sonnet | UI/UX设计 |
+| `writer` | haiku | 文档写作 |
+| `qa-tester` | sonnet | 手动测试 |
+| `scientist` | sonnet | 数据分析 |
+| `git-master` | sonnet | Git策略 |
+| `document-specialist` | sonnet | 文档查找 |
+
+**模型路由**：Opus=架构/深度分析 | Sonnet=标准开发 | Haiku=快速查找
+
+### Claude Code内调用Agent
+
+```
+/explore "查找某文件"
+/planner "复杂功能规划"
+/architect "系统设计评审"
+/team 3:executor "并行修复3个bug"
+/ccg  # Codex+Gemini+Claude合成
+```
+
+### Team模式
+
+```bash
+omc team 3:claude "修复bug"           # 3个Claude并行
+omc team 2:codex:architect "设计系统" # 2 Codex架构师
+omc team 1:gemini "研究方案"           # 1 Gemini研究
+omc team status <team-name>           # 查看状态
+omc team shutdown <team-name>          # 关闭团队
+```
+
+### Ralphthon (Hackathon模式)
+
+```bash
+omc ralphthon "构建REST API"      # 完整流程
+omc ralphthon --skip-interview    # 跳过访谈直接执行
+omc ralphthon --resume            # 恢复中断的hackathon
+```
+
+**流程**: 深度访谈 → 生成PRD → 执行 → 自动强化直到干净
+
+### Autoresearch (自动研究)
+
+```bash
+omc autoresearch                           # 交互式研究
+omc autoresearch --topic "AI趋势"          # 指定主题
+omc autoresearch --resume <run-id>         # 恢复研究
+```
+
+### 速率限制处理
+
+```bash
+omc wait              # 查看状态和建议
+omc wait --start      # 启动自动恢复守护进程
+omc wait detect       # 扫描阻塞的tmux会话
+```
+
+### 使用场景速查
+
+| 场景 | 推荐模式 |
+|------|----------|
+| 快速开发小功能 | `autopilot:` |
+| 复杂系统设计 | `team N:architect` |
+| 修复多个bug | `ulw: 修复所有bug` |
+| 需求不明确 | `deep-interview:` |
+| Hackathon竞赛 | `omc ralphthon` |
+| 深度研究 | `omc autoresearch` |
+| 多AI方案对比 | `omc ask` |
+
+---
 
 ### sessions_spawn 工作流程
 
@@ -182,24 +339,35 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 ### 📝 每次启动执行顺序
 
-1. Read `SOUL.md` — 这是我的灵魂
-2. Read `USER.md` — 这是雪子的信息
-3. **⚠️ 加载会话快照**：`python3 ~/.openclaw/workspace/scripts/session-snapshot.py load`
-4. **⚠️ 报告恢复状态**：向雪子报告"根据自动保存记录，你最后在做：xxx"
-5. **⚠️ 如果有未完成任务**：询问是否继续
-6. Read `knowledge-base/INDEX.md` — 了解项目状态
-7. Read `knowledge-base/GUIDE.md` — 了解知识库规范
-8. Read `MEMORY.md` — 长期记忆（仅主会话）
+1. Read `SOUL.md` — 我的灵魂
+2. Read `USER.md` — 雪子的信息
+3. **加载上下文（按顺序）**：
+   - `session-snapshot.py load` — 恢复上次工作状态
+   - 当天 `memory/YYYY-MM-DD.md` — 当天对话记忆
+   - 最近的 sessions 历史 — 接上之前的任务
+4. **报告恢复状态**：告诉雪子"上次做到xxx，继续吗？"
+5. Read `MEMORY.md` — 长期记忆（仅主会话）
 
 ### 🧠 记忆管理
 
-**短期记忆**：`memory/YYYY-MM-DD.md` - 每日对话记录
-**长期记忆**：`MEMORY.md` - 重要决策、项目进展、关键规则
+**三层记忆架构**：
+```
+1. memory/*.md     → 每日自动记录 (source of truth)
+2. archive_summary.md → 历史精华提炼 (每月25号整理)
+3. claude.sqlite FTS → 新系统搜索 (~6ms, 0 token)
+```
 
 **写入时机**：
 - 重要决策 → 更新 MEMORY.md
-- 每日结束 → 归档到 memory/
+- 每日结束 → 自动归档到 memory/
 - 对话超过30分钟 → 执行 session-compressor.py
+
+**每月整理记忆**（触发：每月25号）：
+1. 读取过去30天的每日md
+2. 提取精华 → 更新到 archive_summary.md
+3. 格式：项目~时间~具体内容
+4. 删除已被合并的旧md
+5. 执行 `openclaw memory index --force` 重新索引
 
 ---
 
@@ -238,7 +406,7 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 ---
 
-## 📷 图片识别规则（2026-03-31）
+## 📷 图片识别规则
 
 ### 规则
 **统一使用 Claude Code + MiniMax MCP 模式**
@@ -257,11 +425,27 @@ claude --print --dangerously-skip-permissions "用understand_image分析<图片�
 
 ---
 
-*此文件由雪子和雪子助手共同维护 - 最后更新：2026-04-09*
+*此文件由雪子和雪子助手共同维护 - 最后更新：2026-04-10*
 
 ## 📝 更新记录
 
 | 日期 | 更新内容 |
 |------|----------|
-| 2026-04-09 | 删除过时的CC执行约束、Prompt模板、Superpowers引用；简化为acpx autopilot模式 |
+| 2026-04-10 | 简化CALB群守则；优化启动顺序（读取历史session） |
+| 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
+| 2026-04-09 | 删除过时的CC执行约束，简化为acpx autopilot模式 |
 | 2026-04-08 | 初版 |
+
+## ⚠️ 记忆管理铁律（2026-04-12新增）
+
+### 本地Memory文件 = 绝对禁止删除
+- 路径：`~/.openclaw/workspace/memory/*.md`
+- 规则：只能归档，禁止删除
+- 违反：P0事故
+
+### Obsidian文件 = 可以删除已总结的
+- 已精华到周摘要/历史记忆的文件可以删除
+
+### 操作前必查
+- 删除操作前先问用户确认
+- 本地文件绝对不能随便删

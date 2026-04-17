@@ -1,0 +1,112 @@
+{
+  "stock_code": "002738.SZ",
+  "stock_name": "中矿资源",
+  "market": "sz",
+  "output_dir": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002738_20260409_2221",
+  "fetch_time": "2026-04-09T22:21:14.769242",
+  "kline_source": "eastmoney",
+  "images": {
+    "kline": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002738_20260409_2221/kline_em.png",
+    "kline_intraday": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002738_20260409_2221/kline_intraday.png",
+    "valuation": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/002738_20260409_2221/valuation.png"
+  },
+  "data": {
+    "financials": {
+      "currentPrice": 78.0,
+      "previousClose": 77.76,
+      "trailingPE": 122.97,
+      "priceToBook": 4.62,
+      "marketCap": 56276366406.0,
+      "fiftyTwoWeekHigh": 78.69,
+      "fiftyTwoWeekLow": 75.6,
+      "shortName": "中矿资源"
+    },
+    "technicals": {
+      "close": 78.0,
+      "ma5": 75.24,
+      "ma20": 72.09,
+      "vol_ratio": 0.58,
+      "rsi": 55.8,
+      "macd_hist": 1.3349,
+      "prev_macd_hist": 1.2044,
+      "ma60": 81.0,
+      "ma_status": "交叉缠绕",
+      "macd_status": "动能增强",
+      "rsi_status": "中性"
+    },
+    "capital_flow_summary": {
+      "type": "北向资金",
+      "consecutive_days": 0,
+      "direction": "净卖出",
+      "recent_total_万股": 0.0
+    },
+    "main_capital_flow": {
+      "recent_days": [
+        {
+          "date": "2026-04-09",
+          "main_net_inflow": -41915147.0,
+          "retail_net_inflow": 14004277.0
+        }
+      ],
+      "total_main_net_inflow": -41915147.0,
+      "direction": "主力净流出",
+      "consecutive_days": 1
+    },
+    "cls_news": [],
+    "analyst_reports": [
+      {
+        "org": "东吴证券",
+        "rating": "买入",
+        "change": 3,
+        "title": "2025年报点评：新兴赛道放量驱动成长，机器人与航空航天打开增量空间",
+        "date": "2026-04-09",
+        "infoCode": "AP202604091821101915",
+        "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604091821101915_1.pdf"
+      },
+      {
+        "org": "华源证券",
+        "rating": "买入",
+        "change": 3,
+        "title": "毛利率持续改善 在手订单超过千亿",
+        "date": "2026-04-09",
+        "infoCode": "AP202604091821101848",
+        "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604091821101848_1.pdf"
+      },
+      {
+        "org": "华金证券",
+        "rating": "",
+        "change": "",
+        "title": "新股覆盖研究：联讯仪器",
+        "date": "2026-04-09",
+        "infoCode": "AP202604091821101422",
+        "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604091821101422_1.pdf"
+      },
+      {
+        "org": "信达证券",
+        "rating": "买入",
+        "change": 3,
+        "title": "全面深化AI发展战略，盈利能力显著改善",
+        "date": "2026-04-09",
+        "infoCode": "AP202604091821099440",
+        "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604091821099440_1.pdf"
+      },
+      {
+        "org": "国信证券",
+        "rating": "增持",
+        "change": 3,
+        "title": "年报点评：业绩表现亮眼，资源端和材料端持续取得突破",
+        "date": "2026-04-09",
+        "infoCode": "AP202604091821093489",
+        "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604091821093489_1.pdf"
+      }
+    ],
+    "macro": {},
+    "adr": {}
+  },
+  "text_charts": {},
+  "export_options": {
+    "pdf_cmd": "python3 /Users/zhaoruicn/.openclaw/workspace/export_report.py {out}/report.md --format pdf",
+    "html_cmd": "python3 /Users/zhaoruicn/.openclaw/workspace/export_report.py {out}/report.md --format html",
+    "open_html": "open {out}/report.html"
+  }
+}

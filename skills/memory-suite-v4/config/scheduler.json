@@ -20,6 +20,18 @@
       "last_run": null,
       "last_result": null
     },
+    "cn-index": {
+      "enabled": true,
+      "last_run": "2026-04-14T00:33:01.482472",
+      "last_result": {
+        "success": true,
+        "result": {
+          "indexed_files": 29,
+          "total_words": 21141,
+          "unique_words": 4090
+        }
+      }
+    },
     "analyze-daily": {
       "enabled": true,
       "last_run": null,
@@ -47,15 +59,8 @@
     },
     "knowledge-graph": {
       "enabled": true,
-      "last_run": "2026-03-30T08:27:32.980438",
-      "last_result": {
-        "success": true,
-        "result": {
-          "entities": 29,
-          "relations": 25,
-          "graph_path": "/Users/zhaoruicn/.openclaw/workspace/knowledge-base/graph/graph.json"
-        }
-      }
+      "last_run": null,
+      "last_result": null
     },
     "knowledge-sync": {
       "enabled": true,

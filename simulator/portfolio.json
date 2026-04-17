@@ -1,5 +1,5 @@
 {
-  "cash": 20379.0,
+  "cash": 1026.0,
   "positions": [
     {
       "code": "sh600007",
@@ -8,10 +8,10 @@
       "shares": 2300,
       "buy_date": "2026-04-09",
       "high_price": 21.34,
-      "current_price": 21.59,
-      "profit_ratio": 0.0117,
-      "profit_amount": 575.0,
-      "hold_days": 0
+      "current_price": 21.23,
+      "profit_ratio": -0.005154639175257705,
+      "profit_amount": -252.9999999999987,
+      "hold_days": 4
     },
     {
       "code": "sh600015",
@@ -20,22 +20,10 @@
       "shares": 6700,
       "buy_date": "2026-04-09",
       "high_price": 7.42,
-      "current_price": 7.32,
-      "profit_ratio": -0.0135,
-      "profit_amount": -670.0,
-      "hold_days": 0
-    },
-    {
-      "code": "sh600026",
-      "name": "中远海能",
-      "buy_price": 26.07,
-      "shares": 1900,
-      "buy_date": "2026-04-09",
-      "high_price": 26.07,
-      "current_price": 25.56,
-      "profit_ratio": -0.0196,
-      "profit_amount": -969.0,
-      "hold_days": 0
+      "current_price": 7.26,
+      "profit_ratio": -0.021563342318059318,
+      "profit_amount": -1072.000000000001,
+      "hold_days": 4
     },
     {
       "code": "sh600062",
@@ -44,10 +32,10 @@
       "shares": 2600,
       "buy_date": "2026-04-09",
       "high_price": 18.56,
-      "current_price": 18.23,
-      "profit_ratio": -0.0178,
-      "profit_amount": -858.0,
-      "hold_days": 0
+      "current_price": 18.15,
+      "profit_ratio": -0.02209051724137932,
+      "profit_amount": -1066.0000000000005,
+      "hold_days": 4
     },
     {
       "code": "sh600066",
@@ -55,11 +43,11 @@
       "buy_price": 36.71,
       "shares": 1300,
       "buy_date": "2026-04-09",
-      "high_price": 36.71,
-      "current_price": 37.58,
-      "profit_ratio": 0.0237,
-      "profit_amount": 1131.0,
-      "hold_days": 0
+      "high_price": 36.8,
+      "current_price": 36.8,
+      "profit_ratio": 0.0024516480523017244,
+      "profit_amount": 116.9999999999952,
+      "hold_days": 4
     },
     {
       "code": "sh600080",
@@ -68,10 +56,10 @@
       "shares": 5600,
       "buy_date": "2026-04-09",
       "high_price": 8.8,
-      "current_price": 8.66,
-      "profit_ratio": -0.0159,
-      "profit_amount": -784.0,
-      "hold_days": 0
+      "current_price": 8.35,
+      "profit_ratio": -0.05113636363636375,
+      "profit_amount": -2520.000000000006,
+      "hold_days": 4
     },
     {
       "code": "sh600099",
@@ -79,23 +67,11 @@
       "buy_price": 11.31,
       "shares": 4400,
       "buy_date": "2026-04-09",
-      "high_price": 11.31,
-      "current_price": 11.13,
-      "profit_ratio": -0.0159,
-      "profit_amount": -792.0,
-      "hold_days": 0
-    },
-    {
-      "code": "sh600125",
-      "name": "铁龙物流",
-      "buy_price": 6.84,
-      "shares": 7300,
-      "buy_date": "2026-04-09",
-      "high_price": 6.84,
-      "current_price": 6.37,
-      "profit_ratio": -0.0687,
-      "profit_amount": -3431.0,
-      "hold_days": 0
+      "high_price": 11.48,
+      "current_price": 11.48,
+      "profit_ratio": 0.015030946065428817,
+      "profit_amount": 747.9999999999997,
+      "hold_days": 4
     },
     {
       "code": "sh600127",
@@ -103,11 +79,11 @@
       "buy_price": 7.35,
       "shares": 6800,
       "buy_date": "2026-04-09",
-      "high_price": 7.35,
+      "high_price": 7.49,
       "current_price": 7.49,
-      "profit_ratio": 0.019,
-      "profit_amount": 952.0,
-      "hold_days": 0
+      "profit_ratio": 0.019047619047619126,
+      "profit_amount": 952.0000000000039,
+      "hold_days": 4
     },
     {
       "code": "sh600132",
@@ -116,10 +92,10 @@
       "shares": 800,
       "buy_date": "2026-04-09",
       "high_price": 57.12,
-      "current_price": 55.61,
-      "profit_ratio": -0.0264,
-      "profit_amount": -1208.0,
-      "hold_days": 0
+      "current_price": 54.61,
+      "profit_ratio": -0.043942577030812294,
+      "profit_amount": -2007.9999999999984,
+      "hold_days": 4
     },
     {
       "code": "sh600176",
@@ -127,11 +103,11 @@
       "buy_price": 27.35,
       "shares": 1800,
       "buy_date": "2026-04-09",
-      "high_price": 27.35,
-      "current_price": 28.0,
-      "profit_ratio": 0.0238,
-      "profit_amount": 1170.0,
-      "hold_days": 0
+      "high_price": 32.11,
+      "current_price": 32.11,
+      "profit_ratio": 0.1740402193784277,
+      "profit_amount": 8567.999999999996,
+      "hold_days": 4
     },
     {
       "code": "sh600196",
@@ -140,10 +116,10 @@
       "shares": 1800,
       "buy_date": "2026-04-09",
       "high_price": 26.8,
-      "current_price": 26.56,
-      "profit_ratio": -0.009,
-      "profit_amount": -432.0,
-      "hold_days": 0
+      "current_price": 26.35,
+      "profit_ratio": -0.016791044776119375,
+      "profit_amount": -809.9999999999987,
+      "hold_days": 4
     },
     {
       "code": "sh600222",
@@ -152,10 +128,10 @@
       "shares": 6800,
       "buy_date": "2026-04-09",
       "high_price": 7.35,
-      "current_price": 7.15,
-      "profit_ratio": -0.0272,
-      "profit_amount": -1360.0,
-      "hold_days": 0
+      "current_price": 7.13,
+      "profit_ratio": -0.029931972789115614,
+      "profit_amount": -1495.9999999999984,
+      "hold_days": 4
     },
     {
       "code": "sh600234",
@@ -163,11 +139,11 @@
       "buy_price": 14.98,
       "shares": 3300,
       "buy_date": "2026-04-09",
-      "high_price": 14.98,
-      "current_price": 15.43,
-      "profit_ratio": 0.03,
-      "profit_amount": 1485.0,
-      "hold_days": 0
+      "high_price": 17.03,
+      "current_price": 17.03,
+      "profit_ratio": 0.136849132176235,
+      "profit_amount": 6765.000000000003,
+      "hold_days": 4
     },
     {
       "code": "sh600251",
@@ -175,11 +151,11 @@
       "buy_price": 11.07,
       "shares": 4500,
       "buy_date": "2026-04-09",
-      "high_price": 11.07,
-      "current_price": 10.94,
-      "profit_ratio": -0.0117,
-      "profit_amount": -585.0,
-      "hold_days": 0
+      "high_price": 11.15,
+      "current_price": 11.15,
+      "profit_ratio": 0.007226738934056014,
+      "profit_amount": 360.00000000000034,
+      "hold_days": 4
     },
     {
       "code": "sh600252",
@@ -188,10 +164,10 @@
       "shares": 18900,
       "buy_date": "2026-04-09",
       "high_price": 2.64,
-      "current_price": 2.57,
-      "profit_ratio": -0.0265,
-      "profit_amount": -1323.0,
-      "hold_days": 0
+      "current_price": 2.52,
+      "profit_ratio": -0.04545454545454549,
+      "profit_amount": -2268.000000000002,
+      "hold_days": 4
     },
     {
       "code": "sh600257",
@@ -200,10 +176,10 @@
       "shares": 6900,
       "buy_date": "2026-04-09",
       "high_price": 7.23,
-      "current_price": 6.98,
-      "profit_ratio": -0.0346,
-      "profit_amount": -1725.0,
-      "hold_days": 0
+      "current_price": 6.68,
+      "profit_ratio": -0.07607192254495168,
+      "profit_amount": -3795.000000000005,
+      "hold_days": 4
     },
     {
       "code": "sh600276",
@@ -212,10 +188,10 @@
       "shares": 800,
       "buy_date": "2026-04-09",
       "high_price": 57.45,
-      "current_price": 56.96,
-      "profit_ratio": -0.0085,
-      "profit_amount": -392.0,
-      "hold_days": 0
+      "current_price": 55.2,
+      "profit_ratio": -0.0391644908616188,
+      "profit_amount": -1800.0,
+      "hold_days": 4
     },
     {
       "code": "sh600285",
@@ -224,10 +200,10 @@
       "shares": 2200,
       "buy_date": "2026-04-09",
       "high_price": 22.18,
-      "current_price": 21.9,
-      "profit_ratio": -0.0126,
-      "profit_amount": -616.0,
-      "hold_days": 0
+      "current_price": 21.55,
+      "profit_ratio": -0.02840396753832277,
+      "profit_amount": -1385.9999999999977,
+      "hold_days": 4
     },
     {
       "code": "sh600345",
@@ -235,10 +211,34 @@
       "buy_price": 44.93,
       "shares": 1100,
       "buy_date": "2026-04-09",
-      "high_price": 44.93,
-      "current_price": 49.42,
-      "profit_ratio": 0.0999,
-      "profit_amount": 4939.0,
+      "high_price": 55.0,
+      "current_price": 55.0,
+      "profit_ratio": 0.2241264188738037,
+      "profit_amount": 11077.0,
+      "hold_days": 4
+    },
+    {
+      "code": "sh600056",
+      "name": "中国医药",
+      "buy_price": 10.59,
+      "shares": 5100,
+      "buy_date": "2026-04-13",
+      "high_price": 10.59,
+      "current_price": 10.59,
+      "profit_ratio": 0,
+      "profit_amount": 0,
+      "hold_days": 0
+    },
+    {
+      "code": "sh600063",
+      "name": "皖维高新",
+      "buy_price": 7.35,
+      "shares": 7400,
+      "buy_date": "2026-04-13",
+      "high_price": 7.35,
+      "current_price": 7.35,
+      "profit_ratio": 0,
+      "profit_amount": 0,
       "hold_days": 0
     }
   ],
@@ -402,8 +402,46 @@
       "action": "buy",
       "price": 44.93,
       "shares": 1100
+    },
+    {
+      "date": "2026-04-13",
+      "code": "sh600026",
+      "name": "中远海能",
+      "action": "sell",
+      "price": 22.93,
+      "shares": 1900,
+      "profit": -5966.000000000001,
+      "profit_ratio": -0.12044495588799388,
+      "reason": "回落12.0%止损"
+    },
+    {
+      "date": "2026-04-13",
+      "code": "sh600125",
+      "name": "铁龙物流",
+      "action": "sell",
+      "price": 6.23,
+      "shares": 7300,
+      "profit": -4452.999999999995,
+      "profit_ratio": -0.08918128654970753,
+      "reason": "回落8.9%止损"
+    },
+    {
+      "date": "2026-04-13",
+      "code": "sh600056",
+      "name": "中国医药",
+      "action": "buy",
+      "price": 10.59,
+      "shares": 5100
+    },
+    {
+      "date": "2026-04-13",
+      "code": "sh600063",
+      "name": "皖维高新",
+      "action": "buy",
+      "price": 7.35,
+      "shares": 7400
     }
   ],
   "start_date": "2026-04-09",
-  "last_update": "2026-04-09"
+  "last_update": "2026-04-13"
 }

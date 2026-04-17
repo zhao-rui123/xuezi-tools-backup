@@ -1,0 +1,31 @@
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: 0.0.0.0:9090
+
+Proxy:
+  - name: "Korea-V2Ray"
+    type: vmess
+    server: 43.108.18.71
+    port: 10086
+    uuid: 8285c54c-994e-4bc0-b923-2ba88cc7a7af
+    alterId: 0
+    cipher: auto
+    network: tcp
+
+Rule:
+  - DOMAIN-SUFFIX,google.com
+  - DOMAIN-SUFFIX,googleapis.com
+  - DOMAIN-SUFFIX,googleusercontent.com
+  - DOMAIN-SUFFIX,github.com
+  - DOMAIN-SUFFIX,githubusercontent.com
+  - DOMAIN-SUFFIX,youtube.com
+  - DOMAIN-SUFFIX,ytimg.com
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,anthropic.com
+  - DOMAIN-KEYWORD,google
+  - DOMAIN-KEYWORD,bERTp
+  - GEOIP,CN,DIRECT
+  - MATCH,DIRECT

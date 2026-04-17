@@ -593,7 +593,7 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
 ### 核心工具链（韩国服务器）
 | 工具 | 路径 | 用途 |
 |------|------|------|
-| acpx | /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx | ACP协议客户端，后台任务调度 |
+| acpx | /home/ccuser/.nvm/versions/node/v20.20.2/bin/acpx | ACP协议客户端，后台任务调度 |
 | codex | PATH中（Node 20） | OpenAI Codex CLI |
 | omx | PATH中（npm global） | oh-my-codex编排层（20个Agent） |
 | ccr | /home/ccuser/.nvm/versions/node/v20.20.2/bin/ccr | Claude Code Router（127.0.0.1:3456） |
@@ -638,22 +638,37 @@ acpx codex sessions
 | verifier | 完成验证 |
 | team-executor | 团队协作执行 |
 
-### 我调用韩国CC的方法
+### 我调用韩国CC的方法（2026-04-17验证更新）
 ```bash
 # SSH到韩国服务器，用完整路径调用acpx
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex sessions new'"
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && /home/ccuser/.nvm/versions/node/v20.20.2/bin/acpx codex sessions new --name <session-name>'"
 
-# 后台任务
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex --no-wait \"任务\" --cwd /home/ccuser/codex-workspace'"
+# 后台任务（关键：必须在session的cwd目录下执行，即/home/ccuser）
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'source ~/.nvm/nvm.sh && cd /home/ccuser && /home/ccuser/.nvm/versions/node/v20.20.2/bin/acpx codex -s <session-name> --no-wait \"任务描述\"'"
 ```
+
+**关键要点（2026-04-17验证）**：
+1. ✅ acpx路径：`/home/ccuser/.nvm/versions/node/v20.20.2/bin/acpx`
+2. ✅ 必须source nvm.sh加载Node环境
+3. ✅ 必须cd到session的cwd目录（默认/home/ccuser）
+4. ✅ 使用`-s <session-name>`指定session
+5. ✅ `--no-wait`模式：任务在独立后台进程跑，完全不超时
 
 ### 韩国CC记忆文件位置
 - `/home/ccuser/.claude/memory/acpx-and-oh-my-codex.md`（完整文档）
 
 ### 注意事项
-1. acpx必须用完整路径（Node 18环境）
+1. acpx必须用完整路径（Node 20环境）
 2. --no-wait依赖已创建的session，先sessions new
-3. ccr服务需手动管理（127.0.0.1:3456）
+3. **必须在session的cwd目录下执行**（默认/home/ccuser）
+4. ccr服务需手动管理（127.0.0.1:3456）
+
+### 常见问题
+| 问题 | 原因 | 解决 |
+|------|------|------|
+| `⚠ No acpx session found` | 不在session的cwd目录 | `cd /home/ccuser`后再执行 |
+| `command not found` | nvm环境未加载 | 先执行`source ~/.nvm/nvm.sh` |
+| `agent needs reconnect` | session已断开 | 重新创建session |
 
 ---
 
@@ -693,6 +708,61 @@ cd ~/.openclaw/workspace/simulator && python3 core.py
 
 ---
 
+## AI Coder 脚本使用指南 (2026-04-17 新增)
+
+**位置**: `~/.openclaw/workspace/ai_coder/`
+
+### 功能
+统一调用本地 Claude Code (MiniMax/Opus) 和韩国 Codex (GPT-5.4) 的安全 CLI 工具。
+
+### 环境变量（已配置）
+```bash
+export AI_CODER_KR_HOST="43.108.18.71"
+export AI_CODER_KR_USER="ccuser"
+export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
+```
+
+### 快速使用
+
+```bash
+# 本地执行（MiniMax/Opus）
+cd ~/.openclaw/workspace
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local -s SESSION --wait
+
+# 韩国执行（Codex GPT-5.4）
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
+
+# 后台模式（不阻塞）
+PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local --no-wait
+```
+
+### 常用命令
+
+| 命令 | 说明 |
+|------|------|
+| `exec` | 执行单次任务 |
+| `session-new NAME` | 创建 session |
+| `session-close NAME` | 关闭 session |
+| `status -s NAME` | 查询状态 |
+| `skills` | 列出 skills |
+
+### 子 Agent 调用（推荐）
+
+```python
+sessions_spawn({
+    "task": "cd ~/.openclaw/workspace && PYTHONPATH=ai_coder python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
+    "runtime": "subagent",
+    "runTimeoutSeconds": 300
+})
+```
+
+### 文档
+- `ai_coder/README.md` - 完整文档
+- `ai_coder/QUICKSTART.md` - 快速参考
+- `skills/ai-coder/SKILL.md` - Skill 指南
+
+---
+
 ## 韩国CC Codex调用更新 (2026-04-14)
 
 ### acpx codex ✅已验证可用
@@ -704,8 +774,8 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/ver
 ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex -s bg-task --no-wait "任务""
 ```
 
-### 详细文档
-- ~/.openclaw/workspace/docs/韩国CC-Codex后台调用指南.md
+### 详细文档（已过时，使用 AI Coder 替代）
+- ~~~/.openclaw/workspace/docs/韩国CC-Codex后台调用指南.md~~ → 使用 `ai_coder exec '任务' -p kr`
 
 
 ## 双CC调度体系 (2026-04-14)

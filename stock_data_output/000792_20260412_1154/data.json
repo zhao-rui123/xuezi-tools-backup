@@ -1,0 +1,151 @@
+{
+  "stock_code": "000792.SZ",
+  "market": "sz",
+  "fetch_time": "2026-04-12T11:54:29.532459",
+  "kline_source": "eastmoney",
+  "financials": {
+    "currentPrice": 37.41,
+    "previousClose": 37.4,
+    "trailingPE": 23.36,
+    "priceToBook": 4.4,
+    "marketCap": 197957728758.80997,
+    "fiftyTwoWeekHigh": 38.3,
+    "fiftyTwoWeekLow": 37.1,
+    "shortName": "盐湖股份"
+  },
+  "technicals": {
+    "close": 37.41,
+    "ma5": 36.95,
+    "ma20": 36.75,
+    "vol_ratio": 0.82,
+    "rsi": 54.1,
+    "macd_hist": -0.0547,
+    "prev_macd_hist": -0.0815,
+    "ma60": 35.43,
+    "ma_status": "多头排列",
+    "macd_status": "动能增强",
+    "rsi_status": "中性"
+  },
+  "capital_flow_label": "北向资金",
+  "capital_flow_summary": {
+    "type": "北向资金",
+    "consecutive_days": 0,
+    "direction": "净卖出",
+    "recent_total_万股": 0.0
+  },
+  "main_capital_flow": {
+    "recent_days": [
+      {
+        "date": "2026-04-10",
+        "main_net_inflow": 35479888.0,
+        "retail_net_inflow": -37955760.0
+      }
+    ],
+    "total_main_net_inflow": 35479888.0,
+    "direction": "主力净流入",
+    "consecutive_days": 1
+  },
+  "cls_news": [],
+  "analyst_reports": [
+    {
+      "org": "华鑫证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "公司事件点评报告：25Q4业绩短期承压，人形机器人业务勾勒全新成长曲线",
+      "date": "2026-04-12",
+      "infoCode": "AP202604121821139543",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604121821139543_1.pdf"
+    },
+    {
+      "org": "中银证券",
+      "rating": "买入",
+      "change": 2,
+      "title": "国内支线航空领导者，未来成长空间可期",
+      "date": "2026-04-12",
+      "infoCode": "AP202604121821139363",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604121821139363_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年年报点评：业绩符合市场预期，在手订单充沛确保十五五开门红",
+      "date": "2026-04-12",
+      "infoCode": "AP202604121821138435",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604121821138435_1.pdf"
+    },
+    {
+      "org": "中邮证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "魔芋品类引领增长，扣非净利表现亮眼",
+      "date": "2026-04-11",
+      "infoCode": "AP202604111821136357",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604111821136357_1.pdf"
+    },
+    {
+      "org": "中邮证券",
+      "rating": "买入",
+      "change": 2,
+      "title": "安驭聚能，孚拓芯途",
+      "date": "2026-04-11",
+      "infoCode": "AP202604111821136355",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604111821136355_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "25年公司量价均有微增，静待外部扰动结束后订单回暖",
+      "date": "2026-04-11",
+      "infoCode": "AP202604111821136257",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604111821136257_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "海缆与高压缆业务收入高增 在手海缆项目充沛",
+      "date": "2026-04-11",
+      "infoCode": "AP202604111821135460",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604111821135460_1.pdf"
+    },
+    {
+      "org": "华源证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "盈利稳健提分红，资产注入促增长",
+      "date": "2026-04-11",
+      "infoCode": "AP202604111821133937",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604111821133937_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年年报点评：2025年利润大增，AI端侧与品牌客户构筑新动能",
+      "date": "2026-04-10",
+      "infoCode": "AP202604101821129702",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604101821129702_1.pdf"
+    },
+    {
+      "org": "东吴证券",
+      "rating": "买入",
+      "change": 3,
+      "title": "2025年年报点评：Q4扣非净利润同比+19%，公允干扰归母表现；关注欧洲储能催化",
+      "date": "2026-04-10",
+      "infoCode": "AP202604101821127679",
+      "pdf_url": "https://pdf.dfcfw.com/pdf/H3_AP202604101821127679_1.pdf"
+    }
+  ],
+  "report_chart_pages": [],
+  "ir_presentation_pages": [],
+  "adr": {},
+  "macro": {},
+  "charts": {
+    "kline": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/000792_20260412_1154/kline_em.png",
+    "kline_intraday": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/000792_20260412_1154/kline_intraday.png",
+    "valuation": "/Users/zhaoruicn/.openclaw/workspace/stock_data_output/000792_20260412_1154/valuation.png"
+  },
+  "chart_count": 3
+}

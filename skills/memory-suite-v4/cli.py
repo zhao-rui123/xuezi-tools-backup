@@ -188,6 +188,116 @@ class MemorySuiteCLI:
             print(f"❌ 搜索失败: {e}")
             return 1
     
+    def cmd_build_cn_index(self, args) -> int:
+        """构建中文分词索引"""
+        logger.info("开始构建中文分词索引...")
+        try:
+            from core.chinese_indexer import ChineseIndexer
+            indexer = ChineseIndexer()
+            force = args.force if hasattr(args, 'force') else False
+            result = indexer.build_index(force=force)
+            
+            if result.get('indexed_files', 0) > 0:
+                print(f"✅ 中文索引构建完成")
+                print(f"   索引文件数: {result.get('indexed_files', 0)}")
+                print(f"   词条总数: {result.get('total_words', 0)}")
+                print(f"   去重词数: {result.get('unique_words', 0)}")
+                return 0
+            else:
+                print("⚠️ 未索引到任何文件")
+                return 1
+        except Exception as e:
+            logger.error(f"构建索引失败: {e}")
+            print(f"❌ 构建索引失败: {e}")
+            return 1
+    
+    def cmd_search_cn(self, args) -> int:
+        """中文分词搜索"""
+        query = args.query if hasattr(args, 'query') else None
+        if not query:
+            print("❌ 请提供搜索关键词")
+            return 1
+        
+        logger.info(f"中文搜索: {query}")
+        try:
+            from core.chinese_indexer import ChineseIndexer
+            indexer = ChineseIndexer()
+            limit = args.limit if hasattr(args, 'limit') else 10
+            results = indexer.search(query, limit=limit)
+            
+            if results:
+                print(f"🔍 找到 {len(results)} 条结果 (中文分词索引):")
+                for i, r in enumerate(results, 1):
+                    print(f"\n{i}. {r.get('title', '未知')}")
+                    print(f"   相关度: {r.get('score', 0):.1f}")
+                    matched = r.get('matched_words', [])
+                    if matched:
+                        print(f"   匹配词: {', '.join(matched[:5])}")
+                    print(f"   {r.get('snippet', '')[:120]}...")
+            else:
+                print("🔍 未找到相关结果")
+            return 0
+        except Exception as e:
+            logger.error(f"中文搜索失败: {e}")
+            print(f"❌ 中文搜索失败: {e}")
+            return 1
+    
+    def cmd_build_unified_index(self, args) -> int:
+        """构建统一索引"""
+        logger.info("开始构建统一索引...")
+        try:
+            from core.unified_indexer import UnifiedIndexer
+            indexer = UnifiedIndexer()
+            force = args.force if hasattr(args, 'force') else False
+            result = indexer.build_index(force=force)
+            
+            print(f"✅ 统一索引构建完成")
+            print(f"   索引文件数: {result.get('indexed_files', 0)}")
+            print(f"   关键词总数: {result.get('total_keywords', 0)}")
+            print(f"   耗时: {result.get('elapsed_seconds', 0):.2f}秒")
+            return 0
+        except Exception as e:
+            logger.error(f"构建统一索引失败: {e}")
+            print(f"❌ 构建统一索引失败: {e}")
+            return 1
+    
+    def cmd_search_unified(self, args) -> int:
+        """统一搜索（中英文混合）"""
+        query = args.query if hasattr(args, 'query') else None
+        if not query:
+            print("❌ 请提供搜索关键词")
+            return 1
+        
+        logger.info(f"统一搜索: {query}")
+        try:
+            from core.unified_indexer import UnifiedIndexer
+            indexer = UnifiedIndexer()
+            limit = args.limit if hasattr(args, 'limit') else 10
+            
+            if hasattr(args, 'all') and args.all:
+                results = indexer.search_all(query, limit=limit)
+                print(f'🔍 搜索 "{query}" (统一索引 + FTS综合搜索):')
+            else:
+                results = indexer.search(query, limit=limit)
+                print(f'🔍 搜索 "{query}" (统一索引):')
+            
+            if results:
+                print(f"找到 {len(results)} 条结果:")
+                for i, r in enumerate(results, 1):
+                    source_tag = {"en": "🇬🇧", "cn": "🇨🇳", "mixed": "🔀", "fts": "📦", "both": "✅"}.get(r.get('source', ''), "")
+                    print(f"\n{i}. {r.get('name', '未知')} {source_tag}")
+                    print(f"   相关度: {r.get('score', 0):.1f}")
+                    snippet = r.get('snippet', '')[:120]
+                    if snippet:
+                        print(f"   {snippet}...")
+            else:
+                print("🔍 未找到相关结果")
+            return 0
+        except Exception as e:
+            logger.error(f"统一搜索失败: {e}")
+            print(f"❌ 统一搜索失败: {e}")
+            return 1
+    
     def cmd_qa(self, args) -> int:
         """智能问答"""
         question = args.question if hasattr(args, 'question') else None
@@ -711,6 +821,8 @@ def main():
 
   # 搜索查询
   memory-suite search "关键词"         # 语义搜索
+  memory-suite build-cn-index          # 构建中文分词索引
+  memory-suite search-cn "韩国服务器"   # 中文分词搜索
   memory-suite qa "问题"               # 智能问答
 
   # 归档管理
@@ -764,6 +876,25 @@ def main():
     search_parser = subparsers.add_parser('search', help='语义搜索')
     search_parser.add_argument('query', help='搜索关键词')
     search_parser.add_argument('--limit', '-l', type=int, default=10, help='结果数量限制')
+    
+    # build-cn-index
+    build_cn_parser = subparsers.add_parser('build-cn-index', help='构建中文分词索引')
+    build_cn_parser.add_argument('--force', '-f', action='store_true', help='强制重建索引')
+    
+    # search-cn
+    search_cn_parser = subparsers.add_parser('search-cn', help='中文分词搜索')
+    search_cn_parser.add_argument('query', help='搜索关键词')
+    search_cn_parser.add_argument('--limit', '-l', type=int, default=10, help='结果数量限制')
+    
+    # build-unified-index
+    build_unified_parser = subparsers.add_parser('build-unified-index', help='构建统一索引（中文+英文）')
+    build_unified_parser.add_argument('--force', '-f', action='store_true', help='强制重建索引')
+
+    # search-unified
+    search_unified_parser = subparsers.add_parser('search-unified', help='统一搜索（中英文混合）')
+    search_unified_parser.add_argument('query', help='搜索关键词')
+    search_unified_parser.add_argument('--limit', '-l', type=int, default=10, help='结果数量限制')
+    search_unified_parser.add_argument('--all', '-a', action='store_true', help='同时搜索OpenClaw FTS')
     
     # qa
     qa_parser = subparsers.add_parser('qa', help='智能问答')
@@ -874,6 +1005,10 @@ def main():
         'restore': cli.cmd_restore,
         'status': cli.cmd_status,
         'search': cli.cmd_search,
+        'build-cn-index': cli.cmd_build_cn_index,
+        'search-cn': cli.cmd_search_cn,
+        'build-unified-index': cli.cmd_build_unified_index,
+        'search-unified': cli.cmd_search_unified,
         'qa': cli.cmd_qa,
         'archive': cli.cmd_archive,
         'report': cli.cmd_report,

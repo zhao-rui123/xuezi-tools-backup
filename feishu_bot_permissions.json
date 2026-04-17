@@ -1,0 +1,52 @@
+{
+  "scopes": [
+    {
+      "scope": "im:message",
+      "description": "发送和接收消息"
+    },
+    {
+      "scope": "im:message:send_as_bot",
+      "description": "以机器人身份发送消息"
+    },
+    {
+      "scope": "im:message.receive_v1",
+      "description": "接收消息"
+    },
+    {
+      "scope": "im:chat",
+      "description": "获取群信息"
+    },
+    {
+      "scope": "im:chat.member",
+      "description": "管理群成员"
+    },
+    {
+      "scope": "im:chat.member:bot",
+      "description": "添加机器人为群成员"
+    },
+    {
+      "scope": "bot:assistant",
+      "description": "机器人助手能力"
+    }
+  ],
+  "permissions": [
+    "im:message:create",
+    "im:message:update",
+    "im:message:delete",
+    "im:message:list",
+    "im:message:read",
+    "im:message:send_as_bot",
+    "im:chat:create",
+    "im:chat:update",
+    "im:chat:delete",
+    "im:chat:list",
+    "im:chat:read",
+    "im:chat.member:create",
+    "im:chat.member:update",
+    "im:chat.member:delete",
+    "im:chat.member:list",
+    "im:chat.member:read",
+    "bot:assistant:update",
+    "contact:user:readonly"
+  ]
+}

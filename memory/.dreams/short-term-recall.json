@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-13T15:07:13.642Z",
+  "entries": {
+    "memory:memory/2026-04-10.md:17:55": {
+      "key": "memory:memory/2026-04-10.md:17:55",
+      "path": "memory/2026-04-10.md",
+      "startLine": 17,
+      "endLine": 55,
+      "source": "memory",
+      "snippet": "- ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: calb那个不如就简化到只回答那几个工作相关，其他问题拒绝回答 - ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: 群外也适用？？你意思是你要防着我了？ - ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: 改吧 - ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: 你可以把obsidian的删除了 - ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: 你自己的agent md也改过了吧？ - ou_5a7b7ec0339ffe0c1d5bb6c5bc162579: agent md又精简了一下，挺好 ### 助手回复摘要 - 明白！简化成： **CALB群守则（一句话）：** > 只答工作相关（零碳/电气/财务/储能），其他一律\"这个我也不清楚\" 要不要加一句群外也适用？ --- 那现在改： **1. CALB群守则** → 简化为一句话 **2. 启动顺序** → 加上读取快照+历史session 要我现在 - 哈哈不是不是！😄 我是说—— - **CALB群**：只答工作相关 - **雪子私聊**：正常回复，不限制 - **其他人私聊**：礼貌拒绝 我话没说清楚，抱歉 😅 你私聊我是自由的，我不会防着你！ 那CALB群守则就这样： > 只答工作相关（零碳/电气/财务/储能），其他一律\"这个我也不清楚 - ✅ **已更新！** **改动：** 1. **CALB群守则**",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-13T15:07:13.642Z",
+      "lastRecalledAt": "2026-04-13T15:07:13.642Z",
+      "queryHashes": [
+        "273d53e12b02"
+      ],
+      "recallDays": [
+        "2026-04-13"
+      ],
+      "conceptTags": [
+        "零碳/电气/财务/储能",
+        "calb",
+        "那个",
+        "不如",
+        "简化",
+        "回答",
+        "那几个",
+        "工作"
+      ]
+    },
+    "memory:memory/2026-04-10.md:48:87": {
+      "key": "memory:memory/2026-04-10.md:48:87",
+      "path": "memory/2026-04-10.md",
+      "startLine": 48,
+      "endLine": 87,
+      "source": "memory",
+      "snippet": "那CALB群守则就这样： > 只答工作相关（零碳/电气/财务/储能），其他一律\"这个我也不清楚 - ✅ **已更新！** **改动：** 1. **CALB群守则** → 简化成一句话 > 只答工作相关（零碳/电气/财务/储能），其他一律\"这个我也不清楚\" > 配置/API Key绝对不给 2. **启动顺序** → 改成读取历史session ``` 1. SOUL - 改了的就是本地 `~/.openclaw/workspace/AGENTS.md`，刚改完 Obsidian那边刚删了（按你要求） 所以现在状态： - ✅ 本地 `~/.openclaw/workspace/AGENTS.md` — 已更新 - ✅ Obsidian `BOSI/zhaorui/ - 👍 精简之后确实更清晰了！ 今天更新的内容汇总： - ✅ OMC完整用法（5种模式、19个Agent） - ✅ CALB群守则简化 - ✅ 启动顺序+读取历史session # 2026-04-10 记忆 ## 工作手册更新 - AGENTS.md 已更新：简化CALB群守则为\"只答工作相关（零碳/电气/财务/储能），其他一律不清楚\" - 启动顺序优化：增加读取历史session功能，避免\"失忆\" - 新增OMC完整用法：5种执行模式、19个专业Agent、Team协作等 ## 文档整理 - 创建《Claude Code ACP & OMC 完整使用教程》(MD+Word) - 拆分文档：工作手册(AGENTS.md) vs 技术参考(OMC指南) - Obsidian同",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-13T15:07:13.642Z",
+      "lastRecalledAt": "2026-04-13T15:07:13.642Z",
+      "queryHashes": [
+        "273d53e12b02"
+      ],
+      "recallDays": [
+        "2026-04-13"
+      ],
+      "conceptTags": [
+        "零碳/电气/财务/储能",
+        "配置/api",
+        "openclaw/workspace/agents.md",
+        "bosi/zhaorui",
+        "agents.md",
+        "calb",
+        "守则",
+        "这样"
+      ]
+    },
+    "memory:memory/2026-04-07.md:71:128": {
+      "key": "memory:memory/2026-04-07.md:71:128",
+      "path": "memory/2026-04-07.md",
+      "startLine": 71,
+      "endLine": 128,
+      "source": "memory",
+      "snippet": "### 文档输出 - Word文档：「数据中心锂电UPS产品设计要求推导.docx」 --- ## 15:00 手动补充 - Obsidian目录整理 ### 目录结构调整 - 股票移到「生活投资/股票/」，与工作分离 - 储能保留在「工作/储能/」 ### 更新文档 - Obsidian笔记命名规范.md - 更新目录结构 - MEMORY.md - Obsidian知识库体系章节 --- ## 19:00 手动补充 - MemPalace研究 ### 研究内容 - MemPalace：AI记忆系统，96.6%检索准确率 - 核心技术：AAAK压缩（30x）、记忆宫殿结构（wing/room） ### 结论 - 中文适配困难（分词、停用词问题） - 我们现有标签方案够用 - 不需要向量搜索（文件量不够大） --- ## 20:00 手动补充 - 标签体系整理 ### Obsidian标签体系v4.0 - 更新命名规范文档 - 整理全部~30个文件，添加层级标签 - 借鉴MemPalace的wing/room思想 ### 标签层级 - 一级（领域）：#AI、#储能、#股票、#工作 - 二级（类型）：#/日志、#/项目、#/IRR、#/规范 --- ## 22:00 手动补充 - 备份超时修复 ### 问题 - daily-backup cron任务超时（30秒不够） - 日志显示：`Request timed out before a response was generated` ### 修复 - openclaw cron edit 增加 t",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-13T15:07:13.642Z",
+      "lastRecalledAt": "2026-04-13T15:07:13.642Z",
+      "queryHashes": [
+        "273d53e12b02"
+      ],
+      "recallDays": [
+        "2026-04-13"
+      ],
+      "conceptTags": [
+        "backup",
+        "备份",
+        "数据中心锂电ups产品设计要求推导.docx",
+        "生活投资/股票",
+        "工作/储能",
+        "obsidian笔记命名规范.md",
+        "memory.md",
+        "96.6"
+      ]
+    },
+    "memory:memory/2026-04-07.md:40:81": {
+      "key": "memory:memory/2026-04-07.md:40:81",
+      "path": "memory/2026-04-07.md",
+      "startLine": 40,
+      "endLine": 81,
+      "source": "memory",
+      "snippet": "雪子需要推导数据中心锂电UPS产品的设计规格 ### 产品尺寸推导结论 | 参数 | 目标值 | 说明 | |------|--------|------| | 宽度 | 600mm | 标准19英寸机柜 | | 高度 | 2000mm | 适配42U机柜空间 | | 深度 | 1000mm | 固定1000mm | | 重量 | ≤600kg | 满足1000kg/m²楼板荷载 | | 功率 | 560-600kVA | 参考比亚迪560kVA路线 | ### 楼板荷载分析 - GB 50174-2017：A级≥500kg/m²，行业通常800-1000kg/m² - 活荷载设计值（800kg/m²）可直接用于设备重量，无需额外扣除静荷载 - 单柜最大重量 = 800kg/m² × 0.6m²（0.6m宽×1m深）= 480kg（临界） - 目标≤600kg满足1000kg/m²楼板要求 ### 各厂商锂电UPS参考 | 厂商 | 产品 | 功率 | |------|------|------| | 华为 | UPS5000-A | 400-600kVA | | 南都电源 | AIOn X-Rate | 600kW+ | | 双登股份 | DP60 | 630kW | | 比亚迪 | 自研？ | 560kVA/78kWh | ### 核心发现 - AIDC备电核心矛盾：高功率 + 高频脉冲 + 本质安全 - 门槛：10C+放电能力 + 6万次+脉冲循环 - 自主开发目标：XZB-600（600+kW/200kWh）、XZM-2500（2.5MWh） ### 文档输",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-13T15:07:13.642Z",
+      "lastRecalledAt": "2026-04-13T15:07:13.642Z",
+      "queryHashes": [
+        "273d53e12b02"
+      ],
+      "recallDays": [
+        "2026-04-13"
+      ],
+      "conceptTags": [
+        "满足1000kg/m2楼板荷载",
+        "560-600kva",
+        "50174-2017",
+        "500kg/m2",
+        "行业通常800-1000kg/m2",
+        "800kg/m2",
+        "0.6m2",
+        "0.6m宽"
+      ]
+    },
+    "memory:memory/2026-03-23.md:41:78": {
+      "key": "memory:memory/2026-03-23.md:41:78",
+      "path": "memory/2026-03-23.md",
+      "startLine": 41,
+      "endLine": 78,
+      "source": "memory",
+      "snippet": "- 原因：Crontab中未安装file-cleanup和security-scan - 修复：添加到crontab并测试通过 - system-maintenance.sh: Gateway检查命令修复(pgrep→launchctl) ### 技能包精简 - 删除16个空技能包+1个重复symlink - 最终保留：51个技能包 - 归档到archived/：31个 ### IDENTITY.md更新 - 添加技能包使用指南 - 分类：图片/搜索/股票/文件/储能/开发/记忆/运维 ### 零碳园区申报书模板 - 来源：金昌经开区国家级零碳园区申报书(189页PDF) - 生成：零碳园区申报书模板.md (73KB, 1530行) - 包含：完整7章结构，所有数据改为[填写：...]占位符 - 文件：零碳园区申报书模板.md/docx（已发送给雪子） ### MiniMax技能包(3个) 1. minimax-understand-image: 图片理解 ✅测试通过 2. minimax-web-search: 网络搜索 ✅测试通过 3. minimax-multimodal: 语音/视频(需单独权限) ### MiniMax M2.7测试 - API状态：200 OK - 雪子已切换到MiniMax-M2.7模型 ### 股票推送脚本更新 - 问题：kilo推送使用东方财富API，自选股列表未同步 - 原因：东方财富自选股还是旧的（盐湖/山东海化/中矿资源） - 修复：更新3个脚本的自选股配置 - stock_daily_push_v3.py ✅ -",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-13T15:07:13.642Z",
+      "lastRecalledAt": "2026-04-13T15:07:13.642Z",
+      "queryHashes": [
+        "273d53e12b02"
+      ],
+      "recallDays": [
+        "2026-04-13"
+      ],
+      "conceptTags": [
+        "gateway",
+        "网络",
+        "system-maintenance.sh",
+        "identity.md更新",
+        "图片/搜索/股票/文件/储能/开发/记忆/运维",
+        "零碳园区申报书模板.md",
+        "零碳园区申报书模板.md/docx",
+        "minimax-understand-image"
+      ]
+    }
+  }
+}
