@@ -708,7 +708,7 @@ cd ~/.openclaw/workspace/simulator && python3 core.py
 
 ---
 
-## AI Coder 脚本使用指南 (2026-04-17 新增)
+## AI Coder 脚本使用指南 (2026-04-17 新增，2026-04-19 重大更新)
 
 **位置**: `~/.openclaw/workspace/ai_coder/`
 
@@ -726,8 +726,8 @@ export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
 
 ```bash
 # 本地执行（MiniMax/Opus）
-cd ~/.openclaw/workspace
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local -s SESSION --wait
+cd ~/.openclaw/workspace/ai_coder
+python3 -m ai_coder exec "任务" -p local -s SESSION --wait
 
 # 韩国执行（Codex GPT-5.4）
 PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
@@ -872,3 +872,26 @@ macOS TCC权限限制：cron任务没有完全磁盘访问权限(FDA)，被系�
 - `~/.claude/settings.json` 控制模型配置
 - `model: default` = Opus 4.6（已配置在 settings.json）
 - 切 opus 后用完记得切回 minimax，避免影响我自己的响应质量
+
+## 韩国服务器 Claude Code 记忆文件
+
+**位置：** `/home/ccuser/memory.json`
+
+**内容结构：**
+```json
+{
+  "last_updated": "2026-04-18",
+  "user_profile": { "name": "用户", "language": "中文" },
+  "long_term_memory": [
+    { "key": "server_info", "content": "服务器状态" },
+    { "key": "software_versions", "content": "oh-my-codex: 0.12.5, codex-cli: 0.121.0" }
+  ],
+  "recent_tasks": [ ... ]
+}
+```
+
+**读取命令：**
+```bash
+ssh root@43.108.18.71 "cat /home/ccuser/memory.json"
+```
+

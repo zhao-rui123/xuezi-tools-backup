@@ -104,20 +104,20 @@ export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
 ```bash
 # 本地执行（MiniMax/Opus）
 cd ~/.openclaw/workspace
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local -s SESSION --wait
+python3 -m ai_coder exec "任务" -p local -s SESSION --wait
 
 # 韩国执行（Codex GPT-5.4）
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
+python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
 
 # 后台模式（不阻塞）
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local --no-wait
+python3 -m ai_coder exec "任务" -p local --no-wait
 ```
 
 ### 子 Agent 调用（推荐）
 
 ```javascript
 sessions_spawn({
-  task: "cd ~/.openclaw/workspace && PYTHONPATH=ai_coder python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
+  task: "cd ~/.openclaw/workspace/ai_coder && python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
   runtime: "subagent",
   runTimeoutSeconds: 300
 })
