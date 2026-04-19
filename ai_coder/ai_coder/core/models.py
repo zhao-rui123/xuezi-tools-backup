@@ -46,6 +46,7 @@ class Task:
     skill_name: str | None = None
     timeout: int = 300
     no_wait: bool = True
+    model: str | None = None
     created_at: str = field(default_factory=utc_now_iso)
     metadata: dict[str, Any] = field(default_factory=dict)
 

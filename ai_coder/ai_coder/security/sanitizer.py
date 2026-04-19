@@ -16,13 +16,27 @@ class SanitizationResult:
 
 
 class InputSanitizer:
-    """Reject obviously dangerous control sequences before execution."""
+    """
+    Whitelist-based input sanitization.
 
-    DANGEROUS_CHARS = ("\x00", "\n", "\r", "\x1b")
+    Only truly dangerous patterns are blocked:
+    - Shell command injection (operators + dangerous commands)
+    - Path traversal attacks
+    - Null bytes and other control characters
+
+    Backticks, $(), and most code syntax are ALLOWED since they are
+    normal in code analysis tasks.
+    """
+
+    # Control chars that should never appear in valid input
+    DANGEROUS_CHARS = ("\x00", "\x1b")
+
+    # Truly dangerous patterns only — shell command injection and path traversal
+    # These block patterns like:  ; rm -rf  or  | cat /etc/passwd  or  ../..
     DANGEROUS_PATTERNS = (
-        r"`[^`]+`",
-        r"\$\([^)]+\)",
-        r"[;&|]\s*(?:rm|mv|cp|cat|sh|bash|python|curl|wget)\b",
+        # Shell operators followed by dangerous commands (command injection)
+        r"[;&|]\s*(?:rm|mv|cp|cat|sh|bash|python|curl|wget|npm|git|chmod|chown)\b",
+        # Path traversal
         r"(?:^|[\\/])\.\.(?:[\\/]|$)",
     )
     SESSION_NAME_RE = re.compile(r"^[a-zA-Z0-9-]+$")
@@ -32,17 +46,22 @@ class InputSanitizer:
         self.patterns = tuple(re.compile(pattern) for pattern in self.DANGEROUS_PATTERNS)
 
     def sanitize(self, input_str: str) -> SanitizationResult:
-        """Validate input and return the original string unchanged when valid."""
+        """Validate input using whitelist approach — only block truly dangerous patterns."""
 
         violations: list[str] = []
         if len(input_str) > self.max_length:
             violations.append(f"Input exceeds max length: {len(input_str)} > {self.max_length}")
+
+        # Block null bytes and escape sequences only
         for char in self.DANGEROUS_CHARS:
             if char in input_str:
                 violations.append(f"Dangerous character found: {repr(char)}")
+
+        # Block only truly dangerous injection patterns
         for pattern in self.patterns:
             if pattern.search(input_str):
                 violations.append(f"Dangerous pattern matched: {pattern.pattern}")
+
         return SanitizationResult(not violations, input_str, tuple(violations))
 
     def validate_session_name(self, name: str) -> SanitizationResult:

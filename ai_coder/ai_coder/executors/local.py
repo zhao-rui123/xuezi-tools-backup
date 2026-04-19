@@ -14,10 +14,11 @@ from .base import BaseExecutor
 class LocalExecutor(BaseExecutor):
     """Execute acpx commands on the local machine."""
 
-    def __init__(self, acpx_path: str = "acpx", workspace: str = "~/.openclaw/workspace"):
+    def __init__(self, acpx_path: str = "acpx", workspace: str = "~/.openclaw/workspace", model: str | None = None):
         super().__init__(ExecutorType.LOCAL)
         self.acpx_path = acpx_path
         self.workspace = os.path.expanduser(workspace)
+        self.model = model
 
     def is_available(self) -> bool:
         try:
@@ -86,6 +87,9 @@ class LocalExecutor(BaseExecutor):
 
     def _build_command(self, task: Task) -> list[str]:
         cmd = [self.acpx_path, "claude"]
+        model = task.model if task.model is not None else self.model
+        if model:
+            cmd.extend(["--model", model])
         if task.type == TaskType.SESSION_NEW:
             cmd.extend(["sessions", "new", "--name", task.session_name or ""])
             return cmd

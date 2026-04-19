@@ -87,6 +87,39 @@ class BackgroundTaskStore:
             row = connection.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
         return dict(row) if row else None
 
+    def update_status(
+        self,
+        task_id: str,
+        status: TaskStatus,
+        output: str,
+        error: str,
+        exit_code: int,
+    ) -> None:
+        """Update the status and result fields of an existing task record."""
+        try:
+            with self._connect() as connection:
+                connection.execute(
+                    """
+                    UPDATE tasks SET
+                        status = ?,
+                        output = ?,
+                        error = ?,
+                        exit_code = ?,
+                        updated_at = ?
+                    WHERE id = ?
+                    """,
+                    (
+                        status.value,
+                        output,
+                        error,
+                        exit_code,
+                        __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
+                        task_id,
+                    ),
+                )
+        except sqlite3.Error as exc:  # pragma: no cover
+            raise StoreError(str(exc)) from exc
+
     def list_recent(self, limit: int = 20) -> list[dict[str, object]]:
         with self._connect() as connection:
             rows = connection.execute(

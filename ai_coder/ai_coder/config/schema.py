@@ -48,6 +48,7 @@ class LocalConfig:
 
     acpx_path: str = defaults.LOCAL_ACPX_PATH
     workspace: str = defaults.LOCAL_WORKSPACE
+    model: str | None = None
 
     @property
     def resolved_workspace(self) -> str:
@@ -63,6 +64,7 @@ class RemoteConfig:
     ssh_key: str
     acpx_path: str = defaults.REMOTE_ACPX_PATH
     known_hosts: str = defaults.REMOTE_KNOWN_HOSTS
+    model: str | None = None
 
     def __post_init__(self) -> None:
         if not _HOST_RE.match(self.host):
@@ -153,6 +155,7 @@ class Settings:
             workspace=str(
                 self._first_value("local", "workspace", "AI_CODER_WORKSPACE", "AI_CODER_LOCAL_WORKSPACE", default=defaults.LOCAL_WORKSPACE)
             ),
+            model=self._first_value("local", "model", "AI_CODER_MODEL", default=None),
         )
 
     def _build_remote_payload(self) -> dict[str, str]:
@@ -177,6 +180,7 @@ class Settings:
                     default=defaults.REMOTE_KNOWN_HOSTS,
                 )
             ),
+            "model": self._first_value("remote", "model", "AI_CODER_REMOTE_MODEL", default=None),
         }
 
     def _load_remote(self) -> RemoteConfig:

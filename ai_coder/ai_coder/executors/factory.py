@@ -22,6 +22,7 @@ class ExecutorFactory:
             executor = LocalExecutor(
                 acpx_path=self.settings.local.acpx_path,
                 workspace=self.settings.local.resolved_workspace,
+                model=self.settings.local.model,
             )
         else:
             remote = self.settings.remote
@@ -31,6 +32,7 @@ class ExecutorFactory:
                 remote.resolved_ssh_key,
                 acpx_path=remote.acpx_path,
                 known_hosts=remote.resolved_known_hosts,
+                model=remote.model,
             )
         self._instances[executor_type] = executor
         return executor

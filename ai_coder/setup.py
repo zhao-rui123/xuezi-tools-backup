@@ -5,7 +5,7 @@ setup(
     version="1.0.0",
     description="Secure unified CLI for Claude Code and Codex",
     author="Xuezi Assistant",
-    packages=find_packages(),
+    packages=find_packages(where="ai_coder", include=["ai_coder*"]),
     install_requires=[
         "click>=8.0.0",
         "paramiko>=3.0.0",

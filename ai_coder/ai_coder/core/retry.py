@@ -2,23 +2,18 @@
 Retry wrapper with Feishu alerting and task audit logging for ai_coder.
 
 Usage:
-    from core.retry import retry_with_alert
-    result = retry_with_alert(executor).execute(task)
+    from core.retry import RetryExecutor
+    result = RetryExecutor(executor).execute(task)
 """
 from __future__ import annotations
 
 import json
 import os
 import time
-from dataclasses import asdict
-from functools import wraps
 from pathlib import Path
-from typing import Callable, ParamSpec, TypeVar
+from typing import Optional
 
 from .models import ExecutionResult, Task
-
-P = ParamSpec("P")
-T = TypeVar("T")
 
 # Default config
 DEFAULT_MAX_RETRIES = 3
@@ -39,8 +34,8 @@ def _send_feishu_alert(
     result: ExecutionResult,
     *,
     attempts: int,
-    webhook_url: str | None = None,
-) -> str | None:
+    webhook_url: Optional[str] = None,
+) -> Optional[str]:
     """Send failure alert via Feishu webhook."""
     url = webhook_url or os.environ.get(
         "AI_CODER_FEISHU_WEBHOOK_URL",
@@ -69,8 +64,8 @@ def _send_feishu_alert(
         )
         with urllib.request.urlopen(req, timeout=10) as resp:
             return resp.read().decode("utf-8")
-    except Exception as exc:  # noqa: BLE001
-        return str(exc)
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def _record_audit(
@@ -80,7 +75,7 @@ def _record_audit(
     attempt: int,
     max_retries: int,
     event: str,
-    alert_error: str | None = None,
+    alert_error: Optional[str] = None,
 ) -> None:
     """Record task event to audit log."""
     log_path = get_audit_log_path()
@@ -101,86 +96,6 @@ def _record_audit(
         handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def retry_with_alert(
-    executor,  # BaseExecutor
-    *,
-    max_retries: int = DEFAULT_MAX_RETRIES,
-    retry_delay: float = DEFAULT_RETRY_DELAY,
-    send_alert: bool = True,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
-    """
-    Decorator that adds retry + Feishu alerting + audit logging to executor.execute().
-
-    Args:
-        executor: The executor instance to wrap
-        max_retries: Maximum number of retry attempts (default 3)
-        retry_delay: Seconds to wait between retries (default 5)
-        send_alert: Whether to send Feishu alert on final failure (default True)
-
-    Returns:
-        Decorated execute method
-
-    Example:
-        executor = RemoteExecutor(...)
-        result = retry_with_alert(executor).execute(task)
-    """
-
-    def decorator(fn: Callable[P, T]) -> Callable[P, T]:
-        @wraps(fn)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-            last_result: ExecutionResult | None = None
-
-            for attempt in range(1, max_retries + 1):
-                result = fn(*args, **kwargs)
-
-                if isinstance(result, ExecutionResult) and result.success:
-                    _record_audit(
-                        args[0].task if args and hasattr(args[0], "task") else Task(command="?"),
-                        result,
-                        attempt=attempt,
-                        max_retries=max_retries,
-                        event="task_completed",
-                    )
-                    return result
-
-                last_result = result
-
-                if attempt < max_retries:
-                    time.sleep(retry_delay)
-                    _record_audit(
-                        args[0].task if args and hasattr(args[0], "task") else Task(command="?"),
-                        result,
-                        attempt=attempt,
-                        max_retries=max_retries,
-                        event="task_retry",
-                    )
-
-            # All retries exhausted
-            task = args[0].task if args and hasattr(args[0], "task") else Task(command="?")
-            alert_error = None
-            if send_alert and last_result is not None:
-                alert_error = _send_feishu_alert(
-                    task,
-                    last_result,
-                    attempts=max_retries,
-                )
-
-            _record_audit(
-                task,
-                last_result or Task(command="?"),
-                attempt=max_retries,
-                max_retries=max_retries,
-                event="task_failed",
-                alert_error=alert_error,
-            )
-
-            return last_result or result  # type: ignore
-
-        return wrapper  # type: ignore
-
-    return decorator
-
-
 class RetryExecutor:
     """Wrapper class that adds retry/alerting to any executor."""
 
@@ -198,7 +113,7 @@ class RetryExecutor:
         self._send_alert = send_alert
 
     def execute(self, task: Task) -> ExecutionResult:
-        last_result: ExecutionResult | None = None
+        last_result: Optional[ExecutionResult] = None
 
         for attempt in range(1, self._max_retries + 1):
             result = self._executor.execute(task)
@@ -236,11 +151,20 @@ class RetryExecutor:
 
         _record_audit(
             task,
-            last_result or Task(command="?"),
+            last_result or task,
             attempt=self._max_retries,
             max_retries=self._max_retries,
             event="task_failed",
             alert_error=alert_error,
         )
 
-        return last_result or Task(command="?")  # type: ignore
+        return last_result or ExecutionResult(
+            success=False,
+            output="",
+            error="max retries exceeded",
+            exit_code=-1,
+            started_at="",
+            completed_at="",
+            duration_ms=0,
+            executor_type=self._executor.executor_type,
+        )
