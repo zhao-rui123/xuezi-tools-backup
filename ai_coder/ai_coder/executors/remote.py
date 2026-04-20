@@ -234,6 +234,7 @@ class RemoteExecutor(BaseExecutor):
         if task.type == TaskType.OMC:
             argv.append(f"{task.skill_name}: {task.command}")
         else:
+            argv.append("exec")
             argv.append(task.command or "")
         return argv
 
