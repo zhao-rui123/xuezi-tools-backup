@@ -1,6 +1,6 @@
 # AGENTS.md - 雪子助手工作手册
 
-*最后更新：2026-04-10*
+*最后更新：2026-04-22*
 
 ---
 
@@ -34,7 +34,64 @@
 
 ---
 
-## 🤖 Claude Code 使用指南
+## 📋 acpx vs Screen 调用规则
+
+### ⚠️ Codex 必须走代理！
+**本地 v2ray 端口**: HTTP=1087, SOCKS=1080
+本地 Codex 启动前必须 export proxy，否则直连被墙！
+
+### 🚨 黄金法则：永远不阻塞
+**screen / sessions_spawn / 任何耗时任务 → 后台跑 → 继续聊天**
+不要等结果，不要 poll，有需要再去查日志。
+雪子永远是第一优先级！
+
+### 核心原则
+> **"额度贵 or 怕掉的 → screen，其他 → acpx"**
+
+| 场景 | 工具 | 原因 |
+|------|------|------|
+| **本地 Codex** (GPT-5.4) | **screen** ✅ | 额度珍贵，不能浪费在失败上 |
+| **远程 Codex** (韩国) | **screen** ✅ | SSH 断连风险 + 额度双重保险 |
+| **Opus 架构/验收** | **screen** ✅ | 关键任务，不能失败 |
+| **本地 Claude Code** | `acpx` / `acpx --no-wait` | MiniMax 额度多，失败成本低 |
+| **快速查询** (< 2 min) | `acpx` | MiniMax 专用，快速轻便 |
+
+### 快速判定
+- **怕 SSH 断** → screen
+- **怕系统杀** → screen
+- **要跑几小时** → screen
+- **额度敏感** (Codex/Opus) → screen
+- **其他情况** → acpx
+
+## 📝 修改问题铁律（Codex风格）
+
+**核心原则：只改问题，其他都不碰**
+
+| 步骤 | 操作 | 说明 |
+|------|------|------|
+| 1️⃣ **备份** | `cp config.json config.json.bak-YYYYMMDD-HHMM` | 先备份再改 |
+| 2️⃣ **最小改动** | 只改有问题的部分，其他保持原样 | 不大改、不重构 |
+| 3️⃣ **验证生效** | 改完立即测试确认 | 看日志/运行结果 |
+| 4️⃣ **汇报清晰** | 说明改了什么、为什么改、不改什么 | 附带备份路径 |
+
+**反面教材：** 上来就大改配置、大重构代码，容易翻车还不好回滚。
+
+**教训：** 修配置/代码前先问自己"最小改动是什么"，能不动的坚决不动。
+
+### 标准命令
+```bash
+# screen 方式（稳定，推荐用于 Codex/Opus）
+screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex.log"
+screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude.log"
+
+# acpx 方式（便捷，推荐用于 MiniMax）
+acpx claude sessions new --name task-name
+acpx claude -s task-name --no-wait "任务"
+```
+
+---
+
+## 🤖 Claude Code / Codex 调用指南
 
 ### 模型分配（雪子规则 - 铁律）
 
@@ -46,107 +103,66 @@
 
 **核心原则：Opus只负责架构设计和验收，其他全部用MiniMax**
 
-### 🛡️ Claude Code 防被杀流程（⚠️ 铁律）
+### 🛡️ 标准调用方式：screen模式（⚠️ 铁律）
 
-**✅ 正确做法：sessions_spawn 后台运行**
+**所有工具调用都用 screen 模式，SSH断开、timeout都不受影响**
 
-```javascript
-sessions_spawn({
-  task: "任务描述",
-  runtime: "subagent",
-  model="minimax-cn/MiniMax-M2.7",
-  runTimeoutSeconds=600
-})
-```
-
-**❌ 错误做法**：`exec("claude --print '大任务'")` —— 必被超时杀！
-
-### Claude Code ACP 调用
-
-**先决条件：必须关闭 Claude GUI**
-
-**快速命令：**
 ```bash
-# 模型切换
-cc-model-switch.sh opus    # 架构/验收
-cc-model-switch.sh minimax # 执行开发
+# 本地 Claude Code（MiniMax）
+screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude.log"
 
-# ACP 调用
-acpx claude -s <session> "任务" --approve-all
+# 本地 Codex（GPT-5.4）
+screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex.log"
 
-# 后台自动驾驶（重要！做完一件我可以继续做其他的）
-acpx claude sessions new --name bg-task
-acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
-# 查看状态: acpx claude -s bg-task status
-# 查看结果: tail ~/.acpx/sessions/*.stream.ndjson
+# 韩国 Codex（GPT-5.4）
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'screen -dmS kr-task bash -c \"codex exec ...\"'"
+
+# omx
+screen -dmS omx-task bash -c "omx autopilot '任务' 2>&1 | tee /tmp/omx.log"
+
+# omc
+screen -dmS omc-task bash -c "omc ralphthon '任务' 2>&1 | tee /tmp/omc.log"
 ```
 
-**详细文档：** Obsidian `Claude Code ACP & OMC 完整指南.md`
+### 查看screen输出
+```bash
+screen -ls                    # 列出所有screen
+screen -r task-name          # 连接screen
+tail -f /tmp/claude.log      # 实时查看输出
+screen -d task-name          # 分离screen（后台继续）
+```
+
+### screen vs --no-wait
+- **screen** = 完全隔离，SSH断开不受影响，不会被杀
+- **--no-wait** = 后台跑，但可能被系统回收
+
+**结论：所有长时间任务都用screen，不用--no-wait**
 
 ---
 
-## 🤖 AI Coder 脚本使用（2026-04-17 新增）
+## 🤖 AI Coder 脚本使用（已过时，推荐直接用screen）
 
-**统一调用 Claude Code 和韩国 Codex 的安全 CLI 工具**
+**⚠️ 重要更新（2026-04-20）：ai_coder封装层已不再推荐使用，直接用screen调用更简单可靠**
 
-### 位置
+### 推荐方式：直接screen调用
+```bash
+# 本地 Claude（MiniMax）
+screen -dmS claude-task bash -c "claude --print '任务'"
+# 本地 Codex（GPT-5.4）
+screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec ..."
+# 韩国 Codex（GPT-5.4）
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'screen -dmS kr-task bash -c \"codex exec ...\"'"
+```
+
+### ai_coder位置（备用）
 `~/.openclaw/workspace/ai_coder/`
 
-### 环境变量（已配置）
+### ai_coder命令（备用）
 ```bash
-export AI_CODER_KR_HOST="43.108.18.71"
-export AI_CODER_KR_USER="ccuser"
-export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
+cd ~/.openclaw/workspace/ai_coder
+python3 -m ai_coder exec "任务" -p local -s SESSION --wait  # 本地
+python3 -m ai_coder exec "任务" -p kr -s SESSION --wait    # 韩国
 ```
-
-### 快速使用
-
-```bash
-# 本地执行（MiniMax/Opus）
-cd ~/.openclaw/workspace
-python3 -m ai_coder exec "任务" -p local -s SESSION --wait
-
-# 韩国执行（Codex GPT-5.4）
-python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
-
-# 后台模式（不阻塞）
-python3 -m ai_coder exec "任务" -p local --no-wait
-```
-
-### 子 Agent 调用（推荐）
-
-```javascript
-sessions_spawn({
-  task: "cd ~/.openclaw/workspace/ai_coder && python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
-  runtime: "subagent",
-  runTimeoutSeconds: 300
-})
-```
-
-### 常用命令
-
-| 命令 | 说明 |
-|------|------|
-| `exec "任务"` | 执行单次任务 |
-| `session-new NAME` | 创建 session |
-| `session-close NAME` | 关闭 session |
-| `status -s NAME` | 查询状态 |
-| `skills` | 列出 skills |
-
-### 参数说明
-
-| 参数 | 说明 |
-|------|------|
-| `-p local` | 本地 Claude Code |
-| `-p kr` | 韩国 Codex |
-| `-s NAME` | 指定 session |
-| `--wait` | 等待完成 |
-| `--no-wait` | 后台执行 |
-
-### 文档
-- `ai_coder/README.md` - 完整文档
-- `ai_coder/QUICKSTART.md` - 快速参考
-- `skills/ai-coder/SKILL.md` - Skill 指南
 
 ---
 
@@ -431,10 +447,69 @@ claude --print --dangerously-skip-permissions "用understand_image分析<图片�
 
 | 日期 | 更新内容 |
 |------|----------|
+| 2026-04-22 | 新增「问题排查五步法」（Codex方法论） |
 | 2026-04-10 | 简化CALB群守则；优化启动顺序（读取历史session） |
 | 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
 | 2026-04-09 | 删除过时的CC执行约束，简化为acpx autopilot模式 |
 | 2026-04-08 | 初版 |
+
+## 🔧 问题排查五步法（Codex方法论，2026-04-22）
+
+*当系统出问题（配置丢失、功能异常、cron失效）时，按以下步骤排查*
+
+### 第一步：找关键引用 + 断点定位
+```bash
+# 搜所有相关引用
+rg "问题关键词" ~/.openclaw -g '!.git'
+
+# 找时间线文件（cron、config、hook）
+find ~/.openclaw -maxdepth 4 \
+  \( -name 'BOOTSTRAP*' -o -name '*cron*' -o -name 'jobs.json*' \
+     -o -name 'openclaw.json*' -o -name '*config*' \
+  \) 2>/dev/null
+
+# 用时间节点定位断点（查 git log 或备份文件）
+ls -la ~/.openclaw/*.save ~/.openclaw/cron/*.bak 2>/dev/null
+```
+
+### 第二步：并排对比新旧版本
+- 旧配置 vs 新配置（找缺失项）
+- 常用备份：`openclaw.json.save`、`jobs.json.bak`
+- 逐段对比，确认"机制被删"还是"执行失败"
+
+### 第三步：追踪调用链
+```bash
+# 哪些脚本在调用它
+rg "目标脚本名" ~/.openclaw/workspace/scripts/ -l
+
+# 脚本指向的文件还在吗
+ls -la ~/.openclaw/workspace/scripts/目标脚本.py
+
+# 常见断裂点：文件被移走但调用方没更新
+```
+
+### 第四步：本地验证（不依赖外部）
+```bash
+# 直接跑脚本本身，确保基础可用
+python3 ~/.openclaw/workspace/scripts/目标脚本.py save "测试"
+
+# 验证 cron 是否真的在跑
+crontab -l | rg 目标脚本
+
+# 测试代理是否通（网络相关）
+curl -x http://127.0.0.1:1087 https://example.com --connect-timeout 3
+```
+
+### 第五步：修复分层交付
+| 优先级 | 类型 | 说明 |
+|--------|------|------|
+| P0 | 立刻能修的 | 直接修，save+git commit |
+| P1 | 改配置的 | 先问用户，加 git 快照再改 |
+| P2 | 锦上添花的 | 记录下来，以后再做 |
+
+**核心心法**：先找断点时间，再顺藤摸瓜引用链，最后小范围验证再推广。
+
+---
 
 ## ⚠️ 记忆管理铁律（2026-04-12新增）
 

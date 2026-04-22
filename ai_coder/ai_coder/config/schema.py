@@ -48,6 +48,7 @@ class LocalConfig:
 
     acpx_path: str = defaults.LOCAL_ACPX_PATH
     workspace: str = defaults.LOCAL_WORKSPACE
+    runtime: str = "claude"
     model: str | None = None
 
     @property
@@ -64,6 +65,7 @@ class RemoteConfig:
     ssh_key: str
     acpx_path: str = defaults.REMOTE_ACPX_PATH
     known_hosts: str = defaults.REMOTE_KNOWN_HOSTS
+    runtime: str = "codex"
     model: str | None = None
 
     def __post_init__(self) -> None:
@@ -155,6 +157,7 @@ class Settings:
             workspace=str(
                 self._first_value("local", "workspace", "AI_CODER_WORKSPACE", "AI_CODER_LOCAL_WORKSPACE", default=defaults.LOCAL_WORKSPACE)
             ),
+            runtime=str(self._first_value("local", "runtime", "AI_CODER_LOCAL_RUNTIME", default="claude")),
             model=self._first_value("local", "model", "AI_CODER_MODEL", default=None),
         )
 
@@ -180,6 +183,7 @@ class Settings:
                     default=defaults.REMOTE_KNOWN_HOSTS,
                 )
             ),
+            "runtime": str(self._first_value("remote", "runtime", "AI_CODER_REMOTE_RUNTIME", default="codex")),
             "model": self._first_value("remote", "model", "AI_CODER_REMOTE_MODEL", default=None),
         }
 

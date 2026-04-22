@@ -1,0 +1,99 @@
+# bugfix.flow - Bug修复任务模板
+# 适用场景：系统化定位和修复Bug，确保修复完整且不引入新问题
+
+name: BugFix Bug修复
+description: 系统化Bug修复流程，从复现到验证，确保修复完整
+steps:
+  - name: 复现问题
+    prompt: |
+      你是调试专家。首先复现Bug，确认问题表现。
+      
+      问题描述：{{bug_description}}
+      代码路径：{{code_path}}
+      复现步骤：{{reproduce_steps|用户提供}}
+      
+      任务：
+      1. 按照复现步骤尝试触发Bug
+      2. 记录Bug的实际表现和预期行为
+      3. 确定复现环境和版本信息
+      4. 分析触发条件
+      
+      输出：复现报告，包含环境、步骤、实际vs预期行为。
+    agent: debugger
+    parallel: false
+
+  - name: 定位根因
+    prompt: |
+      你是根因分析专家。深入分析找到Bug的根本原因。
+      
+      问题描述：{{bug_description}}
+      代码路径：{{code_path}}
+      复现报告：参考上一步的复现结果
+      
+      分析方法：
+      1. 添加日志和断点，跟踪执行路径
+      2. 检查相关函数的输入输出
+      3. 分析数据流和状态变化
+      4. 检查并发和边界条件
+      5. 查看类似问题的历史修复
+      
+      输出：根因分析报告，明确指出问题代码位置和原因。
+    agent: debugger
+    parallel: false
+
+  - name: 修复代码
+    prompt: |
+      你是开发工程师。根据根因分析实施修复。
+      
+      代码路径：{{code_path}}
+      根因报告：参考上一步的分析
+      
+      修复原则：
+      - 修复要精准，避免过度修改
+      - 保持代码风格一致
+      - 必要时添加防御性检查
+      - 同时处理类似隐患
+      
+      修复后简要说明改动内容。
+    agent: executor
+    parallel: false
+
+  - name: 验证修复
+    prompt: |
+      你是测试工程师。验证Bug修复是否正确完整。
+      
+      代码路径：{{code_path}}
+      问题描述：{{bug_description}}
+      复现步骤：{{reproduce_steps}}
+      
+      验证内容：
+      1. 重新执行复现步骤，确认Bug不再出现
+      2. 检查修复是否影响正常功能
+      3. 测试相关边界条件
+      4. 运行相关单元测试和集成测试
+      
+      输出：验证报告，包含测试结果和结论。
+    agent: verifier
+    parallel: false
+
+  - name: 审查确认
+    prompt: |
+      你是技术审查员。最终审查修复的质量和完整性。
+      
+      代码路径：{{code_path}}
+      问题描述：{{bug_description}}
+      修复内容：参考上一步的改动
+      
+      审查维度：
+      1. 修复是否完整解决了问题
+      2. 是否引入新的Bug或副作用
+      3. 代码质量和风格是否达标
+      4. 是否有遗漏的测试覆盖
+      5. 是否需要更新文档
+      
+      输出：最终审查报告，批准或要求进一步修改。
+    agent: code-reviewer
+    parallel: false
+
+agent: debugger
+parallel: false

@@ -262,6 +262,7 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 | `/model MiniMax-M2.7` | minimax-cn/MiniMax-M2.7 | 主用模型 |
 | `/model k2.5` | bailian/kimi-k2.5 | 百炼Kimi |
 
+| `/model right` | rightcodes/right | Right.codes GPT-5.4 |
 | `/model k2p5` | kimi-coding/k2p5 | Kimi Coding |
 
 ### 修复记录
@@ -782,16 +783,21 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/ver
 
 ### 我有两个超级助手
 
-| | 本地Claude Code | 韩国Codex |
-|---|---|---|
-| **模型** | MiniMax M2.7 | GPT-5.4 |
-| **上下文** | 较小 | 100万token |
-| **优势** | 中文好、响应快 | 英文编程最强 |
-| **调度方式** | sessions_spawn | acpx codex --no-wait |
+| | 本地Codex (GPT-5.4) | 韩国Codex | 本地Claude (MiniMax) |
+|---|---|---|---|
+| **模型** | GPT-5.4 | GPT-5.4 | MiniMax M2.7 |
+| **上下文** | 100万token | 100万token | 200k |
+| **优势** | 编程最强、中文好 | 备选 | 快速问答 |
+| **调度方式** | screen + proxy | screen | sessions_spawn |
 
-### 调度规则（雪子指定）
-- 本地CC → 日常任务、快速调用、中文处理
-- 韩国Codex → 复杂编程、大型项目、英文任务
+### 模型分配（2026-04-22 更新）
+| 任务类型 | 模型 | 说明 |
+|---------|------|------|
+| **执行开发** | **本地Codex** (GPT-5.4) ✅ | 主力干活，编程最强 |
+| **架构设计** | Opus | 系统设计、技术选型 |
+| **验收审查** | Opus | 质量把关 |
+| **快速问答** | 本地Claude (MiniMax) | 中文、日常问题 |
+| **复杂/大型** | 韩国Codex | 备选方案 |
 
 ### 核心记忆
 - 本地CC：sessions_spawn(model="minimax-cn/MiniMax-M2.7")
@@ -895,3 +901,35 @@ macOS TCC权限限制：cron任务没有完全磁盘访问权限(FDA)，被系�
 ssh root@43.108.18.71 "cat /home/ccuser/memory.json"
 ```
 
+
+## Right.codes GPT-5.4 API (2026-04-22 新增)
+
+### API信息
+| 项目 | 值 |
+|------|-----|
+| API地址 | `https://www.right.codes/codex/v1/responses` |
+| API Key | `sk-46b4fa8cc6d74393a10e380dce94605d` |
+| 模型名 | `gpt-5.4-high`（内部映射到`gpt-5.4`） |
+| API格式 | OpenAI Responses API |
+| 上下文 | 100万token |
+| 费用 | ~$0.004/K tokens（比Feinian便宜很多） |
+
+### 调用格式
+```python
+requests.post(
+    "https://www.right.codes/codex/v1/responses",
+    headers={"Authorization": "Bearer sk-46b4fa8cc6d74393a10e380dce94605d"},
+    json={
+        "model": "gpt-5.4-high",
+        "input": [{"type": "message", "role": "user", "content": [{"type": "input_text", "text": "问题"}]}]
+    }
+)
+```
+
+### OpenClaw配置
+- Provider名: `rightcodes`
+- 模型ID: `rightcodes/gpt-5.4-high`
+- 用途: 备用GPT-5.4代理，比Feinian更便宜
+
+### 状态
+- ✅ 已测试可用（2026-04-22）

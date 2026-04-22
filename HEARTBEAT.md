@@ -8,7 +8,7 @@
 ### 监控任务清单（2026-03-30 极简版，仅 3 个真正有用的任务）
 | 时间 | 任务名称 | 日志文件 | 类型 |
 |------|----------|----------|------|
-| 22:00 | 每日完整备份 | ~/.openclaw/ops/logs/tasks/backup.log | 每日 |
+| 22:00 | 每日完整备份 | /tmp/backup_cron.log | 每日 |
 | 03:00 (周日) | OUC文件夹清理 | ~/.openclaw/ops/logs/tasks/ouc_cleanup.log | 每周 |
 | 16:30 (周一至周五) | 股票自选股日报 | ~/.openclaw/ops/logs/tasks/stock.log | 工作日 |
 
