@@ -7,6 +7,7 @@ Kilo通知处理器
 import json
 import sys
 import subprocess
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -36,8 +37,11 @@ def process_notifications():
             
             if chat_id and message:
                 # 使用openclaw命令发送
-                cmd = f'openclaw message send --channel feishu --target "{chat_id}" --message "{message[:500]}"'
-                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                env = os.environ.copy()
+                for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"):
+                    env.pop(key, None)
+                cmd = ["openclaw", "message", "send", "--channel", "feishu", "--target", chat_id, "--message", message[:500]]
+                result = subprocess.run(cmd, capture_output=True, text=True, env=env)
                 
                 if result.returncode == 0:
                     print(f"✅ 已发送: {filepath.name}")

@@ -46,6 +46,10 @@ class BroadcasterAgent:
         # 设置环境变量确保能找到openclaw
         env = os.environ.copy()
         env["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + env.get("PATH", "")
+        # Feishu token requests fail through the local V2ray HTTP proxy in cron/shell envs.
+        # Send these notifications directly.
+        for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"):
+            env.pop(key, None)
         
         # 调用 OpenClaw message 工具 - 使用后台运行避免超时
         cmd = [

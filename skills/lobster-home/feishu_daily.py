@@ -143,14 +143,17 @@ class FeishuDailyReport:
         try:
             # 使用OpenClaw的message工具发送到飞书
             import subprocess
-            import shlex
+            import os
             
             # 构建消息（转义特殊字符）
-            safe_message = message.replace('"', '\\"').replace("'", "\\'")
+            safe_message = message[:500]
+            env = os.environ.copy()
+            for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "all_proxy", "ALL_PROXY"):
+                env.pop(key, None)
             
             # 调用openclaw发送消息
-            cmd = f'openclaw message send --channel feishu --message "{safe_message[:500]}"'
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            cmd = ["openclaw", "message", "send", "--channel", "feishu", "--message", safe_message]
+            result = subprocess.run(cmd, capture_output=True, text=True, env=env)
             
             if result.returncode == 0:
                 print("✅ 飞书消息发送成功！")

@@ -17,6 +17,8 @@ from .screen_utils import ScreenArtifacts, build_screen_command, dump_meta
 class LocalExecutor(BaseExecutor):
     """Execute acpx commands on the local machine through screen."""
 
+    CODEX_PROXY = "http://127.0.0.1:1087"
+
     def __init__(
         self,
         acpx_path: str = "acpx",
@@ -52,7 +54,7 @@ class LocalExecutor(BaseExecutor):
         started_at = datetime.now(timezone.utc).isoformat()
         start = time.perf_counter()
         artifacts = ScreenArtifacts.for_task(self.screen_base_dir, task.id, self.runtime_kind)
-        command = shlex.join(self._build_command(task))
+        command = self._build_launch_command(task)
         dump_meta(
             artifacts,
             {
@@ -220,3 +222,15 @@ class LocalExecutor(BaseExecutor):
         else:
             cmd.append(payload)
         return cmd
+
+    def _build_launch_command(self, task: Task) -> str:
+        command = shlex.join(self._build_command(task))
+        if self.runtime_kind != "codex":
+            return command
+        return (
+            f"http_proxy={shlex.quote(self.CODEX_PROXY)} "
+            f"https_proxy={shlex.quote(self.CODEX_PROXY)} "
+            f"HTTP_PROXY={shlex.quote(self.CODEX_PROXY)} "
+            f"HTTPS_PROXY={shlex.quote(self.CODEX_PROXY)} "
+            f"{command}"
+        )

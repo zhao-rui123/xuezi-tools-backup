@@ -1,0 +1,16 @@
+{
+  "name": "minimax",
+  "api_base_url": "https://api.minimaxi.com/anthropic/v1/messages",
+  "api_key": "sk-cp-TaEn7XZHReif66-VaxR-UZJuHCoYYYqho4xu6pV22L3MtAL9oImB0iubia4dRjZDN-0avV5_rSS2ggBC6w2gHYz1tYN0semS3mps1PrA9lS-16qJhoh8l3Q",
+  "models": [
+    "MiniMax-M2.7"
+  ],
+  "model_alias": {
+    "claude-sonnet-4-6": "MiniMax-M2.7"
+  },
+  "transformer": {
+    "use": [
+      "anthropic"
+    ]
+  }
+}

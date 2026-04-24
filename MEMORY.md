@@ -95,6 +95,33 @@ cp ~/.claude/settings-minimax.json ~/.claude/settings.json
 
 **参考技能包**: `skills/feishu-image-send/SKILL.md`（支持图片、文档、文本等）
 
+## 🤖 Claude Code / Codex screen 调用规范（2026-04-24 新增）
+
+**铁律：所有 Claude Code 和 Codex 调用必须用 screen，不允许 sessions_spawn/acpx 直接调**
+
+| 工具 | 命令 |
+|------|------|
+| **本地 Claude Code** | `screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude-task.log"` |
+| **本地 Codex** | `screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"` |
+| **韩国 Codex** | `ssh ... "screen -dmS kr-task bash -c 'codex exec ...'"` |
+
+**查看/管理**：`screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f /tmp/xxx.log`
+
+---
+
+## 📄 文件分享规范（2026-04-24 新增）
+
+给朋友分享任何内容前，必须脱敏：
+- ❌ API Key / Token → 改为 `[YOUR_KEY]` 或空
+- ❌ Cookie / user_id → 全部删除
+- ❌ 个人路径 → 改为通用路径（如 `~/.claude/`）
+- ❌ 密码/授权码 → 全部删除
+- ❌ 内部群ID/服务器IP → 删除或占位符
+
+**触发词**："发给你"、"发给朋友"、"分享"、"发个文档"
+
+---
+
 **核心规则**:
 - ✅ 截图/生成文件保存到: `~/.openclaw/workspace/` 目录
 - ✅ 转发用户文件: 使用 `~/.openclaw/media/inbound/` 路径
@@ -275,6 +302,17 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 - `kimi-coding`: API Key 为 `sk-kimi-2sxCTUilQ9nPKSPAFHcO2gIm7EguvTWvmZwaVclW15ZKwWq4uWZxKAhIWbULJEmD`（2026-04-16 实测有效）
 
 ---
+
+## AI模型矩阵（2026-04-24 更新）
+
+**工具分工（2026-05 起）：**
+| 工具 | 模型 | 用途 |
+|------|------|------|
+| **OpenClaw（我）** | MiniMax M2.7 | 日常对话（飞书） |
+| **Claude Code CLI（Mac）** | DeepSeek V4 Flash | 本地开发 |
+| **Codex（Mac）** | GPT-5.5 | 复杂任务（5月升级） |
+
+**停用：** Opus、Kimi（2026-05 起不再续费）
 
 - **API地址**: `https://api.minimaxi.com/v1/image_generation`
 - **模型**: `image-01`
@@ -908,7 +946,7 @@ ssh root@43.108.18.71 "cat /home/ccuser/memory.json"
 | 项目 | 值 |
 |------|-----|
 | API地址 | `https://www.right.codes/codex/v1/responses` |
-| API Key | `sk-46b4fa8cc6d74393a10e380dce94605d` |
+| API Key | `[已删除]` |
 | 模型名 | `gpt-5.4-high`（内部映射到`gpt-5.4`） |
 | API格式 | OpenAI Responses API |
 | 上下文 | 100万token |
@@ -918,7 +956,7 @@ ssh root@43.108.18.71 "cat /home/ccuser/memory.json"
 ```python
 requests.post(
     "https://www.right.codes/codex/v1/responses",
-    headers={"Authorization": "Bearer sk-46b4fa8cc6d74393a10e380dce94605d"},
+    headers={"Authorization": "Bearer [已删除]"},
     json={
         "model": "gpt-5.4-high",
         "input": [{"type": "message", "role": "user", "content": [{"type": "input_text", "text": "问题"}]}]
@@ -933,3 +971,24 @@ requests.post(
 
 ### 状态
 - ✅ 已测试可用（2026-04-22）
+
+## DeepSeek-V4 API (2026-04-24 新增)
+
+### API信息
+| 项目 | 值 |
+|------|-----|
+| API地址 | `https://api.deepseek.com/v1` |
+| API Key | `sk-829a69f62a054d0f9a9ff3d79d7909b0` |
+| 模型 | DeepSeek-V4-Flash (`deepseek-v4-flash`) |
+| API格式 | OpenAI Completions (`openai-completions`) |
+| 上下文 | 1M token |
+
+### OpenClaw配置
+- Provider名: `deepseek`
+- 模型ID: `deepseek/deepseek-v4-flash` |
+| 状态 | ✅ 已配置（2026-04-24）
+
+### 雪子实测评价（2026-04-24）
+- **文本分析**: 比 MiniMax 强，接近 GPT-5.4
+- **代码能力**: 生成游戏代码（如植物大战僵尸）比 MiniMax 更丰富
+- **结论**: 可作为生产主力模型，性价比极高（约为 GPT-5.4 的 1/10 价格）

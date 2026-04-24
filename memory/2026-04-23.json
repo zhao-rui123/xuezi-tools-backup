@@ -1,10 +1,14 @@
 {
   "date": "2026-04-23",
-  "summary": "snapshot加sessionID测试v2",
-  "manual_note": "snapshot加sessionID测试v2",
-  "task_count": 0,
-  "timestamp": "2026-04-23T06:06:49.509367",
-  "current_session": "994e2990-bd64-4b68-b14b-11778634c408",
+  "summary": "自动保存",
+  "manual_note": "自动保存",
+  "from_memory": [
+    "修 CCR transformer 要动源码 — 插件机制在 CCR 内部处理之后，无法拦截 thinking 块",
+    "SSH 曾经断过 — Korean server sshd 无响应，后来恢复了"
+  ],
+  "task_count": 2,
+  "timestamp": "2026-04-23T23:50:00.615654",
+  "current_session": "8188fb90-9a23-4ca8-8de9-8719e65987f4",
   "current_session_key": "agent:claude:main",
-  "previous_session": "759fd5c4-3a2f-4b18-a672-d335c78c3cd7"
+  "previous_session": "8678aea4-d955-4e16-80bc-93abec4d12aa"
 }

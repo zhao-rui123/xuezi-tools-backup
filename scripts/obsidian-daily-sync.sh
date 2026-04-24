@@ -25,6 +25,7 @@ main() {
 
     # 发飞书私聊通知雪子
     log "发送飞书通知..."
+    env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY -u all_proxy \
     openclaw message send \
         --channel feishu \
         --target "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579" \

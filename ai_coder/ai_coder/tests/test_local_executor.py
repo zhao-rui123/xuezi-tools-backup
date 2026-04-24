@@ -31,6 +31,29 @@ class LocalExecutorTests(unittest.TestCase):
         )
         self.assertEqual(executor._build_command(task), ["acpx", "codex", "exec", "do work"])
 
+    def test_build_launch_command_adds_proxy_for_codex(self) -> None:
+        executor = LocalExecutor(acpx_path="acpx", workspace="~", runtime_kind="codex")
+        task = Task(
+            type=TaskType.EXEC,
+            executor=ExecutorType.LOCAL,
+            command="do work",
+            no_wait=False,
+        )
+        command = executor._build_launch_command(task)
+        self.assertIn("http_proxy=http://127.0.0.1:1087", command)
+        self.assertIn("https_proxy=http://127.0.0.1:1087", command)
+        self.assertTrue(command.endswith("acpx codex exec 'do work'"))
+
+    def test_build_launch_command_leaves_claude_unchanged(self) -> None:
+        executor = LocalExecutor(acpx_path="acpx", workspace="~", runtime_kind="claude")
+        task = Task(
+            type=TaskType.EXEC,
+            executor=ExecutorType.LOCAL,
+            command="do work",
+            no_wait=False,
+        )
+        self.assertEqual(executor._build_launch_command(task), "acpx claude 'do work'")
+
     @patch("ai_coder.executors.local.subprocess.run")
     def test_execute_returns_background_id_for_no_wait(self, run_mock: Mock) -> None:
         run_mock.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="queued\n", stderr="")
@@ -46,6 +69,27 @@ class LocalExecutorTests(unittest.TestCase):
         self.assertTrue(result.success)
         self.assertEqual(result.background_task_id, "task-123")
         self.assertEqual(run_mock.call_args.args[0][:2], ["screen", "-dmS"])
+
+    @patch("ai_coder.executors.local.subprocess.run")
+    def test_execute_passes_proxy_to_codex_screen_command(self, run_mock: Mock) -> None:
+        run_mock.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="queued\n", stderr="")
+        executor = LocalExecutor(
+            acpx_path="acpx",
+            workspace="~",
+            runtime_kind="codex",
+            screen_base_dir="~/.ai_coder/test-screen",
+        )
+        task = Task(
+            id="task-789",
+            type=TaskType.EXEC,
+            executor=ExecutorType.LOCAL,
+            command="do work",
+            no_wait=True,
+        )
+        executor.execute(task)
+        screen_script = run_mock.call_args.args[0][-1]
+        self.assertIn("http_proxy=http://127.0.0.1:1087", screen_script)
+        self.assertIn("https_proxy=http://127.0.0.1:1087", screen_script)
 
     def test_execute_wait_reads_screen_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
