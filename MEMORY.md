@@ -95,6 +95,17 @@ cp ~/.claude/settings-minimax.json ~/.claude/settings.json
 
 **参考技能包**: `skills/feishu-image-send/SKILL.md`（支持图片、文档、文本等）
 
+## 💡 Codex方法论要点（雪子教导，2026-04-24）
+
+1. **先读手册再动手** — 不熟悉的任务先读规范文档
+2. **最小改动原则** — 只改问题点，其他不动
+3. **改动前先备份** — 万一翻车能回滚
+4. **改完立刻验证** — 确认生效再收工
+5. **找根因，不治标** — 找到断点时间+引用链追踪，从源头解决
+6. **汇报清晰** — 说明改了什么、为什么改、不改什么
+
+---
+
 ## 🤖 Claude Code / Codex screen 调用规范（2026-04-24 新增）
 
 **铁律：所有 Claude Code 和 Codex 调用必须用 screen，不允许 sessions_spawn/acpx 直接调**

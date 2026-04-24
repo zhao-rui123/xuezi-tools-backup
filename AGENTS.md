@@ -1,6 +1,6 @@
 # AGENTS.md - 雪子助手工作手册
 
-*最后更新：2026-04-22*
+*最后更新：2026-04-24*
 
 ---
 
@@ -50,11 +50,10 @@
 
 | 场景 | 工具 | 原因 |
 |------|------|------|
-| **本地 Codex** (GPT-5.4) | **screen** ✅ | 额度珍贵，不能浪费在失败上 |
+| **本地 Codex** (GPT) | **screen** ✅ | 额度珍贵，不能浪费在失败上 |
 | **远程 Codex** (韩国) | **screen** ✅ | SSH 断连风险 + 额度双重保险 |
-| **Opus 架构/验收** | **screen** ✅ | 关键任务，不能失败 |
-| **本地 Claude Code** | `acpx` / `acpx --no-wait` | MiniMax 额度多，失败成本低 |
-| **快速查询** (< 2 min) | `acpx` | MiniMax 专用，快速轻便 |
+| **本地 Claude Code** | **screen** ✅ | 所有CLI任务都用screen |
+| **韩国 Claude Code** | **screen** ✅ | SSH环境，screen隔离 |
 
 ### 快速判定
 - **怕 SSH 断** → screen
@@ -80,13 +79,17 @@
 
 ### 标准命令
 ```bash
-# screen 方式（稳定，推荐用于 Codex/Opus）
-screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex.log"
+# 本地 Claude Code（MiniMax）
 screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude.log"
 
-# acpx 方式（便捷，推荐用于 MiniMax）
-acpx claude sessions new --name task-name
-acpx claude -s task-name --no-wait "任务"
+# 本地 Claude Code（DeepSeek）
+screen -dmS claude-ds-task bash -c "claude --print --model deepseek/deepseek-v4-flash '任务' 2>&1 | tee /tmp/claude-ds.log"
+
+# 本地 Codex（GPT-5.4，需代理）
+screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex.log"
+
+# 韩国 Codex
+ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'screen -dmS kr-task bash -c \"codex exec ...\"'"
 ```
 
 ---
@@ -97,11 +100,19 @@ acpx claude -s task-name --no-wait "任务"
 
 | 任务类型 | 模型 | 说明 |
 |---------|------|------|
-| **架构设计** | **Opus** | 系统设计、技术选型、架构决策 |
-| **验收审查** | **Opus** | 质量把关、代码评审、测试验证 |
-| **执行开发** | **MiniMax** | 主力开发干活 |
+| **日常对话** | **MiniMax** | OpenClaw主力 |
+| **小型任务开发** | **MiniMax** | 简单代码、快速修复 |
+| **中型任务开发** | **DeepSeek V4 Flash** | 复杂代码、数据分析 |
+| **架构/验收/复杂任务** | **Codex (GPT-5.4/5.5)** | 系统设计、关键代码 |
 
-**核心原则：Opus只负责架构设计和验收，其他全部用MiniMax**
+**工具分工（2026-05起）：**
+| 工具 | 主模型 | 备用 |
+|------|--------|------|
+| **OpenClaw（我）** | MiniMax | DeepSeek |
+| **Claude Code CLI** | MiniMax + DeepSeek（按任务大小） | - |
+| **Codex** | 官方GPT（复杂/架构/验收） | - |
+
+**停用**：Opus（2026-05退役），Kimi（2026-05不续费）
 
 ### 🛡️ 标准调用方式：screen模式（⚠️ 铁律）
 
@@ -271,16 +282,6 @@ omc wait detect       # 扫描阻塞的tmux会话
 
 ---
 
-### sessions_spawn 工作流程
-
-```
-1️⃣ 需求确认 → 拆分模块（每个模块5-10分钟）
-2️⃣ sessions_spawn 启动模块1（后台）
-3️⃣ 模块1完成 → git commit → sessions_spawn 启动模块2
-4️⃣ 遇到问题 → 立即汇报
-5️⃣ 每完成一个模块 → 向雪子汇报进度
-```
-
 ### 汇报节点
 
 | 节点 | 时机 | 内容 |
@@ -289,12 +290,13 @@ omc wait detect       # 扫描阻塞的tmux会话
 | **⚠️ 关键里程碑** | 遇到问题/重大进展 | "已完成 zzz" |
 | **✅ 任务完成** | 部署成功后 | "xxx 已上线" |
 
-### Token消耗比例
+### 任务大小判定
 
-| 模型 | 用途 | 占比 |
-|------|------|------|
-| Opus | 架构设计 + 验收审查 | 20% |
-| MiniMax | 实际开发干活 | 80% |
+| 大小 | 判断标准 |
+|------|----------|
+| **小型** | 单文件、简单功能、已知方案 |
+| **中型** | 多模块、需调研、有一定复杂度 |
+| **大型/复杂** | 架构设计、系统重构、多方集成 |
 
 ---
 
@@ -302,15 +304,16 @@ omc wait detect       # 扫描阻塞的tmux会话
 
 | 任务类型 | 判断标准 | 使用方式 |
 |---------|---------|---------|
-| **普通任务** | 单个文件、简单功能 | acpx 直接执行 |
-| **复杂任务** | 多模块、新领域 | acpx + autopilot 自动驾驶 |
+| **小型任务** | 单个文件、已知方案 | Claude Code + MiniMax + screen |
+| **中型任务** | 多模块、需调研 | Claude Code + DeepSeek + screen |
+| **复杂任务** | 架构/验收/多系统 | Codex + autopilot + screen |
 
 ### 开发流程（简化版）
 
 ```
 雪子：有个想法...
     ↓
-我：用 acpx + autopilot 模式
+我：用 screen + Claude Code autopilot 模式
     ↓
 autopilot 自动规划、执行、验证
     ↓
@@ -319,9 +322,7 @@ autopilot 自动规划、执行、验证
 ✅ 向雪子汇报
 ```
 
-**比以前省事太多！**
-- 以前：我要拆分模块、手写Prompt、监督每一步
-- 现在：autopilot 自己搞定，我只管启动和验收
+**Claude Code 用 screen 调用，不用 sessions_spawn**
 
 ---
 
@@ -447,8 +448,9 @@ claude --print --dangerously-skip-permissions "用understand_image分析<图片�
 
 | 日期 | 更新内容 |
 |------|----------|
-| 2026-04-22 | 新增「问题排查五步法」（Codex方法论） |
+| 2026-04-24 | 模型分配全面更新：MiniMax日常+DeepSeek中型+Codex复杂；Claude Code改用screen调用；删除sessions_spawn工作流 |
 | 2026-04-10 | 简化CALB群守则；优化启动顺序（读取历史session） |
+| 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
 | 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
 | 2026-04-09 | 删除过时的CC执行约束，简化为acpx autopilot模式 |
 | 2026-04-08 | 初版 |
