@@ -153,7 +153,7 @@ screen -d task-name          # 分离screen（后台继续）
 | `git-master` | sonnet | Git策略 |
 | `document-specialist` | sonnet | 文档查找 |
 
-**模型路由**：Opus=架构/深度分析 | Sonnet=标准开发 | Haiku=快速查找
+**模型路由**（仅供参考，OMC可能需要手动指定）：Claude Sonnet=标准开发 | Haiku=快速查找
 
 ### Claude Code内调用Agent
 
