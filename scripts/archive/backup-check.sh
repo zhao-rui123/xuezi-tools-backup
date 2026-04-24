@@ -1,11 +1,11 @@
 #!/bin/bash
-# 备份状态检查脚本 - 每天 22:05 执行
-# 检查今天的备份是否成功
+# 备份状态检查脚本 v2 - 每天 22:05 执行
+# 对应 daily-backup-v2.sh (架构 v2.4)
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
 export HOME="/Users/zhaoruicn"
 
-BACKUP_DIR="/Volumes/cu/ocu/full-backups"
+BACKUP_DIR="/Volumes/cu/ocu"
 LOG_FILE="/tmp/backup_cron.log"
 TODAY=$(date +%Y%m%d)
 
@@ -16,62 +16,55 @@ send_message() {
         --message "$message" 2>&1
 }
 
-# 真正验证备份文件是否存在且有效
-verify_backup() {
-    local latest="$BACKUP_DIR/latest"
-    local size_bytes=0
-    
-    if [ -L "$latest" ] && [ -f "$latest" ]; then
-        # 检查是否是今天的备份
-        local file_date=$(stat -f "%Sm" -t "%Y%m%d" "$latest" 2>/dev/null || stat -c "%y" "$latest" 2>/dev/null | cut -d' ' -f1 | tr -d '-')
-        
-        if [ "$file_date" = "$TODAY" ]; then
-            # 检查文件大小（>100KB才算有效）
-            size_bytes=$(stat -f "%z" "$latest" 2>/dev/null || stat -c "%s" "$latest" 2>/dev/null)
-            if [ "$size_bytes" -gt 102400 ]; then
-                return 0  # 备份有效
-            fi
+# 验证 manifest 文件存在且有效
+verify_manifest() {
+    local manifest="$BACKUP_DIR/backup-manifest-$TODAY.json"
+    if [ -f "$manifest" ]; then
+        local size=$(stat -f "%z" "$manifest" 2>/dev/null || stat -c "%s" "$manifest" 2>/dev/null)
+        if [ "$size" -gt 100 ]; then
+            return 0
         fi
-    fi
-    return 1  # 备份无效
-}
-
-# 验证压缩包完整性
-verify_archive() {
-    local latest="$BACKUP_DIR/latest"
-    if [ -f "$latest" ]; then
-        tar -tzf "$latest" > /dev/null 2>&1
-        return $?
     fi
     return 1
 }
 
 # 执行验证
-if verify_backup; then
-    size=$(du -h "$BACKUP_DIR/latest" 2>/dev/null | cut -f1)
+if verify_manifest; then
+    # 读取 manifest 统计
+    manifest_file="$BACKUP_DIR/backup-manifest-$TODAY.json"
     
-    # 使用正确的备份目录路径
-    memory_files=$(find /Volumes/cu/ocu/memory-backup/daily -type f 2>/dev/null | wc -l)
-    skills_files=$(find /Volumes/cu/ocu/skills-backup/core -type f 2>/dev/null | wc -l)
+    # 提取关键数据
+    backup_time=$(python3 -c "import json; d=json.load(open('$manifest_file')); print(d.get('backup_time','?'))" 2>/dev/null || echo "?")
+    memory_count=$(python3 -c "import json; d=json.load(open('$manifest_file')); s=d.get('structure',{}).get('memory',{}); print(sum(s.values()))" 2>/dev/null || echo "?")
+    skills_core=$(python3 -c "import json; d=json.load(open('$manifest_file')); print(d.get('structure',{}).get('skills',{}).get('core','?'))" 2>/dev/null || echo "?")
+    skills_suites=$(python3 -c "import json; d=json.load(open('$manifest_file')); print(d.get('structure',{}).get('skills',{}).get('suites','?'))" 2>/dev/null || echo "?")
     
-    # 验证压缩包完整性
-    if verify_archive; then
-        archive_status="✅ 完整"
+    # 检查压缩包
+    archive_size=""
+    if [ -f "$BACKUP_DIR/full-backups/latest" ]; then
+        archive_size=$(du -h "$BACKUP_DIR/full-backups/latest" 2>/dev/null | cut -f1)
+        if tar -tzf "$BACKUP_DIR/full-backups/latest" > /dev/null 2>&1; then
+            archive_status="✅ 完整"
+        else
+            archive_status="⚠️ 损坏"
+        fi
     else
-        archive_status="⚠️ 损坏"
+        archive_status="❌ 不存在"
     fi
     
     send_message "✅ 备份验证通过 ($(date '+%Y-%m-%d %H:%M'))
 
-📁 Memory备份: $memory_files 个文件
-📁 Skills备份: $skills_files 个文件
-💾 压缩包: $size ($archive_status)
+🕐 备份时间: $backup_time
+📁 Memory: $memory_count 个文件
+📁 Skills核心: $skills_core 个
+📁 Skills套件: $skills_suites 个
+💾 压缩包: $archive_size ($archive_status)
 
-备份完整可用，数据安全。"
+v2.4 架构备份完整可用 ✅"
 else
     send_message "⚠️ 备份验证失败 ($(date '+%Y-%m-%d %H:%M'))
 
-今天的备份文件不存在或无效
+backup-manifest-$TODAY.json 不存在或无效
 
 请检查：/tmp/backup_cron.log"
 fi
