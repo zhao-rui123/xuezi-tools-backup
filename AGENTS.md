@@ -34,19 +34,37 @@
 
 ---
 
-## 📋 acpx vs Screen 调用规则
+## 📋 工具调用规范（2026-04-24 统一）
 
-### ⚠️ Codex 必须走代理！
-**本地 v2ray 端口**: HTTP=1087, SOCKS=1080
-本地 Codex 启动前必须 export proxy，否则直连被墙！
+### 调用方式三分法
+
+| 方式 | 用途 | 典型场景 |
+|------|------|----------|
+| **screen** | CLI 任务后台跑 | Claude Code / Codex / omx / omc |
+| **curl / API 直调** | 快速测试、一次性查询 | API 连通性验证、简单数据获取 |
+| **sessions_spawn** | 非 CLI 工具的子任务 | web_search、file 操作、网页抓取 |
 
 ### 🚨 黄金法则：永远不阻塞
 **screen / sessions_spawn / 任何耗时任务 → 后台跑 → 继续聊天**
 不要等结果，不要 poll，有需要再去查日志。
 雪子永远是第一优先级！
 
+### ⚠️ Codex 必须走代理！
+**本地 v2ray 端口**: HTTP=1087, SOCKS=1080
+Codex 启动前必须 export proxy，否则直连被墙！
+
+### acpx 已停用
+Claude Code 全部改用 screen 调用，acpx 不再使用（2026-04-24）
+
+### 快速判定
+- **CLI 任务（Claude/Codex/omx/omc）** → screen ✅
+- **API 测试/快速查询** → curl ✅
+- **工具类子任务（搜索/文件）** → sessions_spawn ✅
+- **怕断/怕超时/怕 SSH 断** → screen ✅
+- **其他情况** → 先问雪子
+
 ### 核心原则
-> **"额度贵 or 怕掉的 → screen，其他 → acpx"**
+
 
 | 场景 | 工具 | 原因 |
 |------|------|------|
@@ -60,7 +78,7 @@
 - **怕系统杀** → screen
 - **要跑几小时** → screen
 - **额度敏感** (Codex/Opus) → screen
-- **其他情况** → acpx
+- **其他情况** → 先问雪子
 
 ## 📝 修改问题铁律（Codex风格）
 
@@ -151,29 +169,11 @@ screen -d task-name          # 分离screen（后台继续）
 
 ---
 
-## 🤖 AI Coder 脚本使用（已过时，推荐直接用screen）
 
-**⚠️ 重要更新（2026-04-20）：ai_coder封装层已不再推荐使用，直接用screen调用更简单可靠**
+## 🤖 AI Coder 脚本（已归档）
 
-### 推荐方式：直接screen调用
-```bash
-# 本地 Claude（MiniMax）
-screen -dmS claude-task bash -c "claude --print '任务'"
-# 本地 Codex（GPT-5.4）
-screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec ..."
-# 韩国 Codex（GPT-5.4）
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'screen -dmS kr-task bash -c \"codex exec ...\"'"
-```
-
-### ai_coder位置（备用）
-`~/.openclaw/workspace/ai_coder/`
-
-### ai_coder命令（备用）
-```bash
-cd ~/.openclaw/workspace/ai_coder
-python3 -m ai_coder exec "任务" -p local -s SESSION --wait  # 本地
-python3 -m ai_coder exec "任务" -p kr -s SESSION --wait    # 韩国
-```
+**ai_coder 封装层已停用，直接用 screen 调用更简单可靠。**
+脚本位置保留在 `~/.openclaw/workspace/ai_coder/`（仅作参考）
 
 ---
 
