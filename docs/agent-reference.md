@@ -27,11 +27,10 @@ omc autoresearch --topic "AI趋势"
 
 ## 图片识别参考
 
-默认优先链路：Claude Code + MiniMax MCP。
+**默认优先链路**：`mmx vision describe`（直接调用，最轻最快）
 
-示例：
 ```bash
-claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
+mmx vision describe <图片路径>
 ```
 
 适用：
@@ -39,6 +38,8 @@ claude --print --dangerously-skip-permissions "用understand_image分析<图片�
 - 数据报表
 - 复杂截图
 - 需要上下文理解的图像问题
+
+如 `mmx` 不可用或失败，可退回 Claude Code + MiniMax MCP 链路。
 
 ## 排障参考
 
