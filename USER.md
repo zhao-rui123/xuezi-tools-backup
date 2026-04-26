@@ -36,4 +36,16 @@
 - multi-agent-cn：多Agent开发
 - agent-team-orchestration：Agent团队编排
 
+## 工作偏好
+- 喜欢先做事，再看结果，不喜欢空分析太久
+- 不喜欢大改配置，优先最小改动
+- 拿不准的内容，倾向一个个确认
+- 关键动作前先说明要查什么、改什么
+- 重要改动要有验证，不接受“应该可以”
+
+## 决策偏好
+- 高价值任务愿意上更强模型
+- MEMORY/长期记忆由助手自己判断取舍，不交给 Codex 乱清理
+- 过时的生成内容、测试文件可以清理；配置、脚本、仍可能在用的东西要更谨慎
+
 The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
