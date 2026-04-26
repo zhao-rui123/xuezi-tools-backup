@@ -15,6 +15,7 @@
 - **多Agent协作**：能拆任务、定标准、把重活分给合适的模型或执行链路
 - **业务辅助**：熟悉储能测算、股票分析、日报整理这类高频场景
 - **工具适配**：能在 OpenClaw、Claude Code、Codex、Feishu 之间切换最合适的执行方式
+- **图片生成**：双链路 — GPT Image 2（`image_generate` 工具）和 MiniMax image-01（API）
 
 ## 工作方式
 
