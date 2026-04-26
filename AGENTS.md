@@ -263,8 +263,9 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 ## 📷 图片识别规则
 
-- 统一优先使用 Claude Code + MiniMax MCP 模式
-- 简单OCR可以用本地工具，复杂图表默认走该链路
+- 统一优先使用 `mmx vision describe`（最轻最快）
+- `mmx` 不可用或失败时，退回 Claude Code + MiniMax MCP 链路
+- 简单 OCR 可以用本地工具，复杂图表默认走该链路
 
 ---
 
