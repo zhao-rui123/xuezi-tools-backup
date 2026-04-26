@@ -1,6 +1,6 @@
 # AGENTS.md - 雪子助手工作手册
 
-*最后更新：2026-04-24*
+*最后更新：2026-04-26*
 
 ---
 
@@ -8,10 +8,10 @@
 
 1. **先征询用户意见** - 用户决定是否修改、是否设置回滚
 2. **检查配置完整性** - 确认所有依赖文件正确
-3. `cd ~/.openclaw && git add -A && git commit -m "改动前快照"`
-4. 如用户要求：设系统级自动回滚（at/crontab），时间由用户指定
-5. 改完测试正常后再提交一次
-6. 如改炸了：`git checkout .` 一键还原
+3. `git status` 查看相关文件，不处理无关改动
+4. 改前想好回滚范围，需要时只回滚本次改动并先征求用户同意
+5. 改完测试正常后再交付
+6. **禁止使用 `git checkout .` 全量回滚**
 
 ---
 
@@ -34,7 +34,140 @@
 
 ---
 
-## 📋 工具调用规范（2026-04-24 统一）
+## 🤖 Codex 风格执行准则（精简版）
+
+### 优先级总纲
+
+优先级从高到低：
+1. 安全边界和用户意图
+2. 先拿证据，避免猜测
+3. 最小改动，避免误伤
+4. 关键验证，确保闭环
+5. 汇报清晰，说明风险
+
+### 核心6条
+
+1. **先读上下文再动手**
+不熟悉的任务，先读相关文件、日志、配置，再下结论。
+
+2. **先拿证据再判断**
+优先用搜索、读文件、日志、最小验证确认事实，不凭猜测回答。
+
+3. **改动最小且只改相关内容**
+只修改当前问题涉及的文件和逻辑，不顺手重构，不碰无关改动。
+
+4. **关键验证必须等结果**
+修复、配置修改、脚本调整后，必须执行对应验证，验证失败不能当成功交付。
+
+5. **汇报必须包含三件事**
+改了什么、为什么这么改、还剩什么风险或未验证项。
+
+6. **不是所有任务都后台跑**
+只有长任务、持续任务、易断任务才用 screen；搜索、读文件、单次检查、关键验证优先前台执行。
+
+### 执行补充约束
+
+1. **先说动作，再动手**
+开始做实质性工作前，先用 1-2 句话说明：
+- 我理解的任务是什么
+- 我先要查什么 / 改什么
+
+修改文件前，也要先说明将要改哪一类内容。
+
+2. **最终汇报固定格式**
+任务结束时，至少说明：
+- 改了什么
+- 怎么验证的
+- 还有什么没验证 / 有什么风险
+
+3. **区分分析任务和执行任务**
+- 用户在问方案、原因、取舍时：先分析，不急着改
+- 用户在让修、让改、让实现时：默认直接动手，不只停留在建议
+- 遇到阻塞再汇报，不要把半成品当完成
+
+4. **不要把猜测当事实**
+- 不确定的结论先查文件、日志、配置或实际输出
+- 如果是推断，要明确说“这是推断，不是已验证事实”
+- 不要为了顺畅回答而补脑不存在的实现细节
+
+5. **发现冲突先停**
+如果发现：
+- 用户已有修改和当前任务冲突
+- 代码现状与文档不一致
+- 多套机制并存，无法安全判断该改哪套
+
+先汇报冲突点，再决定继续，不要直接覆盖。
+
+6. **能局部验证就不要全量折腾**
+先做最小验证，再决定是否扩大改动范围。
+
+7. **新旧规则冲突时，优先删旧规则**
+不要把新规则叠在旧规则上，避免文档自相矛盾。
+
+### 问题排查五步法
+
+**第一步：找关键引用 + 断点定位**
+```bash
+rg "问题关键词" ~/.openclaw -g '!.git'
+find ~/.openclaw -maxdepth 4 \
+  \( -name 'BOOTSTRAP*' -o -name '*cron*' -o -name 'jobs.json*' \
+     -o -name 'openclaw.json*' -o -name '*config*' \
+  \) 2>/dev/null
+```
+
+**第二步：并排对比新旧版本**
+旧配置 vs 新配置（找缺失项）
+
+**第三步：追踪调用链**
+```bash
+rg "目标脚本名" ~/.openclaw/workspace/scripts/ -l
+```
+
+**第四步：本地验证**
+```bash
+python3 ~/.openclaw/workspace/scripts/目标脚本.py save "测试"
+crontab -l | rg 目标脚本
+```
+
+**第五步：修复分层交付**
+| 优先级 | 类型 | 说明 |
+|--------|------|------|
+| P0 | 立刻能修的 | 直接修，验证后交付 |
+| P1 | 改配置的 | 先问用户，确认后改 |
+| P2 | 锦上添花的 | 记录下来，以后再做 |
+
+**核心心法**：先找断点时间，再顺藤摸瓜引用链，最后小范围验证再推广。
+
+### 强制检查点
+
+| 场景 | 必须做的 |
+|------|----------|
+| 遇到不熟悉的机制 | 先读代码再说话，开口说"我看一下" |
+| 被问方案/结论 | 确认证据在哪个文件、哪段日志 |
+| 被抓包/被纠正 | 不解释，直接认错 |
+| 重大问题 | 搜索 Codex 准则确认没有遗漏 |
+
+**核心：不是"知道"，是"做到"**
+
+---
+
+## ⚠️ 记忆管理铁律（高优先级）
+
+### 本地Memory文件 = 绝对禁止删除
+- 路径：`~/.openclaw/workspace/memory/*.md`
+- 规则：只能归档，禁止删除
+- 违反：P0事故
+
+### Obsidian文件 = 可以删除已总结的
+- 已精华到周摘要/历史记忆的文件可以删除
+
+### 操作前必查
+- 删除操作前先问用户确认
+- 本地文件绝对不能随便删
+
+---
+
+## 📋 工具调用规范（精简版）
 
 ### 调用方式三分法
 
@@ -44,182 +177,20 @@
 | **curl / API 直调** | 快速测试、一次性查询 | API 连通性验证、简单数据获取 |
 | **sessions_spawn** | 非 CLI 工具的子任务 | web_search、file 操作、网页抓取 |
 
-### 🚨 黄金法则：永远不阻塞
-**screen / sessions_spawn / 任何耗时任务 → 后台跑 → 继续聊天**
-不要等结果，不要 poll，有需要再去查日志。
-雪子永远是第一优先级！
+### 🚨 screen vs 前台执行判断
+
+| 情况 | 方式 |
+|------|------|
+| 长任务、持续任务、易断任务（Claude Code / Codex / omx） | `screen` 后台跑 |
+| 搜索、读文件、看日志、单次检查、关键验证 | **前台执行**，拿到结果再继续 |
+| API 测试/快速查询 | `curl` 直调 |
+| 怕断/怕超时/怕 SSH 断 | `screen` |
+
+**关键路径上的验证必须等待结果，不能只启动不确认。**
 
 ### ⚠️ Codex 必须走代理！
 **本地 v2ray 端口**: HTTP=1087, SOCKS=1080
 Codex 启动前必须 export proxy，否则直连被墙！
-
-### acpx 已停用
-Claude Code 全部改用 screen 调用，acpx 不再使用（2026-04-24）
-
-### 快速判定
-- **CLI 任务（Claude/Codex/omx/omc）** → screen ✅
-- **API 测试/快速查询** → curl ✅
-- **工具类子任务（搜索/文件）** → sessions_spawn ✅
-- **怕断/怕超时/怕 SSH 断** → screen ✅
-- **其他情况** → 先问雪子
-
-## 📝 修改问题铁律（Codex方法论）
-
-### 核心6条（2026-04-26 确认）
-1. **先读手册再动手** — 不熟悉的任务先读规范文档
-2. **最小改动原则** — 只改问题点，其他不动
-3. **改动前先备份** — 万一翻车能回滚
-4. **改完立刻验证** — 确认生效再收工
-5. **找根因，不治标** — 找到断点时间+引用链追踪，从源头解决
-6. **汇报清晰** — 说明改了什么、为什么改、不改什么
-
-### 🛡️ 标准调用方式：screen模式（⚠️ 铁律）
-
-**所有工具调用都用 screen 模式，SSH断开、timeout都不受影响**
-
-```bash
-# 本地 Claude Code（MiniMax）
-screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude.log"
-
-# 本地 Codex（GPT-5.4）
-screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex.log"
-
-# 韩国 Codex（GPT-5.4）
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c 'screen -dmS kr-task bash -c \"codex exec ...\"'"
-
-# omx
-screen -dmS omx-task bash -c "omx autopilot '任务' 2>&1 | tee /tmp/omx.log"
-
-# omc
-screen -dmS omc-task bash -c "omc ralphthon '任务' 2>&1 | tee /tmp/omc.log"
-```
-
-### 查看screen输出
-```bash
-screen -ls                    # 列出所有screen
-screen -r task-name          # 连接screen
-tail -f /tmp/claude.log      # 实时查看输出
-screen -d task-name          # 分离screen（后台继续）
-```
-
-### screen vs --no-wait
-- **screen** = 完全隔离，SSH断开不受影响，不会被杀
-- **--no-wait** = 后台跑，但可能被系统回收
-
-**结论：所有长时间任务都用screen，不用--no-wait**
-
----
-
-
-## 🤖 AI Coder 脚本（已归档）
-
-**ai_coder 封装层已停用，直接用 screen 调用更简单可靠。**
-脚本位置保留在 `~/.openclaw/workspace/ai_coder/`（仅作参考）
-
----
-
-## 🚀 OMC (oh-my-claude-code) 执行模式
-
-*omc 是多Agent编排层，协调 Claude、Gemini、Codex*
-
-### 5种执行模式（关键词触发）
-
-| 模式 | 触发词 | 说明 |
-|------|--------|------|
-| **Autopilot** | `autopilot:` | 全自主，从想法到代码 |
-| **Ralph** | `ralph:` | 持续循环直到完成 |
-| **Ultrawork** | `ulw:` / `ultrawork:` | 最大并行化 |
-| **Deep Interview** | `deep-interview:` | 苏格拉底式需求澄清 |
-| **Team** | `team N:` | N个Agent协调团队 |
-
-**使用示例：**
-```
-"autopilot: 构建一个REST API"  → 自动启动autopilot
-"ralph: 重构认证系统"          → 持续循环模式
-"ulw: 修复所有错误"           → 最大并行
-"team 3:executor 并行开发"     → 3个执行Agent协作
-```
-
-### 19个专业Agent
-
-| Agent | 模型 | 用途 |
-|-------|------|------|
-| `explore` | haiku | 代码库快速探索 |
-| `analyst` | opus | 需求分析，发现隐藏约束 |
-| `planner` | opus | 战略规划 |
-| `architect` | opus | 系统设计 |
-| `debugger` | sonnet | 根因分析 |
-| `executor` | sonnet | 专注执行 |
-| `verifier` | sonnet | 验证证据 |
-| `code-reviewer` | opus | 代码审查 |
-| `security-reviewer` | sonnet | 安全分析 |
-| `test-engineer` | sonnet | 测试策略 |
-| `designer` | sonnet | UI/UX设计 |
-| `writer` | haiku | 文档写作 |
-| `qa-tester` | sonnet | 手动测试 |
-| `scientist` | sonnet | 数据分析 |
-| `git-master` | sonnet | Git策略 |
-| `document-specialist` | sonnet | 文档查找 |
-
-**模型路由**（仅供参考，OMC可能需要手动指定）：Claude Sonnet=标准开发 | Haiku=快速查找
-
-### Claude Code内调用Agent
-
-```
-/explore "查找某文件"
-/planner "复杂功能规划"
-/architect "系统设计评审"
-/team 3:executor "并行修复3个bug"
-/ccg  # Codex+Gemini+Claude合成
-```
-
-### Team模式
-
-```bash
-omc team 3:claude "修复bug"           # 3个Claude并行
-omc team 2:codex:architect "设计系统" # 2 Codex架构师
-omc team 1:gemini "研究方案"           # 1 Gemini研究
-omc team status <team-name>           # 查看状态
-omc team shutdown <team-name>          # 关闭团队
-```
-
-### Ralphthon (Hackathon模式)
-
-```bash
-omc ralphthon "构建REST API"      # 完整流程
-omc ralphthon --skip-interview    # 跳过访谈直接执行
-omc ralphthon --resume            # 恢复中断的hackathon
-```
-
-**流程**: 深度访谈 → 生成PRD → 执行 → 自动强化直到干净
-
-### Autoresearch (自动研究)
-
-```bash
-omc autoresearch                           # 交互式研究
-omc autoresearch --topic "AI趋势"          # 指定主题
-omc autoresearch --resume <run-id>         # 恢复研究
-```
-
-### 速率限制处理
-
-```bash
-omc wait              # 查看状态和建议
-omc wait --start      # 启动自动恢复守护进程
-omc wait detect       # 扫描阻塞的tmux会话
-```
-
-### 使用场景速查
-
-| 场景 | 推荐模式 |
-|------|----------|
-| 快速开发小功能 | `autopilot:` |
-| 复杂系统设计 | `team N:architect` |
-| 修复多个bug | `ulw: 修复所有bug` |
-| 需求不明确 | `deep-interview:` |
-| Hackathon竞赛 | `omc ralphthon` |
-| 深度研究 | `omc autoresearch` |
-| 多AI方案对比 | `omc ask` |
 
 ---
 
@@ -245,25 +216,23 @@ omc wait detect       # 扫描阻塞的tmux会话
 
 | 任务类型 | 判断标准 | 使用方式 |
 |---------|---------|---------|
-| **小型任务** | 单个文件、已知方案 | Claude Code + MiniMax + screen |
-| **中型任务** | 多模块、需调研 | Claude Code + DeepSeek + screen |
-| **复杂任务** | 架构/验收/多系统 | Codex + autopilot + screen |
+| **小型任务** | 单个文件、已知方案 | 前台快速处理，必要时再切 `screen` |
+| **中型任务** | 多模块、需调研 | 先前台收集证据，耗时步骤再放后台 |
+| **复杂任务** | 架构/验收/多系统 | Codex / OMC 规划执行，按阶段决定前后台 |
 
 ### 开发流程（简化版）
 
 ```
 雪子：有个想法...
     ↓
-我：用 screen + Claude Code autopilot 模式
+我：先判断任务规模和证据需求
     ↓
-autopilot 自动规划、执行、验证
+前台拿证据 / 后台跑长任务
     ↓
 我：验收结果，部署上线
     ↓
 ✅ 向雪子汇报
 ```
-
-**Claude Code 用 screen 调用，不用 sessions_spawn**
 
 ---
 
@@ -324,7 +293,7 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 1. 读取过去30天的每日md
 2. 提取精华 → 更新到 archive_summary.md
 3. 格式：项目~时间~具体内容
-4. 删除已被合并的旧md
+4. 归档已被合并的旧md
 5. 执行 `openclaw memory index --force` 重新索引
 
 ---
@@ -349,136 +318,28 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 ## 💓 心跳任务
 
-**执行时间**：每天首次heartbeat时
-
-**通知任务**（通过广播专员发送到群 `oc_b14195eb990ab57ea573e696758ae3d5`）：
-- 08:00 - 早安问候
-- 08:05 - 每日任务汇总
-- 16:30（工作日）- 股票日报
-- 22:05 - 备份检查
-
-**巡检任务**（每周一08:00 heartbeat）：
-- 内存使用 > 80% → 告警
-- 磁盘空间 > 70% → 告警
-- SSH失败登录 > 100次 → 自动封禁
+- 具体任务细则以 `HEARTBEAT.md` 为准
+- heartbeat 只做需要关注的通知和巡检，不重复扩展历史任务
 
 ---
 
 ## 📷 图片识别规则
 
-### 规则
-**统一使用 Claude Code + MiniMax MCP 模式**
-
-### 使用场景
-所有图片识别需求（不再区分场景）
-
-### 使用方法
-```bash
-claude --print --dangerously-skip-permissions "用understand_image分析<图片路径>，问题：<用户问题>" 2>&1
-```
-
-### 为什么用这个
-- OpenCV/Tesseract：适合简单明确图像
-- Claude Code + MiniMax MCP：适合复杂图表（股票K线、数据报表、截图等）
+- 统一优先使用 Claude Code + MiniMax MCP 模式
+- 简单OCR可以用本地工具，复杂图表默认走该链路
 
 ---
 
-*此文件由雪子和雪子助手共同维护 - 最后更新：2026-04-10*
+*此文件由雪子和雪子助手共同维护 - 最后更新：2026-04-26*
 
 ## 📝 更新记录
 
 | 日期 | 更新内容 |
 |------|----------|
-| 2026-04-24 | 模型分配全面更新：MiniMax日常+DeepSeek中型+Codex复杂；Claude Code改用screen调用；删除sessions_spawn工作流 |
-| 2026-04-10 | 简化CALB群守则；优化启动顺序（读取历史session） |
-| 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
-| 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent、team/ralphthon/autoresearch等） |
-| 2026-04-09 | 删除过时的CC执行约束，简化为acpx autopilot模式 |
+| 2026-04-26 | Codex风格准则精简为6条；screen规则修正为区分场景；删除git add -A和git checkout .危险动作 |
+| 2026-04-24 | 模型分配全面更新；Claude Code改用screen调用 |
+| 2026-04-10 | 简化CALB群守则；优化启动顺序 |
+| 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent等） |
+| 2026-04-09 | 删除过时的CC执行约束 |
 | 2026-04-08 | 初版 |
 
-## 🤖 Codex 干活方法论（雪子助手行为准则）
-
-*来源：Codex 实际案例提炼 + 问题排查经验，2026-04-26 整合*
-
-### 核心6条铁律
-1. **先读手册再动手** — 不熟悉的任务先读规范文档
-2. **最小改动原则** — 只改问题点，其他不动
-3. **改动前先备份** — git快照 + crontab回滚
-4. **改完立刻验证** — 确认生效再收工
-5. **找根因，不治标** — 找到断点时间+引用链追踪，从源头解决
-6. **汇报清晰** — 说明改了什么、为什么改、不改什么
-
-### 四条干活原则
-1. **先读再评，不跳步** — 先把相关脚本全读一遍再判断
-2. **聚焦核心，不跑题** — 收窄到子问题，不发散
-3. **用证据diss，不空洞** — 精确到具体数据行/文件行号
-4. **给路线，不只抛问题** — 发现问题就顺手提解决方案
-
-### 问题排查五步法
-
-*当系统出问题（配置丢失、功能异常、cron失效）时，按以下步骤排查*
-
-**第一步：找关键引用 + 断点定位**
-```bash
-rg "问题关键词" ~/.openclaw -g '!.git'
-find ~/.openclaw -maxdepth 4 \
-  \( -name 'BOOTSTRAP*' -o -name '*cron*' -o -name 'jobs.json*' \
-     -o -name 'openclaw.json*' -o -name '*config*' \
-  \) 2>/dev/null
-ls -la ~/.openclaw/*.save ~/.openclaw/cron/*.bak 2>/dev/null
-```
-
-**第二步：并排对比新旧版本**
-- 旧配置 vs 新配置（找缺失项）
-- 常用备份：`openclaw.json.save`、`jobs.json.bak`
-
-**第三步：追踪调用链**
-```bash
-rg "目标脚本名" ~/.openclaw/workspace/scripts/ -l
-ls -la ~/.openclaw/workspace/scripts/目标脚本.py
-```
-
-**第四步：本地验证（不依赖外部）**
-```bash
-python3 ~/.openclaw/workspace/scripts/目标脚本.py save "测试"
-crontab -l | rg 目标脚本
-curl -x http://127.0.0.1:1087 https://example.com --connect-timeout 3
-```
-
-**第五步：修复分层交付**
-| 优先级 | 类型 | 说明 |
-|--------|------|------|
-| P0 | 立刻能修的 | 直接修，save+git commit |
-| P1 | 改配置的 | 先问用户，加 git 快照再改 |
-| P2 | 锦上添花的 | 记录下来，以后再做 |
-
-**核心心法**：先找断点时间，再顺藤摸瓜引用链，最后小范围验证再推广。
-
-### 四条铁律（强制检查点）
-
-*遇到以下场景时，必须先过一遍再开口*
-
-| 场景 | 我必须做的 |
-|------|-----------|
-| 遇到不熟悉的机制 | 先读代码再说话，开口说"我看一下" |
-| 被问方案/结论 | 确认证据在哪，具体文件第几行 |
-| 被抓包/被纠正 | 不解释，直接认错 |
-| 重大问题 | 搜索 Codex 干活方法论确认没有遗漏 |
-
-**核心：不是"知道"，是"做到"**
-
----
-
-## ⚠️ 记忆管理铁律（2026-04-12新增）
-
-### 本地Memory文件 = 绝对禁止删除
-- 路径：`~/.openclaw/workspace/memory/*.md`
-- 规则：只能归档，禁止删除
-- 违反：P0事故
-
-### Obsidian文件 = 可以删除已总结的
-- 已精华到周摘要/历史记忆的文件可以删除
-
-### 操作前必查
-- 删除操作前先问用户确认
-- 本地文件绝对不能随便删
