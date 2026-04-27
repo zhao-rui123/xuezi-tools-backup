@@ -13,6 +13,8 @@ from pathlib import Path
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 MEMORY_DIR = WORKSPACE / "memory"
 NOTIFICATION_FILE = MEMORY_DIR / "task_notifications.json"
+LAUNCH_AGENT_LABEL = "ai.openclaw.gateway"
+LAUNCH_AGENT_PLIST = Path.home() / "Library" / "LaunchAgents" / f"{LAUNCH_AGENT_LABEL}.plist"
 
 # 每日任务（22:00-08:00）→ 每天早上8点统一汇总
 # 注意：Memory Suite v4.0 的任务日志都在 /tmp/memory-suite.log 中
@@ -313,10 +315,16 @@ def execute_auto_fix(action):
             
         elif action == "restart_gateway":
             # 重启OpenClaw Gateway
-            subprocess.run(["openclaw", "gateway", "restart"], 
-                         capture_output=True, text=True)
-            result["success"] = True
-            result["message"] = "✅ 已重启 Gateway"
+            restart_cmd = ["openclaw", "gateway", "restart"]
+            if os.name == "posix" and LAUNCH_AGENT_PLIST.exists() and hasattr(os, "getuid"):
+                restart_cmd = ["launchctl", "kickstart", "-k", f"gui/{os.getuid()}/{LAUNCH_AGENT_LABEL}"]
+            restart = subprocess.run(restart_cmd, capture_output=True, text=True)
+            if restart.returncode == 0:
+                result["success"] = True
+                result["message"] = "✅ 已重启 Gateway"
+            else:
+                result["message"] = restart.stderr.strip() or restart.stdout.strip() or "❌ Gateway 重启失败"
+                result["output"] = restart.stderr or restart.stdout or ""
             
         elif action == "clear_cache":
             # 清理缓存

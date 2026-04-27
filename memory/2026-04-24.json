@@ -2,8 +2,12 @@
   "date": "2026-04-24",
   "summary": "自动保存",
   "manual_note": "自动保存",
-  "task_count": 0,
-  "timestamp": "2026-04-24T22:30:00.627579",
+  "from_memory": [
+    "找根因不治标 — 从源头解决，不是打补丁（今天 backup-check.sh 误报的教训：根因是 v2.4 升级后检查位置变了）",
+    "汇报清晰 — 改了什么、为什么改、不改什么"
+  ],
+  "task_count": 2,
+  "timestamp": "2026-04-24T23:50:00.847384",
   "current_session": "8b7c7ede-4267-4855-85f1-e72e53746cd1",
   "current_session_key": "agent:claude:main",
   "previous_session": "c170b016-831f-4094-8f47-67a19db25c23"

@@ -28,6 +28,66 @@ def _snapshot_file(date_str: Optional[str] = None) -> Path:
     return MEMORY_DIR / f"{date_str or _today()}.json"
 
 
+def _normalize_text(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _clean_message_text(text: str) -> str:
+    cleaned = text
+    if "Conversation info (untrusted metadata):" in cleaned and "[message_id:" in cleaned:
+        cleaned = cleaned.split("[message_id:", 1)[1]
+        if "]" in cleaned:
+            cleaned = cleaned.split("]", 1)[1]
+    cleaned = cleaned.split("[Bootstrap truncation warning]", 1)[0]
+    cleaned = cleaned.replace("[[reply_to_current]]", "")
+    cleaned = re.sub(r"```json.*?```", "", cleaned, flags=re.DOTALL)
+    cleaned = re.sub(r"Sender \(untrusted metadata\):", "", cleaned)
+    cleaned = re.sub(r"^ou_[a-z0-9]+:\s*", "", cleaned.strip())
+    cleaned = _normalize_text(cleaned)
+    if cleaned.startswith("/"):
+        return ""
+    return cleaned[:240]
+
+
+def _is_control_like_message(text: str) -> bool:
+    clean = _normalize_text(text)
+    if clean.startswith("/"):
+        return True
+    lowered = clean.lower()
+    if lowered in {"new", "reset"}:
+        return True
+    if "我要new" in clean or "我先new" in clean or "准备new" in clean:
+        return True
+    if "我要reset" in clean or "我先reset" in clean or "准备reset" in clean:
+        return True
+    if ":" in clean:
+        tail = clean.rsplit(":", 1)[-1].strip()
+        if tail.startswith("/"):
+            return True
+    return False
+
+
+def _score_task_candidate(text: str) -> int:
+    clean = _normalize_text(text)
+    score = 0
+    strong_markers = ("约定", "记住", "等于", "修复", "任务", "问题", "验证", "测试", "deepseek", "codex")
+    weak_markers = ("继续", "处理", "整合", "恢复", "快照", "session", "上下文")
+    casual_markers = ("哈哈", "验收", "朴实而无华", "去吧", "回来", "聊着")
+
+    for marker in strong_markers:
+        if marker.lower() in clean.lower():
+            score += 4
+    for marker in weak_markers:
+        if marker.lower() in clean.lower():
+            score += 2
+    for marker in casual_markers:
+        if marker in clean:
+            score -= 3
+    if _is_control_like_message(clean):
+        score -= 10
+    return score
+
+
 def _get_current_session_info() -> dict:
     """Get current and previous session IDs from sessions.json."""
     info = {
@@ -93,6 +153,27 @@ def extract_tasks_from_memory() -> dict:
     content = memory_file.read_text(encoding="utf-8")
     tasks: List[str] = []
 
+    def add_task(text: str, prefix: str = "") -> None:
+        clean = re.sub(r"\s+", " ", text).strip()
+        if not clean:
+            return
+        if set(clean) <= {"-", "|", " "}:
+            return
+        if clean.startswith("合计 |") or clean.startswith("|"):
+            return
+        if len(clean) < 6:
+            return
+        candidate = (prefix + clean)[:120]
+        if candidate not in tasks:
+            tasks.append(candidate)
+
+    recent_snapshot_task = _load_recent_snapshot_task()
+    if recent_snapshot_task:
+        add_task(recent_snapshot_task, "[快照] ")
+
+    for item in re.findall(r"^##\s+(.+)$", content, re.MULTILINE)[-3:]:
+        add_task(item, "[主题] ")
+
     # Prefer recent update blocks because they usually contain the active task.
     update_blocks = re.findall(
         r"### \[UPDATE\][^\n]*\n+(.+?)(?=\n###|\n##|\Z)",
@@ -102,19 +183,23 @@ def extract_tasks_from_memory() -> dict:
     for block in update_blocks[-3:]:
         lines = [line.strip().lstrip("-*").strip() for line in block.splitlines()]
         for line in lines:
-            if len(line) > 5:
-                tasks.append(line[:120])
+            if line and not line.startswith("#"):
+                add_task(line)
                 break
 
     # Include recently completed checklist items.
     for item in re.findall(r"- \[x\] (.+)", content)[-3:]:
-        tasks.append("[完成] " + item[:100])
+        add_task(item, "[完成] ")
+
+    # Include active checklist items if no better task summary exists.
+    if len(tasks) < 3:
+        for item in re.findall(r"- \[ \] (.+)", content)[-3:]:
+            add_task(item, "[待办] ")
 
     # Fall back to bold project markers when updates are sparse.
     for item in re.findall(r"\*\*.*?\*\*.*?(?:\n|$)", content)[-2:]:
         clean = re.sub(r"\*\*(.+?)\*\*", r"\1", item).strip()
-        if len(clean) > 5:
-            tasks.append(clean[:120])
+        add_task(clean)
 
     summary = tasks[-1] if tasks else "无记录"
     return {
@@ -127,24 +212,182 @@ def extract_tasks_from_memory() -> dict:
     }
 
 
-def save_snapshot(task: Optional[str] = None) -> bool:
+def _load_recent_snapshot_task() -> Optional[str]:
+    snapshot_dir = MEMORY_DIR / "snapshots"
+    if not snapshot_dir.exists():
+        return None
+
+    snapshot_files = sorted(
+        snapshot_dir.glob("snapshot_*.json"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+    for path in snapshot_files[:5]:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        task = str(data.get("current_task", "")).strip()
+        if task:
+            return task
+    return None
+
+
+def _resolve_session_file(session_file: Optional[str], session_id: Optional[str] = None) -> Optional[Path]:
+    if session_file:
+        path = Path(session_file)
+        if path.exists():
+            return path
+
+        reset_matches = sorted(
+            path.parent.glob(f"{path.name}.reset.*"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        if reset_matches:
+            return reset_matches[0]
+
+    if session_id:
+        reset_matches = sorted(
+            SESSIONS_DIR.glob(f"{session_id}.jsonl.reset.*"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        if reset_matches:
+            return reset_matches[0]
+
+        direct = SESSIONS_DIR / f"{session_id}.jsonl"
+        if direct.exists():
+            return direct
+
+    return None
+
+
+def extract_tasks_from_session_file(session_file: str) -> dict:
+    tasks: List[str] = []
+    fallback_tasks: List[str] = []
+    transcript: List[str] = []
+    path = Path(session_file)
+    if not path.exists():
+        return {"summary": None, "tasks": [], "transcript": [], "task_count": 0}
+
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                entry = json.loads(line)
+            except Exception:
+                continue
+            if entry.get("type") != "message":
+                continue
+            message = entry.get("message") or {}
+            role = message.get("role")
+            if role not in {"user", "assistant"}:
+                continue
+            content = message.get("content")
+            text = ""
+            if isinstance(content, list):
+                for item in content:
+                    if isinstance(item, dict) and item.get("type") == "text":
+                        text = item.get("text") or ""
+                        break
+            elif isinstance(content, str):
+                text = content
+            cleaned = _clean_message_text(text)
+            if not cleaned:
+                continue
+            prefix = "user" if role == "user" else "assistant"
+            transcript.append(f"{prefix}: {cleaned}")
+            is_control = _is_control_like_message(cleaned)
+            if role == "user":
+                target = f"[用户] {cleaned[:120]}"
+                if not is_control:
+                    tasks.append(target)
+            else:
+                target = f"[助手] {cleaned[:120]}"
+                if not is_control and any(
+                    marker in cleaned for marker in ("我来", "整合", "方案", "搞定", "接下来", "修", "处理")
+                ):
+                    tasks.append(target)
+                else:
+                    fallback_tasks.append(target)
+    except Exception:
+        return {"summary": None, "tasks": [], "transcript": [], "task_count": 0}
+
+    deduped_tasks: List[str] = []
+    for task in tasks + fallback_tasks:
+        if task not in deduped_tasks:
+            deduped_tasks.append(task)
+
+    summary = None
+    best_score = -999
+    for item in deduped_tasks:
+        candidate = item.replace("[用户] ", "", 1).replace("[助手] ", "", 1)
+        score = _score_task_candidate(candidate)
+        if item.startswith("[用户] "):
+            score += 1
+        if score >= best_score:
+            best_score = score
+            summary = item
+    if not summary and deduped_tasks:
+        summary = deduped_tasks[-1]
+
+    return {
+        "summary": summary,
+        "tasks": deduped_tasks[-6:],
+        "transcript": transcript[-12:],
+        "task_count": len(deduped_tasks),
+    }
+
+
+def save_snapshot(
+    task: Optional[str] = None,
+    session_file: Optional[str] = None,
+    session_id: Optional[str] = None,
+    session_key: Optional[str] = None,
+) -> bool:
     """Persist today's snapshot into memory/YYYY-MM-DD.json."""
     MEMORY_DIR.mkdir(parents=True, exist_ok=True)
 
-    info = extract_tasks_from_memory()
+    memory_info = extract_tasks_from_memory()
+    resolved_session_file = _resolve_session_file(session_file, session_id=session_id)
+    session_extract = extract_tasks_from_session_file(str(resolved_session_file)) if resolved_session_file else {
+        "summary": None,
+        "tasks": [],
+        "transcript": [],
+        "task_count": 0,
+    }
     session_info = _get_current_session_info()
-    manual = task if task and task != "未标注任务" else None
+    ignored_manual_notes = {"未标注任务", "自动保存", "日常对话"}
+    manual = task if task and task not in ignored_manual_notes else None
+    summary = (
+        manual
+        or session_extract.get("summary")
+        or memory_info.get("summary")
+        or "无标注"
+    )
+    from_session = session_extract.get("tasks", [])
+    from_memory = memory_info.get("tasks", [])
+    captured_session_id = session_id or session_info.get("current_session_id")
+    captured_session_key = session_key or session_info.get("current_session_key")
     data = {
         "date": _today(),
-        "summary": manual or info.get("summary", "无标注"),
+        "summary": summary,
         "manual_note": manual,
-        "from_memory": info.get("tasks", []),
-        "task_count": info.get("task_count", 0),
+        "from_session": from_session,
+        "from_memory": from_memory,
+        "session_transcript": session_extract.get("transcript", []),
+        "task_count": max(
+            session_extract.get("task_count", 0),
+            memory_info.get("task_count", 0),
+        ),
         "timestamp": datetime.now().isoformat(),
-        "current_session": session_info.get("current_session_id"),
-        "current_session_key": session_info.get("current_session_key"),
+        "current_session": captured_session_id,
+        "current_session_key": captured_session_key,
         "previous_session": session_info.get("previous_session_id"),
         "reset_file": session_info.get("reset_file"),
+        "source_session_file": str(resolved_session_file) if resolved_session_file else session_file,
     }
     data = {key: value for key, value in data.items() if value not in (None, [])}
 
@@ -198,13 +441,33 @@ def load_snapshot() -> Optional[dict]:
 
 def main() -> None:
     if len(sys.argv) < 2:
-        print("Usage: session-snapshot.py <save|load> [task]")
+        print("Usage: session-snapshot.py <save|load> [task] [--session-file PATH] [--session-id ID] [--session-key KEY]")
         raise SystemExit(1)
 
     action = sys.argv[1]
     if action == "save":
-        task = sys.argv[2] if len(sys.argv) > 2 else "未标注任务"
-        save_snapshot(task)
+        task = "未标注任务"
+        session_file = None
+        session_id = None
+        session_key = None
+        idx = 2
+        if idx < len(sys.argv) and not sys.argv[idx].startswith("--"):
+            task = sys.argv[idx]
+            idx += 1
+        while idx < len(sys.argv):
+            arg = sys.argv[idx]
+            if arg == "--session-file" and idx + 1 < len(sys.argv):
+                session_file = sys.argv[idx + 1]
+                idx += 2
+            elif arg == "--session-id" and idx + 1 < len(sys.argv):
+                session_id = sys.argv[idx + 1]
+                idx += 2
+            elif arg == "--session-key" and idx + 1 < len(sys.argv):
+                session_key = sys.argv[idx + 1]
+                idx += 2
+            else:
+                idx += 1
+        save_snapshot(task, session_file=session_file, session_id=session_id, session_key=session_key)
         return
 
     if action == "load":
