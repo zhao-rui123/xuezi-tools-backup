@@ -56,6 +56,66 @@ class UnifiedIndexer:
         self.file_index: Dict[str, Dict] = {}
         self._load_index()
 
+    def _phrase_tokens(self, text: str) -> List[str]:
+        """提取短语 token，用于提高连续词命中的排序。"""
+        cleaned = re.sub(r'[#*`\[\](){}|_]', ' ', text)
+        cleaned = re.sub(r'https?://\S+', ' ', cleaned)
+
+        phrases: List[str] = []
+
+        # 英文短语：保留连续 2~4 个英文/数字词
+        en_words = re.findall(r'[a-zA-Z0-9_\-]+', cleaned)
+        lowered = [w.lower() for w in en_words if w.strip()]
+        for size in range(2, 5):
+            for i in range(len(lowered) - size + 1):
+                phrase = ' '.join(lowered[i:i + size]).strip()
+                if phrase:
+                    phrases.append(phrase)
+
+        # 中文短语：对连续中文 token 组合成 2-gram / 3-gram
+        cn_tokens = [
+            w for w in jieba.cut(cleaned, cut_all=False)
+            if w.strip() and w not in self.stop_words and len(w) >= 2
+            and re.search(r'[\u4e00-\u9fff]', w)
+        ]
+        for size in (2, 3):
+            for i in range(len(cn_tokens) - size + 1):
+                phrase = ''.join(cn_tokens[i:i + size]).strip()
+                if len(phrase) >= 4:
+                    phrases.append(phrase)
+
+        return list(dict.fromkeys(phrases))
+
+    def _load_json_list(self, file_path: Path) -> List[str]:
+        if not file_path.exists():
+            return []
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return data if isinstance(data, list) else []
+        except Exception:
+            return []
+
+    def _save_json_list(self, file_path: Path, values: Set[str]):
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(sorted(values), f, ensure_ascii=False)
+
+    def _remove_file_from_inverted_indexes(self, file_path: str, meta: Dict[str, Any]):
+        """文件重建前先从旧 posting lists 里删掉，避免脏索引残留。"""
+        for kw in meta.get('en_keywords', []):
+            word_file = self.keywords_dir / f"{kw}.json"
+            existing = set(self._load_json_list(word_file))
+            if file_path in existing:
+                existing.discard(file_path)
+                self._save_json_list(word_file, existing)
+
+        for kw in meta.get('cn_keywords', []):
+            word_file = self.chinese_dir / f"{kw}.json"
+            existing = set(self._load_json_list(word_file))
+            if file_path in existing:
+                existing.discard(file_path)
+                self._save_json_list(word_file, existing)
+
     def _load_index(self):
         """加载主索引"""
         if self.index_file.exists():
@@ -92,23 +152,27 @@ class UnifiedIndexer:
         """分词：返回 (英文/数字词列表, 中文词列表)"""
         text = re.sub(r'[#*`\[\](){}|_]', ' ', text)
         text = re.sub(r'https?://\S+', ' ', text)  # 移除URL
-        
+
         english_words = []
         chinese_words = []
-        
+
         # 英文/数字词（直接提取）
         for word in re.findall(r'[a-zA-Z0-9_\-]+', text.lower()):
             if word not in self.stop_words and len(word) >= 1:
                 english_words.append(word)
-        
+
         # 中文词（jieba分词）—— 只要有中文就分词，不再检查整体占比
         if re.search(r'[\u4e00-\u9fff]', text):
-            cn_tokens = [w for w in jieba.cut(text, cut_all=False) 
+            cn_tokens = [w for w in jieba.cut(text, cut_all=False)
                         if w.strip() and w not in self.stop_words and len(w) >= 2
                         and not self._is_english_word(w)
                         and re.search(r'[\u4e00-\u9fff]', w)]  # 确保词中含中文
             chinese_words.extend(cn_tokens)
-        
+
+        phrase_tokens = self._phrase_tokens(text)
+        english_words.extend([p for p in phrase_tokens if re.search(r'[a-zA-Z]', p)])
+        chinese_words.extend([p for p in phrase_tokens if re.search(r'[\u4e00-\u9fff]', p)])
+
         return english_words, chinese_words
 
     def build_index(self, force: bool = False) -> Dict[str, Any]:
@@ -118,38 +182,62 @@ class UnifiedIndexer:
         # 扫描记忆文件
         memory_files = list(self.memory_dir.glob("*.md"))
         memory_files.sort(key=lambda f: -f.stat().st_mtime)
-        
+
         indexed_files = 0
         total_keywords = Counter()
-        
+        current_paths = {str(f) for f in memory_files}
+
+        # 先清理已删除文件的旧索引
+        removed_paths = [path for path in list(self.file_index.keys()) if path not in current_paths]
+        for removed_path in removed_paths:
+            self._remove_file_from_inverted_indexes(removed_path, self.file_index.get(removed_path, {}))
+            self.file_index.pop(removed_path, None)
+
         for mf in memory_files:
             try:
                 with open(mf, 'r', encoding='utf-8') as f:
                     content = f.read()
-                
+
+                file_path = str(mf)
+                current_mtime = int(mf.stat().st_mtime)
+                old_meta = self.file_index.get(file_path)
+
+                # 真增量：未变化文件直接复用旧元数据
+                if not force and old_meta and old_meta.get('mtime') == current_mtime:
+                    total_keywords.update(old_meta.get('en_counts', {}))
+                    total_keywords.update(old_meta.get('cn_counts', {}))
+                    indexed_files += 1
+                    continue
+
+                # 先从旧 posting lists 移除，防止脏索引残留
+                if old_meta:
+                    self._remove_file_from_inverted_indexes(file_path, old_meta)
+
                 english_words, chinese_words = self._tokenize(content)
-                
+
                 # 更新关键词索引
                 en_count = Counter(english_words)
                 cn_count = Counter(chinese_words)
                 total_keywords.update(en_count)
                 total_keywords.update(cn_count)
-                
+
                 # 保存文件元数据
-                self.file_index[str(mf)] = {
+                self.file_index[file_path] = {
                     "name": mf.name,
                     "size": len(content),
-                    "en_keywords": list(set(english_words)),
-                    "cn_keywords": list(set(chinese_words)),
+                    "en_keywords": list(en_count.keys()),
+                    "cn_keywords": list(cn_count.keys()),
+                    "en_counts": dict(en_count),
+                    "cn_counts": dict(cn_count),
                     "updated": datetime.now().isoformat(),
-                    "mtime": int(mf.stat().st_mtime),
+                    "mtime": current_mtime,
                 }
-                
+
                 indexed_files += 1
-                
+
             except Exception as e:
                 logger.warning(f"索引文件失败 {mf.name}: {e}")
-        
+
         # 保存关键词倒排索引
         self._save_index()
         self._build_inverted_index()
@@ -181,33 +269,27 @@ class UnifiedIndexer:
             for kw in meta.get('cn_keywords', []):
                 cn_map[kw].add(file_path)
         
+        # 先清理旧词文件，避免残留脏 posting lists
+        for old_file in self.keywords_dir.glob("*.json"):
+            old_file.unlink(missing_ok=True)
+        for old_file in self.chinese_dir.glob("*.json"):
+            old_file.unlink(missing_ok=True)
+
         # 保存英文关键词索引
         for word, files in en_map.items():
             word_file = self.keywords_dir / f"{word}.json"
             try:
-                existing = []
-                if word_file.exists():
-                    with open(word_file, 'r', encoding='utf-8') as f:
-                        existing = json.load(f)
-                existing_set = set(existing)
-                existing_set.update(files)
                 with open(word_file, 'w', encoding='utf-8') as f:
-                    json.dump(sorted(existing_set), f, ensure_ascii=False)
+                    json.dump(sorted(files), f, ensure_ascii=False)
             except Exception as e:
                 logger.warning(f"保存关键词 {word} 失败: {e}")
-        
+
         # 保存中文关键词索引
         for word, files in cn_map.items():
             word_file = self.chinese_dir / f"{word}.json"
             try:
-                existing = []
-                if word_file.exists():
-                    with open(word_file, 'r', encoding='utf-8') as f:
-                        existing = json.load(f)
-                existing_set = set(existing)
-                existing_set.update(files)
                 with open(word_file, 'w', encoding='utf-8') as f:
-                    json.dump(sorted(existing_set), f, ensure_ascii=False)
+                    json.dump(sorted(files), f, ensure_ascii=False)
             except Exception as e:
                 logger.warning(f"保存中文词 {word} 失败: {e}")
 
@@ -234,7 +316,7 @@ class UnifiedIndexer:
     def _search_keywords(self, words: List[str], limit: int) -> List[Dict[str, Any]]:
         """FTS风格英文/数字搜索"""
         file_scores: Dict[str, float] = defaultdict(float)
-        
+
         for word in words:
             word_file = self.keywords_dir / f"{word}.json"
             if word_file.exists():
@@ -242,16 +324,19 @@ class UnifiedIndexer:
                     with open(word_file, 'r', encoding='utf-8') as f:
                         files = json.load(f)
                     for f_path in files:
-                        file_scores[f_path] += 1.0
+                        meta = self.file_index.get(f_path, {})
+                        count = meta.get('en_counts', {}).get(word, 1)
+                        weight = 2.5 if ' ' in word else 1.0
+                        file_scores[f_path] += count * weight
                 except Exception:
                     pass
-        
-        return self._score_to_results(file_scores)
+
+        return self._score_to_results(file_scores, query=' '.join(words))
 
     def _search_chinese(self, words: List[str], limit: int) -> List[Dict[str, Any]]:
         """中文jieba分词搜索"""
         file_scores: Dict[str, float] = defaultdict(float)
-        
+
         for word in words:
             word_file = self.chinese_dir / f"{word}.json"
             if word_file.exists():
@@ -259,28 +344,37 @@ class UnifiedIndexer:
                     with open(word_file, 'r', encoding='utf-8') as f:
                         files = json.load(f)
                     for f_path in files:
-                        file_scores[f_path] += 1.0
+                        meta = self.file_index.get(f_path, {})
+                        count = meta.get('cn_counts', {}).get(word, 1)
+                        weight = 2.5 if len(word) >= 4 else 1.0
+                        file_scores[f_path] += count * weight
                 except Exception:
                     pass
-        
-        return self._score_to_results(file_scores)
 
-    def _score_to_results(self, file_scores: Dict[str, float]) -> List[Dict[str, Any]]:
+        return self._score_to_results(file_scores, query=''.join(words))
+
+    def _score_to_results(self, file_scores: Dict[str, float], query: str = '') -> List[Dict[str, Any]]:
         """将分数映射转换为结果列表"""
         if not file_scores:
             return []
-        
+
         results = []
         for file_path, score in sorted(file_scores.items(), key=lambda x: -x[1]):
             if file_path in self.file_index:
                 meta = self.file_index[file_path]
+                name = meta.get("name", os.path.basename(file_path))
+                boosted_score = float(score)
+                if query:
+                    q = query.lower()
+                    if q and q in name.lower():
+                        boosted_score += 3.0
                 results.append({
                     "path": file_path,
-                    "name": meta.get("name", os.path.basename(file_path)),
-                    "score": score,
-                    "snippet": self._get_snippet(file_path),
+                    "name": name,
+                    "score": boosted_score,
+                    "snippet": self._get_snippet(file_path, query=query),
                 })
-        
+
         return results
 
     def _merge_results(self, en_results: List, cn_results: List,
@@ -314,14 +408,41 @@ class UnifiedIndexer:
         
         return sorted_results
 
-    def _get_snippet(self, file_path: str, max_chars: int = 150) -> str:
-        """获取文件片段"""
+    def _get_snippet(self, file_path: str, max_chars: int = 150, query: str = '') -> str:
+        """获取文件片段：优先返回命中词附近的上下文。"""
         try:
             if not os.path.exists(file_path):
                 return ""
             with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            return content[:max_chars].replace('\n', ' ')
+                content = f.read().replace('\n', ' ')
+
+            if not query:
+                return content[:max_chars]
+
+            lowered_content = content.lower()
+            lowered_query = query.lower().strip()
+            hit = lowered_content.find(lowered_query) if lowered_query else -1
+
+            if hit == -1:
+                english_words, chinese_words = self._tokenize(query)
+                candidates = sorted(set(english_words + chinese_words), key=len, reverse=True)
+                for token in candidates:
+                    idx = lowered_content.find(token.lower())
+                    if idx != -1:
+                        hit = idx
+                        break
+
+            if hit == -1:
+                return content[:max_chars]
+
+            start = max(0, hit - 45)
+            end = min(len(content), hit + max_chars)
+            snippet = content[start:end]
+            if start > 0:
+                snippet = '...' + snippet
+            if end < len(content):
+                snippet = snippet + '...'
+            return snippet
         except Exception:
             return ""
 

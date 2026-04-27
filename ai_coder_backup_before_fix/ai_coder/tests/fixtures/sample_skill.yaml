@@ -1,4 +1,0 @@
-name: summarize
-description: Summarize a request
-template: "summarize: {command}"
-executor: local

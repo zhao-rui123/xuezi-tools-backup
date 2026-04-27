@@ -173,9 +173,38 @@ crontab -l | rg 目标脚本
 
 | 方式 | 用途 | 典型场景 |
 |------|------|----------|
-| **screen** | CLI 任务后台跑 | Claude Code / Codex / omx / omc |
+| **screen** | CLI 任务后台跑 | Claude Code / Codex / omx / omc（长任务/易断任务必须用） |
 | **curl / API 直调** | 快速测试、一次性查询 | API 连通性验证、简单数据获取 |
-| **sessions_spawn** | 非 CLI 工具的子任务 | web_search、file 操作、网页抓取 |
+| **sessions_spawn** | 非 CLI 工具的子任务 | web_search、file 操作、网页抓取（仅限分钟级任务，会超时） |
+
+### 🚨 Claude Code 模型与调用规范（2026-04-27）
+
+**⚠️ sessions_spawn 超时限制：适合快速任务，大项目必须用 screen**
+
+**Claude Code 默认模型（~/.claude/settings.json）：**
+- 当前默认：`deepseek-v4-flash`
+- 可用模型：DeepSeek V4 Flash（主力）、GPT-5.4 via Feinian（复杂任务）
+
+**screen 调用示例：**
+```bash
+# DeepSeek 主力（默认）
+screen -dmS cc-task bash -c "claude --print '任务' 2>&1 | tee /tmp/cc-task.log"
+
+# GPT-5.4 复杂任务（需配置Feinian代理）
+screen -dmS cc-gpt-task bash -c "claude --model opus --print '任务' 2>&1 | tee /tmp/cc-gpt-task.log"
+
+# Codex（必须走代理）
+screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"
+```
+
+**查看/管理：** `screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f /tmp/xxx.log`
+
+**Feinian 代理配置（GPT-5.4）：**
+```bash
+export ANTHROPIC_AUTH_TOKEN="sk-abcredai-..."
+export ANTHROPIC_BASE_URL="https://ai.feinian.net"
+export ANTHROPIC_MODEL="claude-sonnet-4-6"
+``` |
 
 ### 🚨 screen vs 前台执行判断
 
@@ -275,7 +304,7 @@ echo "xxx" >> /tmp/openclaw_session_note.txt
 
 | 日期 | 更新内容 |
 |------|----------|
-| 2026-04-26 | Codex风格准则精简为6条；screen规则修正为区分场景；删除git add -A和git checkout .危险动作 |
+| 2026-04-27 | 新增Claude Code模型架构（三档）；明确sessions_spawn超时限制；screen调用示例更新 |
 | 2026-04-24 | 模型分配全面更新；Claude Code改用screen调用 |
 | 2026-04-10 | 简化CALB群守则；优化启动顺序 |
 | 2026-04-10 | 新增OMC完整用法（5种模式、19个Agent等） |

@@ -60,62 +60,47 @@ chmod 644 /usr/share/nginx/html/*/index.html
 - **更新方式**: 用户告知需要更新的省份 → 我修改数据 → 重新部署 → 更新GitHub备份
 - **数据来源**: 各省发改委/电网公司官方文件
 
-# 执行开发 → MiniMax
-cp ~/.claude/settings-minimax.json ~/.claude/settings.json
-
-# 架构/审核 → 官方（需手动编辑）
-```
-
-### 完整工作流程
-1. 📋 向雪子确认需求
-2. 官方Sonnet → 架构设计 + Superpowers规划
-3. MiniMax Claude Code → sessions_spawn 分模块执行开发
-4. 官方Sonnet → 验收审查
-5. 我（决策）→ 部署 or 返工
-6. OpenClaw子Agent → 部署上线
-7. ✅ 向雪子汇报完成
-
-### 汇报节点
-- **📋 任务启动**：开始时汇报
-- **⚠️ 关键里程碑**：遇到问题/重大进展时汇报
-- **✅ 任务完成**：部署成功后汇报
-
-### 适用场景
-- 大型Web应用开发
-- 多模块系统设计
-- 需要架构审查的复杂项目
-
-### 不适用场景
-- 简单问答、已有明确步骤的任务、紧急小修小改
-
-## 注意事项
 - 电价查询工具在GitHub Pages备用站使用iframe嵌入主站
 - 如主站无法访问，备用站的电价查询会显示错误提示，需下载离线包使用
 - 其他五个工具在备用站可独立正常使用
 
 **参考技能包**: `skills/feishu-image-send/SKILL.md`（支持图片、文档、文本等）
 
-## 💡 Codex方法论要点（雪子教导，2026-04-24）
+## 💡 Codex风格执行准则（精简版，2026-04-26）
 
-1. **先读手册再动手** — 不熟悉的任务先读规范文档
-2. **最小改动原则** — 只改问题点，其他不动
-3. **改动前先备份** — 万一翻车能回滚
-4. **改完立刻验证** — 确认生效再收工
-5. **找根因，不治标** — 找到断点时间+引用链追踪，从源头解决
-6. **汇报清晰** — 说明改了什么、为什么改、不改什么
+### 核心6条
+
+1. **先读上下文再动手** — 不熟悉的任务先读相关文件、日志、配置，再下结论
+2. **先拿证据再判断** — 优先用搜索、读文件、日志、最小验证确认事实，不凭猜测回答
+3. **改动最小且只改相关内容** — 只修改当前问题涉及的文件和逻辑，不顺手重构
+4. **关键验证必须等结果** — 验证失败不能当成功交付
+5. **汇报必须包含三件事** — 改了什么、为什么这么改、还剩什么风险或未验证项
+6. **不是所有任务都后台跑** — 搜索/读文件/单次验证优先前台执行；只有长任务/易断任务才用screen
+
+### 7条执行补充约束
+
+1. **先说动作再动手** — 实质性工作前先说明意图和先查什么/改什么
+2. **最终汇报固定格式** — 改了什么、怎么验证的、还有什么风险
+3. **区分分析任务和执行任务** — 问方案先分析不急着改，让修让改默认直接动手
+4. **不要把猜测当事实** — 不确定先查，明确说“这是推断”
+5. **发现冲突先停** — 有冲突先汇报，不要直接覆盖
+6. **能局部验证就不要全量折腾** — 先最小验证再决定扩大范围
+7. **新旧规则冲突时优先删旧规则** — 避免文档自相矛盾
 
 ---
 
-## 🤖 Claude Code / Codex screen 调用规范（2026-04-24 新增）
+## 🤖 Claude Code / Codex screen 调用规范（2026-04-26 更新）
 
-**铁律：所有 Claude Code 和 Codex 调用必须用 screen，不允许 sessions_spawn/acpx 直接调**
+**原则：screen 用于长任务/易断任务；搜索/读文件/单次验证用前台执行**
 
-| 工具 | 命令 |
-|------|------|
-| **本地 Claude Code** | `screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude-task.log"` |
-| **本地 Codex** | `screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"` |
-| **韩国 Codex** | `ssh ... "screen -dmS kr-task bash -c 'codex exec ...'"` |
+| 工具 | 场景 | 命令 |
+|------|------|------|
+| **本地 Claude Code** | 长任务、易断任务 | `screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude-task.log"` |
+| **本地 Codex** | 长任务、易断任务 | `screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"` |
+| **韩国 Codex** | 长任务、易断任务 | `ssh ... "screen -dmS kr-task bash -c 'codex exec ...'"` |
+| **快速验证/搜索** | 前台执行 | 直接调用，拿到结果再继续 |
 
+**关键路径验证必须等待结果，不能只启动不确认。**
 **查看/管理**：`screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f /tmp/xxx.log`
 
 ---
@@ -288,40 +273,28 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 - **格式**: `### 项目名称 (2026-04-25)`
 - **内容**: 保留具体详情（地址、功能、状态等）
 - **保留**: 技能包清单、定时任务、重要教训
+## AI模型矩阵（2026-04-27 更新）
 
-### 下次整理时间
-- **预计**: 2026-04-25（飞书定时消息提醒）
-
----
-
-
-
-|------|------|------|
-| `/model MiniMax-M2.7` | minimax-cn/MiniMax-M2.7 | 主用模型 |
-| `/model k2.5` | bailian/kimi-k2.5 | 百炼Kimi |
-
-| `/model right` | rightcodes/right | Right.codes GPT-5.4 |
-| `/model k2p5` | kimi-coding/k2p5 | Kimi Coding |
-
-### 修复记录
-
-**问题**：模型名称不匹配，显示 M2/M2.1 而不是 M2.7
-**原因**：配置里模型 id 缺少 `minimax-cn/` 前缀，导致匹配到 OpenClaw 内置别名
-**修复**：
-- `openclaw.json`: 模型 id 从 `MiniMax-M2.7` 改为 `minimax-cn/MiniMax-M2.7`
-- `models.json`: 同上
-- `kimi-coding`: API Key 为 `sk-kimi-2sxCTUilQ9nPKSPAFHcO2gIm7EguvTWvmZwaVclW15ZKwWq4uWZxKAhIWbULJEmD`（2026-04-16 实测有效）
-
----
-
-## AI模型矩阵（2026-04-24 更新）
-
-**工具分工（2026-05 起）：**
+**工具分工（三档架构）：**
 | 工具 | 模型 | 用途 |
 |------|------|------|
-| **OpenClaw（我）** | MiniMax M2.7 | 日常对话（飞书） |
-| **Claude Code CLI（Mac）** | DeepSeek V4 Flash | 本地开发 |
-| **Codex（Mac）** | GPT-5.5 | 复杂任务（5月升级） |
+| **OpenClaw（我）** | MiniMax M2.7 | 飞书日常对话、轻执行 |
+| **Claude Code CLI（Mac）** | DeepSeek V4 Flash | 本地开发主力（默认） |
+| **Claude Code CLI（Mac）+ Feinian** | GPT-5.4 | 复杂任务/深度研究 |
+
+**Claude Code 调用规范：**
+- `sessions_spawn` → 适合快速任务（分钟级），会超时
+- **大项目必须走screen**：
+  - DeepSeek主力：`screen -dmS cc-task bash -c "claude --print '任务' 2>&1 | tee /tmp/cc-task.log"`
+  - GPT-5.4复杂任务：`screen -dmS cc-gpt-task bash -c "claude --model opus --print '任务' 2>&1 | tee /tmp/cc-gpt-task.log"`
+- 代理必须：Codex `export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087`
+
+**Feinian配置（GPT-5.4链路）：**
+```bash
+export ANTHROPIC_AUTH_TOKEN="sk-abcredai-..."
+export ANTHROPIC_BASE_URL="https://ai.feinian.net"
+export ANTHROPIC_MODEL="claude-sonnet-4-6"
+```
 
 **停用：** Opus、Kimi（2026-05 起不再续费）
 
@@ -405,79 +378,11 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 - 雪子自己先用懂，再教我怎么更好地调用
 - 结论：OpenClaw(图形中枢) + Claude Code(命令行代码) 组合够用，不需要 Trae
 
-- [ ] 处理GitHub 2FA #GitHub #待办
-```
+- [x] GitHub 2FA 已完成 #GitHub #待办
 
 
-### Opus配置（雪子提供）
-| 项目 | 值 |
-|------|------|
-| Provider | opus-proxy |
-| Base URL | https://timesniper.club |
-| API Key | sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ |
-| 模型 | claude-opus-4-6 |
-| 调用方式 | sessions_spawn(model="opus-proxy/claude-opus-4-6") |
 
-### MiniMax配置（已有）
-| 项目 | 值 |
-|------|------|
-| Provider | minimax-cn |
-| Base URL | https://api.minimaxi.com/anthropic |
-| API Key | sk-cp-TaEn7XZH... |
-| 模型 | MiniMax-M2.7 |
-
-### Claude Code环境变量（给雪子CC用）
-```bash
-ANTHROPIC_AUTH_TOKEN=sk-OLqePftCUT0kOGggfgGtgeMOE3km0hPXwxUf6FTpFFL7mdsJ
-ANTHROPIC_BASE_URL=https://timesniper.club
-ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-6
-ANTHROPIC_MODEL=claude-opus-4-6
-```
-
-### 使用场景
-- 架构设计/算法审核 → Opus (opus-proxy/claude-opus-4-6)
-- 执行开发/日常任务 → MiniMax (minimax-cn/MiniMax-M2.7)
-
----
-
-## Claude Code ACP 集成 [2026-04-09 新增]
-
-### 核心配置
-| 组件 | 状态 | 路径 |
-|------|------|------|
-| acpx CLI | ✅ 已安装 | `/opt/homebrew/bin/acpx` v0.5.3 |
-| 模型切换脚本 | ✅ | `~/.openclaw/workspace/scripts/cc-model-switch.sh` |
-| 完整使用指南 | ✅ | `Claude Code ACP调用完整指南.md` (Obsidian) |
-
-### 三层模型工作流
-| 阶段 | 模型 | Session |
-|------|------|---------|
-| 架构设计 | Opus | arch |
-| 执行开发 | MiniMax | dev |
-| 验收审查 | Opus | review |
-
-### 快速命令
-```bash
-# 模型切换
-cc-model-switch.sh opus    # 架构/验收
-cc-model-switch.sh minimax # 执行开发
-
-# ACP 调用（必须先关闭 Claude GUI）
-acpx claude -s <session> "任务" --approve-all
-
-# 后台自动驾驶（重要！）
-acpx claude sessions new --name bg-task
-acpx claude -s bg-task --no-wait "用 autopilot 开发 xxx"
-# 我可以做其他事，acpx 后台自动跑完
-```
-
-### 关键要点
-- **必须关闭 Claude GUI** 才能用 acpx
-- **当前模型**: MiniMax-M2.7（执行开发）
-- **Opus**: 架构设计、验收审查
-- **--no-wait**: 后台自动驾驶，做完一件我可以继续做其他的
-
-## MiniMax MMX-CLI 命令行工具 (2026-04-11 新增)
+## MiniMax MMX-CLI 命令行工具 (2026-04-26 更新)
 
 ### 安装
 ```bash
@@ -553,7 +458,7 @@ mmx <resource> --help
 
 ### VMess链接
 ```
-vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4x...（完整链接已精简，详见 TOOLS.md）
 ```
 
 ### 配置文件
@@ -614,7 +519,7 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
 - 协议: VMess
 - UUID: 8285c54c-994e-4bc0-b923-2ba88cc7a7af
 - AlterId: 0
-- VMess链接: vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZGQiOiI0My4xMDguMTguNzEiLCJwb3J0IjoiMTAwODYiLCJpZCI6IjgyODVjNTRjLTk5NGUtNGJjMC1iOTIzLTJiYTg4Y2M3YTdhZiIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJzY3kiOiJhdXRvIiwidGxzIjoiIn0=
+- VMess链接: vmess://eyJ2IjoiMiIsInBzIjoiS29yZWEtVjJSYXkiLCJhZ...（完整链接已精简，详见 TOOLS.md）
 
 ### 备份
 - 备份位置: /root/*.bak
@@ -623,9 +528,22 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
 
 ### 用途
 - 手机梯子（V2RayNG）
-- 飞书Claude Code机器人（Gemini 2.5 Flash）
 - 直连OpenAI/GitHub/Google AI
 - 海外API代理
+
+### 核心定位：AI容灾备用机器人
+
+**三级AI容灾体系（2026-04-26确认）：**
+1. **本地Mac** → OpenClaw（我）+ Claude Code 主力
+2. **本地Claude Code** → 本地开发主力
+3. **韩国服务器Claude Code机器人** → 备用应急
+
+**触发条件**：
+- 笔记本不在身边 / 无法Tailscale进Mac命令行
+- 本地AI进程挂了无法快速恢复
+- 通过飞书直接唤醒韩国服务器CC处理紧急任务
+
+**飞书机器人**：openclaw急救医生（Gemini 2.5 Flash）
 
 ## 记忆管理规则 (2026-04-12更新)
 - Obsidian文件：可以删除已总结过的文件
@@ -758,181 +676,6 @@ cd ~/.openclaw/workspace/simulator && python3 core.py
 
 ---
 
-## AI Coder 脚本使用指南 (2026-04-17 新增，2026-04-19 重大更新)
-
-**位置**: `~/.openclaw/workspace/ai_coder/`
-
-### 功能
-统一调用本地 Claude Code (MiniMax/Opus) 和韩国 Codex (GPT-5.4) 的安全 CLI 工具。
-
-### 环境变量（已配置）
-```bash
-export AI_CODER_KR_HOST="43.108.18.71"
-export AI_CODER_KR_USER="ccuser"
-export AI_CODER_SSH_KEY="$HOME/.ssh/id_ed25519"
-```
-
-### 快速使用
-
-```bash
-# 本地执行（MiniMax/Opus）
-cd ~/.openclaw/workspace/ai_coder
-python3 -m ai_coder exec "任务" -p local -s SESSION --wait
-
-# 韩国执行（Codex GPT-5.4）
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p kr -s SESSION --wait
-
-# 后台模式（不阻塞）
-PYTHONPATH=ai_coder python3 -m ai_coder exec "任务" -p local --no-wait
-```
-
-### 常用命令
-
-| 命令 | 说明 |
-|------|------|
-| `exec` | 执行单次任务 |
-| `session-new NAME` | 创建 session |
-| `session-close NAME` | 关闭 session |
-| `status -s NAME` | 查询状态 |
-| `skills` | 列出 skills |
-
-### 子 Agent 调用（推荐）
-
-```python
-sessions_spawn({
-    "task": "cd ~/.openclaw/workspace && PYTHONPATH=ai_coder python3 -m ai_coder exec '任务' -p local -s SESSION --wait",
-    "runtime": "subagent",
-    "runTimeoutSeconds": 300
-})
-```
-
-### 文档
-- `ai_coder/README.md` - 完整文档
-- `ai_coder/QUICKSTART.md` - 快速参考
-- `skills/ai-coder/SKILL.md` - Skill 指南
-
----
-
-## 韩国CC Codex调用更新 (2026-04-14)
-
-### acpx codex ✅已验证可用
-```bash
-# 创建session
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex sessions new --name bg-task"
-
-# 后台调用
-ssh -i ~/.ssh/id_ed25519 root@43.108.18.71 "su - ccuser -c /home/ccuser/.nvm/versions/node/v18.20.8/bin/acpx codex -s bg-task --no-wait "任务""
-```
-
-### 详细文档（已过时，使用 AI Coder 替代）
-- ~~~/.openclaw/workspace/docs/韩国CC-Codex后台调用指南.md~~ → 使用 `ai_coder exec '任务' -p kr`
-
-
-## 双CC调度体系 (2026-04-14)
-
-### 我有两个超级助手
-
-| | 本地Codex (GPT-5.4) | 韩国Codex | 本地Claude (MiniMax) |
-|---|---|---|---|
-| **模型** | GPT-5.4 | GPT-5.4 | MiniMax M2.7 |
-| **上下文** | 100万token | 100万token | 200k |
-| **优势** | 编程最强、中文好 | 备选 | 快速问答 |
-| **调度方式** | screen + proxy | screen | sessions_spawn |
-
-### 模型分配（2026-04-22 更新）
-| 任务类型 | 模型 | 说明 |
-|---------|------|------|
-| **执行开发** | **本地Codex** (GPT-5.4) ✅ | 主力干活，编程最强 |
-| **架构设计** | Opus | 系统设计、技术选型 |
-| **验收审查** | Opus | 质量把关 |
-| **快速问答** | 本地Claude (MiniMax) | 中文、日常问题 |
-| **复杂/大型** | 韩国Codex | 备选方案 |
-
-### 核心记忆
-- 本地CC：sessions_spawn(model="minimax-cn/MiniMax-M2.7")
-- 韩国Codex：acpx codex sessions new + --no-wait
-
-### 位置
-~/.openclaw/workspace/.agents/skills/buffett-perspective/SKILL.md
-
-### 触发词
-- 「用巴菲特的视角」「巴菲特会怎么看」「巴菲特模式」「Buffett perspective」
-- 「帮我用巴菲特的角度想想」「如果巴菲特会怎么做」「切换到巴菲特」
-
-### 6个核心心智模型
-1. 经济护城河 (Economic Moat)
-2. 能力圈 (Circle of Competence)
-3. 市场先生 (Mr. Market)
-4. 复利滚雪球 (Compounding Snowball)
-5. 制度性强制力 (Institutional Imperative)
-6. 所有者思维 (Owner Mindset)
-
-### 8条决策启发式
-- 安全边际规则
-- 管理层诚信优先
-- 打孔卡规则
-- 棒球甜蜜区规则
-- 蟑螂规则
-- 5分钟规则
-- 报纸测试
-- "太难"篮子
-
-### 退出角色
-用户说「退出」「切回正常」「不用扮演了」时恢复正常模式
-
-
-## 备份系统修复记录 (2026-04-15)
-
-### 问题描述
-每日备份(cron任务)连续多天失败，日志显示 Operation not permitted
-
-### 根因分析
-macOS TCC权限限制：cron任务没有完全磁盘访问权限(FDA)，被系统安全机制拦截外置APFS卷写入。
-
-### 修复步骤
-1. 添加FDA权限：系统设置 > 隐私与安全性 > 完全磁盘访问权限 > 添加 /bin/bash、/usr/sbin/cron
-2. 备份脚本升级：v2.3 > v2.4
-   - safe_cp()替代cp 2>/dev/null（不再静默吞错误）
-   - 新增backup_workspace_configs()（备份MEMORY.md等6个核心文件）
-   - 改用白名单SKILLS_TO_BACKUP，只备份memory-suite-v4
-
-### 关键文件
-- 备份脚本：~/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh
-- 备份目标：/Volumes/cu/ocu/
-- 核心配置备份：/Volumes/cu/ocu/workspace-configs/
-
-### 经验教训
-- macOS cron任务默认没有FDA权限，访问外置卷会被TCC拦截
-- mkdir -p对已存在目录不触发TCC，但写入新文件会
-- cp -r 2>/dev/null会静默吞掉所有错误
-
----
-
-## 本地 Claude Code 调用规范（2026-04-16 记住）
-
-### 调用流程
-1. **检查 GUI 已关闭**：`pgrep -x "Claude" && echo "需关闭" || echo "OK"`
-2. **切换模型**：
-   - `~/.openclaw/workspace/scripts/cc-model-switch.sh opus`（架构/验收）
-   - `~/.openclaw/workspace/scripts/cc-model-switch.sh minimax`（执行开发）
-3. **创建 session**：`acpx claude sessions new --name <session名>`
-4. **执行任务**：
-   - `acpx claude -s <session名> --no-wait "任务"`（后台，不阻塞）
-   - `acpx claude -s <session名> "任务"`（等待结果）
-5. **查看结果**：`tail ~/.acpx/sessions/<id>.stream.ndjson`
-6. **关闭 session**：`acpx claude sessions close <session名>`
-
-### 关键事实
-- acpx 用的是本地 Claude CLI，不是远程服务器
-- `~/.claude/settings.json` 控制模型配置
-- `model: default` = Opus 4.6（已配置在 settings.json）
-- 切 opus 后用完记得切回 minimax，避免影响我自己的响应质量
-
-## 韩国服务器 Claude Code 记忆文件
-
-**位置：** `/home/ccuser/memory.json`
-
-**内容结构：**
 ```json
 {
   "last_updated": "2026-04-18",
@@ -948,8 +691,6 @@ macOS TCC权限限制：cron任务没有完全磁盘访问权限(FDA)，被系�
 **读取命令：**
 ```bash
 ssh root@43.108.18.71 "cat /home/ccuser/memory.json"
-```
-
 
 ## Right.codes GPT-5.4 API (2026-04-22 新增)
 
@@ -1003,3 +744,33 @@ requests.post(
 - **文本分析**: 比 MiniMax 强，接近 GPT-5.4
 - **代码能力**: 生成游戏代码（如植物大战僵尸）比 MiniMax 更丰富
 - **结论**: 可作为生产主力模型，性价比极高（约为 GPT-5.4 的 1/10 价格）
+
+## OpenClaw gpt-image-2 接入修复 (2026-04-26)
+
+### 最终状态
+- OpenClaw 已可通过本地插件 `~/.openclaw/local-plugins/openai-codex-image/` 调用 `openai-codex/gpt-image-2`
+- 在线 gateway 实测已打通，用户反馈“通了通了”
+
+### 根因
+- 插件最初按普通 JSON responses 解析，实际 `chatgpt.com/backend-api/codex/responses` 图片接口要求：
+  - 顶层必须有 `instructions`
+  - 必须 `store: false`
+  - 必须 `stream: true`
+  - 图片结果从 SSE 事件 `response.image_generation_call.partial_image.partial_image_b64` 中取
+- 自定义 HTTPS/CONNECT 传输最初过早 `socket.end()`，只收到前几帧 SSE，拿不到图片事件
+- gateway 在线进程由 `launchd` 启动，没有 `HTTP_PROXY/HTTPS_PROXY` 环境变量；因此 smoke test 能过但在线调用仍可能报 `AggregateError`
+
+### 关键修复
+- 修改插件文件：`~/.openclaw/local-plugins/openai-codex-image/index.js`
+  - 改成正确的 Codex 图片 SSE 协议
+  - 加入本地 HTTP 代理隧道支持
+  - 修复 SSE 读取时连接过早关闭问题
+- 修改插件配置 schema：`~/.openclaw/local-plugins/openai-codex-image/openclaw.plugin.json`
+- 修改 OpenClaw 配置：`~/.openclaw/openclaw.json`
+  - `agents.defaults.imageGenerationModel.primary = "openai-codex/gpt-image-2"`
+  - `plugins.entries["openai-codex-image"].config.proxyUrl = "http://127.0.0.1:1087"`
+
+### 重要结论
+- 不要给整个 gateway 挂全局代理，否则可能影响 Feishu
+- 只给 `openai-codex-image` 插件单独配 `proxyUrl`，让图片请求走 `127.0.0.1:1087`
+- 本机代理不通时，`gpt-image-2` 在线调用大概率会再次报 `AggregateError`
