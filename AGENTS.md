@@ -188,16 +188,36 @@ crontab -l | rg 目标脚本
 **screen 调用示例：**
 ```bash
 # DeepSeek 主力（默认）
-screen -dmS cc-task bash -c "claude --print '任务' 2>&1 | tee /tmp/cc-task.log"
+cat > /tmp/cc_prompt.txt <<'EOF'
+任务
+EOF
+bash ~/.openclaw/workspace/scripts/agent-screen-run.sh \
+  claude cc-task ~/.openclaw/workspace /tmp/cc_prompt.txt
 
-# GPT-5.4 复杂任务（需配置Feinian代理）
-screen -dmS cc-gpt-task bash -c "claude --model opus --print '任务' 2>&1 | tee /tmp/cc-gpt-task.log"
+# GPT-5.4 复杂任务（如仍需直调 Claude CLI，再沿用同一 wrapper 思路）
+cat > /tmp/cc_gpt_prompt.txt <<'EOF'
+复杂任务
+EOF
+bash ~/.openclaw/workspace/scripts/agent-screen-run.sh \
+  claude cc-gpt-task ~/.openclaw/workspace /tmp/cc_gpt_prompt.txt
 
-# Codex（必须走代理）
-screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"
+# Codex（必须走代理，wrapper 已内置代理和清理逻辑）
+cat > /tmp/codex_prompt.txt <<'EOF'
+任务
+EOF
+bash ~/.openclaw/workspace/scripts/agent-screen-run.sh \
+  codex codex-task ~/.openclaw/workspace /tmp/codex_prompt.txt
 ```
 
-**查看/管理：** `screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f /tmp/xxx.log`
+**查看/管理：** `screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f ~/.openclaw/workspace/logs/任务名.log`
+
+**结束/清残留：**
+```bash
+bash ~/.openclaw/workspace/scripts/agent-screen-clean.sh cc-task
+bash ~/.openclaw/workspace/scripts/agent-screen-clean.sh codex-task
+```
+
+**重要：不要再把 `screen -X quit` 当成结束条件。必须执行 clean 脚本清理 Claude/Codex 子进程链。**
 
 **Feinian 代理配置（GPT-5.4）：**
 ```bash

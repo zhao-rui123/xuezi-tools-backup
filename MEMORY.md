@@ -95,13 +95,15 @@ chmod 644 /usr/share/nginx/html/*/index.html
 
 | 工具 | 场景 | 命令 |
 |------|------|------|
-| **本地 Claude Code** | 长任务、易断任务 | `screen -dmS claude-task bash -c "claude --print '任务' 2>&1 | tee /tmp/claude-task.log"` |
-| **本地 Codex** | 长任务、易断任务 | `screen -dmS codex-task bash -c "export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087 && codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox '任务' 2>&1 | tee /tmp/codex-task.log"` |
+| **本地 Claude Code** | 长任务、易断任务 | `bash ~/.openclaw/workspace/scripts/agent-screen-run.sh claude cc-task ~/.openclaw/workspace /tmp/cc_prompt.txt` |
+| **本地 Codex** | 长任务、易断任务 | `bash ~/.openclaw/workspace/scripts/agent-screen-run.sh codex codex-task ~/.openclaw/workspace /tmp/codex_prompt.txt` |
 | **韩国 Codex** | 长任务、易断任务 | `ssh ... "screen -dmS kr-task bash -c 'codex exec ...'"` |
 | **快速验证/搜索** | 前台执行 | 直接调用，拿到结果再继续 |
 
 **关键路径验证必须等待结果，不能只启动不确认。**
-**查看/管理**：`screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f /tmp/xxx.log`
+**查看/管理**：`screen -ls` / `screen -r 任务名` / `Ctrl+A D` 分离 / `tail -f ~/.openclaw/workspace/logs/任务名.log`
+**结束/清残留**：`bash ~/.openclaw/workspace/scripts/agent-screen-clean.sh 任务名`
+**重要**：本机 `screen` 后台调用 Claude/Codex 后，不能只 `screen -X quit`，必须执行 clean 脚本清理子进程链。
 
 ---
 
@@ -201,7 +203,7 @@ XUEQIU_COOKIES = {
 
 ### 备份配置（已合并）
 - **备份时间**: 每天 22:00
-- **备份脚本**: `~/.openclaw/workspace/skills/system-backup/scripts/daily-backup.sh`
+- **备份脚本**: `~/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh`
 - **备份内容**:
   1. Memory → `/Volumes/cu/ocu/memory/`
   2. Skills → `/Volumes/cu/ocu/skills/`
@@ -230,7 +232,7 @@ cd ~/.openclaw/workspace
 tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 
 # 手动执行备份
-~/.openclaw/workspace/skills/system-backup/scripts/daily-backup.sh
+~/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh
 ```
 
 ---
@@ -285,8 +287,8 @@ tar -xzvf /Volumes/cu/ocu/skills-backup/latest
 **Claude Code 调用规范：**
 - `sessions_spawn` → 适合快速任务（分钟级），会超时
 - **大项目必须走screen**：
-  - DeepSeek主力：`screen -dmS cc-task bash -c "claude --print '任务' 2>&1 | tee /tmp/cc-task.log"`
-  - GPT-5.4复杂任务：`screen -dmS cc-gpt-task bash -c "claude --model opus --print '任务' 2>&1 | tee /tmp/cc-gpt-task.log"`
+  - DeepSeek主力：`bash ~/.openclaw/workspace/scripts/agent-screen-run.sh claude cc-task ~/.openclaw/workspace /tmp/cc_prompt.txt`
+  - GPT-5.4复杂任务：优先沿用同一 wrapper 思路，结束时统一执行 `agent-screen-clean.sh`
 - 代理必须：Codex `export https_proxy=http://127.0.0.1:1087 http_proxy=http://127.0.0.1:1087`
 
 **Feinian配置（GPT-5.4链路）：**
