@@ -179,6 +179,31 @@ def check_disk() -> CheckItem:
     return CheckItem("磁盘空间", status, summary, detail)
 
 
+def check_cpu() -> CheckItem:
+    code, out, err = run(["top", "-l", "1", "-s", "0"], timeout=15)
+    if code != 0:
+        return CheckItem("CPU 状态", "warn", "top 执行失败", err or out)
+
+    cpu_line = next((line for line in out.splitlines() if line.startswith("CPU usage:")), "")
+    load_line = next((line for line in out.splitlines() if line.startswith("Load Avg:")), "")
+    if not cpu_line:
+        return CheckItem("CPU 状态", "warn", "未解析到 CPU usage", out[:300])
+
+    m = re.search(r"CPU usage:\s*([0-9.]+)% user,\s*([0-9.]+)% sys,\s*([0-9.]+)% idle", cpu_line)
+    if not m:
+        return CheckItem("CPU 状态", "warn", "CPU usage 格式异常", cpu_line)
+
+    user_pct = float(m.group(1))
+    sys_pct = float(m.group(2))
+    idle_pct = float(m.group(3))
+    busy_pct = round(user_pct + sys_pct, 1)
+
+    status = "ok" if busy_pct < 70 else "warn"
+    summary = f"当前 CPU 占用≈{busy_pct}%（idle {idle_pct:.1f}%）"
+    detail = load_line if load_line else f"user={user_pct:.1f}% sys={sys_pct:.1f}%"
+    return CheckItem("CPU 状态", status, summary, detail)
+
+
 def check_memory() -> CheckItem:
     code, out, err = run(["vm_stat"], timeout=10)
     if code != 0:
@@ -397,7 +422,7 @@ def build_report(items: List[CheckItem]) -> str:
 
 def build_summary(items: List[CheckItem]) -> str:
     payload = build_payload(items)
-    local_focus = [i for i in items if i.name in {"Gateway", "Tailscale 运行态", "股票推送", "每日备份", "云端同步", "Claude Code 入口", "Codex 入口", "内存状态"}]
+    local_focus = [i for i in items if i.name in {"Gateway", "Tailscale 运行态", "股票推送", "每日备份", "云端同步", "Claude Code 入口", "Codex 入口", "CPU 状态", "内存状态"}]
     remote_focus = [i for i in items if i.name in {"云服务器 SSH", "云服务器内存", "云服务器 V2Ray"}]
 
     lines = []
@@ -430,6 +455,7 @@ def gather_items() -> List[CheckItem]:
     items.append(check_exec_entry("Claude Code 入口", "claude"))
     items.append(check_exec_entry("Codex 入口", "codex"))
     items.append(check_disk())
+    items.append(check_cpu())
     items.append(check_memory())
     items.append(check_remote_ssh())
     items.append(check_remote_memory())
