@@ -197,15 +197,45 @@ def check_memory() -> CheckItem:
             val = int(float(m.group(2).replace('.', '')))
             values[key] = val
 
-    free_pages = values.get("Pages free", 0) + values.get("Pages speculative", 0)
-    active_pages = values.get("Pages active", 0) + values.get("Pages wired down", 0) + values.get("Pages occupied by compressor", 0)
-    total_pages = free_pages + active_pages + values.get("Pages inactive", 0)
-    free_gb = free_pages * page_size / (1024**3)
-    used_pct = round((active_pages / total_pages) * 100, 1) if total_pages else 0
-    status = "ok" if free_gb > 2 else "warn"
-    summary = f"估算活跃内存占比 {used_pct}%"
-    detail = f"free≈{free_gb:.1f}GB"
-    return CheckItem("内存状态", status, summary, detail)
+    free_pages = values.get("Pages free", 0)
+    speculative_pages = values.get("Pages speculative", 0)
+    inactive_pages = values.get("Pages inactive", 0)
+    purgeable_pages = values.get("Pages purgeable", 0)
+    compressor_pages = values.get("Pages occupied by compressor", 0)
+
+    available_pages = free_pages + speculative_pages + inactive_pages + purgeable_pages
+    available_gb = available_pages * page_size / (1024**3)
+    compressor_gb = compressor_pages * page_size / (1024**3)
+
+    swap_code, swap_out, _ = run(["sysctl", "vm.swapusage"], timeout=10)
+    swap_used = "unknown"
+    swap_used_mb = 0.0
+    if swap_code == 0:
+        m_swap = re.search(r"used = ([0-9.]+)([MG])", swap_out)
+        if m_swap:
+            raw = float(m_swap.group(1))
+            unit = m_swap.group(2)
+            swap_used_mb = raw * 1024 if unit == "G" else raw
+            swap_used = f"{raw:.2f}{unit}"
+
+    mp_code, mp_out, _ = run(["memory_pressure", "-Q"], timeout=10)
+    pressure_pct = None
+    if mp_code == 0:
+        m_pressure = re.search(r"System-wide memory free percentage: (\d+)%", mp_out)
+        if m_pressure:
+            pressure_pct = int(m_pressure.group(1))
+
+    status = "ok"
+    if swap_used_mb > 512:
+        status = "warn"
+    if pressure_pct is not None and pressure_pct < 50:
+        status = "warn"
+
+    summary = f"估算可用内存≈{available_gb:.1f}GB"
+    detail_parts = [f"compressor≈{compressor_gb:.1f}GB", f"swap={swap_used}"]
+    if pressure_pct is not None:
+        detail_parts.append(f"memory_free_pct={pressure_pct}%")
+    return CheckItem("内存状态", status, summary, " | ".join(detail_parts))
 
 
 def check_git_status() -> CheckItem:
@@ -367,7 +397,7 @@ def build_report(items: List[CheckItem]) -> str:
 
 def build_summary(items: List[CheckItem]) -> str:
     payload = build_payload(items)
-    local_focus = [i for i in items if i.name in {"Gateway", "Tailscale 运行态", "股票推送", "每日备份", "云端同步", "Claude Code 入口", "Codex 入口"}]
+    local_focus = [i for i in items if i.name in {"Gateway", "Tailscale 运行态", "股票推送", "每日备份", "云端同步", "Claude Code 入口", "Codex 入口", "内存状态"}]
     remote_focus = [i for i in items if i.name in {"云服务器 SSH", "云服务器内存", "云服务器 V2Ray"}]
 
     lines = []
