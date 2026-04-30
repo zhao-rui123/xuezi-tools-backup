@@ -19,10 +19,10 @@ import os
 import re
 import shutil
 import subprocess
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 NOW = datetime.now()
@@ -284,15 +284,61 @@ def check_remote_v2ray() -> CheckItem:
     return CheckItem("云服务器 V2Ray", status, summary, "\n".join(detail_lines) if detail_lines else None)
 
 
-def build_report(items: List[CheckItem]) -> str:
+def collect_risks(items: List[CheckItem]) -> List[str]:
+    return [f"{item.name}: {item.summary}" for item in items if item.status in {"warn", "fail"}]
+
+
+def collect_suggestions(items: List[CheckItem]) -> List[str]:
+    suggestions = []
+    for item in items:
+        if item.name == "Gateway" and item.status == "fail":
+            suggestions.append("Gateway 异常时先试：openclaw gateway restart")
+        if item.name == "版本更新" and item.status == "warn":
+            suggestions.append("可择机执行：openclaw update")
+        if item.name == "磁盘空间" and item.status in {"warn", "fail"}:
+            suggestions.append("关注 logs / tmp / 历史备份占用")
+        if item.name == "股票推送" and item.status == "warn":
+            suggestions.append("检查 /tmp/stock_push.log 和 crontab 16:30 入口")
+        if item.name == "云端同步" and item.status == "warn":
+            suggestions.append("检查 /tmp/cloud-backup.log 和 22:35 同步脚本")
+    return list(dict.fromkeys(suggestions))
+
+
+def build_payload(items: List[CheckItem]) -> Dict:
     ok_count = sum(1 for i in items if i.status == "ok")
     warn_count = sum(1 for i in items if i.status == "warn")
     fail_count = sum(1 for i in items if i.status == "fail")
+    info_count = sum(1 for i in items if i.status == "info")
+    risks = collect_risks(items)
+    suggestions = collect_suggestions(items)
 
+    overall = "ok"
+    if fail_count > 0:
+        overall = "fail"
+    elif warn_count > 0:
+        overall = "warn"
+
+    return {
+        "generated_at": NOW.strftime('%Y-%m-%d %H:%M:%S'),
+        "summary": {
+            "ok": ok_count,
+            "warn": warn_count,
+            "fail": fail_count,
+            "info": info_count,
+            "overall": overall,
+        },
+        "items": [asdict(item) for item in items],
+        "risks": risks,
+        "suggestions": suggestions,
+    }
+
+
+def build_report(items: List[CheckItem]) -> str:
+    payload = build_payload(items)
     lines = []
     lines.append(f"🔍 OpenClaw 健康检查 v1 | {NOW.strftime('%Y-%m-%d %H:%M')}")
     lines.append("")
-    lines.append(f"总览：✅{ok_count} / ⚠️{warn_count} / ❌{fail_count}")
+    lines.append(f"总览：✅{payload['summary']['ok']} / ⚠️{payload['summary']['warn']} / ❌{payload['summary']['fail']}")
     lines.append("")
 
     for item in items:
@@ -301,43 +347,49 @@ def build_report(items: List[CheckItem]) -> str:
             detail = item.detail.strip()
             if detail:
                 lines.append(f"   {detail.replace(chr(10), chr(10) + '   ')}")
-    
-    risks = []
-    for item in items:
-        if item.status in {"warn", "fail"}:
-            risks.append(f"- {item.name}: {item.summary}")
 
     lines.append("")
     lines.append("风险提示：")
-    if risks:
-        lines.extend(risks[:8])
+    if payload['risks']:
+        lines.extend(f"- {r}" for r in payload['risks'][:8])
     else:
         lines.append("- 暂无明显风险项")
 
-    suggestions = []
-    for item in items:
-        if item.name == "Gateway" and item.status == "fail":
-            suggestions.append("- Gateway 异常时先试：openclaw gateway restart")
-        if item.name == "版本更新" and item.status == "warn":
-            suggestions.append("- 可择机执行：openclaw update")
-        if item.name == "磁盘空间" and item.status in {"warn", "fail"}:
-            suggestions.append("- 关注 logs / tmp / 历史备份占用")
-        if item.name == "股票推送" and item.status == "warn":
-            suggestions.append("- 检查 /tmp/stock_push.log 和 crontab 16:30 入口")
-        if item.name == "云端同步" and item.status == "warn":
-            suggestions.append("- 检查 /tmp/cloud-backup.log 和 22:35 同步脚本")
-
     lines.append("")
     lines.append("建议动作：")
-    if suggestions:
-        lines.extend(dict.fromkeys(suggestions))
+    if payload['suggestions']:
+        lines.extend(f"- {s}" for s in payload['suggestions'])
     else:
         lines.append("- 暂不需要处理")
 
     return "\n".join(lines)
 
 
-def main() -> None:
+def build_summary(items: List[CheckItem]) -> str:
+    payload = build_payload(items)
+    local_focus = [i for i in items if i.name in {"Gateway", "Tailscale 运行态", "股票推送", "每日备份", "云端同步", "Claude Code 入口", "Codex 入口"}]
+    remote_focus = [i for i in items if i.name in {"云服务器 SSH", "云服务器内存", "云服务器 V2Ray"}]
+
+    lines = []
+    lines.append(f"🔍 健康检查摘要 | {NOW.strftime('%m-%d %H:%M')}")
+    lines.append(f"总览：✅{payload['summary']['ok']} ⚠️{payload['summary']['warn']} ❌{payload['summary']['fail']}")
+    lines.append("")
+    lines.append("本机：")
+    for item in local_focus:
+        lines.append(f"{emoji(item.status)} {item.name}：{item.summary}")
+    lines.append("")
+    lines.append("云服务器：")
+    for item in remote_focus:
+        lines.append(f"{emoji(item.status)} {item.name}：{item.summary}")
+    if payload['risks']:
+        lines.append("")
+        lines.append("风险：")
+        for risk in payload['risks'][:4]:
+            lines.append(f"- {risk}")
+    return "\n".join(lines)
+
+
+def gather_items() -> List[CheckItem]:
     items: List[CheckItem] = []
     items.extend(parse_openclaw_status())
     items.append(check_tailscale_runtime())
@@ -353,8 +405,21 @@ def main() -> None:
     items.append(check_remote_memory())
     items.append(check_remote_v2ray())
     items.append(check_git_status())
+    return items
 
-    print(build_report(items))
+
+def main() -> None:
+    import sys
+
+    items = gather_items()
+    arg = sys.argv[1] if len(sys.argv) > 1 else ""
+
+    if arg == "--json":
+        print(json.dumps(build_payload(items), ensure_ascii=False, indent=2))
+    elif arg == "--summary":
+        print(build_summary(items))
+    else:
+        print(build_report(items))
 
 
 if __name__ == "__main__":
