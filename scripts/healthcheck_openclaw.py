@@ -26,6 +26,8 @@ from typing import List, Optional, Tuple
 
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 NOW = datetime.now()
+REMOTE_HOST = "root@43.108.18.71"
+REMOTE_SSH_KEY = str(Path.home() / ".ssh/id_ed25519")
 
 LOG_TASKS = [
     ("股票推送", Path("/tmp/stock_push.log"), "16:30", 48),
@@ -216,6 +218,72 @@ def check_git_status() -> CheckItem:
     return CheckItem("Git 工作区", "info", f"存在 {len(lines)} 个未提交改动", "\n".join(lines[:10]))
 
 
+def ssh_base_cmd() -> List[str]:
+    return [
+        "ssh",
+        "-i", REMOTE_SSH_KEY,
+        "-o", "BatchMode=yes",
+        "-o", "ConnectTimeout=6",
+        REMOTE_HOST,
+    ]
+
+
+def check_remote_ssh() -> CheckItem:
+    code, out, err = run(ssh_base_cmd() + ["echo ok"], timeout=12)
+    if code == 0 and out.strip() == "ok":
+        return CheckItem("云服务器 SSH", "ok", "SSH 连通正常")
+    return CheckItem("云服务器 SSH", "fail", "SSH 连通失败", err or out)
+
+
+def check_remote_memory() -> CheckItem:
+    code, out, err = run(ssh_base_cmd() + ["free -m | sed -n '2p'"], timeout=12)
+    if code != 0 or not out.strip():
+        return CheckItem("云服务器内存", "warn", "无法获取内存信息", err or out)
+
+    parts = out.split()
+    if len(parts) < 7:
+        return CheckItem("云服务器内存", "warn", "内存输出格式异常", out)
+
+    total = int(parts[1])
+    used = int(parts[2])
+    available = int(parts[6])
+    used_pct = round(used / total * 100, 1) if total else 0
+    status = "ok" if used_pct < 75 else "warn"
+    return CheckItem("云服务器内存", status, f"已用 {used_pct}% ({used}MB/{total}MB)", f"available={available}MB")
+
+
+def check_remote_v2ray() -> CheckItem:
+    remote_cmd = "systemctl is-active v2ray; echo '---'; systemctl show v2ray -p NRestarts -p ActiveEnterTimestamp --no-pager 2>/dev/null || true; echo '---'; journalctl -u v2ray -n 8 --no-pager 2>/dev/null | tail -n 8"
+    code, out, err = run(ssh_base_cmd() + [remote_cmd], timeout=15)
+    if code != 0:
+        return CheckItem("云服务器 V2Ray", "warn", "无法获取 V2Ray 状态", err or out)
+
+    parts = out.split("---")
+    active = parts[0].strip() if parts else ""
+    meta = parts[1].strip() if len(parts) > 1 else ""
+    logs = parts[2].strip() if len(parts) > 2 else ""
+
+    restarts_match = re.search(r"NRestarts=(\d+)", meta)
+    restarts = int(restarts_match.group(1)) if restarts_match else None
+
+    status = "ok"
+    summary = "V2Ray 运行正常"
+
+    if active != "active":
+        status = "fail"
+        summary = f"V2Ray 非 active（当前：{active or 'unknown'}）"
+    elif restarts is not None and restarts > 3:
+        status = "warn"
+        summary = f"V2Ray 有重启记录（{restarts} 次）"
+
+    detail_lines = []
+    if meta:
+        detail_lines.append(meta)
+    if logs:
+        detail_lines.append(logs)
+    return CheckItem("云服务器 V2Ray", status, summary, "\n".join(detail_lines) if detail_lines else None)
+
+
 def build_report(items: List[CheckItem]) -> str:
     ok_count = sum(1 for i in items if i.status == "ok")
     warn_count = sum(1 for i in items if i.status == "warn")
@@ -281,6 +349,9 @@ def main() -> None:
     items.append(check_exec_entry("Codex 入口", "codex"))
     items.append(check_disk())
     items.append(check_memory())
+    items.append(check_remote_ssh())
+    items.append(check_remote_memory())
+    items.append(check_remote_v2ray())
     items.append(check_git_status())
 
     print(build_report(items))
