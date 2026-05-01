@@ -94,6 +94,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '切 Feinian'}, 'type': 'default', 'value': quick_action('/model feinian', 'feishu.quick_actions.oc_model_feinian', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '切 DeepSeek'}, 'type': 'default', 'value': quick_action('/model deepseek', 'feishu.quick_actions.oc_model_deepseek', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '切 MiniMax'}, 'type': 'default', 'value': quick_action('/model minimax', 'feishu.quick_actions.oc_model_minimax', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '切 5.4mini'}, 'type': 'default', 'value': quick_action('/model 5.4mini', 'feishu.quick_actions.oc_model_5_4mini', open_id=open_id)},
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**Claude Code 模型**\n- 作用范围：本地 Claude Code 默认环境\n- 当前支持：Feinian / DeepSeek / MiniMax'}},
