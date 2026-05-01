@@ -212,6 +212,10 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
         },
         'elements': [
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**今日焦点**：{focus_text}'}},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '今日重点建议'}, 'type': 'primary', 'value': quick_action('focus panel card', 'feishu.quick_actions.focus_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
             {'tag': 'div', 'fields': [
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': x}} for x in top_fields
             ]},
