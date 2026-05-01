@@ -267,9 +267,28 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "全面检查"
+            "content": "系统面板"
           },
           "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.system_panel",
+            "q": "system panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "全面检查"
+          },
+          "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
