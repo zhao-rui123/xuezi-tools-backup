@@ -1,0 +1,139 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🧵 后台任务中心 V1"
+    },
+    "template": "indigo"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**执行侧总览**：把主会话、后台线程、运行状态收成一个专题面板。"
+      }
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**当前模型**\nfeinian/gpt-5.4"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Tokens**\n475k in / 3.5k out"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Context**\n161k / 1.0m"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**活跃任务**\n1 active · running"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**后台线程**\n2 个子会话/ACP 线程"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前判断**\n- 主会话正在运行\n- 已挂出子会话/ACP 线程可继续扩展\n- 这一版先做只读观测，不做线程管理操作"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "查看会话状态"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_status",
+            "q": "/status",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "模型面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.model_panel",
+            "q": "model panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "主控制台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步如果要更强，可以做 ACP/子线程列表、最近后台任务历史、甚至停止/恢复入口。"
+        }
+      ]
+    }
+  ]
+}
