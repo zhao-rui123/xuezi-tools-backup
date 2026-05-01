@@ -218,8 +218,9 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🧠 模型区**'}},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'OpenClaw 模型'}, 'type': 'primary', 'value': quick_action('openclaw model card', 'feishu.quick_actions.cockpit_oc_model', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Claude Code 模型'}, 'type': 'default', 'value': quick_action('cc model card', 'feishu.quick_actions.cockpit_cc_model', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '模型面板'}, 'type': 'primary', 'value': quick_action('model panel card', 'feishu.quick_actions.model_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'OpenClaw 模型卡'}, 'type': 'default', 'value': quick_action('openclaw model card', 'feishu.quick_actions.cockpit_oc_model', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Claude Code 模型卡'}, 'type': 'default', 'value': quick_action('cc model card', 'feishu.quick_actions.cockpit_cc_model', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话状态'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
             ]},
             {'tag': 'hr'},
