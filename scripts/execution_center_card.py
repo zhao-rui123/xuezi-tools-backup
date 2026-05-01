@@ -107,6 +107,7 @@ def build_card(
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**当前判断**\n- {runtime_note or "执行链路总体正常，当前先做只读观测版。"}'}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '语义任务面板'}, 'type': 'primary', 'value': quick_action('semantic execution panel card', 'feishu.quick_actions.semantic_execution_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'ACP 语义面板'}, 'type': 'default', 'value': quick_action('acp semantic panel card', 'feishu.quick_actions.acp_semantic_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'ACP 详情'}, 'type': 'default', 'value': quick_action('acp detail panel card', 'feishu.quick_actions.acp_detail_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '后台任务中心'}, 'type': 'default', 'value': quick_action('runtime tasks panel card', 'feishu.quick_actions.runtime_tasks_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话状态'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
