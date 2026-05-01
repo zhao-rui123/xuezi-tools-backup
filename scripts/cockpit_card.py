@@ -234,6 +234,14 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '摘要'}, 'type': 'default', 'value': quick_action('digest card', 'feishu.quick_actions.digest', open_id=open_id)},
             ]},
             {'tag': 'hr'},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**⚡ 快捷动作区**'}},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '快捷动作面板'}, 'type': 'primary', 'value': quick_action('quick actions panel card', 'feishu.quick_actions.quick_actions_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '全面检查'}, 'type': 'default', 'value': quick_action('healthcheck summary', 'feishu.quick_actions.healthcheck', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Inbox'}, 'type': 'default', 'value': quick_action('inbox card', 'feishu.quick_actions.inbox', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '切 Feinian'}, 'type': 'default', 'value': quick_action('/model feinian', 'feishu.quick_actions.oc_model_feinian', open_id=open_id)},
+            ]},
+            {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🧠 记忆区**'}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '记忆面板'}, 'type': 'primary', 'value': quick_action('memory panel card', 'feishu.quick_actions.memory_panel', open_id=open_id)},

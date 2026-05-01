@@ -2,16 +2,16 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🕹️ 主控制台 V2 | 2026-05-01"
+      "content": "⚡ 快捷动作面板 V1"
     },
-    "template": "turquoise"
+    "template": "orange"
   },
   "elements": [
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**今日焦点**：阻塞 5 条｜高优先级 4 条｜健康风险 3 项｜备份需复查"
+        "content": "**定位**：把最常用动作集中成一组直接可点的执行按钮。"
       }
     },
     {
@@ -21,42 +21,28 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**当前会话模型**\nFeinian / GPT-5.4"
+            "content": "**系统动作**\n全面检查 / 备份状态 / 会话状态"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Claude Code 模型**\nDeepSeek / V4 Flash"
+            "content": "**任务动作**\nInbox / 阻塞 / 高优先级 / 摘要"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**阻塞 / 高优**\n5 / 4"
+            "content": "**模型动作**\n切 OpenClaw / 切 Claude Code"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**进行中 / Inbox**\n1 / 6"
-          }
-        },
-        {
-          "tag": "field",
-          "text": {
-            "tag": "lark_md",
-            "content": "**健康风险数**\n3"
-          }
-        },
-        {
-          "tag": "field",
-          "text": {
-            "tag": "lark_md",
-            "content": "**最近备份**\n本地备份 04-30 22:00｜云端同步 04-30 22:35"
+            "content": "**导航动作**\n返回主控台 / 打开专题面板"
           }
         }
       ]
@@ -68,7 +54,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**🧠 模型区**"
+        "content": "**🩺 系统动作**"
       }
     },
     {
@@ -78,14 +64,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "模型面板"
+            "content": "全面检查"
           },
           "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.model_panel",
-            "q": "model panel card",
+            "a": "feishu.quick_actions.healthcheck",
+            "q": "healthcheck summary",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -97,33 +83,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "OpenClaw 模型卡"
+            "content": "备份状态"
           },
           "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.cockpit_oc_model",
-            "q": "openclaw model card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "Claude Code 模型卡"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.cockpit_cc_model",
-            "q": "cc model card",
+            "a": "feishu.quick_actions.backup_status",
+            "q": "backup status",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -149,6 +116,25 @@
               "t": "p2p"
             }
           }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "系统面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.system_panel",
+            "q": "system panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         }
       ]
     },
@@ -159,7 +145,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**📋 任务区**"
+        "content": "**📋 任务动作**"
       }
     },
     {
@@ -169,47 +155,9 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "任务面板"
+            "content": "Inbox"
           },
           "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.task_panel",
-            "q": "task panel card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "工作台总览"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.cockpit_workspace",
-            "q": "workspace card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "待处理 Inbox"
-          },
-          "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
@@ -278,6 +226,25 @@
               "t": "p2p"
             }
           }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "任务面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.task_panel",
+            "q": "task panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         }
       ]
     },
@@ -288,7 +255,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**⚡ 快捷动作区**"
+        "content": "**🧠 模型动作**"
       }
     },
     {
@@ -298,66 +265,9 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "快捷动作面板"
-          },
-          "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.quick_actions_panel",
-            "q": "quick actions panel card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "全面检查"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.healthcheck",
-            "q": "healthcheck summary",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "Inbox"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.inbox",
-            "q": "inbox card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
             "content": "切 Feinian"
           },
-          "type": "default",
+          "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
@@ -369,6 +279,82 @@
               "t": "p2p"
             }
           }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "切 DeepSeek"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_model_deepseek",
+            "q": "/model deepseek",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "切 MiniMax"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_model_minimax",
+            "q": "/model minimax",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "CC 切 DeepSeek"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cc_model_deepseek",
+            "q": "cc model deepseek",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "模型面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.model_panel",
+            "q": "model panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         }
       ]
     },
@@ -379,7 +365,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**🧠 记忆区**"
+        "content": "**🧭 导航动作**"
       }
     },
     {
@@ -389,9 +375,28 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "记忆面板"
+            "content": "主控制台"
           },
           "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "记忆面板"
+          },
+          "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
@@ -408,131 +413,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "Inbox"
+            "content": "工作台总览"
           },
           "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.inbox",
-            "q": "inbox card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "摘要"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.digest",
-            "q": "digest card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "tag": "hr"
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**🩺 系统区**"
-      }
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "总览：✅15 ⚠️3 ❌0 ｜ 关注：OpenClaw 视角 Tailscale: openclaw status 里显示 Tailscale=off"
-      }
-    },
-    {
-      "tag": "action",
-      "actions": [
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "系统面板"
-          },
-          "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.system_panel",
-            "q": "system panel card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "全面检查"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.healthcheck",
-            "q": "healthcheck summary",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "备份状态"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.backup_status",
-            "q": "backup status",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "帮助"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.help",
-            "q": "/help",
+            "a": "feishu.quick_actions.cockpit_workspace",
+            "q": "workspace card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -547,16 +435,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "备份：本地备份 04-30 22:00｜云端同步 04-30 22:35"
-        }
-      ]
-    },
-    {
-      "tag": "note",
-      "elements": [
-        {
-          "tag": "plain_text",
-          "content": "V2 目标：先做状态化首页，再继续拆模型/任务/系统专题面板。"
+          "content": "下一步可做“今日重点建议”，让主控制台从状态面板升级为半自动指挥台。"
         }
       ]
     }
