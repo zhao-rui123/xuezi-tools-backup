@@ -558,6 +558,31 @@ ssh -i ~/.ssh/id_ed25519 root@43.108.18.71
 
 ---
 
+## 工作台卡片系统（2026-05-01 定版）
+
+### 快速命令
+| 命令 | 功能 |
+|------|------|
+| `inbox card` | 候选待处理 inbox |
+| `blocked card` | 当前阻塞任务 |
+| `high card` | 高优先级待办 |
+| `digest card` | 工作台摘要 |
+
+### 脚本位置
+- 主脚本：`scripts/workspace_dashboard_card.py`
+- 卡片JSON：`summary/cards/YYYY-MM-DD-dashboard-card.json`
+
+### 文档
+- 定版总结：`docs/workbench-final-summary-2026-05-01.md`
+- 候选工作台：`docs/candidate-workbench.md`
+- 模型切换卡片：`docs/model-switch-cards-2026-05-01.md`
+
+### 规则
+- 先读工作区文档，再动手
+- 卡片按钮已打通，点击后返回格式化文本
+
+---
+
 ## 韩国CC Codex后台调用体系 (2026-04-13)
 
 ### 核心工具链（韩国服务器）
