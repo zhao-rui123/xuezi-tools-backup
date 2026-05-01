@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """
-总驾驶台互动卡片生成器 V1
+总驾驶台互动卡片生成器 V2
 
-整合：
-1. OpenClaw 会话模型切换
-2. Claude Code 模型切换
-3. 工作台/任务跟踪
-4. 健康检查入口
-5. 常用系统入口
+目标：
+1. 首页状态化，而不是只做导航
+2. 汇总模型 / 任务 / 健康 / 备份四类核心信息
+3. 保留高频按钮，作为主控制台首页
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
-from datetime import date
+from collections import Counter
+from datetime import date, datetime
 from pathlib import Path
 
 WORKSPACE = Path('/Users/zhaoruicn/.openclaw/workspace')
@@ -23,6 +23,11 @@ OUTPUT_DIR = WORKSPACE / 'summary' / 'cards'
 DEFAULT_OPEN_ID = 'ou_5a7b7ec0339ffe0c1d5bb6c5bc162579'
 DEFAULT_EXPIRES_AT = 1893456000000
 HEALTH_SCRIPT = WORKSPACE / 'scripts' / 'healthcheck_openclaw.py'
+CC_MODEL_SCRIPT = WORKSPACE / 'scripts' / 'cc-model-switch.sh'
+TASK_FILE = WORKSPACE / 'projects' / 'task-center' / 'tasks.json'
+CANDIDATE_DIR = WORKSPACE / 'memory' / 'auto-candidates'
+BACKUP_LOG = Path('/tmp/backup_cron.log')
+CLOUD_BACKUP_LOG = Path('/tmp/cloud-backup.log')
 
 
 def quick_action(command: str, action: str, open_id: str = DEFAULT_OPEN_ID, chat_type: str = 'p2p') -> dict:
@@ -39,9 +44,85 @@ def quick_action(command: str, action: str, open_id: str = DEFAULT_OPEN_ID, chat
     }
 
 
-def get_health_summary() -> str:
+def run(cmd: list[str], timeout: int = 20) -> tuple[int, str, str]:
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=str(WORKSPACE))
+        return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
+    except Exception as e:
+        return 1, '', str(e)
+
+
+def load_tasks() -> list[dict]:
+    if not TASK_FILE.exists():
+        return []
+    try:
+        return json.loads(TASK_FILE.read_text(encoding='utf-8')).get('tasks', [])
+    except Exception:
+        return []
+
+
+def load_candidates(day: str) -> list[dict]:
+    path = CANDIDATE_DIR / f'{day}.json'
+    if not path.exists():
+        return []
+    try:
+        items = json.loads(path.read_text(encoding='utf-8')).get('items', [])
+        for item in items:
+            item.setdefault('state', 'new')
+        return items
+    except Exception:
+        return []
+
+
+def get_cc_model() -> str:
+    if not CC_MODEL_SCRIPT.exists():
+        return '未知'
+    code, out, _ = run(['bash', str(CC_MODEL_SCRIPT), 'status'], timeout=20)
+    if code != 0 or not out:
+        return '未知'
+    m = re.search(r'模型:\s*([^\n]+)', out)
+    if not m:
+        return '未知'
+    raw = m.group(1).strip()
+    mapping = {
+        'gpt-5.4': 'Feinian / GPT-5.4',
+        'deepseek-v4-flash': 'DeepSeek / V4 Flash',
+        'MiniMax-M2.7': 'MiniMax / M2.7',
+    }
+    return mapping.get(raw, raw)
+
+
+def get_backup_summary() -> tuple[str, str]:
+    parts = []
+    risk = ''
+
+    if BACKUP_LOG.exists():
+        t = datetime.fromtimestamp(BACKUP_LOG.stat().st_mtime).strftime('%m-%d %H:%M')
+        parts.append(f'本地备份 {t}')
+    else:
+        parts.append('本地备份缺失')
+        risk = '未找到本地备份日志'
+
+    if CLOUD_BACKUP_LOG.exists():
+        t = datetime.fromtimestamp(CLOUD_BACKUP_LOG.stat().st_mtime).strftime('%m-%d %H:%M')
+        parts.append(f'云端同步 {t}')
+        try:
+            tail = '\n'.join(CLOUD_BACKUP_LOG.read_text(errors='ignore').splitlines()[-8:])
+            if '远程端当前备份数量: 0' in tail:
+                risk = '云端同步跑了，但远程端数量为 0'
+        except Exception:
+            pass
+    else:
+        parts.append('云端同步缺失')
+        if not risk:
+            risk = '未找到云端同步日志'
+
+    return '｜'.join(parts), risk
+
+
+def get_health_summary() -> tuple[str, int, str]:
     if not HEALTH_SCRIPT.exists():
-        return '健康检查脚本缺失，暂无法读取摘要。'
+        return '健康检查脚本缺失', 1, '健康检查脚本缺失'
     try:
         proc = subprocess.run(
             ['python3', str(HEALTH_SCRIPT), '--summary'],
@@ -51,56 +132,104 @@ def get_health_summary() -> str:
             cwd=str(WORKSPACE),
         )
         if proc.returncode != 0:
-            return '健康检查执行失败，请点“全面检查”获取详情。'
+            return '健康检查执行失败', 1, '健康检查执行失败'
         lines = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
         if not lines:
-            return '健康检查无输出，请点“全面检查”获取详情。'
+            return '健康检查无输出', 1, '健康检查无输出'
         summary_line = next((x for x in lines if x.startswith('总览：')), '')
         risk_index = next((i for i, x in enumerate(lines) if x.startswith('风险：')), -1)
         risk_line = ''
         if risk_index >= 0 and risk_index + 1 < len(lines):
             risk_line = lines[risk_index + 1].lstrip('- ').strip()
+        warn = 0
+        fail = 0
+        m = re.search(r'✅(\d+)\s*⚠️(\d+)\s*❌(\d+)', summary_line)
+        if m:
+            warn = int(m.group(2))
+            fail = int(m.group(3))
+        risk_count = warn + fail
         parts = []
         if summary_line:
             parts.append(summary_line)
         if risk_line:
             parts.append(f'关注：{risk_line}')
-        return ' ｜ '.join(parts) if parts else lines[0]
+        return ' ｜ '.join(parts) if parts else lines[0], risk_count, risk_line
     except Exception:
-        return '健康检查读取异常，请点“全面检查”获取详情。'
+        return '健康检查读取异常', 1, '健康检查读取异常'
 
 
-def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
+def resolve_openclaw_model_label(model: str = '') -> str:
+    mapping = {
+        'feinian/gpt-5.4': 'Feinian / GPT-5.4',
+        'deepseek/deepseek-v4-flash': 'DeepSeek / V4 Flash',
+        'minimax-cn/MiniMax-M2.7': 'MiniMax / M2.7',
+        '5.4mini': '5.4mini',
+    }
+    if not model:
+        return '当前会话'
+    return mapping.get(model, model)
+
+
+def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
     today = date.today().strftime('%Y-%m-%d')
-    health_summary = get_health_summary()
+    tasks = load_tasks()
+    candidates = load_candidates(today)
+    candidate_by_state = Counter(x.get('state', 'new') for x in candidates)
+
+    blocked_count = sum(1 for t in tasks if t.get('status') == 'blocked')
+    high_count = sum(1 for t in tasks if t.get('status') == 'todo' and t.get('priority') == 'high')
+    doing_count = sum(1 for t in tasks if t.get('status') == 'doing')
+
+    oc_model = resolve_openclaw_model_label(oc_model_raw)
+    cc_model = get_cc_model()
+    backup_summary, backup_risk = get_backup_summary()
+    health_summary, health_risk_count, health_risk = get_health_summary()
+
+    top_fields = [
+        f'**当前会话模型**\n{oc_model}',
+        f'**Claude Code 模型**\n{cc_model}',
+        f'**阻塞 / 高优**\n{blocked_count} / {high_count}',
+        f'**进行中 / Inbox**\n{doing_count} / {candidate_by_state.get("new", 0)}',
+        f'**健康风险数**\n{health_risk_count}',
+        f'**最近备份**\n{backup_summary}',
+    ]
+
+    quick_focus = []
+    if blocked_count:
+        quick_focus.append(f'阻塞 {blocked_count} 条')
+    if high_count:
+        quick_focus.append(f'高优先级 {high_count} 条')
+    if health_risk_count:
+        quick_focus.append(f'健康风险 {health_risk_count} 项')
+    if backup_risk:
+        quick_focus.append('备份需复查')
+    focus_text = '｜'.join(quick_focus) if quick_focus else '当前无明显高优先级风险'
+
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': f'🕹️ 总驾驶台 | {today}'},
+            'title': {'tag': 'plain_text', 'content': f'🕹️ 主控制台 V2 | {today}'},
             'template': 'turquoise'
         },
         'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：把模型切换、任务跟踪、系统检查收进一张总入口卡里。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**今日焦点**：{focus_text}'}},
             {'tag': 'div', 'fields': [
-                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**OpenClaw**\n会话模型切换'}},
-                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**Claude Code**\n本地模型切换'}},
-                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**工作台**\nInbox / Blocked / High / Digest'}},
-                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**全面检查**\n系统健康与风险摘要'}},
+                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': x}} for x in top_fields
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🧠 模型区**'}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'OpenClaw 模型'}, 'type': 'primary', 'value': quick_action('openclaw model card', 'feishu.quick_actions.cockpit_oc_model', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Claude Code 模型'}, 'type': 'default', 'value': quick_action('cc model card', 'feishu.quick_actions.cockpit_cc_model', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话 Status'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话状态'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**📋 任务区**'}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '工作台总览'}, 'type': 'primary', 'value': quick_action('workspace card', 'feishu.quick_actions.cockpit_workspace', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Inbox'}, 'type': 'default', 'value': quick_action('inbox card', 'feishu.quick_actions.inbox', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Blocked'}, 'type': 'default', 'value': quick_action('blocked card', 'feishu.quick_actions.blocked', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'High'}, 'type': 'default', 'value': quick_action('high card', 'feishu.quick_actions.high', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'Digest'}, 'type': 'default', 'value': quick_action('digest card', 'feishu.quick_actions.digest', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '待处理 Inbox'}, 'type': 'default', 'value': quick_action('inbox card', 'feishu.quick_actions.inbox', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '阻塞'}, 'type': 'default', 'value': quick_action('blocked card', 'feishu.quick_actions.blocked', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '高优先级'}, 'type': 'default', 'value': quick_action('high card', 'feishu.quick_actions.high', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '摘要'}, 'type': 'default', 'value': quick_action('digest card', 'feishu.quick_actions.digest', open_id=open_id)},
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🩺 系统区**'}},
@@ -111,20 +240,24 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '帮助'}, 'type': 'default', 'value': quick_action('/help', 'feishu.quick_actions.help', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '建议把它当首页入口：先看总览，再点进模型、任务、检查。'}
+                {'tag': 'plain_text', 'content': f'备份：{backup_summary}'}
+            ]},
+            {'tag': 'note', 'elements': [
+                {'tag': 'plain_text', 'content': 'V2 目标：先做状态化首页，再继续拆模型/任务/系统专题面板。'}
             ]}
         ]
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description='总驾驶台互动卡片生成器 V1')
+    parser = argparse.ArgumentParser(description='总驾驶台互动卡片生成器 V2')
     parser.add_argument('--open-id', default=DEFAULT_OPEN_ID)
+    parser.add_argument('--oc-model', default='')
     parser.add_argument('--print', action='store_true')
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    card = build_card(args.open_id)
+    card = build_card(args.open_id, args.oc_model)
     out = OUTPUT_DIR / 'cockpit-card.json'
     out.write_text(json.dumps(card, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f'✅ 已生成: {out}')

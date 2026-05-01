@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🕹️ 总驾驶台 | 2026-05-01"
+      "content": "🕹️ 主控制台 V2 | 2026-05-01"
     },
     "template": "turquoise"
   },
@@ -11,7 +11,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：把模型切换、任务跟踪、系统检查收进一张总入口卡里。"
+        "content": "**今日焦点**：阻塞 5 条｜高优先级 4 条｜健康风险 3 项｜备份需复查"
       }
     },
     {
@@ -21,28 +21,42 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**OpenClaw**\n会话模型切换"
+            "content": "**当前会话模型**\nFeinian / GPT-5.4"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Claude Code**\n本地模型切换"
+            "content": "**Claude Code 模型**\nDeepSeek / V4 Flash"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**工作台**\nInbox / Blocked / High / Digest"
+            "content": "**阻塞 / 高优**\n5 / 4"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**全面检查**\n系统健康与风险摘要"
+            "content": "**进行中 / Inbox**\n1 / 6"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**健康风险数**\n3"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**最近备份**\n本地备份 04-30 22:00｜云端同步 04-30 22:35"
           }
         }
       ]
@@ -102,7 +116,7 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "会话 Status"
+            "content": "会话状态"
           },
           "type": "default",
           "value": {
@@ -155,7 +169,7 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "Inbox"
+            "content": "待处理 Inbox"
           },
           "type": "default",
           "value": {
@@ -174,7 +188,7 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "Blocked"
+            "content": "阻塞"
           },
           "type": "default",
           "value": {
@@ -193,7 +207,7 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "High"
+            "content": "高优先级"
           },
           "type": "default",
           "value": {
@@ -212,7 +226,7 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "Digest"
+            "content": "摘要"
           },
           "type": "default",
           "value": {
@@ -313,7 +327,16 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "建议把它当首页入口：先看总览，再点进模型、任务、检查。"
+          "content": "备份：本地备份 04-30 22:00｜云端同步 04-30 22:35"
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "V2 目标：先做状态化首页，再继续拆模型/任务/系统专题面板。"
         }
       ]
     }
