@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🕹️ 主控制台 V2 | 2026-05-01"
+      "content": "🕹️ 主控制台 V3 | 2026-05-01"
     },
     "template": "turquoise"
   },
@@ -11,51 +11,8 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**今日焦点**：阻塞 5 条｜高优先级 4 条｜健康风险 3 项｜备份需复查"
+        "content": "**首页语义化升级**：直接告诉你现在在干什么、哪里有问题、该点哪里。"
       }
-    },
-    {
-      "tag": "action",
-      "actions": [
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "今日重点建议"
-          },
-          "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.focus_panel",
-            "q": "focus panel card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "主控制台"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.cockpit_home",
-            "q": "cockpit card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        }
-      ]
     },
     {
       "tag": "div",
@@ -92,7 +49,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**健康风险数**\n3"
+            "content": "**风险 / 健康风险**\n4 / 3"
           }
         },
         {
@@ -100,6 +57,85 @@
           "text": {
             "tag": "lark_md",
             "content": "**最近备份**\n本地备份 04-30 22:00｜云端同步 04-30 22:35"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前最重要的事**\n- 先清 5 条阻塞任务\n- 复查云端备份异常\n- 关注 3 项健康风险"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前活跃/最近任务**\n- Claude Code 最小链路测试（screen/Claude Code）\n- 铁路储能 5MWh 项目测算（screen/Codex）\n- 铁路储能 5MWh 项目测算（screen/Claude Code）"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "今日重点建议"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.focus_panel",
+            "q": "focus panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "任务语义面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.semantic_execution_panel",
+            "q": "semantic execution panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "执行中心"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_center",
+            "q": "execution center card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
           }
         }
       ]
@@ -417,25 +453,6 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "Inbox"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.inbox",
-            "q": "inbox card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
             "content": "切 Feinian"
           },
           "type": "default",
@@ -647,16 +664,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "备份：本地备份 04-30 22:00｜云端同步 04-30 22:35"
-        }
-      ]
-    },
-    {
-      "tag": "note",
-      "elements": [
-        {
-          "tag": "plain_text",
-          "content": "V2 目标：先做状态化首页，再继续拆模型/任务/系统专题面板。"
+          "content": "V3 目标：把首页也改成任务语义视角，先看重点，再点专题。"
         }
       ]
     }
