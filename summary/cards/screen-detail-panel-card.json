@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🖥️ screen 详情面板 V1"
+      "content": "🖥️ screen 详情面板 V2"
     },
     "template": "cyan"
   },
@@ -11,28 +11,28 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：下钻查看 screen / agent-screen 任务的执行细节。"
+        "content": "**定位**：下钻查看 screen / agent-screen 任务的执行细节，并显示是否还活着。"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code 最小链路测试**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace`\n- 日志：`cc-min-test.log`\n- 启动时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
+        "content": "**Claude Code 最小链路测试**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 存活：当前未存活\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace`\n- 日志：`cc-min-test.log`\n- 启动时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Codex\n- 状态：已完成/测试\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`codex-wrapper-test.log`\n- 启动时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Codex\n- 状态：已完成/测试\n- 存活：当前未存活\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`codex-wrapper-test.log`\n- 启动时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`cc-wrapper-test.log`\n- 启动时间：2026-04-28 16:16:33\n- 技术任务名：`cc-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 存活：当前未存活\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`cc-wrapper-test.log`\n- 启动时间：2026-04-28 16:16:33\n- 技术任务名：`cc-wrapper-test`"
       }
     },
     {
@@ -102,7 +102,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步可以补日志摘要、screen 当前存活状态，或者把 ACP 线程也做成同样的详情格式。"
+          "content": "下一步可以补 ACP 线程同样的存活状态格式，或者继续做后台任务历史。"
         }
       ]
     }

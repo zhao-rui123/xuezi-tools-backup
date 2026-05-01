@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🧩 ACP 语义任务面板 V1"
+      "content": "🧩 ACP 语义任务面板 V2"
     },
     "template": "purple"
   },
@@ -11,21 +11,21 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：把 ACP 线程从 key/sessionId 翻成可读的业务任务视角。"
+        "content": "**定位**：把 ACP 线程翻成可读任务，并显示是否仍活跃。"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code ACP 子线程 1**｜**ACP / Claude Code**｜**历史线程/最近未活跃**\n- 最近时间：04-09 17:55\n- sessionId：`4945ff44-c3b1-4b61-ad25-97e878728191`\n- 技术线程名：`agent:claude-code:acp:4c453dc5-f1f3-47f0-ade4-d4d2a1d913cc`"
+        "content": "**Claude Code ACP 子线程 1**｜**ACP / Claude Code**｜**进行中/活跃**\n- 存活：存活中\n- 最近时间：04-09 17:55\n- sessionId：`4945ff44-c3b1-4b61-ad25-97e878728191`\n- 技术线程名：`agent:claude-code:acp:4c453dc5-f1f3-47f0-ade4-d4d2a1d913cc`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code ACP 子线程 2**｜**ACP / Claude Code**｜**历史线程/最近未活跃**\n- 最近时间：04-09 18:22\n- sessionId：`fc544bfd-d119-429d-a890-a1735eb27ba2`\n- 技术线程名：`agent:claude-code:acp:616314ea-5092-4ede-b43e-cda2cca0f256`"
+        "content": "**Claude Code ACP 子线程 2**｜**ACP / Claude Code**｜**进行中/活跃**\n- 存活：存活中\n- 最近时间：04-09 18:22\n- sessionId：`fc544bfd-d119-429d-a890-a1735eb27ba2`\n- 技术线程名：`agent:claude-code:acp:616314ea-5092-4ede-b43e-cda2cca0f256`"
       }
     },
     {

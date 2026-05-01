@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-screen 详情面板卡片生成器 V1
+screen 详情面板卡片生成器 V2
 
 目标：
 - 展示 screen/agent-screen 任务的详情
 - 下钻看到工作目录、日志、agent、启动时间
+- 增加 screen 存活状态
 """
 
 from __future__ import annotations
@@ -61,7 +62,7 @@ def execution_mode(agent: str) -> str:
     return mapping.get(agent.lower(), agent)
 
 
-def load_items(limit: int = 8) -> list[dict]:
+def load_items(active_screen_names: set[str], limit: int = 8) -> list[dict]:
     items = []
     if not AGENT_SCREEN_DIR.exists():
         return items
@@ -71,6 +72,7 @@ def load_items(limit: int = 8) -> list[dict]:
         task_name = meta.get('TASK_NAME', path.stem)
         workdir = meta.get('WORKDIR', '')
         agent = meta.get('AGENT', 'unknown')
+        alive = task_name in active_screen_names
         items.append({
             'business_name': business_label(task_name, workdir),
             'task_name': task_name,
@@ -80,13 +82,15 @@ def load_items(limit: int = 8) -> list[dict]:
             'started_at': meta.get('STARTED_AT', '未知'),
             'prompt_file': Path(meta.get('PROMPT_FILE', '')).name if meta.get('PROMPT_FILE') else 'unknown',
             'pattern': meta.get('PATTERN', 'unknown'),
-            'status': '已完成/测试' if 'test' in task_name.lower() else '最近活跃',
+            'status': '进行中' if alive else ('已完成/测试' if 'test' in task_name.lower() else '最近活跃'),
+            'alive_text': '存活中' if alive else '当前未存活',
         })
     return items
 
 
-def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
-    items = load_items()
+def build_card(open_id: str = DEFAULT_OPEN_ID, active_screen_names: set[str] | None = None) -> dict:
+    active_screen_names = active_screen_names or set()
+    items = load_items(active_screen_names)
     blocks = []
     for item in items:
         blocks.append({
@@ -97,6 +101,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                     f"**{item['business_name']}**\n"
                     f"- 执行方式：{item['execution_mode']}\n"
                     f"- 状态：{item['status']}\n"
+                    f"- 存活：{item['alive_text']}\n"
                     f"- 工作目录：`{item['workdir'] or '.'}`\n"
                     f"- 日志：`{item['log_file']}`\n"
                     f"- 启动时间：{item['started_at']}\n"
@@ -113,11 +118,11 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
 
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': '🖥️ screen 详情面板 V1'},
+            'title': {'tag': 'plain_text', 'content': '🖥️ screen 详情面板 V2'},
             'template': 'cyan'
         },
         'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：下钻查看 screen / agent-screen 任务的执行细节。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：下钻查看 screen / agent-screen 任务的执行细节，并显示是否还活着。'}},
             *blocks,
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '语义任务面板'}, 'type': 'primary', 'value': quick_action('semantic execution panel card', 'feishu.quick_actions.semantic_execution_panel', open_id=open_id)},
@@ -125,20 +130,26 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可以补日志摘要、screen 当前存活状态，或者把 ACP 线程也做成同样的详情格式。'}
+                {'tag': 'plain_text', 'content': '下一步可以补 ACP 线程同样的存活状态格式，或者继续做后台任务历史。'}
             ]}
         ]
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description='screen 详情面板 V1')
+    parser = argparse.ArgumentParser(description='screen 详情面板 V2')
     parser.add_argument('--open-id', default=DEFAULT_OPEN_ID)
+    parser.add_argument('--active-screen', default='[]', help='JSON array of live screen task names')
     parser.add_argument('--print', action='store_true')
     args = parser.parse_args()
 
+    try:
+        active = set(json.loads(args.active_screen))
+    except Exception:
+        active = set()
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    card = build_card(args.open_id)
+    card = build_card(args.open_id, active)
     out = OUTPUT_DIR / 'screen-detail-panel-card.json'
     out.write_text(json.dumps(card, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f'✅ 已生成: {out}')
