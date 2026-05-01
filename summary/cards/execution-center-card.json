@@ -1,0 +1,146 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🚦 执行中心 V1"
+    },
+    "template": "violet"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**定位**：把 ACP、screen、本地后台任务收进一个统一执行中心。"
+      }
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**主会话模型**\nfeinian/gpt-5.4"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**活跃任务**\n1 active · running"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**ACP / 子线程数**\n2"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**screen 会话数**\n0"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**ACP / 子会话**\n- agent:claude-code:acp:4c453dc5-f1f3-47f0-ade4-d4d2a1d913cc\n- agent:claude-code:acp:616314ea-5092-4ede-b43e-cda2cca0f256"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**screen 会话**\n- 当前没有 screen 会话"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前判断**\n- 当前主会话在跑，已挂出 2 个 ACP 子线程；screen 暂时为空。"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "后台任务中心"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.runtime_tasks_panel",
+            "q": "runtime tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "会话状态"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_status",
+            "q": "/status",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "主控制台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步可补：ACP/子线程详情、screen 日志入口、停止/恢复操作。"
+        }
+      ]
+    }
+  ]
+}
