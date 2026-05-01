@@ -78,9 +78,28 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "后台任务中心"
+            "content": "ACP 详情"
           },
           "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.acp_detail_panel",
+            "q": "acp detail panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "后台任务中心"
+          },
+          "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",

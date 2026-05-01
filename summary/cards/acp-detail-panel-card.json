@@ -1,0 +1,103 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🔎 ACP / 子线程详情 V1"
+    },
+    "template": "purple"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**总览**：当前记录到 2 个 ACP 子线程会话。"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**agent:claude-code:acp:4c453dc5-f1f3-47f0-ade4-d4d2a1d913cc**\n- sessionId: `4945ff44-c3b1-4b61-ad25-97e878728191`\n- 最近更新: 04-09 17:55\n- 文件: `4945ff44-c3b1-4b61-ad25-97e878728191.jsonl`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**agent:claude-code:acp:616314ea-5092-4ede-b43e-cda2cca0f256**\n- sessionId: `fc544bfd-d119-429d-a890-a1735eb27ba2`\n- 最近更新: 04-09 18:22\n- 文件: `fc544bfd-d119-429d-a890-a1735eb27ba2.jsonl`"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "执行中心"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_center",
+            "q": "execution center card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "后台任务中心"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.runtime_tasks_panel",
+            "q": "runtime tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "主控制台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步可以补 screen 详情、后台任务历史，或者给这些线程加日志入口。"
+        }
+      ]
+    }
+  ]
+}
