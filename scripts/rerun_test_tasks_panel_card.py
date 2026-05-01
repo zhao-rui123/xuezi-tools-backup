@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-重跑测试任务面板 V1
+重跑测试任务面板 V2
 
 目标：
 - 列出可安全试点的测试任务
-- 先给出重跑候选和原则
-- 暂不直接执行，避免误触
+- 给每个测试任务接“二次确认”入口
+- 暂不直接执行真实重跑，先完成确认层
 """
 
 from __future__ import annotations
@@ -80,50 +80,64 @@ def collect_candidates() -> list[dict]:
 
 def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
     items = collect_candidates()
-    blocks = []
-    for item in items:
-        blocks.append({
-            'tag': 'div',
-            'text': {
-                'tag': 'lark_md',
-                'content': (
-                    f"**{item['business_name']}**\n"
-                    f"- 执行方式：{item['mode']}\n"
-                    f"- 上次时间：{item['started_at']}\n"
-                    f"- 工作目录：`{item['workdir']}`\n"
-                    f"- 日志：`{item['log_file']}`\n"
-                    f"- 技术任务名：`{item['task_name']}`"
-                )
-            }
-        })
+    elements = [
+        {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**试点原则**：先只针对测试任务，不直接执行，先明确候选和规则。'}},
+        {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前规则**\n- 仅限测试任务\n- 不碰正式项目任务\n- 真执行前必须二次确认\n- 这一版按钮只进入确认层，不直接重跑'}},
+        {'tag': 'hr'},
+    ]
 
-    if not blocks:
-        blocks.append({'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前没有可识别的测试任务候选。**'}})
+    if not items:
+        elements.append({'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前没有可识别的测试任务候选。**'}})
+    else:
+        for item in items:
+            elements.append({
+                'tag': 'div',
+                'text': {
+                    'tag': 'lark_md',
+                    'content': (
+                        f"**{item['business_name']}**\n"
+                        f"- 执行方式：{item['mode']}\n"
+                        f"- 上次时间：{item['started_at']}\n"
+                        f"- 工作目录：`{item['workdir']}`\n"
+                        f"- 日志：`{item['log_file']}`\n"
+                        f"- 技术任务名：`{item['task_name']}`"
+                    )
+                }
+            })
+            elements.append({
+                'tag': 'action',
+                'actions': [
+                    {
+                        'tag': 'button',
+                        'text': {'tag': 'plain_text', 'content': f'确认重跑 {item["task_name"]}'},
+                        'type': 'primary',
+                        'value': quick_action(f'rerun confirm {item["task_name"]}', 'feishu.quick_actions.rerun_test_confirm', open_id=open_id)
+                    }
+                ]
+            })
+
+    elements.extend([
+        {'tag': 'action', 'actions': [
+            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '轻控制入口'}, 'type': 'primary', 'value': quick_action('light control panel card', 'feishu.quick_actions.light_control_panel', open_id=open_id)},
+            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '任务历史中心'}, 'type': 'default', 'value': quick_action('task history panel card', 'feishu.quick_actions.task_history_panel', open_id=open_id)},
+            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+        ]},
+        {'tag': 'note', 'elements': [
+            {'tag': 'plain_text', 'content': '下一步如果继续，可以把确认卡片后的动作真正接到重跑脚本。'}
+        ]}
+    ])
 
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': '♻️ 重跑测试任务 V1'},
+            'title': {'tag': 'plain_text', 'content': '♻️ 重跑测试任务 V2'},
             'template': 'orange'
         },
-        'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**试点原则**：先只针对测试任务，不直接执行，先明确候选和规则。'}},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前规则**\n- 仅限测试任务\n- 不碰正式项目任务\n- 真执行前必须二次确认\n- 先做“可重跑候选”清单，再接执行按钮'}},
-            {'tag': 'hr'},
-            *blocks,
-            {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '轻控制入口'}, 'type': 'primary', 'value': quick_action('light control panel card', 'feishu.quick_actions.light_control_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '任务历史中心'}, 'type': 'default', 'value': quick_action('task history panel card', 'feishu.quick_actions.task_history_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
-            ]},
-            {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步如果继续，可以把这里升级成“二次确认后重跑”的真正控制动作。'}
-            ]}
-        ]
+        'elements': elements,
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description='重跑测试任务面板 V1')
+    parser = argparse.ArgumentParser(description='重跑测试任务面板 V2')
     parser.add_argument('--open-id', default=DEFAULT_OPEN_ID)
     parser.add_argument('--print', action='store_true')
     args = parser.parse_args()

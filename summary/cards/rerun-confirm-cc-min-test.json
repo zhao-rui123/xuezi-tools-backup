@@ -1,0 +1,103 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "♻️ 重跑确认 V1"
+    },
+    "template": "orange"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**请确认**：你要重跑的是下面这个测试任务。"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**\n- 执行方式：screen / Claude Code\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace`\n- 日志：`cc-min-test.log`\n- 上次时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前阶段**：这一步只做确认，不直接执行。真实重跑按钮下一版再接。"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "确认：下一版接重跑"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.rerun_test_confirm_ack",
+            "q": "rerun confirm cc-min-test",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "返回重跑面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.rerun_test_tasks_panel",
+            "q": "rerun test tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "主控制台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "真正执行重跑前，还需要把执行脚本、安全确认和回写状态接上。"
+        }
+      ]
+    }
+  ]
+}

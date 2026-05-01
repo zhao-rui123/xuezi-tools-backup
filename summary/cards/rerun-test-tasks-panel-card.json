@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "♻️ 重跑测试任务 V1"
+      "content": "♻️ 重跑测试任务 V2"
     },
     "template": "orange"
   },
@@ -18,7 +18,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前规则**\n- 仅限测试任务\n- 不碰正式项目任务\n- 真执行前必须二次确认\n- 先做“可重跑候选”清单，再接执行按钮"
+        "content": "**当前规则**\n- 仅限测试任务\n- 不碰正式项目任务\n- 真执行前必须二次确认\n- 这一版按钮只进入确认层，不直接重跑"
       }
     },
     {
@@ -32,6 +32,30 @@
       }
     },
     {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "确认重跑 cc-min-test"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.rerun_test_confirm",
+            "q": "rerun confirm cc-min-test",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
       "tag": "div",
       "text": {
         "tag": "lark_md",
@@ -39,11 +63,59 @@
       }
     },
     {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "确认重跑 codex-wrapper-test"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.rerun_test_confirm",
+            "q": "rerun confirm codex-wrapper-test",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
       "tag": "div",
       "text": {
         "tag": "lark_md",
         "content": "**铁路储能 5MWh 项目测试链路**\n- 执行方式：screen / Claude Code\n- 上次时间：2026-04-28 16:16:33\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace/projects/railway-storage-5mwh`\n- 日志：`cc-wrapper-test.log`\n- 技术任务名：`cc-wrapper-test`"
       }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "确认重跑 cc-wrapper-test"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.rerun_test_confirm",
+            "q": "rerun confirm cc-wrapper-test",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
     },
     {
       "tag": "action",
@@ -112,7 +184,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步如果继续，可以把这里升级成“二次确认后重跑”的真正控制动作。"
+          "content": "下一步如果继续，可以把确认卡片后的动作真正接到重跑脚本。"
         }
       ]
     }
