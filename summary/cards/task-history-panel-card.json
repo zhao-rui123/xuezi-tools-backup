@@ -18,42 +18,84 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**股票日报推送**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 16:30:09\n- 技术标识：`stock_push.log`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:22:29\n- 技术标识：`cc-wrapper-test-rerun-0501-232229`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**云端同步**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-04-30 22:35:10\n- 技术标识：`cloud-backup.log`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:22:20\n- 技术标识：`cc-wrapper-test-rerun-0501-232220`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**每日备份**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-04-30 22:00:16\n- 技术标识：`backup_cron.log`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:21:44\n- 技术标识：`cc-wrapper-test-rerun-0501-232144`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**\n- 类型：测试任务\n- 最近时间：2026-04-29 15:40:19\n- 技术标识：`cc-min-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:21:22\n- 技术标识：`cc-wrapper-test-rerun-0501-232122`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**\n- 类型：项目任务\n- 最近时间：2026-04-28 16:18:28\n- 技术标识：`codex-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:21:11\n- 技术标识：`cc-wrapper-test-rerun-0501-232111`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-04-28 16:16:33\n- 技术标识：`cc-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:03:36\n- 技术标识：`codex-wrapper-test-rerun-0501-230336`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:01:39\n- 技术标识：`cc-wrapper-test-rerun-0501-230138`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**\n- 类型：测试任务\n- 最近时间：2026-05-01 23:01:29\n- 技术标识：`cc-min-test-rerun-0501-230129`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**\n- 类型：测试任务\n- 最近时间：2026-05-01 23:00:04\n- 技术标识：`cc-min-test-rerun-0501-230004`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**\n- 类型：测试任务\n- 最近时间：2026-05-01 22:44:50\n- 技术标识：`cc-min-test-rerun-0501-224450`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**云端同步**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 22:35:09\n- 技术标识：`cloud-backup.log`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**每日备份**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 22:00:14\n- 技术标识：`backup_cron.log`"
       }
     },
     {

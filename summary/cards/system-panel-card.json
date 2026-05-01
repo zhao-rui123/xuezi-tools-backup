@@ -35,7 +35,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**任务系统**\n⚠️ 1 active / 1 running / 1 error / 11 warn"
+            "content": "**任务系统**\n⚠️ 1 active / 1 running / 1 error / 12 warn"
           }
         },
         {
@@ -68,14 +68,14 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**备份状态**\n- 本地备份：04-30 22:00\n- 云端同步：04-30 22:35\n- 版本更新：⚠️ 发现 OpenClaw 可更新版本"
+        "content": "**备份状态**\n- 本地备份：05-01 22:00\n- 云端同步：05-01 22:35\n- 版本更新：⚠️ 发现 OpenClaw 可更新版本"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**风险提示**\n- OpenClaw 视角 Tailscale: openclaw status 里显示 Tailscale=off\n- 任务系统: 1 active / 1 running / 1 error / 11 warn\n- 版本更新: 发现 OpenClaw 可更新版本"
+        "content": "**风险提示**\n- OpenClaw 视角 Tailscale: openclaw status 里显示 Tailscale=off\n- 任务系统: 1 active / 1 running / 1 error / 12 warn\n- 版本更新: 发现 OpenClaw 可更新版本"
       }
     },
     {

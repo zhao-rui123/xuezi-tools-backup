@@ -21,21 +21,21 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**主会话模型**\nfeinian/gpt-5.4"
+            "content": "**主会话模型**\n未知"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**活跃任务**\n1 active · running"
+            "content": "**活跃任务**\n未知"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**ACP / 子线程数**\n2"
+            "content": "**ACP / 子线程数**\n0"
           }
         },
         {
@@ -54,7 +54,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**ACP / 子会话**\n- agent:claude-code:acp:4c453dc5-f1f3-47f0-ade4-d4d2a1d913cc\n- agent:claude-code:acp:616314ea-5092-4ede-b43e-cda2cca0f256"
+        "content": "**ACP / 子会话**\n- 当前未发现可见 ACP 子线程详情"
       }
     },
     {
@@ -68,14 +68,14 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**最近后台任务名**\n- `cc-min-test` | claude | 2026-04-29 15:40:19 | cc-min-test.log\n- `codex-wrapper-test` | codex | 2026-04-28 16:18:28 | codex-wrapper-test.log\n- `cc-wrapper-test` | claude | 2026-04-28 16:16:33 | cc-wrapper-test.log"
+        "content": "**最近后台任务名**\n- `cc-wrapper-test-rerun-0501-232229` | claude | 2026-05-01 23:22:29 | cc-wrapper-test-rerun-0501-232229.log\n- `cc-wrapper-test-rerun-0501-232220` | claude | 2026-05-01 23:22:20 | cc-wrapper-test-rerun-0501-232220.log\n- `cc-wrapper-test-rerun-0501-232144` | claude | 2026-05-01 23:21:44 | cc-wrapper-test-rerun-0501-232144.log\n- `cc-wrapper-test-rerun-0501-232122` | claude | 2026-05-01 23:21:22 | cc-wrapper-test-rerun-0501-232122.log\n- `cc-wrapper-test-rerun-0501-232111` | claude | 2026-05-01 23:21:11 | cc-wrapper-test-rerun-0501-232111.log\n- `codex-wrapper-test-rerun-0501-230336` | codex | 2026-05-01 23:03:36 | codex-wrapper-test-rerun-0501-230336.log"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前判断**\n- 当前主会话在跑，已挂出 2 个 ACP 子线程；screen 暂时为空。"
+        "content": "**当前判断**\n- 执行链路总体正常，当前先做只读观测版。"
       }
     },
     {

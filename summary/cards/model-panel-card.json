@@ -21,7 +21,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**OpenClaw 当前会话**\nFeinian / GPT-5.4"
+            "content": "**OpenClaw 当前会话**\n当前会话"
           }
         },
         {
@@ -115,6 +115,25 @@
             "k": "quick",
             "a": "feishu.quick_actions.oc_model_minimax",
             "q": "/model minimax",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "切 5.4mini"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_model_5_4mini",
+            "q": "/model 5.4mini",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,

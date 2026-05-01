@@ -1,0 +1,16 @@
+{
+  "date": "2026-04-29",
+  "summary": "优先怀疑残留的 CC/Codex 进程链，而不是先怀疑 OpenClaw 主进程本体。",
+  "from_memory": [
+    "[主题] Claude Code 模型切换脚本（三档）",
+    "[主题] OpenClaw 内存问题经验更新",
+    "[主题] 股票日报 2026-04-29 (16:30 推送)",
+    "再起 screen 任务",
+    "优先怀疑残留的 CC/Codex 进程链，而不是先怀疑 OpenClaw 主进程本体。"
+  ],
+  "task_count": 5,
+  "timestamp": "2026-04-29T23:50:00.213702",
+  "current_session": "6bf31e0b-616c-4970-908c-2f34c89ebb5b",
+  "current_session_key": "agent:claude:main",
+  "previous_session": "8825f7ea-248a-460b-b79d-b80a375518ff"
+}
