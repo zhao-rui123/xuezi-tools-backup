@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """
-执行中心面板卡片生成器 V1
+执行中心面板卡片生成器 V2
 
 聚焦：
 - ACP / 子会话
 - screen 会话
 - 本地后台任务与主会话状态
-
-说明：
-- 当前先做只读观测版
-- 动态值由运行时注入
+- 尽量展示可见任务名，而不是只给数量
 """
 
 from __future__ import annotations
@@ -22,6 +19,7 @@ WORKSPACE = Path('/Users/zhaoruicn/.openclaw/workspace')
 OUTPUT_DIR = WORKSPACE / 'summary' / 'cards'
 DEFAULT_OPEN_ID = 'ou_5a7b7ec0339ffe0c1d5bb6c5bc162579'
 DEFAULT_EXPIRES_AT = 1893456000000
+AGENT_SCREEN_DIR = WORKSPACE / 'logs' / 'agent-screen'
 
 
 def quick_action(command: str, action: str, open_id: str = DEFAULT_OPEN_ID, chat_type: str = 'p2p') -> dict:
@@ -38,6 +36,27 @@ def quick_action(command: str, action: str, open_id: str = DEFAULT_OPEN_ID, chat
     }
 
 
+def load_recent_meta_tasks(limit: int = 6) -> list[dict]:
+    items: list[dict] = []
+    if not AGENT_SCREEN_DIR.exists():
+        return items
+    metas = sorted(AGENT_SCREEN_DIR.glob('*.meta'), key=lambda p: p.stat().st_mtime, reverse=True)
+    for path in metas[:limit]:
+        text = path.read_text(errors='ignore')
+        kv = {}
+        for line in text.splitlines():
+            if '=' in line:
+                k, v = line.split('=', 1)
+                kv[k.strip()] = v.strip().strip("'")
+        items.append({
+            'task_name': kv.get('TASK_NAME', path.stem),
+            'agent': kv.get('AGENT', 'unknown'),
+            'started_at': kv.get('STARTED_AT', '未知'),
+            'log_file': Path(kv.get('LOG_FILE', '')).name if kv.get('LOG_FILE') else 'unknown',
+        })
+    return items
+
+
 def build_card(
     open_id: str = DEFAULT_OPEN_ID,
     *,
@@ -51,6 +70,7 @@ def build_card(
 ) -> dict:
     acp_list = acp_list or []
     screen_list = screen_list or []
+    recent_tasks = load_recent_meta_tasks()
 
     acp_text = '\n'.join(f'- {x}' for x in acp_list[:5]) if acp_list else '- 当前未发现可见 ACP 子线程详情'
     if len(acp_list) > 5:
@@ -60,13 +80,20 @@ def build_card(
     if len(screen_list) > 5:
         screen_text += f'\n- ... 还有 {len(screen_list) - 5} 个'
 
+    if recent_tasks:
+        recent_text = '\n'.join(
+            f"- `{x['task_name']}` | {x['agent']} | {x['started_at']} | {x['log_file']}" for x in recent_tasks
+        )
+    else:
+        recent_text = '- 当前没有可见 agent-screen 任务元数据'
+
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': '🚦 执行中心 V1'},
+            'title': {'tag': 'plain_text', 'content': '🚦 执行中心 V2'},
             'template': 'violet'
         },
         'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：把 ACP、screen、本地后台任务收进一个统一执行中心。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：把 ACP、screen、本地后台任务收进一个统一执行中心，并尽量展示具体任务名。'}},
             {'tag': 'div', 'fields': [
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': f'**主会话模型**\n{main_model or "未知"}'}},
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': f'**活跃任务**\n{active_tasks or "未知"}'}},
@@ -76,6 +103,7 @@ def build_card(
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**ACP / 子会话**\n{acp_text}'}},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**screen 会话**\n{screen_text}'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**最近后台任务名**\n{recent_text}'}},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**当前判断**\n- {runtime_note or "执行链路总体正常，当前先做只读观测版。"}'}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'ACP 详情'}, 'type': 'primary', 'value': quick_action('acp detail panel card', 'feishu.quick_actions.acp_detail_panel', open_id=open_id)},
@@ -84,14 +112,14 @@ def build_card(
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可补：ACP/子线程详情、screen 日志入口、停止/恢复操作。'}
+                {'tag': 'plain_text', 'content': '目前 screen 任务名可以通过 agent-screen meta 看到；ACP 暂时只能稳定拿到线程 key / sessionId。'}
             ]}
         ]
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description='执行中心面板卡片生成器 V1')
+    parser = argparse.ArgumentParser(description='执行中心面板卡片生成器 V2')
     parser.add_argument('--open-id', default=DEFAULT_OPEN_ID)
     parser.add_argument('--main-model', default='')
     parser.add_argument('--active-tasks', default='')

@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🚦 执行中心 V1"
+      "content": "🚦 执行中心 V2"
     },
     "template": "violet"
   },
@@ -11,7 +11,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：把 ACP、screen、本地后台任务收进一个统一执行中心。"
+        "content": "**定位**：把 ACP、screen、本地后台任务收进一个统一执行中心，并尽量展示具体任务名。"
       }
     },
     {
@@ -62,6 +62,13 @@
       "text": {
         "tag": "lark_md",
         "content": "**screen 会话**\n- 当前没有 screen 会话"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**最近后台任务名**\n- `cc-min-test` | claude | 2026-04-29 15:40:19 | cc-min-test.log\n- `codex-wrapper-test` | codex | 2026-04-28 16:18:28 | codex-wrapper-test.log\n- `cc-wrapper-test` | claude | 2026-04-28 16:16:33 | cc-wrapper-test.log"
       }
     },
     {
@@ -157,7 +164,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步可补：ACP/子线程详情、screen 日志入口、停止/恢复操作。"
+          "content": "目前 screen 任务名可以通过 agent-screen meta 看到；ACP 暂时只能稳定拿到线程 key / sessionId。"
         }
       ]
     }
