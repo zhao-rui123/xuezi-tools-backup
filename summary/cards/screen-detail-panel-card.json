@@ -2,37 +2,37 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🧭 任务语义执行面板 V2"
+      "content": "🖥️ screen 详情面板 V1"
     },
-    "template": "blue"
+    "template": "cyan"
   },
   "elements": [
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：统一显示 任务名｜执行方式｜状态｜最近时间。"
+        "content": "**定位**：下钻查看 screen / agent-screen 任务的执行细节。"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：链路测试\n- 最近时间：2026-04-29 15:40:19\n- 日志：`cc-min-test.log`\n- 技术任务名：`cc-min-test`"
+        "content": "**Claude Code 最小链路测试**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace`\n- 日志：`cc-min-test.log`\n- 启动时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:18:28\n- 日志：`codex-wrapper-test.log`\n- 技术任务名：`codex-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Codex\n- 状态：已完成/测试\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`codex-wrapper-test.log`\n- 启动时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:16:33\n- 日志：`cc-wrapper-test.log`\n- 技术任务名：`cc-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**\n- 执行方式：screen / Claude Code\n- 状态：已完成/测试\n- 工作目录：`projects/railway-storage-5mwh`\n- 日志：`cc-wrapper-test.log`\n- 启动时间：2026-04-28 16:16:33\n- 技术任务名：`cc-wrapper-test`"
       }
     },
     {
@@ -42,14 +42,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "screen 详情"
+            "content": "语义任务面板"
           },
           "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.screen_detail_panel",
-            "q": "screen detail panel card",
+            "a": "feishu.quick_actions.semantic_execution_panel",
+            "q": "semantic execution panel card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -69,25 +69,6 @@
             "k": "quick",
             "a": "feishu.quick_actions.execution_center",
             "q": "execution center card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "后台任务中心"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.runtime_tasks_panel",
-            "q": "runtime tasks panel card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -121,7 +102,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步可补：把 ACP 线程也做成业务任务名映射，而不只显示 key。"
+          "content": "下一步可以补日志摘要、screen 当前存活状态，或者把 ACP 线程也做成同样的详情格式。"
         }
       ]
     }

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-任务语义执行面板 V2
+screen 详情面板卡片生成器 V1
 
 目标：
-- 从技术任务名翻成业务任务名
-- 明确显示 执行方式 / 状态 / 最近时间
-- 优先给雪子看“任务本身”，不是底层 id
+- 展示 screen/agent-screen 任务的详情
+- 下钻看到工作目录、日志、agent、启动时间
 """
 
 from __future__ import annotations
@@ -44,33 +43,14 @@ def parse_meta(path: Path) -> dict:
     return kv
 
 
-def map_business_name(task_name: str, workdir: str) -> tuple[str, str]:
+def business_label(task_name: str, workdir: str) -> str:
     wd = workdir.lower()
     tn = task_name.lower()
-
     if 'railway-storage-5mwh' in wd:
-        if 'codex' in tn:
-            return '铁路储能 5MWh 项目测算', '项目开发'
-        if 'claude' in tn or 'cc-' in tn:
-            return '铁路储能 5MWh 项目测算', '项目开发'
-        return '铁路储能 5MWh 项目任务', '项目开发'
-
+        return '铁路储能 5MWh 项目测算'
     if 'cc-min-test' in tn:
-        return 'Claude Code 最小链路测试', '链路测试'
-
-    if 'codex' in tn:
-        return 'Codex 后台任务', '后台执行'
-    if 'cc-' in tn or 'claude' in tn:
-        return 'Claude Code 后台任务', '后台执行'
-
-    return task_name, '未分类'
-
-
-def infer_status(task_name: str) -> str:
-    tn = task_name.lower()
-    if 'test' in tn:
-        return '已完成/测试'
-    return '最近活跃'
+        return 'Claude Code 最小链路测试'
+    return task_name
 
 
 def execution_mode(agent: str) -> str:
@@ -81,7 +61,7 @@ def execution_mode(agent: str) -> str:
     return mapping.get(agent.lower(), agent)
 
 
-def load_semantic_tasks(limit: int = 8) -> list[dict]:
+def load_items(limit: int = 8) -> list[dict]:
     items = []
     if not AGENT_SCREEN_DIR.exists():
         return items
@@ -90,33 +70,36 @@ def load_semantic_tasks(limit: int = 8) -> list[dict]:
         meta = parse_meta(path)
         task_name = meta.get('TASK_NAME', path.stem)
         workdir = meta.get('WORKDIR', '')
-        business_name, category = map_business_name(task_name, workdir)
         agent = meta.get('AGENT', 'unknown')
         items.append({
-            'business_name': business_name,
-            'category': category,
-            'execution_mode': execution_mode(agent),
-            'status': infer_status(task_name),
-            'started_at': meta.get('STARTED_AT', '未知'),
+            'business_name': business_label(task_name, workdir),
             'task_name': task_name,
+            'execution_mode': execution_mode(agent),
+            'workdir': workdir.replace(str(WORKSPACE) + '/', ''),
             'log_file': Path(meta.get('LOG_FILE', '')).name if meta.get('LOG_FILE') else 'unknown',
+            'started_at': meta.get('STARTED_AT', '未知'),
+            'prompt_file': Path(meta.get('PROMPT_FILE', '')).name if meta.get('PROMPT_FILE') else 'unknown',
+            'pattern': meta.get('PATTERN', 'unknown'),
+            'status': '已完成/测试' if 'test' in task_name.lower() else '最近活跃',
         })
     return items
 
 
 def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
-    tasks = load_semantic_tasks()
+    items = load_items()
     blocks = []
-    for item in tasks:
+    for item in items:
         blocks.append({
             'tag': 'div',
             'text': {
                 'tag': 'lark_md',
                 'content': (
-                    f"**{item['business_name']}**｜**{item['execution_mode']}**｜**{item['status']}**\n"
-                    f"- 类型：{item['category']}\n"
-                    f"- 最近时间：{item['started_at']}\n"
+                    f"**{item['business_name']}**\n"
+                    f"- 执行方式：{item['execution_mode']}\n"
+                    f"- 状态：{item['status']}\n"
+                    f"- 工作目录：`{item['workdir'] or '.'}`\n"
                     f"- 日志：`{item['log_file']}`\n"
+                    f"- 启动时间：{item['started_at']}\n"
                     f"- 技术任务名：`{item['task_name']}`"
                 )
             }
@@ -125,39 +108,38 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
     if not blocks:
         blocks.append({
             'tag': 'div',
-            'text': {'tag': 'lark_md', 'content': '**当前没有可映射的后台任务。**'}
+            'text': {'tag': 'lark_md', 'content': '**当前没有可见的 screen 任务元数据。**'}
         })
 
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': '🧭 任务语义执行面板 V2'},
-            'template': 'blue'
+            'title': {'tag': 'plain_text', 'content': '🖥️ screen 详情面板 V1'},
+            'template': 'cyan'
         },
         'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：统一显示 任务名｜执行方式｜状态｜最近时间。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：下钻查看 screen / agent-screen 任务的执行细节。'}},
             *blocks,
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'screen 详情'}, 'type': 'primary', 'value': quick_action('screen detail panel card', 'feishu.quick_actions.screen_detail_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '语义任务面板'}, 'type': 'primary', 'value': quick_action('semantic execution panel card', 'feishu.quick_actions.semantic_execution_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '执行中心'}, 'type': 'default', 'value': quick_action('execution center card', 'feishu.quick_actions.execution_center', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '后台任务中心'}, 'type': 'default', 'value': quick_action('runtime tasks panel card', 'feishu.quick_actions.runtime_tasks_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可补：把 ACP 线程也做成业务任务名映射，而不只显示 key。'}
+                {'tag': 'plain_text', 'content': '下一步可以补日志摘要、screen 当前存活状态，或者把 ACP 线程也做成同样的详情格式。'}
             ]}
         ]
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description='任务语义执行面板 V2')
+    parser = argparse.ArgumentParser(description='screen 详情面板 V1')
     parser.add_argument('--open-id', default=DEFAULT_OPEN_ID)
     parser.add_argument('--print', action='store_true')
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     card = build_card(args.open_id)
-    out = OUTPUT_DIR / 'semantic-execution-panel-card.json'
+    out = OUTPUT_DIR / 'screen-detail-panel-card.json'
     out.write_text(json.dumps(card, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f'✅ 已生成: {out}')
     if args.print:
