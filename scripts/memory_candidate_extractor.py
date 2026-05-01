@@ -44,6 +44,9 @@ class Candidate:
     created_at: str
     tags: List[str]
     dedupe_key: str
+    state: str = "new"
+    handled_at: str = ""
+    task_id: str = ""
 
 
 class MemoryCandidateExtractor:
@@ -77,10 +80,18 @@ class MemoryCandidateExtractor:
         else:
             data = {"date": day, "version": 1, "items": []}
 
+        for item in data.get("items", []):
+            item.setdefault("state", "new")
+            item.setdefault("handled_at", "")
+            item.setdefault("task_id", "")
+
         existing_keys = {item.get("dedupe_key") for item in data.get("items", [])}
         new_items = []
         for c in candidates:
             item = asdict(c)
+            item.setdefault("state", "new")
+            item.setdefault("handled_at", "")
+            item.setdefault("task_id", "")
             if item["dedupe_key"] not in existing_keys:
                 new_items.append(item)
                 existing_keys.add(item["dedupe_key"])

@@ -28,6 +28,8 @@ from datetime import datetime, date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from candidate_state_manager import mark as mark_candidate_state
+
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 DATA_DIR = WORKSPACE / "projects" / "task-center"
 DATA_FILE = DATA_DIR / "tasks.json"
@@ -331,6 +333,10 @@ def cmd_import_candidates(args):
         imported.append(task)
         if dedupe_key:
             existing_dedupe.add(dedupe_key)
+            try:
+                mark_candidate_state(args.day or today_str(), dedupe_key, "imported", task_id=task.id)
+            except Exception:
+                pass
 
     store.save_tasks(tasks)
     print(f"✅ 已导入 {len(imported)} 条候选任务")

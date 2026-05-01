@@ -14,7 +14,10 @@
         "memory",
         "todo"
       ],
-      "dedupe_key": "57fe92ac5ec2bf22e3b23c6aa170f3588f1e9fb1"
+      "dedupe_key": "57fe92ac5ec2bf22e3b23c6aa170f3588f1e9fb1",
+      "state": "imported",
+      "handled_at": "2026-05-01 10:02:54",
+      "task_id": "test123"
     },
     {
       "id": "ac8db8ee22",
@@ -127,6 +130,40 @@
         "risk"
       ],
       "dedupe_key": "3bf19f824eb5a9bc4890c836aa393334e772b854"
+    },
+    {
+      "id": "b92241173a",
+      "type": "todo",
+      "content": "把候选状态管理接到后续流程",
+      "confidence": 0.83,
+      "source": "manual",
+      "project": "openclaw",
+      "created_at": "2026-05-01 10:02:36",
+      "tags": [
+        "memory",
+        "todo"
+      ],
+      "dedupe_key": "94d2a41889943427775afb895ab7d96481314c1e",
+      "state": "imported",
+      "handled_at": "2026-05-01 10:02:36",
+      "task_id": "7c690a4c"
+    },
+    {
+      "id": "8dcf5e3d7a",
+      "type": "risk",
+      "content": "不要让候选文件越积越乱",
+      "confidence": 0.76,
+      "source": "manual",
+      "project": "openclaw",
+      "created_at": "2026-05-01 10:02:36",
+      "tags": [
+        "memory",
+        "risk"
+      ],
+      "dedupe_key": "04626fd3547ef7c7ac53189b54646996418c1b1f",
+      "state": "imported",
+      "handled_at": "2026-05-01 10:02:36",
+      "task_id": "e68ab4ad"
     }
   ]
 }

@@ -21,6 +21,7 @@ from typing import List
 
 from memory_candidate_extractor import MemoryCandidateExtractor
 from task_center import TaskStore, Task, today_str, now_str, short_id, render_task
+from candidate_state_manager import mark as mark_candidate_state
 
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 
@@ -91,6 +92,11 @@ def import_candidates_from_items(items: List[dict], candidate_file: Path, projec
         imported.append(task)
         if dedupe_key:
             existing_dedupe.add(dedupe_key)
+            try:
+                day = candidate_file.stem
+                mark_candidate_state(day, dedupe_key, "imported", task_id=task.id)
+            except Exception:
+                pass
 
     store.save_tasks(tasks)
     return imported
