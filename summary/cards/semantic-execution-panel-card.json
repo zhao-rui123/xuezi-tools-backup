@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🧭 任务语义执行面板 V1"
+      "content": "🧭 任务语义执行面板 V2"
     },
     "template": "blue"
   },
@@ -11,28 +11,28 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：优先显示“任务本身是什么、什么情况”，而不是底层进程 id。"
+        "content": "**定位**：统一显示 任务名｜执行方式｜状态｜最近时间。"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code 最小链路测试**\n- 类型：链路测试\n- 链路：claude\n- 状态：已完成/测试\n- 最近时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
+        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：链路测试\n- 最近时间：2026-04-29 15:40:19\n- 日志：`cc-min-test.log`\n- 技术任务名：`cc-min-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目（Codex 包装链路测试）**\n- 类型：项目开发\n- 链路：codex\n- 状态：已完成/测试\n- 最近时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:18:28\n- 日志：`codex-wrapper-test.log`\n- 技术任务名：`codex-wrapper-test`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目（Claude Code 包装链路测试）**\n- 类型：项目开发\n- 链路：claude\n- 状态：已完成/测试\n- 最近时间：2026-04-28 16:16:33\n- 技术任务名：`cc-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:16:33\n- 日志：`cc-wrapper-test.log`\n- 技术任务名：`cc-wrapper-test`"
       }
     },
     {
