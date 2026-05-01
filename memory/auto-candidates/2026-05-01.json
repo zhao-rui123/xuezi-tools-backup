@@ -31,7 +31,9 @@
         "memory",
         "rule"
       ],
-      "dedupe_key": "0b041d098eb189906bd6798114770ed0a1b85695"
+      "dedupe_key": "0b041d098eb189906bd6798114770ed0a1b85695",
+      "state": "ignored",
+      "handled_at": "2026-05-01 10:07:08"
     },
     {
       "id": "016bdffb67",
@@ -45,7 +47,9 @@
         "memory",
         "rule"
       ],
-      "dedupe_key": "2a90061151b9ddc83f96ad770194f0b02ba0d225"
+      "dedupe_key": "2a90061151b9ddc83f96ad770194f0b02ba0d225",
+      "state": "ignored",
+      "handled_at": "2026-05-01 10:07:08"
     },
     {
       "id": "06a01953ab",
