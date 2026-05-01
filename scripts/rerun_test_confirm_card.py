@@ -100,14 +100,14 @@ def build_card(task_name: str, open_id: str = DEFAULT_OPEN_ID) -> dict:
                 f"- 上次时间：{meta.get('STARTED_AT', '未知')}\n"
                 f"- 技术任务名：`{task_name}`"
             )}},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前阶段**：这一步只做确认，不直接执行。真实重跑按钮下一版再接。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**执行说明**：点击下面的确认按钮，会向当前会话发送重跑指令；由当前会话执行 `rerun-test-task.sh`。'}},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '确认：下一版接重跑'}, 'type': 'primary', 'value': quick_action(f'rerun confirm {task_name}', 'feishu.quick_actions.rerun_test_confirm_ack', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': f'确认并重跑 {task_name}'}, 'type': 'primary', 'value': quick_action(f'rerun execute {task_name}', 'feishu.quick_actions.rerun_test_execute', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '返回重跑面板'}, 'type': 'default', 'value': quick_action('rerun test tasks panel card', 'feishu.quick_actions.rerun_test_tasks_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '真正执行重跑前，还需要把执行脚本、安全确认和回写状态接上。'}
+                {'tag': 'plain_text', 'content': '当前只允许 3 个测试任务：cc-min-test / cc-wrapper-test / codex-wrapper-test。'}
             ]}
         ]
     }

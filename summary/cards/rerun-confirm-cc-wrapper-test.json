@@ -25,7 +25,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前阶段**：这一步只做确认，不直接执行。真实重跑按钮下一版再接。"
+        "content": "**执行说明**：点击下面的确认按钮，会向当前会话发送重跑指令；由当前会话执行 `rerun-test-task.sh`。"
       }
     },
     {
@@ -35,14 +35,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "确认：下一版接重跑"
+            "content": "确认并重跑 cc-wrapper-test"
           },
           "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.rerun_test_confirm_ack",
-            "q": "rerun confirm cc-wrapper-test",
+            "a": "feishu.quick_actions.rerun_test_execute",
+            "q": "rerun execute cc-wrapper-test",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -95,7 +95,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "真正执行重跑前，还需要把执行脚本、安全确认和回写状态接上。"
+          "content": "当前只允许 3 个测试任务：cc-min-test / cc-wrapper-test / codex-wrapper-test。"
         }
       ]
     }
