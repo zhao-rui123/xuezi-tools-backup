@@ -181,7 +181,7 @@ def resolve_openclaw_model_label(model: str = '') -> str:
     return mapping.get(model, model or '当前会话')
 
 
-def build_priority_suggestions(tasks: list[dict], candidates: list[dict], backup_risk: str, health_risk_count: int) -> list[str]:
+def build_priority_suggestions(tasks: list[dict], candidates: list[dict], backup_risk: str, health_risk_count: int) -> tuple[str, str]:
     out = []
     blocked = [t for t in tasks if t.get('status') == 'blocked']
     high = [t for t in tasks if t.get('status') == 'todo' and t.get('priority') == 'high']
@@ -199,7 +199,10 @@ def build_priority_suggestions(tasks: list[dict], candidates: list[dict], backup
         out.append(f'整理 {len(risks)} 条风险候选')
     if inbox and len(out) < 3:
         out.append(f'清理 Inbox（{len(inbox)} 条）')
-    return out[:3]
+    suggestions = out[:3]
+    top1 = suggestions[0] if suggestions else '当前无明显高优先级异常'
+    all_text = '\n'.join(f'- {x}' for x in suggestions) if suggestions else '- 当前无明显高优先级异常'
+    return top1, all_text
 
 
 def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
@@ -229,26 +232,29 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
         f'**最近备份**\n{backup_summary}',
     ]
 
-    priority_text = '\n'.join(f'- {x}' for x in priority) if priority else '- 当前无明显高优先级异常'
+    top1_priority, priority_text = build_priority_suggestions(tasks, candidates, backup_risk, health_risk_count)
     recent_text = '\n'.join(f'- {x}' for x in recent_tasks) if recent_tasks else '- 当前暂无可见后台任务'
 
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': f'🕹️ 主控制台 V3 | {today}'},
+            'title': {'tag': 'plain_text', 'content': f'🕹️ 主控制台 V4 | {today}'},
             'template': 'turquoise'
         },
         'elements': [
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**首页语义化升级**：直接告诉你现在在干什么、哪里有问题、该点哪里。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🚦 当前最该做的事**\n' + top1_priority}},
+            {'tag': 'hr'},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**📊 快看看板**'}},
             {'tag': 'div', 'fields': [
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': x}} for x in top_fields
             ]},
             {'tag': 'hr'},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**当前最重要的事**\n{priority_text}'}},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**当前活跃/最近任务**\n{recent_text}'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前最重要的事**\n' + priority_text}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**当前活跃/最近任务**\n' + recent_text}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '今日重点建议'}, 'type': 'primary', 'value': quick_action('focus panel card', 'feishu.quick_actions.focus_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '任务语义面板'}, 'type': 'default', 'value': quick_action('semantic execution panel card', 'feishu.quick_actions.semantic_execution_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '执行中心'}, 'type': 'default', 'value': quick_action('execution center card', 'feishu.quick_actions.execution_center', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '轻控制入口'}, 'type': 'default', 'value': quick_action('light control panel card', 'feishu.quick_actions.light_control_panel', open_id=open_id)},
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🧠 模型区**'}},

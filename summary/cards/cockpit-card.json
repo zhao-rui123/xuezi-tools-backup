@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🕹️ 主控制台 V3 | 2026-05-01"
+      "content": "🕹️ 主控制台 V4 | 2026-05-01"
     },
     "template": "turquoise"
   },
@@ -11,7 +11,17 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**首页语义化升级**：直接告诉你现在在干什么、哪里有问题、该点哪里。"
+        "content": "**🚦 当前最该做的事**\n先清 5 条阻塞任务"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📊 快看看板**"
       }
     },
     {
@@ -21,7 +31,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**当前会话模型**\nFeinian / GPT-5.4"
+            "content": "**当前会话模型**\n当前会话"
           }
         },
         {
@@ -56,7 +66,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**最近备份**\n本地备份 04-30 22:00｜云端同步 04-30 22:35"
+            "content": "**最近备份**\n本地备份 05-01 22:00｜云端同步 05-01 22:35"
           }
         }
       ]
@@ -75,7 +85,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前活跃/最近任务**\n- Claude Code 最小链路测试（screen/Claude Code）\n- 铁路储能 5MWh 项目测算（screen/Codex）\n- 铁路储能 5MWh 项目测算（screen/Claude Code）"
+        "content": "**当前活跃/最近任务**\n- 铁路储能 5MWh 项目测算（screen/Codex）\n- 铁路储能 5MWh 项目测算（screen/Claude Code）\n- Claude Code 最小链路测试（screen/Claude Code）"
       }
     },
     {
@@ -131,6 +141,25 @@
             "k": "quick",
             "a": "feishu.quick_actions.execution_center",
             "q": "execution center card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "轻控制入口"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.light_control_panel",
+            "q": "light control panel card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
