@@ -1,0 +1,186 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🧠 记忆面板 V1 | 2026-05-01"
+    },
+    "template": "carmine"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**记忆总览**：把候选层、状态管理和风险/规则入口收成专题面板。"
+      }
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**候选总数**\n11"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Inbox**\n6"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**已导入 / 已忽略**\n3 / 2"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**风险 / 规则**\n4 / 2"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**待办 / 进展**\n3 / 1"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**今日焦点**\n4 风险候选"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**风险候选**\n- `6537109672` risk | 不要直接污染 MEMORY.md\n- `a617163570` risk | 直接污染 MEMORY.md\n- `7ab9db4c4b` risk | 不要直接写 MEMORY.md\n- `8dcf5e3d7a` risk | 不要让候选文件越积越乱"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**规则候选**\n- `ac8db8ee22` rule | 先做记忆提炼，再增强任务中心。待办：把候选层接进任务系统。这个先暂停，等我确认。已经把统一任务中心最小版落地。注意直接污染 MEMORY.md\n- `016bdffb67` rule | 先做记忆提炼，再增强任务中心"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**待处理 Inbox**\n- `06a01953ab` progress | 把统一任务中心最小版\n- `6537109672` risk | 不要直接污染 MEMORY.md\n- `a617163570` risk | 直接污染 MEMORY.md\n- `8f4bd4f4f5` blocked | 等我确认\n- ... 还有 2 条"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**待办 / 进展候选**\n- `ec4cebfdf6` todo | 把候选层接进任务系统\n- `6a80634a09` todo | 把这个链路接到对话入口\n- `b92241173a` todo | 把候选状态管理接到后续流程\n- `06a01953ab` progress | 把统一任务中心最小版"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "Inbox"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.inbox",
+            "q": "inbox card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "摘要"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.digest",
+            "q": "digest card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "任务面板"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.task_panel",
+            "q": "task panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "返回主控台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步可做快捷动作面板，把最常用操作集中成一组“执行按钮”。"
+        }
+      ]
+    }
+  ]
+}
