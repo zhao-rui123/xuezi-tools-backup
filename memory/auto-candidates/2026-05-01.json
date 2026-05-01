@@ -99,6 +99,34 @@
         "blocked"
       ],
       "dedupe_key": "6f136e539757f685d2815f44b3abd8987a5eace4"
+    },
+    {
+      "id": "6a80634a09",
+      "type": "todo",
+      "content": "把这个链路接到对话入口",
+      "confidence": 0.83,
+      "source": "manual",
+      "project": "openclaw",
+      "created_at": "2026-05-01 09:59:02",
+      "tags": [
+        "memory",
+        "todo"
+      ],
+      "dedupe_key": "bea6ae045cef7ad18d470d7c9fcdbe9fcd68578a"
+    },
+    {
+      "id": "7ab9db4c4b",
+      "type": "risk",
+      "content": "不要直接写 MEMORY.md",
+      "confidence": 0.76,
+      "source": "manual",
+      "project": "openclaw",
+      "created_at": "2026-05-01 09:59:02",
+      "tags": [
+        "memory",
+        "risk"
+      ],
+      "dedupe_key": "3bf19f824eb5a9bc4890c836aa393334e772b854"
     }
   ]
 }

@@ -128,6 +128,52 @@
         "risk",
         "auto-import"
       ]
+    },
+    {
+      "id": "e8bebd8e",
+      "title": "把这个链路接到对话入口",
+      "status": "todo",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "todo",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "bea6ae045cef7ad18d470d7c9fcdbe9fcd68578a",
+      "notes": "从自动化入口导入 | confidence=0.83 | policy=all-tasklike",
+      "due_date": "",
+      "created_at": "2026-05-01 09:59:02",
+      "updated_at": "2026-05-01 09:59:02",
+      "completed_at": "",
+      "blocked_reason": "",
+      "tags": [
+        "memory",
+        "todo",
+        "auto-import",
+        "flow-v1"
+      ]
+    },
+    {
+      "id": "ee37395d",
+      "title": "风险关注：不要直接写 MEMORY.md",
+      "status": "blocked",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "risk",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "3bf19f824eb5a9bc4890c836aa393334e772b854",
+      "notes": "从自动化入口导入 | confidence=0.76 | policy=all-tasklike",
+      "due_date": "",
+      "created_at": "2026-05-01 09:59:02",
+      "updated_at": "2026-05-01 09:59:02",
+      "completed_at": "",
+      "blocked_reason": "不要直接写 MEMORY.md",
+      "tags": [
+        "memory",
+        "risk",
+        "auto-import",
+        "flow-v1"
+      ]
     }
   ]
 }
