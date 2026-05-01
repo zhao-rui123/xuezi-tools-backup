@@ -1,0 +1,110 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "🧭 任务语义执行面板 V1"
+    },
+    "template": "blue"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**定位**：优先显示“任务本身是什么、什么情况”，而不是底层进程 id。"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**\n- 类型：链路测试\n- 链路：claude\n- 状态：已完成/测试\n- 最近时间：2026-04-29 15:40:19\n- 技术任务名：`cc-min-test`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目（Codex 包装链路测试）**\n- 类型：项目开发\n- 链路：codex\n- 状态：已完成/测试\n- 最近时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目（Claude Code 包装链路测试）**\n- 类型：项目开发\n- 链路：claude\n- 状态：已完成/测试\n- 最近时间：2026-04-28 16:16:33\n- 技术任务名：`cc-wrapper-test`"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "执行中心"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_center",
+            "q": "execution center card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "后台任务中心"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.runtime_tasks_panel",
+            "q": "runtime tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "主控制台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步可补：把 ACP 线程也做成业务任务名映射，而不只显示 key。"
+        }
+      ]
+    }
+  ]
+}
