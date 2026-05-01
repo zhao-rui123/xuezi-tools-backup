@@ -31,6 +31,7 @@ from typing import Any, Dict, List, Optional
 WORKSPACE = Path("/Users/zhaoruicn/.openclaw/workspace")
 DATA_DIR = WORKSPACE / "projects" / "task-center"
 DATA_FILE = DATA_DIR / "tasks.json"
+CANDIDATE_DIR = WORKSPACE / "memory" / "auto-candidates"
 
 VALID_STATUS = {
     "todo",
@@ -49,6 +50,9 @@ class Task:
     priority: str = "medium"
     project: str = "default"
     source: str = "manual"
+    origin_type: str = "manual"
+    source_ref: str = ""
+    dedupe_key: str = ""
     notes: str = ""
     due_date: str = ""     # YYYY-MM-DD
     created_at: str = ""
@@ -130,6 +134,9 @@ def cmd_add(args):
         priority=args.priority,
         project=args.project,
         source=args.source,
+        origin_type="manual",
+        source_ref="",
+        dedupe_key="",
         notes=args.notes.strip(),
         due_date=args.due_date.strip(),
         created_at=now_str(),
@@ -241,6 +248,75 @@ def cmd_show(args):
     print(json.dumps(asdict(task), ensure_ascii=False, indent=2))
 
 
+def cmd_import_candidates(args):
+    store = TaskStore()
+    tasks = store.list_tasks()
+    existing_dedupe = {t.dedupe_key for t in tasks if t.dedupe_key}
+
+    candidate_file = Path(args.file) if args.file else (CANDIDATE_DIR / f"{args.day or today_str()}.json")
+    if not candidate_file.exists():
+        print(f"❌ 候选文件不存在: {candidate_file}")
+        sys.exit(1)
+
+    data = json.loads(candidate_file.read_text(encoding="utf-8"))
+    items = data.get("items", [])
+    imported = []
+
+    for item in items:
+        item_type = item.get("type")
+        if item_type not in {"todo", "blocked", "progress"}:
+            continue
+        dedupe_key = item.get("dedupe_key", "")
+        if dedupe_key and dedupe_key in existing_dedupe:
+            continue
+
+        status = "todo"
+        blocked_reason = ""
+        priority = "medium"
+        title = item.get("content", "").strip()
+        tags = list(item.get("tags", [])) + ["auto-import"]
+
+        if item_type == "blocked":
+            status = "blocked"
+            blocked_reason = title
+            priority = "high"
+        elif item_type == "progress":
+            status = "doing"
+            priority = "medium"
+            title = f"跟进：{title}"
+        elif item_type == "todo":
+            status = "todo"
+            priority = "high" if args.high_priority_todo else "medium"
+
+        task = Task(
+            id=short_id(),
+            title=title,
+            status=status,
+            priority=priority,
+            project=item.get("project", args.project or "default"),
+            source=item.get("source", "candidate"),
+            origin_type=item_type,
+            source_ref=str(candidate_file),
+            dedupe_key=dedupe_key,
+            notes=f"从候选层导入 | confidence={item.get('confidence', '')}",
+            due_date="",
+            created_at=now_str(),
+            updated_at=now_str(),
+            completed_at="",
+            blocked_reason=blocked_reason,
+            tags=tags,
+        )
+        tasks.append(task)
+        imported.append(task)
+        if dedupe_key:
+            existing_dedupe.add(dedupe_key)
+
+    store.save_tasks(tasks)
+    print(f"✅ 已导入 {len(imported)} 条候选任务")
+    for t in imported:
+        print(render_task(t))
+
+
 def build_parser():
     parser = argparse.ArgumentParser(description="统一任务中心")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -284,6 +360,13 @@ def build_parser():
     p = sub.add_parser("show", help="查看任务详情")
     p.add_argument("id")
     p.set_defaults(func=cmd_show)
+
+    p = sub.add_parser("import-candidates", help="从候选层导入任务")
+    p.add_argument("--file", default="")
+    p.add_argument("--day", default="")
+    p.add_argument("--project", default="")
+    p.add_argument("--high-priority-todo", action="store_true")
+    p.set_defaults(func=cmd_import_candidates)
 
     return parser
 

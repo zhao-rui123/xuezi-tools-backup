@@ -8,6 +8,9 @@
       "priority": "high",
       "project": "openclaw",
       "source": "assistant",
+      "origin_type": "manual",
+      "source_ref": "",
+      "dedupe_key": "",
       "notes": "第一阶段",
       "due_date": "2026-05-01",
       "created_at": "2026-05-01 09:40:06",
@@ -15,6 +18,72 @@
       "completed_at": "",
       "blocked_reason": "",
       "tags": []
+    },
+    {
+      "id": "de64c2ec",
+      "title": "把候选层接进任务系统",
+      "status": "todo",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "todo",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "57fe92ac5ec2bf22e3b23c6aa170f3588f1e9fb1",
+      "notes": "从候选层导入 | confidence=0.83",
+      "due_date": "",
+      "created_at": "2026-05-01 09:49:18",
+      "updated_at": "2026-05-01 09:49:18",
+      "completed_at": "",
+      "blocked_reason": "",
+      "tags": [
+        "memory",
+        "todo",
+        "auto-import"
+      ]
+    },
+    {
+      "id": "c1c988fb",
+      "title": "跟进：把统一任务中心最小版",
+      "status": "doing",
+      "priority": "medium",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "progress",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "9b933db4bb56245f9be5c8d8f1ea58f1a8ddcda9",
+      "notes": "从候选层导入 | confidence=0.79",
+      "due_date": "",
+      "created_at": "2026-05-01 09:49:18",
+      "updated_at": "2026-05-01 09:49:18",
+      "completed_at": "",
+      "blocked_reason": "",
+      "tags": [
+        "memory",
+        "progress",
+        "auto-import"
+      ]
+    },
+    {
+      "id": "7134ee8d",
+      "title": "等我确认",
+      "status": "blocked",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "blocked",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "6f136e539757f685d2815f44b3abd8987a5eace4",
+      "notes": "从候选层导入 | confidence=0.82",
+      "due_date": "",
+      "created_at": "2026-05-01 09:49:18",
+      "updated_at": "2026-05-01 09:49:18",
+      "completed_at": "",
+      "blocked_reason": "等我确认",
+      "tags": [
+        "memory",
+        "blocked",
+        "auto-import"
+      ]
     }
   ]
 }

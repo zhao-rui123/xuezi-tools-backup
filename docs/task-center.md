@@ -59,8 +59,25 @@ python3 scripts/task_center.py show <task_id>
 - `done`：完成
 - `archived`：归档
 
+## 候选层导入（已支持）
+现在任务中心已支持从 `memory/auto-candidates/` 导入：
+- `todo`
+- `blocked`
+- `progress`
+
+### 导入命令
+```bash
+python3 scripts/task_center.py import-candidates --day 2026-05-01 --high-priority-todo
+```
+
+说明：
+- 按 `dedupe_key` 去重，重复导入不会重复建任务
+- `blocked` 会自动变成阻塞任务
+- `progress` 会自动变成进行中任务
+- `todo` 可选择导入为高优先级
+
 ## 下一步建议
 后续可以逐步接入：
-1. 从对话自动抽取待办
+1. 从对话自动抽取待办并自动写入候选层
 2. 后台任务完成后自动写回任务状态
 3. 飞书卡片展示任务中心
