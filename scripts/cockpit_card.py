@@ -225,7 +225,8 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**📋 任务区**'}},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '工作台总览'}, 'type': 'primary', 'value': quick_action('workspace card', 'feishu.quick_actions.cockpit_workspace', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '任务面板'}, 'type': 'primary', 'value': quick_action('task panel card', 'feishu.quick_actions.task_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '工作台总览'}, 'type': 'default', 'value': quick_action('workspace card', 'feishu.quick_actions.cockpit_workspace', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '待处理 Inbox'}, 'type': 'default', 'value': quick_action('inbox card', 'feishu.quick_actions.inbox', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '阻塞'}, 'type': 'default', 'value': quick_action('blocked card', 'feishu.quick_actions.blocked', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '高优先级'}, 'type': 'default', 'value': quick_action('high card', 'feishu.quick_actions.high', open_id=open_id)},

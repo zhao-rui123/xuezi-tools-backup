@@ -1,0 +1,224 @@
+{
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "📋 任务面板 V1 | 2026-05-01"
+    },
+    "template": "blue"
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**任务总览**：把工作台里最常用的任务状态收成一个专题面板。"
+      }
+    },
+    {
+      "tag": "div",
+      "fields": [
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Inbox**\n6"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Blocked**\n5"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**Doing**\n1"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**High**\n4"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**已导入**\n3"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**已忽略**\n2"
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**当前阻塞**\n- `7134ee8d` 等我确认\n- `5d51d62f` 风险关注：不要直接污染 MEMORY.md\n- `5be27f0f` 风险关注：直接污染 MEMORY.md\n- `ee37395d` 风险关注：不要直接写 MEMORY.md\n- ... 还有 1 条"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**高优先级待办**\n- `b4d0a9a2` 统一任务中心最小版落地\n- `de64c2ec` 把候选层接进任务系统\n- `e8bebd8e` 把这个链路接到对话入口\n- `7c690a4c` 把候选状态管理接到后续流程"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**待处理 Inbox**\n- `06a01953ab` progress | 把统一任务中心最小版\n- `6537109672` risk | 不要直接污染 MEMORY.md\n- `a617163570` risk | 直接污染 MEMORY.md\n- `8f4bd4f4f5` blocked | 等我确认\n- ... 还有 2 条"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**今日自动导入**\n- `de64c2ec` 把候选层接进任务系统\n- `c1c988fb` 跟进：把统一任务中心最小版\n- `7134ee8d` 等我确认\n- `5d51d62f` 风险关注：不要直接污染 MEMORY.md\n- ... 还有 5 条"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "工作台总览"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_workspace",
+            "q": "workspace card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "Inbox"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.inbox",
+            "q": "inbox card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "阻塞"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.blocked",
+            "q": "blocked card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "高优先级"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.high",
+            "q": "high card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "摘要"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.digest",
+            "q": "digest card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "返回主控台"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "note",
+      "elements": [
+        {
+          "tag": "plain_text",
+          "content": "下一步可以继续做模型面板，把 OpenClaw / Claude Code 模型状态彻底拆开。"
+        }
+      ]
+    }
+  ]
+}
