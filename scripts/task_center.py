@@ -156,6 +156,12 @@ def cmd_list(args):
         tasks = [t for t in tasks if t.status == args.status]
     if args.project:
         tasks = [t for t in tasks if t.project == args.project]
+    if args.source:
+        tasks = [t for t in tasks if t.source == args.source]
+    if args.origin_type:
+        tasks = [t for t in tasks if t.origin_type == args.origin_type]
+    if args.tag:
+        tasks = [t for t in tasks if args.tag in (t.tags or [])]
     if not args.all:
         tasks = [t for t in tasks if t.status != "archived"]
 
@@ -262,13 +268,23 @@ def cmd_import_candidates(args):
     items = data.get("items", [])
     imported = []
 
+    policy = args.policy or "default"
+
     for item in items:
         item_type = item.get("type")
-        if item_type not in {"todo", "blocked", "progress"}:
-            continue
         dedupe_key = item.get("dedupe_key", "")
         if dedupe_key and dedupe_key in existing_dedupe:
             continue
+
+        if policy == "default":
+            if item_type not in {"todo", "blocked", "progress"}:
+                continue
+        elif policy == "all-tasklike":
+            if item_type not in {"todo", "blocked", "progress", "risk"}:
+                continue
+        else:
+            print(f"❌ 未知 policy: {policy}")
+            sys.exit(1)
 
         status = "todo"
         blocked_reason = ""
@@ -287,6 +303,11 @@ def cmd_import_candidates(args):
         elif item_type == "todo":
             status = "todo"
             priority = "high" if args.high_priority_todo else "medium"
+        elif item_type == "risk":
+            status = "blocked"
+            blocked_reason = title
+            priority = "high"
+            title = f"风险关注：{title}"
 
         task = Task(
             id=short_id(),
@@ -298,7 +319,7 @@ def cmd_import_candidates(args):
             origin_type=item_type,
             source_ref=str(candidate_file),
             dedupe_key=dedupe_key,
-            notes=f"从候选层导入 | confidence={item.get('confidence', '')}",
+            notes=f"从候选层导入 | confidence={item.get('confidence', '')} | policy={policy}",
             due_date="",
             created_at=now_str(),
             updated_at=now_str(),
@@ -315,6 +336,40 @@ def cmd_import_candidates(args):
     print(f"✅ 已导入 {len(imported)} 条候选任务")
     for t in imported:
         print(render_task(t))
+
+
+def cmd_digest(args):
+    store = TaskStore()
+    tasks = store.list_tasks()
+    day = args.day or today_str()
+
+    today_tasks = [t for t in tasks if (t.created_at or "").startswith(day)]
+    auto_tasks = [t for t in today_tasks if "auto-import" in (t.tags or [])]
+    blocked = [t for t in tasks if t.status == "blocked" and t.status != "archived"]
+    doing = [t for t in tasks if t.status == "doing" and t.status != "archived"]
+    todo_high = [t for t in tasks if t.status == "todo" and t.priority == "high"]
+
+    print(f"📦 任务中心整理视图 ({day})")
+    print(f"- 今日新增任务: {len(today_tasks)}")
+    print(f"- 今日自动导入: {len(auto_tasks)}")
+    print(f"- 当前阻塞: {len(blocked)}")
+    print(f"- 当前进行中: {len(doing)}")
+    print(f"- 当前高优先级待办: {len(todo_high)}")
+
+    if auto_tasks:
+        print("\n🤖 今日自动导入")
+        for t in auto_tasks:
+            print(render_task(t))
+
+    if blocked:
+        print("\n⛔ 当前阻塞")
+        for t in blocked:
+            print(render_task(t))
+
+    if doing:
+        print("\n🚧 当前进行中")
+        for t in doing:
+            print(render_task(t))
 
 
 def build_parser():
@@ -334,6 +389,9 @@ def build_parser():
     p = sub.add_parser("list", help="列出任务")
     p.add_argument("--status", choices=sorted(VALID_STATUS))
     p.add_argument("--project", default="")
+    p.add_argument("--source", default="")
+    p.add_argument("--origin-type", default="")
+    p.add_argument("--tag", default="")
     p.add_argument("--all", action="store_true")
     p.set_defaults(func=cmd_list)
 
@@ -365,8 +423,13 @@ def build_parser():
     p.add_argument("--file", default="")
     p.add_argument("--day", default="")
     p.add_argument("--project", default="")
+    p.add_argument("--policy", default="default", choices=["default", "all-tasklike"])
     p.add_argument("--high-priority-todo", action="store_true")
     p.set_defaults(func=cmd_import_candidates)
+
+    p = sub.add_parser("digest", help="查看每日整理视图")
+    p.add_argument("--day", default="")
+    p.set_defaults(func=cmd_digest)
 
     return parser
 

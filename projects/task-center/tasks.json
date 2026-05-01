@@ -84,6 +84,50 @@
         "blocked",
         "auto-import"
       ]
+    },
+    {
+      "id": "5d51d62f",
+      "title": "风险关注：不要直接污染 MEMORY.md",
+      "status": "blocked",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "risk",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "3b6826eb40d8348cc5cd6715fc7351255afa6eef",
+      "notes": "从候选层导入 | confidence=0.76 | policy=all-tasklike",
+      "due_date": "",
+      "created_at": "2026-05-01 09:54:01",
+      "updated_at": "2026-05-01 09:54:01",
+      "completed_at": "",
+      "blocked_reason": "不要直接污染 MEMORY.md",
+      "tags": [
+        "memory",
+        "risk",
+        "auto-import"
+      ]
+    },
+    {
+      "id": "5be27f0f",
+      "title": "风险关注：直接污染 MEMORY.md",
+      "status": "blocked",
+      "priority": "high",
+      "project": "openclaw",
+      "source": "manual",
+      "origin_type": "risk",
+      "source_ref": "/Users/zhaoruicn/.openclaw/workspace/memory/auto-candidates/2026-05-01.json",
+      "dedupe_key": "7d50ae4695f443065c4387c57a8c3db2a5e8b104",
+      "notes": "从候选层导入 | confidence=0.76 | policy=all-tasklike",
+      "due_date": "",
+      "created_at": "2026-05-01 09:54:01",
+      "updated_at": "2026-05-01 09:54:01",
+      "completed_at": "",
+      "blocked_reason": "直接污染 MEMORY.md",
+      "tags": [
+        "memory",
+        "risk",
+        "auto-import"
+      ]
     }
   ]
 }

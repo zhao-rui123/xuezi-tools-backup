@@ -76,6 +76,30 @@ python3 scripts/task_center.py import-candidates --day 2026-05-01 --high-priorit
 - `progress` 会自动变成进行中任务
 - `todo` 可选择导入为高优先级
 
+## 第二轮增强（已支持）
+
+### 来源筛选
+```bash
+python3 scripts/task_center.py list --origin-type todo
+python3 scripts/task_center.py list --origin-type blocked
+python3 scripts/task_center.py list --tag auto-import
+```
+
+### 每日整理视图
+```bash
+python3 scripts/task_center.py digest --day 2026-05-01
+```
+
+### 自动采纳策略
+```bash
+python3 scripts/task_center.py import-candidates --day 2026-05-01 --policy default
+python3 scripts/task_center.py import-candidates --day 2026-05-01 --policy all-tasklike
+```
+
+规则说明：
+- `default`：导入 `todo / blocked / progress`
+- `all-tasklike`：额外导入 `risk`，按高优先级阻塞项处理
+
 ## 下一步建议
 后续可以逐步接入：
 1. 从对话自动抽取待办并自动写入候选层
