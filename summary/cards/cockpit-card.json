@@ -530,6 +530,25 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
+            "content": "定时任务中心"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.scheduled_tasks_panel",
+            "q": "scheduled tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
             "content": "全面检查"
           },
           "type": "default",

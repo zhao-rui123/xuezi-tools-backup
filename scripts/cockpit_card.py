@@ -257,6 +257,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, oc_model_raw: str = '') -> dict:
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': health_summary}},
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '系统面板'}, 'type': 'primary', 'value': quick_action('system panel card', 'feishu.quick_actions.system_panel', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '定时任务中心'}, 'type': 'default', 'value': quick_action('scheduled tasks panel card', 'feishu.quick_actions.scheduled_tasks_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '全面检查'}, 'type': 'default', 'value': quick_action('healthcheck summary', 'feishu.quick_actions.healthcheck', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '备份状态'}, 'type': 'default', 'value': quick_action('backup status', 'feishu.quick_actions.backup_status', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '帮助'}, 'type': 'default', 'value': quick_action('/help', 'feishu.quick_actions.help', open_id=open_id)},
