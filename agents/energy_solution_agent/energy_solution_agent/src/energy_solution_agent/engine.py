@@ -100,7 +100,27 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     )
     thermal_electric_profile = thermal_daily
     thermal_series = thermal_annual["thermal_electric_series_kw"]
-    storage_strategy = data.get("project_info", {}).get("storage_strategy_mode") or "balanced"
+    # ── 自动选择储能策略 ──────────────────────────────────────
+    user_strategy = data.get("project_info", {}).get("storage_strategy_mode") or ""
+    if user_strategy and user_strategy != "auto":
+        storage_strategy = user_strategy
+    else:
+        market_mode = str(data.get("market_data", {}).get("market_mode") or "").lower()
+        has_tou = bool(data.get("market_data", {}).get("tou_tariff"))
+        has_market_price = bool(data.get("market_data", {}).get("market_price_series"))
+        pv_mwp = float(renewables.get("pv_mwp") or 0)
+        wind_mw = float(renewables.get("wind_mw") or 0)
+        annual_load = float(data.get("load_data", {}).get("annual_consumption_mwh") or 0)
+        renewable_ratio = (pv_mwp * 1200 + wind_mw * 2200) / annual_load if annual_load > 0 else 0
+
+        if "microgrid" in scenario or market_mode == "offgrid_internal":
+            storage_strategy = "microgrid"
+        elif has_tou or has_market_price:
+            storage_strategy = "market_responding"
+        elif renewable_ratio > 0.3:
+            storage_strategy = "renewable_priority"
+        else:
+            storage_strategy = "peak_shaving"
     dispatch = simulate_storage_dispatch(
         load_profile_kw=load_profile,
         pv_profile_kw=renewables.get("pv_hourly_profile_kw", [0.0] * 24),
