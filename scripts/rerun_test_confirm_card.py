@@ -104,7 +104,10 @@ def build_card(task_name: str, open_id: str = DEFAULT_OPEN_ID) -> dict:
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': f'确认并重跑 {task_name}'}, 'type': 'primary', 'value': quick_action(f'rerun execute {task_name}', 'feishu.quick_actions.rerun_test_execute', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '返回重跑面板'}, 'type': 'default', 'value': quick_action('rerun test tasks panel card', 'feishu.quick_actions.rerun_test_tasks_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '当前只允许 3 个测试任务：cc-min-test / cc-wrapper-test / codex-wrapper-test。'}

@@ -81,7 +81,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag':'button','text':{'tag':'plain_text','content':'⌂ 主控制台'},'type':'default',
                  'value': quick_action('cockpit card','feishu.quick_actions.cockpit_home',open_id=open_id)},
             ]},
-            {'tag':'note','elements':[{'tag':'plain_text','content':'下一步：扩清理执行脚本 + 结果卡'}]},
+            {'tag':'note','elements':[{'tag':'plain_text','content':'当前链路已支持：清理面板 → 二次确认 → 结果卡。'}]},
         ]
     }
 

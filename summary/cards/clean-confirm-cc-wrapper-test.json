@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "♻️ 重跑确认 V1"
+      "content": "🗑️ 清理确认 V1"
     },
     "template": "orange"
   },
@@ -11,21 +11,21 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**请确认**：你要重跑的是下面这个测试任务。"
+        "content": "**请确认**：你要清理的是下面这个测试任务。"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测试链路**\n- 执行方式：screen / Codex\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace/projects/railway-storage-5mwh`\n- 日志：`codex-wrapper-test.log`\n- 上次时间：2026-04-28 16:18:28\n- 技术任务名：`codex-wrapper-test`"
+        "content": "**cc-wrapper-test**\n- Agent：claude\n- 工作目录：`/Users/zhaoruicn/.openclaw/workspace/projects/railway-storage-5mwh`\n- 日志：`cc-wrapper-test.log`\n- 启动时间：2026-04-28 16:16:33"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**执行说明**：点击下面的确认按钮，会向当前会话发送重跑指令；由当前会话执行 `rerun-test-task.sh`。"
+        "content": "**执行说明**：点击确认后，会清理该测试任务的活跃元信息；日志保留，不碰正式任务。"
       }
     },
     {
@@ -35,14 +35,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "确认并重跑 codex-wrapper-test"
+            "content": "确认清理 cc-wrapper-test"
           },
           "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.rerun_test_execute",
-            "q": "rerun execute codex-wrapper-test",
+            "a": "feishu.quick_actions.clean_test_execute",
+            "q": "clean execute cc-wrapper-test",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -54,14 +54,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "返回重跑面板"
+            "content": "返回清理面板"
           },
           "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.rerun_test_tasks_panel",
-            "q": "rerun test tasks panel card",
+            "a": "feishu.quick_actions.clean_test_tasks_panel",
+            "q": "clean test tasks panel card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -78,14 +78,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "← 执行链路"
+            "content": "← 模型与控制"
           },
           "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.execution_hub",
-            "q": "execution_hub card",
+            "a": "feishu.quick_actions.model_control_hub",
+            "q": "model_control_hub card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -111,15 +111,6 @@
               "t": "p2p"
             }
           }
-        }
-      ]
-    },
-    {
-      "tag": "note",
-      "elements": [
-        {
-          "tag": "plain_text",
-          "content": "当前只允许 3 个测试任务：cc-min-test / cc-wrapper-test / codex-wrapper-test。"
         }
       ]
     }

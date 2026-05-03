@@ -34,7 +34,7 @@ def build_result_card(task: str, raw: str, open_id: str = DEFAULT_OPEN_ID) -> di
 
     return {
         'header': {
-            'title': {'tag': 'plain_text', 'content': f'✅ 重跑成功'},
+            'title': {'tag': 'plain_text', 'content': '✅ 重跑成功'},
             'template': 'green'
         },
         'elements': [
@@ -45,17 +45,14 @@ def build_result_card(task: str, raw: str, open_id: str = DEFAULT_OPEN_ID) -> di
                 f'- Meta：`{meta_name}`\n'
                 f'- Screen：`{screen}`'}},
             {'tag': 'hr'},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '现在可以进入新链路，或返回主控制台查看。'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**反馈闭环**\n- 重跑已执行\n- 新任务已生成\n- 下一步可查看日志，或回到重跑面板继续操作'}},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '查看日志'},
-                 'type': 'default',
-                 'value': quick_action(f'tail -20 logs/{log_name}', 'feishu.quick_actions.oc_exec', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '重跑面板'},
-                 'type': 'primary',
-                 'value': quick_action('rerun test tasks panel card', 'feishu.quick_actions.rerun_test_tasks_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'},
-                 'type': 'default',
-                 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '查看日志'}, 'type': 'default', 'value': quick_action(f'tail -20 logs/{log_name}', 'feishu.quick_actions.oc_exec', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '返回重跑面板'}, 'type': 'primary', 'value': quick_action('rerun test tasks panel card', 'feishu.quick_actions.rerun_test_tasks_panel', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
         ]
     }
