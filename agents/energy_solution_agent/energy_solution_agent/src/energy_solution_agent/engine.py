@@ -295,6 +295,9 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "opex_escalation_rate": finance["opex_escalation_rate"],
             "lcoe": finance.get("lcoe"),
             "lcos": finance.get("lcos"),
+            "equity_irr": finance.get("equity_irr"),
+            "equity_npv": finance.get("equity_npv"),
+            "dscr_min": finance.get("dscr_min"),
         }
     )
     output["carbon_results"].update(carbon)

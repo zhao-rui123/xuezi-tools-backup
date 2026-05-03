@@ -738,6 +738,31 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         _slc = storage_capex + replacement_cost + sum(opex_annual * _ss * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
         _lcos_val = _slc / (_ld * 1000) if _ld > 0 else None
 
+    # ── 融资结构分析（负债/权益）────────────────────────────────────
+    debt_ratio = float(financial.get("debt_ratio", 0.7))
+    loan_rate = float(financial.get("loan_rate", 0.045))
+    loan_term = int(financial.get("loan_term", min(10, years)))
+    total_loan = capex_total * debt_ratio
+    equity_invest = capex_total * (1 - debt_ratio)
+    annual_principal = total_loan / loan_term if loan_term > 0 else 0.0
+    equity_cashflows = [-equity_invest]
+    outstanding = total_loan
+    dscr_values = []
+    for y in range(1, years + 1):
+        cf = cashflows[y] if y < len(cashflows) else 0.0
+        interest = outstanding * loan_rate
+        principal = min(annual_principal, outstanding)
+        debt_service = interest + principal
+        tax_shield = interest * cit_rate * 0.25 if apply_tax else 0.0
+        equity_cf = cf - debt_service + tax_shield
+        equity_cashflows.append(equity_cf)
+        outstanding -= principal
+        if debt_service > 0:
+            dscr_values.append(cf / debt_service)
+    equity_irr = _calc_irr(equity_cashflows)
+    equity_npv_val = sum(cf / ((1 + discount_rate) ** y) for y, cf in enumerate(equity_cashflows))
+    dscr_min = min(dscr_values) if dscr_values else None
+
     return {
         "price_mechanism_summary": _describe_price_mode(market),
         "revenue_breakdown": _revenue_breakdown(charge_saving, pv_saving, wind_saving, charging_margin, thermal_saving, carbon_value),
@@ -751,6 +776,9 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "storage_replacement_year": replacement_year,
         "storage_replacement_cost": round(replacement_cost, 2) if replacement_cost else None,
         "opex_escalation_rate": opex_escalation_rate,
+        "equity_irr": round(equity_irr, 4) if equity_irr is not None else None,
+        "equity_npv": round(equity_npv_val, 2),
+        "dscr_min": round(dscr_min, 3) if dscr_min is not None else None,
         "lcoe": round(_lcoe_val, 4) if _lcoe_val is not None else None,
         "lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
     }
