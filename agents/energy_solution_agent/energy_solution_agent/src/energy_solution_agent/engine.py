@@ -123,43 +123,6 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         storage_config=data.get("equipment", {}).get("storage", {}),
     )
 
-    # ── 储能循环次数约束（≥300次/年）─────────────────────────────
-    min_annual_cycles = 300.0
-    actual_annual_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
-    # microgrid 策略下，不通过放大储能来满足循环次数
-    # 因为储能循环取决于"有多少过剩电量"，不是"储能有多大"
-    if storage_strategy != "microgrid" and actual_annual_cycles < min_annual_cycles:
-        max_iter = 6
-        iter_count = 0
-        while iter_count < max_iter:
-            actual_annual_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
-            if actual_annual_cycles >= min_annual_cycles or float(storage.get("storage_power_mw") or 0.0) <= 0.0:
-                break
-            iter_count += 1
-            # 放大储能（功率+50%，能量+50%，上限100MW/500MWh）
-            cur_power = float(storage["storage_power_mw"])
-            cur_energy = float(storage["storage_energy_mwh"])
-            new_power = min(round(cur_power * 1.5, 3), 100.0)
-            new_energy = min(round(cur_energy * 1.5, 3), 500.0)
-            storage = {
-                **storage,
-                "storage_power_mw": new_power,
-                "storage_energy_mwh": new_energy,
-            }
-            # 用放大后的储能重新跑年调度
-            annual_dispatch = simulate_storage_dispatch_annual(
-                load_series_kw=load_series,
-                pv_series_kw=renewables.get("pv_annual_series_kw", [0.0] * 8760),
-                wind_series_kw=renewables.get("wind_annual_series_kw", [0.0] * 8760),
-                charging_series_kw=charging_series,
-                thermal_series_kw=thermal_series,
-                storage_power_mw=new_power,
-                storage_energy_mwh=new_energy,
-                strategy_mode=storage_strategy,
-                price_series=prelim_prices,
-                storage_config=data.get("equipment", {}).get("storage", {}),
-            )
-
     gross_demand = annual_load + annual_charging + (annual_cooling / 3.5 if annual_cooling else 0.0) + (annual_heating / 3.0 if annual_heating else 0.0)
     annual_grid_purchase = annual_dispatch["annual_grid_purchase_mwh"]
     annual_export = max(0.0, annual_pv + annual_wind - gross_demand * 0.65)

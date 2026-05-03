@@ -254,6 +254,11 @@ def simulate_storage_dispatch_annual(
         percentile = 0.82
     target_peak = sorted(positive)[int(len(positive) * percentile)] if positive else 0.0 if strategy_mode != "microgrid" else 0.0
     valley_threshold = min(target_peak * (0.62 if strategy_mode == "arbitrage" else 0.55), (sum(positive) / len(positive)) if positive else target_peak)
+    # 确保 valley_threshold 不低于最小净负荷+20%，否则电池永远无法充电
+    if positive:
+        min_positive = positive[0] if len(positive) > 0 else 0.0
+        floor_threshold = min_positive * 1.2 + 50.0  # 比最小净负荷高20%+50kW
+        valley_threshold = max(valley_threshold, floor_threshold)
     grid = []
     charged = 0.0
     discharged = 0.0
@@ -515,15 +520,26 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     financial = data.get("financial", {})
     market = data.get("market_data", {})
     degradation = financial.get("degradation") or {}
-    tou = market.get("tou_tariff") or []
-    avg_price = 0.72
-    if tou:
-        prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
-        if prices:
-            avg_price = sum(prices) / len(prices)
     market_mode = str(market.get("market_mode") or "").lower()
     is_offgrid = market_mode == "offgrid_internal"
     is_ppa = market_mode == "ppa"
+    # 从市场数据中提取平均电价和套利价差
+    price_series_raw = [float(v) for v in (market.get("market_price_series") or [])]
+    tou = market.get("tou_tariff") or []
+    if price_series_raw:
+        sorted_prices = sorted(price_series_raw)
+        valley_price = sorted_prices[max(0, int(len(sorted_prices) * 0.25) - 1)]
+        peak_price = sorted_prices[min(len(sorted_prices) - 1, int(len(sorted_prices) * 0.75))]
+        avg_price = sum(price_series_raw) / len(price_series_raw)
+        avg_spread = max(0.1, peak_price - valley_price)
+    elif tou:
+        prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
+        avg_price = sum(prices) / len(prices) if prices else 0.72
+        avg_spread = max(0.1, avg_price - 0.35)
+    else:
+        avg_price = 0.72
+        avg_spread = 0.37
+
     charge_saving = 0.0
     pv_saving = 0.0
     wind_saving = 0.0
@@ -551,7 +567,7 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             wind_saving = total_savings * (annual_wind / total_gen)
         charge_saving = 0.0
     else:
-        charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * max(avg_price - 0.35, 0.1) * 1000
+        charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * avg_spread * 1000
         pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * 0.78 * 1000
         wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * 0.72 * 1000
     charging_margin = float(simulation.get("annual_charging_energy_mwh") or 0.0) * 120
