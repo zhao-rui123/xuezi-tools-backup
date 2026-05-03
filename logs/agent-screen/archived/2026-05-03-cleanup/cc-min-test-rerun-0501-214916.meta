@@ -1,0 +1,7 @@
+AGENT='claude'
+TASK_NAME='cc-min-test-rerun-0501-214916'
+WORKDIR='/Users/zhaoruicn/.openclaw/workspace'
+LOG_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/cc-min-test-rerun-0501-214916.log'
+PROMPT_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/agent-screen/cc-min-test-rerun-0501-214916.prompt.txt'
+PATTERN='claude --permission-mode bypassPermissions --print'
+STARTED_AT='2026-05-01 21:49:16'

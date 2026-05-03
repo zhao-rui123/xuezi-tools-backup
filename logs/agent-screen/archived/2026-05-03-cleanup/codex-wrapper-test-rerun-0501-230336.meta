@@ -1,0 +1,7 @@
+AGENT='codex'
+TASK_NAME='codex-wrapper-test-rerun-0501-230336'
+WORKDIR='/Users/zhaoruicn/.openclaw/workspace/projects/railway-storage-5mwh'
+LOG_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/codex-wrapper-test-rerun-0501-230336.log'
+PROMPT_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/agent-screen/codex-wrapper-test-rerun-0501-230336.prompt.txt'
+PATTERN='codex exec --skip-git-repo-check --dangerously-bypass-approvals-and-sandbox'
+STARTED_AT='2026-05-01 23:03:36'

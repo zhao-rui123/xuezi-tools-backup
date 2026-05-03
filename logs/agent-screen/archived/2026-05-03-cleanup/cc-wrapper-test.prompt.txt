@@ -1,0 +1,1 @@
+Read the current directory and output exactly three bullet points about the project. Do not modify files.

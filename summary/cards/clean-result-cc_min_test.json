@@ -2,16 +2,16 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🗑️ 清理测试任务 V1"
+      "content": "✅ 清理成功"
     },
-    "template": "orange"
+    "template": "green"
   },
   "elements": [
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**说明**：这里只列出测试任务，正式任务不在范围内。清理后会从“活跃测试任务”列表中移除，但日志文件保留。"
+        "content": "**测试任务清理完成**\n\n- 任务：`cc-min-test`\n- 结果：已从活跃测试任务列表移除\n- 日志文件：保留\n- 正式任务：未触碰"
       }
     },
     {
@@ -21,11 +21,8 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**没有可清理的测试任务。**"
+        "content": "现在可以回到清理面板复查，或直接回主控制台继续操作。"
       }
-    },
-    {
-      "tag": "hr"
     },
     {
       "tag": "action",
@@ -34,26 +31,21 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "轻控制入口"
+            "content": "返回清理面板"
           },
-          "type": "default",
+          "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.light_control_panel",
-            "q": "light control panel card",
+            "a": "feishu.quick_actions.clean_test_tasks_panel",
+            "q": "clean test tasks panel card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
               "t": "p2p"
             }
           }
-        }
-      ]
-    },
-    {
-      "tag": "action",
-      "actions": [
+        },
         {
           "tag": "button",
           "text": {
@@ -91,15 +83,6 @@
               "t": "p2p"
             }
           }
-        }
-      ]
-    },
-    {
-      "tag": "note",
-      "elements": [
-        {
-          "tag": "plain_text",
-          "content": "当前链路已支持：清理面板 → 二次确认 → 结果卡。"
         }
       ]
     }

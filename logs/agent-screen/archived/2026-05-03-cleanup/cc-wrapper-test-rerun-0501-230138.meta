@@ -1,0 +1,7 @@
+AGENT='claude'
+TASK_NAME='cc-wrapper-test-rerun-0501-230138'
+WORKDIR='/Users/zhaoruicn/.openclaw/workspace/projects/railway-storage-5mwh'
+LOG_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/cc-wrapper-test-rerun-0501-230138.log'
+PROMPT_FILE='/Users/zhaoruicn/.openclaw/workspace/logs/agent-screen/cc-wrapper-test-rerun-0501-230138.prompt.txt'
+PATTERN='claude --permission-mode bypassPermissions --print'
+STARTED_AT='2026-05-01 23:01:39'
