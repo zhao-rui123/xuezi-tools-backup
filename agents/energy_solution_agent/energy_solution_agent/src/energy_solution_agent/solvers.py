@@ -521,9 +521,29 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
         if prices:
             avg_price = sum(prices) / len(prices)
-    charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * max(avg_price - 0.35, 0.1) * 1000
-    pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * 0.78 * 1000
-    wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * 0.72 * 1000
+    is_offgrid = str(market.get("market_mode") or "").lower() == "offgrid_internal"
+    charge_saving = 0.0
+    pv_saving = 0.0
+    wind_saving = 0.0
+    if is_offgrid:
+        # offgrid：收益 = 柴油替代节省量（燃料成本 × 被替代电量）
+        fuel_cost = float(market.get("fuel_cost_per_kwh") or 0.0)
+        annual_load = float(data.get("load_data", {}).get("annual_consumption_mwh") or 0.0)
+        annual_grid_purchase = float(simulation.get("annual_grid_purchase_mwh") or 0.0)
+        diesel_displaced_mwh = max(0.0, annual_load - annual_grid_purchase)
+        total_savings = diesel_displaced_mwh * fuel_cost * 1000  # MWh * RMB/kWh * 1000 = RMB
+        # 按风光发电量比例拆分收益
+        annual_pv = float(simulation.get("annual_pv_generation_mwh") or 0.0)
+        annual_wind = float(simulation.get("annual_wind_generation_mwh") or 0.0)
+        total_gen = annual_pv + annual_wind
+        if total_gen > 0:
+            pv_saving = total_savings * (annual_pv / total_gen)
+            wind_saving = total_savings * (annual_wind / total_gen)
+        charge_saving = 0.0  # 储能收益已包含在总柴油替代里
+    else:
+        charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * max(avg_price - 0.35, 0.1) * 1000
+        pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * 0.78 * 1000
+        wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * 0.72 * 1000
     charging_margin = float(simulation.get("annual_charging_energy_mwh") or 0.0) * 120
     thermal_saving = (float(simulation.get("annual_cooling_energy_mwh") or 0.0) + float(simulation.get("annual_heating_energy_mwh") or 0.0)) * 70
     carbon_value = float(carbon.get("annual_reduction_tco2e") or 0.0) * float(financial.get("carbon_price_assumption") or 0.0)
@@ -629,6 +649,9 @@ def _revenue_breakdown(charge: float, pv: float, wind: float, charging: float, t
         items.append("冷热系统节费收益")
     if carbon > 0:
         items.append("碳减排价值")
+    if pv > 0 and wind > 0 and charge == 0:
+        # offgrid 模式下 pv 和 wind 的收益标签已改，这里不动显示
+        pass
     return items
 
 
