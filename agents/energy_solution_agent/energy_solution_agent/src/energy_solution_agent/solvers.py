@@ -723,6 +723,21 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             lifetime_revenue = sum(cashflows[1:]) + replacement_cost + sum(opex_annual * ((1 + opex_escalation_rate) ** (year - 1)) for year in range(1, years + 1))
             abatement_cost = max(0.0, (lifetime_cost - lifetime_revenue) / lifetime_reduction)
 
+    # LCOE/LCOS
+    _gen = float(simulation.get("annual_pv_generation_mwh") or 0.0) + float(simulation.get("annual_wind_generation_mwh") or 0.0)
+    _dis = float(simulation.get("annual_storage_discharge_mwh") or 0.0)
+    _lcoe_val = None
+    _lcos_val = None
+    if _gen > 0 and years > 0:
+        _lg = sum(_gen * max(0.0, 1.0 - pv_degradation * (y-1)) for y in range(1, years+1))
+        _lc = capex_total + replacement_cost + sum(opex_annual * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
+        _lcoe_val = _lc / (_lg * 1000) if _lg > 0 else None
+    if _dis > 0 and years > 0:
+        _ld = sum(_dis * max(0.0, 1.0 - storage_degradation * (y-1)) for y in range(1, years+1))
+        _ss = storage_capex / capex_total if capex_total > 0 else 0.0
+        _slc = storage_capex + replacement_cost + sum(opex_annual * _ss * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
+        _lcos_val = _slc / (_ld * 1000) if _ld > 0 else None
+
     return {
         "price_mechanism_summary": _describe_price_mode(market),
         "revenue_breakdown": _revenue_breakdown(charge_saving, pv_saving, wind_saving, charging_margin, thermal_saving, carbon_value),
@@ -736,6 +751,8 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "storage_replacement_year": replacement_year,
         "storage_replacement_cost": round(replacement_cost, 2) if replacement_cost else None,
         "opex_escalation_rate": opex_escalation_rate,
+        "lcoe": round(_lcoe_val, 4) if _lcoe_val is not None else None,
+        "lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
     }
 
 

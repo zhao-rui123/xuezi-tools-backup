@@ -293,6 +293,8 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "storage_replacement_year": finance["storage_replacement_year"],
             "storage_replacement_cost": finance["storage_replacement_cost"],
             "opex_escalation_rate": finance["opex_escalation_rate"],
+            "lcoe": finance.get("lcoe"),
+            "lcos": finance.get("lcos"),
         }
     )
     output["carbon_results"].update(carbon)
