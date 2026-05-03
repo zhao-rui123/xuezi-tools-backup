@@ -126,7 +126,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
             {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
         ]},
         {'tag': 'note', 'elements': [
-            {'tag': 'plain_text', 'content': '下一步如果继续，可以把确认卡片后的动作真正接到重跑脚本。'}
+            {'tag': 'plain_text', 'content': '这里只允许测试任务重跑，不碰正式任务。'}
         ]}
     ])
 

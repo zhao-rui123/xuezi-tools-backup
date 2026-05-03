@@ -101,7 +101,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可做快捷动作面板，把最常用操作集中成一组“执行按钮”。'}
+                {'tag': 'plain_text', 'content': '这里偏收集与梳理；如果要执行动作，请回任务面板或快捷动作面板。'}
             ]}
         ]
     }

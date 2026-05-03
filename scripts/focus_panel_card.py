@@ -217,7 +217,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可做“定时任务中心”或“后台任务中心”，让主控制台继续向总控台靠近。'}
+                {'tag': 'plain_text', 'content': '建议先处理高优先级或阻塞项，再回任务与记忆继续排队。'}
             ]}
         ]
     }

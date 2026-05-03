@@ -42,7 +42,7 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**会话快照**\n✅ 最近：05-03 10:00\n计划：每10分钟｜高频"
+            "content": "**会话快照**\n✅ 最近：05-03 11:30\n计划：每10分钟｜高频"
           }
         },
         {
@@ -174,7 +174,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步可做“后台任务中心”，把 Claude Code / Codex / screen 任务也纳入主控制台。"
+          "content": "这里只看定时任务；临时执行任务请回执行链路专题。"
         }
       ]
     }

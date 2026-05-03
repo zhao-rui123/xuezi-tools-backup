@@ -62,7 +62,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, *, oc_model: str = '', tokens: st
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步如果要更强，可以做 ACP/子线程列表、最近后台任务历史、甚至停止/恢复入口。'}
+                {'tag': 'plain_text', 'content': '这里以只读观测为主；如需继续操作，请回执行链路专题。'}
             ]}
         ]
     }

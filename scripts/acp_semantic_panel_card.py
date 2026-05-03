@@ -115,7 +115,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, active_keys: set[str] | None = No
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '这版先保守显示“Claude Code ACP 子线程 X”；后续如果拿到更强元数据，再映射成具体业务任务。'}
+                {'tag': 'plain_text', 'content': '这里按任务视角看 ACP 线程；要看原始线程细节，请进入 ACP 详情。'}
             ]}
         ]
     }

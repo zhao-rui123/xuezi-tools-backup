@@ -133,7 +133,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, active_screen_names: set[str] | N
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可以补 ACP 线程同样的存活状态格式，或者继续做后台任务历史。'}
+                {'tag': 'plain_text', 'content': '这里展示最近 screen 元信息；为空通常代表已清理或当前没有可见记录。'}
             ]}
         ]
     }

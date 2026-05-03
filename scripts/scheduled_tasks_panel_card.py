@@ -109,7 +109,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可做“后台任务中心”，把 Claude Code / Codex / screen 任务也纳入主控制台。'}
+                {'tag': 'plain_text', 'content': '这里只看定时任务；临时执行任务请回执行链路专题。'}
             ]}
         ]
     }

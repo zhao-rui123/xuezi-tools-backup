@@ -79,7 +79,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '今日重点建议'}, 'type': 'default', 'value': quick_action('focus panel card', 'feishu.quick_actions.focus_panel', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步如果继续，可以开始做更强的“控制动作”，比如停任务/重跑，但那会进入高风险区。'}
+                {'tag': 'plain_text', 'content': '这里只放高频低风险快捷动作；复杂控制请回专题面板。'}
             ]}
         ]
     }

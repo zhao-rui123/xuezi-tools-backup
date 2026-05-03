@@ -82,7 +82,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '工作台总览'}, 'type': 'default', 'value': quick_action('workspace card', 'feishu.quick_actions.cockpit_workspace', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
-                {'tag': 'plain_text', 'content': '下一步可做“今日重点建议”，让主控制台从状态面板升级为半自动指挥台。'}
+                {'tag': 'plain_text', 'content': '这里放高频低风险快捷动作；复杂操作优先回专题面板。'}
             ]}
         ]
     }
