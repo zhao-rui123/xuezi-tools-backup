@@ -18,6 +18,8 @@ META_FILE=$(printf '%s
 SCREEN_NAME=$(printf '%s
 ' "$OUT" | awk -F'=' '/^screen=/{print $2}')
 
+bash "$HOME/.openclaw/workspace/scripts/refresh-cockpit-cards.sh" execution >/dev/null || true
+
 cat <<EOF
 ✅ 已触发重跑
 - 原任务: $TASK_NAME

@@ -120,6 +120,20 @@ def normalize_target(raw: str) -> str:
     return raw.strip()
 
 
+def model_display(alias: str) -> str:
+    mapping = {
+        "deepseek": "DeepSeek / V4 Flash",
+        "minimax": "MiniMax / M2.7",
+        "mini": "MiniMax / M2.7",
+        "kimi": "Kimi / K2.5",
+        "k2.5": "Kimi / K2.5",
+        "qwen": "Qwen / 3.5 Plus",
+        "code": "Kimi Coding",
+        "coding": "Kimi Coding",
+    }
+    return mapping.get(alias, alias)
+
+
 def show_status() -> int:
     result = run(["openclaw", "config", "get", "agents.defaults.model.primary"])
     if result.returncode != 0:
@@ -145,6 +159,11 @@ def main(argv: list[str]) -> int:
 
     switch_model(target)
     restart_gateway()
+    subprocess.run([
+        "bash",
+        str(Path.home() / ".openclaw" / "workspace" / "scripts" / "refresh-cockpit-cards.sh"),
+        "models",
+    ], env={**os.environ, "CURRENT_MODEL": model_display(target)}, check=False, capture_output=True, text=True)
 
     print(f"已切换到 {target}")
     if rotated:

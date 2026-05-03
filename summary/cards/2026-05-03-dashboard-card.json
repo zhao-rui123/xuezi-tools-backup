@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🗂️ 任务历史中心 V1"
+      "content": "🧭 工作台总览 | 2026-05-03"
     },
     "template": "blue"
   },
@@ -11,69 +11,52 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**定位**：从历史角度看最近系统到底忙过什么。"
+        "content": "**概览**：主卡片只保留核心统计，详细内容通过按钮查看。"
       }
     },
     {
       "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**云端同步**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-02 22:35:09\n- 技术标识：`cloud-backup.log`"
-      }
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**每日备份**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-02 22:00:15\n- 技术标识：`backup_cron.log`"
-      }
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**股票日报推送**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 16:30:09\n- 技术标识：`stock_push.log`"
-      }
-    },
-    {
-      "tag": "action",
-      "actions": [
+      "fields": [
         {
-          "tag": "button",
+          "tag": "field",
           "text": {
-            "tag": "plain_text",
-            "content": "执行中心"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.execution_center",
-            "q": "execution center card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
+            "tag": "lark_md",
+            "content": "**候选待处理**\n0"
           }
         },
         {
-          "tag": "button",
+          "tag": "field",
           "text": {
-            "tag": "plain_text",
-            "content": "定时任务中心"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.scheduled_tasks_panel",
-            "q": "scheduled tasks panel card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
+            "tag": "lark_md",
+            "content": "**已导入**\n0"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**已忽略**\n0"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**阻塞**\n0"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**进行中**\n1"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
+            "content": "**高优先级待办**\n0"
           }
         }
       ]
@@ -85,14 +68,14 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "← 执行链路"
+            "content": "📥 Inbox"
           },
           "type": "default",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.execution_hub",
-            "q": "execution_hub card",
+            "a": "feishu.quick_actions.inbox",
+            "q": "inbox card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -104,14 +87,52 @@
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "⌂ 主控制台"
+            "content": "⛔ 阻塞"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.blocked",
+            "q": "blocked card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "🔥 高优先级"
           },
           "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
-            "a": "feishu.quick_actions.cockpit_home",
-            "q": "cockpit card",
+            "a": "feishu.quick_actions.high",
+            "q": "high card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "🧾 摘要"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.digest",
+            "q": "digest card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -126,7 +147,7 @@
       "elements": [
         {
           "tag": "plain_text",
-          "content": "下一步可以继续做“轻控制入口”，比如查看详情/跳转/回到相关面板。"
+          "content": "点击按钮会返回对应的子卡片内容。"
         }
       ]
     }

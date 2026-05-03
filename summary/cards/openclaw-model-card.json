@@ -42,6 +42,13 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
+            "content": "**GPT-5.4**\n标准版 GPT-5.4"
+          }
+        },
+        {
+          "tag": "field",
+          "text": {
+            "tag": "lark_md",
             "content": "**5.4mini**\n轻量版 GPT-5.4"
           }
         },
@@ -107,6 +114,25 @@
             "k": "quick",
             "a": "feishu.quick_actions.oc_model_minimax",
             "q": "/model minimax",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "切 GPT-5.4"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.oc_model_gpt54",
+            "q": "/model gpt-5.4",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
