@@ -59,7 +59,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "  → 执行中心 | 语义任务面板 | ACP | screen详情 | 重跑测试任务 | 任务历史 | 后台任务中心"
+        "content": "  → 执行中心 | 语义任务面板 | ACP语义面板 | screen详情 | 重跑测试任务 | 任务历史中心 | 后台任务中心"
       }
     },
     {
@@ -90,7 +90,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "  → 任务面板 | 记忆面板 | 今日重点 | 阻塞 | 高优先级 | Inbox | 摘要"
+        "content": "  → 任务面板 | 记忆面板 | 今日重点建议 | 阻塞 | 高优先级 | 待处理Inbox | 摘要"
       }
     },
     {
@@ -152,7 +152,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "  → 模型面板 | 切换CC模型 | OpenClaw模型 | 会话状态 | 轻控制入口"
+        "content": "  → 模型面板 | 切换CC模型 | OpenClaw模型卡 | 会话状态 | 轻控制入口 | 重跑测试 | 清理测试"
       }
     },
     {
