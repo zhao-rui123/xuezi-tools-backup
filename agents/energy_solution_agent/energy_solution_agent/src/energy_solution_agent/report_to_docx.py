@@ -43,6 +43,8 @@ def _add_table(doc, headers, rows, col_widths=None):
                 _set_cell_shading(cell, 'D6E4F0')
     return t
 
+from .analysis_narrative import generate_narrative
+
 def build_docx(result_json: dict) -> str:
     out = result_json
     f = out.get('financial_results', {})
@@ -72,6 +74,16 @@ def build_docx(result_json: dict) -> str:
     r3 = p2.add_run(f"场景类型：{proj.get('scenario_type','')}    省份：{proj.get('province','')}")
     r3.font.size = Pt(10)
     
+    # ===== 专家结论 =====
+    doc.add_heading('专家分析结论', level=1)
+    narrative = generate_narrative(result_json)
+    for line in narrative.split('\n'):
+        if line.startswith('### '):
+            doc.add_heading(line.replace('### ', ''), level=2)
+        elif line.startswith('- '):
+            doc.add_paragraph(line, style='List Bullet')
+        elif line.strip():
+            doc.add_paragraph(line)
     doc.add_page_break()
     
     # ===== 1. 项目概况 =====
