@@ -111,9 +111,6 @@ def build_card(current_model: str, open_id: str = DEFAULT_OPEN_ID, active_hours:
         {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🕹️ 主控制台 V6**  — 轻状态版'}},
         {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'**当前模型：{current_model or "未知"}**'}},
         {'tag': 'div', 'text': {'tag': 'lark_md', 'content': f'今日重点：{focus_count}｜阻塞：{blocked_count}｜后台任务：{bg_total}'}},
-        {'tag': 'note', 'elements': [
-            {'tag': 'plain_text', 'content': f'后台任务 = screen {screen_count} + acpx {acpx_count}（统计近 {active_hours} 小时未关闭会话）'}
-        ]},
         {'tag': 'hr'},
     ]
 

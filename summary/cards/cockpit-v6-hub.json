@@ -29,15 +29,6 @@
       }
     },
     {
-      "tag": "note",
-      "elements": [
-        {
-          "tag": "plain_text",
-          "content": "后台任务 = screen 0 + acpx 0（统计近 24 小时未关闭会话）"
-        }
-      ]
-    },
-    {
       "tag": "hr"
     },
     {

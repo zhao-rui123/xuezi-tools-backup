@@ -801,3 +801,22 @@ requests.post(
 - 不要给整个 gateway 挂全局代理，否则可能影响 Feishu
 - 只给 `openai-codex-image` 插件单独配 `proxyUrl`，让图片请求走 `127.0.0.1:1087`
 - 本机代理不通时，`gpt-image-2` 在线调用大概率会再次报 `AggregateError`
+
+## 快捷触发词（2026-05-02 新增）
+
+### 主控制台
+- **触发词**：「主控制台」「主控制台v5」「cockpit」
+- **动作**：直接发送 `cockpit-v6-hub.json` 卡片，不问，不解释
+- **卡片路径**：`~/.openclaw/workspace/summary/cards/cockpit-v6-hub.json`
+- **禁止**：不再询问用户要不要发，直接发
+
+
+### 触发规则（2026-05-02 更新）
+- **「主控制台」** = 直接触发 → 读取 `cockpit-v6-hub.json` → 直接发送飞书卡片
+- 不问、不解释、不搜索，直接发
+- 触发词包括：主控制台、主控制台v5、cockpit、cockpit card、主控制台卡片
+
+### 飞书卡片排版规范
+- 每个入口结构：button + 二级说明div 交替排列
+- 不把所有button打包在同一个action块里
+- 格式：button → 说明 → button → 说明 → ...
