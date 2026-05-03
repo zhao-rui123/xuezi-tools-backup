@@ -43,7 +43,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
         'elements': [
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**目标**：把主控制台里的控制动作按风险分级，先开安全的，再逐步放开危险的。'}},
             {'tag': 'hr'},
-            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**P0｜现在就能开放（低风险）**\n- 查看任务详情\n- 查看日志文件位置\n- 跳转到相关面板\n- 返回主控台\n- 查看状态 / 历史 / 最近时间'}},
+            {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**P0｜现在就能开放（低风险）**\n- 查看任务详情\n- 查看日志文件位置\n- 跳转到相关面板\n- 返回主控制台\n- 查看状态 / 历史 / 最近时间'}},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**P1｜可做，但需要确认（中风险）**\n- 清理测试任务\n- 重跑测试任务\n- 停止明确标记为测试的 screen 任务\n- 重新打开某个已结束的测试链路'}},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**P2｜后面再做（高风险）**\n- 停止正式项目任务\n- 重跑正式项目任务\n- 恢复失败任务\n- 停止 ACP 正式线程\n- 改动定时任务配置'}},
             {'tag': 'hr'},

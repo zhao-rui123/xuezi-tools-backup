@@ -45,7 +45,7 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**系统动作**\n全面检查 / 备份状态 / 会话状态'}},
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**任务动作**\nInbox / 阻塞 / 高优先级 / 摘要'}},
                 {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**模型动作**\n切 OpenClaw / 切 Claude Code'}},
-                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**导航动作**\n返回主控台 / 打开专题面板'}},
+                {'tag': 'field', 'text': {'tag': 'lark_md', 'content': '**导航动作**\n返回主控制台 / 打开专题面板'}},
             ]},
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🩺 系统动作**'}},
