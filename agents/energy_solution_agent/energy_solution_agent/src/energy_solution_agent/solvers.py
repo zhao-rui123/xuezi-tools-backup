@@ -639,13 +639,13 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
 
         # 折旧计算（直线法）
         annual_dep = 0.0
-        for asset, cost, years in [
+        for asset, cost, dep_y in [
             ("pv", pv_capex, dep_pv),
             ("wind", wind_capex, dep_wind),
             ("storage", storage_capex, dep_storage),
         ]:
-            if cost > 0 and years > 0:
-                annual_dep += cost * (1 - residual) / years
+            if cost > 0 and dep_y > 0:
+                annual_dep += cost * (1 - residual) / dep_y
 
         # 进项增值税（一次性在首年抵扣）
         input_vat = capex_total * vat_rate
