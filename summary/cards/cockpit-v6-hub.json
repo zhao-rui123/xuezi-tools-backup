@@ -200,7 +200,7 @@
             "oc": "ocf1",
             "k": "quick",
             "a": "feishu.quick_actions.professional_services_hub",
-            "q": "professional_services_hub card",
+            "q": "专业服务 hub card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -214,7 +214,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "  → 电力及零碳专家 | 股票分析专家（即将上线）"
+        "content": "  → 电力及零碳专家 ✅ | 股票分析专家（即将上线）"
       }
     },
     {

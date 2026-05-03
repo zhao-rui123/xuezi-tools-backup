@@ -28,14 +28,14 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**⚡ 电力及零碳专家** *(开发中)*"
+        "content": "**⚡ 电力及零碳专家**"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "电力行业：电气接线图 / 电价查询 / 储能选型 / 电费清单处理"
+        "content": "项目分析：风光储优化设计 / 微电网能量平衡 / 储能容量测算\n零碳领域：零碳园区 / 碳排计算 / 项目经济测算"
       }
     },
     {
@@ -59,7 +59,7 @@
             "oc": "ocf1",
             "k": "quick",
             "a": "feishu.quick_actions.electric_zero_carbon_expert",
-            "q": "电力及零碳专家 agent card",
+            "q": "能源Agent 打开控制台",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -100,7 +100,7 @@
             "oc": "ocf1",
             "k": "quick",
             "a": "feishu.quick_actions.stock_expert",
-            "q": "股票分析专家 agent card",
+            "q": "股票Agent 打开控制台",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
