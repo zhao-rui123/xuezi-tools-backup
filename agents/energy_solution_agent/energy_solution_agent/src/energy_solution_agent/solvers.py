@@ -621,9 +621,93 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         running_cum += year_cashflow
         if payback is None and running_cum >= 0:
             payback = float(year)
+
+    # ── 中国税法调整 ───────────────────────────────────────────────
+    tax_cfg = financial.get("tax", {})
+    if tax_cfg.get("enabled", False):
+        vat_rate = float(tax_cfg.get("vat_rate", 0.13))
+        cit_rate = float(tax_cfg.get("cit_rate", 0.25))
+        surcharge_rate = float(tax_cfg.get("surcharge_rate", 0.12))
+        dep_pv = int(tax_cfg.get("dep_years_pv", 20))
+        dep_wind = int(tax_cfg.get("dep_years_wind", 20))
+        dep_storage = int(tax_cfg.get("dep_years_storage", 12))
+        residual = float(tax_cfg.get("residual_ratio", 0.05))
+        cit_free = int(tax_cfg.get("cit_exemption_years", 3))
+        cit_half = int(tax_cfg.get("cit_halved_years", 3))
+        invest_mode = str(tax_cfg.get("investment_mode", "self")).lower()
+        share_ratio = float(tax_cfg.get("revenue_share_ratio", 1.0))
+
+        # 折旧计算（直线法）
+        annual_dep = 0.0
+        for asset, cost, years in [
+            ("pv", pv_capex, dep_pv),
+            ("wind", wind_capex, dep_wind),
+            ("storage", storage_capex, dep_storage),
+        ]:
+            if cost > 0 and years > 0:
+                annual_dep += cost * (1 - residual) / years
+
+        # 进项增值税（一次性在首年抵扣）
+        input_vat = capex_total * vat_rate
+        tax_credit = input_vat  # 留抵税额
+
+        after_tax = [cashflows[0]]  # Year 0 CAPEX unchanged
+        running_cum_at = cashflows[0]
+        payback_at = None
+
+        for year in range(1, years + 1):
+            rev = cashflows[year] + opex_annual * ((1 + opex_escalation_rate) ** (year - 1))
+            y_opex = opex_annual * ((1 + opex_escalation_rate) ** (year - 1))
+
+            # 销项增值税
+            output_vat = rev * vat_rate if rev > 0 else 0.0
+            # 运维进项（仅运维成本的小部分有增值税）
+            maint_input_vat = y_opex * vat_rate * 0.3
+            net_vat = max(0.0, output_vat - maint_input_vat)
+            # 消抵扣留抵
+            if tax_credit > 0:
+                deduction = min(tax_credit, net_vat)
+                net_vat -= deduction
+                tax_credit -= deduction
+
+            # 城建税+教育费
+            surcharge = net_vat * surcharge_rate
+
+            # 折旧抵税
+            dep_deduction = annual_dep
+
+            # 应税所得
+            taxable = max(0.0, rev - y_opex - dep_deduction)
+            # 三免三减半
+            if year <= cit_free:
+                cit = 0.0
+            elif year <= cit_free + cit_half:
+                cit = taxable * cit_rate * 0.5
+            else:
+                cit = taxable * cit_rate
+
+            # 投资模式调整
+            if invest_mode == "third_party":
+                rev = rev * share_ratio
+                cit = cit * share_ratio
+                # 第三方投资模式下，进项税也在投资方账上
+
+            year_at = rev - y_opex - surcharge - cit - (cashflows[year] - rev + y_opex)
+            after_tax.append(year_at)
+            running_cum_at += year_at
+            if payback_at is None and running_cum_at >= 0:
+                payback_at = float(year)
+
+        # 用税后现金流重算 IRR 和 NPV
+        irr = _calc_irr(after_tax)
+        npv = 0.0
+        for yr, cf in enumerate(after_tax):
+            npv += cf / ((1 + discount_rate) ** yr)
+        payback = payback_at
+        cashflows = after_tax
+
     net_annual = cashflows[1] if len(cashflows) > 1 else 0.0
-    # 牛顿法求 IRR
-    irr = _calc_irr(cashflows)
+    irr = _calc_irr(cashflows) if not tax_cfg.get("enabled", False) else irr
     npv = 0.0
     for year, cashflow in enumerate(cashflows):
         npv += cashflow / ((1 + discount_rate) ** year)
