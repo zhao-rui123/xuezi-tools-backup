@@ -115,7 +115,13 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
 
         if "microgrid" in scenario or market_mode == "offgrid_internal":
             storage_strategy = "microgrid"
-        elif has_tou or has_market_price:
+        elif has_tou or has_market_price or data.get("market_data", {}).get("market_mode") in ("spot", "market_price_series"):
+            storage_strategy = "market_responding"
+            # 如有现货市场配置，生成现货价格序列
+            if data.get("market_data", {}).get("market_mode") == "spot":
+                data["market_data"]["market_price_series"] = build_spot_price_series(
+                    data["market_data"], 8760
+                )
             storage_strategy = "market_responding"
         elif renewable_ratio > 0.3:
             storage_strategy = "renewable_priority"
@@ -302,6 +308,9 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "roi": finance.get("roi"),
             "roe": finance.get("roe"),
             "breakeven_price_factor": finance.get("breakeven_price_factor"),
+            "gec_revenue_annual": finance.get("gec_revenue_annual"),
+            "ccer_total_value": finance.get("ccer_total_value"),
+            "residual_salvage_value": finance.get("residual_salvage_value"),
         }
     )
     output["carbon_results"].update(carbon)

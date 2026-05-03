@@ -171,6 +171,55 @@ def ancillary_and_dr_revenue(
     }
 
 
+
+
+# ── 绿证 (GEC) 收益 ─────────────────────────────────────────────
+def annual_gec_revenue(renewable_mwh: float, market: dict[str, Any]) -> float:
+    """绿证交易收益：可再生能源发电量 × 绿证价格"""
+    gec_price = float(market.get("gec_price_per_mwh") or 30.0)  # 30 元/MWh ≈ 0.03 元/kWh
+    return renewable_mwh * gec_price
+
+
+# ── 现货市场价格模拟 ─────────────────────────────────────────────
+def build_spot_price_series(market: dict[str, Any], length: int) -> list[float]:
+    """基于基准电价生成现货市场模拟价格"""
+    base = float(market.get("spot_base_price", 0.42))  # 现货基准价
+    volatility = float(market.get("spot_volatility", 0.20))  # 波动率
+    import random
+    random.seed(int(market.get("spot_seed", 42)))
+    series = []
+    for h in range(length):
+        hour = h % 24
+        # 日内模式：夜间低，日间高，晚峰最高
+        pattern = 0.7 if hour in range(0, 7) else (1.3 if hour in range(18, 23) else 1.0)
+        noise = 1.0 + random.gauss(0, volatility * 0.5)
+        price = base * pattern * noise
+        series.append(max(0.1, round(price, 4)))
+    return series
+
+
+# ── CCER 签发时序 ───────────────────────────────────────────────
+def estimate_ccer_revenue(annual_reduction_tco2e: float, years: int, market: dict[str, Any]) -> list[float]:
+    """CCER 分年签发收益（元/年）"""
+    ccer_price = float(market.get("ccer_price_per_tco2e") or 60.0)  # 60 元/tCO₂e
+    phase1_ratio = float(market.get("ccer_phase1_ratio", 0.7))  # 减排量的70%可签发CCER
+    yearly_revenue = []
+    for y in range(1, years + 1):
+        if y <= 3:
+            # 前3年：项目验证期，不计CCER
+            factor = 0.0
+        elif y <= 10:
+            # 4-10年：全额签发
+            factor = 1.0
+        else:
+            # 11年后：递减
+            factor = max(0.0, 1.0 - (y - 10) * 0.1)
+        revenue = annual_reduction_tco2e * phase1_ratio * factor * ccer_price
+        yearly_revenue.append(revenue)
+    return yearly_revenue
+
+
+
 def _province_market_modifier(market: dict[str, Any]) -> float:
     province_profile = str(market.get("province_policy_profile") or "").lower()
     mode = str(market.get("market_mode") or "").lower()

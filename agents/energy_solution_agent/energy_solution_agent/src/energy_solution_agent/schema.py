@@ -135,6 +135,9 @@ OUTPUT_TEMPLATE: dict[str, Any] = {
             "roi": None,
             "roe": None,
             "breakeven_price_factor": None,
+            "gec_revenue_annual": None,
+            "ccer_total_value": None,
+            "residual_salvage_value": None,
         "abatement_cost_per_tco2e": None,
     },
     "carbon_results": {

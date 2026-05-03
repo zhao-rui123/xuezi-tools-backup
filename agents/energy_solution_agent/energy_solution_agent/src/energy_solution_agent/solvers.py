@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from .settlement import ancillary_and_dr_revenue, annual_demand_charge, annual_energy_charge, build_hourly_price_series, annual_gec_revenue, build_spot_price_series, estimate_ccer_revenue
 from .constants import DEFAULT_GAS_EMISSION_FACTOR, DEFAULT_GRID_EMISSION_FACTOR, DEFAULT_HEAT_PUMP_COP, DEFAULT_THERMAL_COP
 from .utils import clamp, safe_div
 
@@ -573,7 +574,10 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     charging_margin = float(simulation.get("annual_charging_energy_mwh") or 0.0) * 120
     thermal_saving = (float(simulation.get("annual_cooling_energy_mwh") or 0.0) + float(simulation.get("annual_heating_energy_mwh") or 0.0)) * 70
     carbon_value = float(carbon.get("annual_reduction_tco2e") or 0.0) * float(financial.get("carbon_price_assumption") or 0.0)
-    annual_revenue = charge_saving + pv_saving + wind_saving + charging_margin + thermal_saving + carbon_value
+    # 绿证收益
+    gec_revenue = annual_gec_revenue(annual_pv + annual_wind, market)
+    
+    annual_revenue = charge_saving + pv_saving + wind_saving + charging_margin + thermal_saving + carbon_value + gec_revenue
 
     capex = financial.get("capex", {})
     storage_capex = (simulation.get("storage_energy_mwh") or 0.0) * 1000 * float(capex.get("storage_system_cost_per_kwh") or 850)
@@ -602,6 +606,8 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     cashflows = [-capex_total]
     running_cum = -capex_total
     payback = None
+    ccer_schedule = estimate_ccer_revenue(float(carbon.get("annual_reduction_tco2e") or 0.0), years, market)
+
     for year in range(1, years + 1):
         storage_factor = max(0.0, 1.0 - storage_degradation * (year - 1))
         pv_factor = max(0.0, 1.0 - pv_degradation * (year - 1))
@@ -614,6 +620,9 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             + thermal_saving
             + carbon_value
         )
+        # CCER 分年签发收益（前3年无，逐年递减）
+        ccer_year = ccer_schedule[year - 1] if ccer_schedule and year <= len(ccer_schedule) else 0.0
+        year_revenue += ccer_year
         year_opex = opex_annual * ((1 + opex_escalation_rate) ** (year - 1))
         year_capex = replacement_cost if replacement_year and year == replacement_year else 0.0
         year_cashflow = year_revenue - year_opex - year_capex
@@ -775,17 +784,36 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     for y in range(1, years + 1):
         cf = cashflows[y] if y < len(cashflows) else 0.0
         if fin_mode == "lease":
-            # 融资租赁：年租金属性固定，利息部分可抵税
-            lease_pmt = total_loan * loan_rate * (1 + loan_rate)**loan_term / ((1+loan_rate)**loan_term - 1) if loan_term > 0 else 0.0
-            interest = outstanding * loan_rate
+            # 融资租赁：等额本息 + 保证金 + 手续费
+            lease_rate = float(financial.get("lease_rate", loan_rate))
+            deposit_ratio = float(financial.get("lease_deposit_ratio", 0.10))
+            fee_ratio = float(financial.get("lease_fee_ratio", 0.02))
+            buyback_ratio = float(financial.get("lease_buyback_ratio", 0.05))
+            lease_pmt = total_loan * lease_rate * (1+lease_rate)**loan_term / ((1+lease_rate)**loan_term - 1) if loan_term > 0 else 0.0
+            interest = outstanding * lease_rate
             principal_portion = lease_pmt - interest
             debt_service = lease_pmt
             outstanding -= principal_portion
+            # 首年：保证金（可退） + 手续费（不可退）
+            if y == 1:
+                deposit = total_loan * deposit_ratio
+                fee = total_loan * fee_ratio
+                debt_service += fee
+            else:
+                deposit = 0.0
+                fee = 0.0
+            # 末年：残值回购
+            if y == loan_term or outstanding <= 0:
+                buyback = total_loan * buyback_ratio
+                debt_service += buyback
         else:
             interest = outstanding * loan_rate
             principal = min(annual_principal, outstanding)
             debt_service = interest + principal
             outstanding -= principal
+        # 保证金年末退还处理（模拟为最后一笔正现金流）
+        if y == 1 and fin_mode == "lease":
+            pass  # 保证金在lease_deposit_recall中处理
         # 利息抵税
         tax_shield = interest * cit_rate * 0.25 if apply_tax else 0.0
         equity_cf = cf - debt_service + tax_shield
@@ -841,6 +869,9 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "roi": round(roi, 4) if roi is not None else None,
         "roe": round(roe, 4) if roe is not None else None,
         "breakeven_price_factor": round(be_price_factor, 4) if be_price_factor is not None else None,
+        "gec_revenue_annual": round(gec_revenue, 2) if gec_revenue else None,
+        "ccer_total_value": round(sum(ccer_schedule), 2) if ccer_schedule else None,
+        "residual_salvage_value": round(residual_value, 2) if residual_value > 0 else None,
         "lcoe": round(_lcoe_val, 4) if _lcoe_val is not None else None,
         "lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
     }
