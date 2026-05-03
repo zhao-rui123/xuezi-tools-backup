@@ -74,7 +74,11 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
             {'tag':'action','actions':[
                 {'tag':'button','text':{'tag':'plain_text','content':'轻控制入口'},'type':'default',
                  'value': quick_action('light control panel card','feishu.quick_actions.light_control_panel',open_id=open_id)},
-                {'tag':'button','text':{'tag':'plain_text','content':'主控制台'},'type':'default',
+            ]},
+            {'tag':'action','actions':[
+                {'tag':'button','text':{'tag':'plain_text','content':'← 模型与控制'},'type':'default',
+                 'value': quick_action('model_control_hub card','feishu.quick_actions.model_control_hub',open_id=open_id)},
+                {'tag':'button','text':{'tag':'plain_text','content':'⌂ 主控制台'},'type':'default',
                  'value': quick_action('cockpit card','feishu.quick_actions.cockpit_home',open_id=open_id)},
             ]},
             {'tag':'note','elements':[{'tag':'plain_text','content':'下一步：扩清理执行脚本 + 结果卡'}]},

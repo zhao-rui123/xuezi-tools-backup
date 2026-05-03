@@ -120,7 +120,10 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
         {'tag': 'action', 'actions': [
             {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '轻控制入口'}, 'type': 'primary', 'value': quick_action('light control panel card', 'feishu.quick_actions.light_control_panel', open_id=open_id)},
             {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '任务历史中心'}, 'type': 'default', 'value': quick_action('task history panel card', 'feishu.quick_actions.task_history_panel', open_id=open_id)},
-            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+        ]},
+        {'tag': 'action', 'actions': [
+            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+            {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
         ]},
         {'tag': 'note', 'elements': [
             {'tag': 'plain_text', 'content': '下一步如果继续，可以把确认卡片后的动作真正接到重跑脚本。'}

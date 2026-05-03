@@ -18,6 +18,20 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
+        "content": "**云端同步**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-02 22:35:09\n- 技术标识：`cloud-backup.log`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**每日备份**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-02 22:00:15\n- 技术标识：`backup_cron.log`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
         "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**\n- 类型：项目任务\n- 最近时间：2026-05-01 23:22:29\n- 技术标识：`cc-wrapper-test-rerun-0501-232229`"
       }
     },
@@ -85,41 +99,8 @@
       }
     },
     {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**云端同步**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 22:35:09\n- 技术标识：`cloud-backup.log`"
-      }
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**每日备份**｜**定时任务**\n- 类型：定时任务\n- 最近时间：2026-05-01 22:00:14\n- 技术标识：`backup_cron.log`"
-      }
-    },
-    {
       "tag": "action",
       "actions": [
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "主控制台"
-          },
-          "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.cockpit_home",
-            "q": "cockpit card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        },
         {
           "tag": "button",
           "text": {
@@ -151,6 +132,49 @@
             "k": "quick",
             "a": "feishu.quick_actions.scheduled_tasks_panel",
             "q": "scheduled tasks panel card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 执行链路"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_hub",
+            "q": "execution_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        },
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "⌂ 主控制台"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_home",
+            "q": "cockpit card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,

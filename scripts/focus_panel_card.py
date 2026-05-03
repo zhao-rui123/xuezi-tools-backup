@@ -211,7 +211,10 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
             *suggestion_blocks,
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '快捷动作面板'}, 'type': 'default', 'value': quick_action('quick actions panel card', 'feishu.quick_actions.quick_actions_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 任务与记忆'}, 'type': 'default', 'value': quick_action('task_hub card', 'feishu.quick_actions.task_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '下一步可做“定时任务中心”或“后台任务中心”，让主控制台继续向总控台靠近。'}

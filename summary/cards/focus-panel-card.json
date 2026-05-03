@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "🎯 今日重点建议 V1 | 2026-05-01"
+      "content": "🎯 今日重点建议 V1 | 2026-05-03"
     },
     "template": "green"
   },
@@ -21,28 +21,28 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**高优先级待办**\n4"
+            "content": "**高优先级待办**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**阻塞任务**\n5"
+            "content": "**阻塞任务**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**风险候选**\n4"
+            "content": "**风险候选**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Inbox**\n6"
+            "content": "**Inbox**\n0"
           }
         }
       ]
@@ -54,38 +54,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**建议 1｜先清阻塞任务**\n- 原因：当前有 5 条 blocked，优先解除卡点。\n- 建议动作：查看阻塞"
-      }
-    },
-    {
-      "tag": "action",
-      "actions": [
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "查看阻塞"
-          },
-          "type": "primary",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.blocked",
-            "q": "blocked card",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**建议 2｜复查云端备份**\n- 原因：云端同步跑了，但远程端数量为 0\n- 建议动作：看备份状态"
+        "content": "**建议 1｜复查云端备份**\n- 原因：云端同步跑了，但远程端数量为 0\n- 建议动作：看备份状态"
       }
     },
     {
@@ -97,7 +66,7 @@
             "tag": "plain_text",
             "content": "看备份状态"
           },
-          "type": "default",
+          "type": "primary",
           "value": {
             "oc": "ocf1",
             "k": "quick",
@@ -116,7 +85,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**建议 3｜关注系统风险**\n- 原因：OpenClaw 视角 Tailscale: openclaw status 里显示 Tailscale=off\n- 建议动作：全面检查"
+        "content": "**建议 2｜关注系统风险**\n- 原因：OpenClaw 视角 Tailscale: openclaw status 里显示 Tailscale=off\n- 建议动作：全面检查"
       }
     },
     {
@@ -134,37 +103,6 @@
             "k": "quick",
             "a": "feishu.quick_actions.healthcheck",
             "q": "healthcheck summary",
-            "c": {
-              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
-              "e": 1893456000000,
-              "t": "p2p"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "tag": "div",
-      "text": {
-        "tag": "lark_md",
-        "content": "**建议 4｜推进高优先级待办**\n- 原因：当前有 4 条高优先级待办。\n- 建议动作：看高优先级"
-      }
-    },
-    {
-      "tag": "action",
-      "actions": [
-        {
-          "tag": "button",
-          "text": {
-            "tag": "plain_text",
-            "content": "看高优先级"
-          },
-          "type": "default",
-          "value": {
-            "oc": "ocf1",
-            "k": "quick",
-            "a": "feishu.quick_actions.high",
-            "q": "high card",
             "c": {
               "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
               "e": 1893456000000,
@@ -195,12 +133,36 @@
               "t": "p2p"
             }
           }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 任务与记忆"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.task_hub",
+            "q": "task_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         },
         {
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "主控制台"
+            "content": "⌂ 主控制台"
           },
           "type": "default",
           "value": {

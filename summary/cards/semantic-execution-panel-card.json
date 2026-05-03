@@ -18,21 +18,56 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：链路测试\n- 最近时间：2026-04-29 15:40:19\n- 日志：`cc-min-test.log`\n- 技术任务名：`cc-min-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:22:29\n- 日志：`cc-wrapper-test-rerun-0501-232229.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-232229`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:18:28\n- 日志：`codex-wrapper-test.log`\n- 技术任务名：`codex-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:22:20\n- 日志：`cc-wrapper-test-rerun-0501-232220.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-232220`"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-04-28 16:16:33\n- 日志：`cc-wrapper-test.log`\n- 技术任务名：`cc-wrapper-test`"
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:21:44\n- 日志：`cc-wrapper-test-rerun-0501-232144.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-232144`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:21:22\n- 日志：`cc-wrapper-test-rerun-0501-232122.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-232122`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:21:11\n- 日志：`cc-wrapper-test-rerun-0501-232111.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-232111`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Codex**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:03:36\n- 日志：`codex-wrapper-test-rerun-0501-230336.log`\n- 技术任务名：`codex-wrapper-test-rerun-0501-230336`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**铁路储能 5MWh 项目测算**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：项目开发\n- 最近时间：2026-05-01 23:01:39\n- 日志：`cc-wrapper-test-rerun-0501-230138.log`\n- 技术任务名：`cc-wrapper-test-rerun-0501-230138`"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**Claude Code 最小链路测试**｜**screen / Claude Code**｜**已完成/测试**\n- 类型：链路测试\n- 最近时间：2026-05-01 23:01:29\n- 日志：`cc-min-test-rerun-0501-230129.log`\n- 技术任务名：`cc-min-test-rerun-0501-230129`"
       }
     },
     {
@@ -94,12 +129,36 @@
               "t": "p2p"
             }
           }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 执行链路"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_hub",
+            "q": "execution_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         },
         {
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "主控制台"
+            "content": "⌂ 主控制台"
           },
           "type": "default",
           "value": {

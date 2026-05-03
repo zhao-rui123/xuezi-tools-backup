@@ -129,9 +129,12 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**定位**：从历史角度看最近系统到底忙过什么。'}},
             *blocks,
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '执行中心'}, 'type': 'default', 'value': quick_action('execution center card', 'feishu.quick_actions.execution_center', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '定时任务中心'}, 'type': 'default', 'value': quick_action('scheduled tasks panel card', 'feishu.quick_actions.scheduled_tasks_panel', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '下一步可以继续做“轻控制入口”，比如查看详情/跳转/回到相关面板。'}
