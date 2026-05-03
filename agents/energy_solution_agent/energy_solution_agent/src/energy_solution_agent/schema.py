@@ -131,6 +131,10 @@ OUTPUT_TEMPLATE: dict[str, Any] = {
             "equity_irr": None,
             "equity_npv": None,
             "dscr_min": None,
+            "dyn_payback_years": None,
+            "roi": None,
+            "roe": None,
+            "breakeven_price_factor": None,
         "abatement_cost_per_tco2e": None,
     },
     "carbon_results": {

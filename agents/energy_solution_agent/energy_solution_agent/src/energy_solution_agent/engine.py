@@ -298,6 +298,10 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "equity_irr": finance.get("equity_irr"),
             "equity_npv": finance.get("equity_npv"),
             "dscr_min": finance.get("dscr_min"),
+            "dyn_payback_years": finance.get("dyn_payback_years"),
+            "roi": finance.get("roi"),
+            "roe": finance.get("roe"),
+            "breakeven_price_factor": finance.get("breakeven_price_factor"),
         }
     )
     output["carbon_results"].update(carbon)

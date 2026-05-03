@@ -738,6 +738,28 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         _slc = storage_capex + replacement_cost + sum(opex_annual * _ss * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
         _lcos_val = _slc / (_ld * 1000) if _ld > 0 else None
 
+    # ── 补充财务指标 ────────────────────────────────────────────────
+    # 动态回收期（折现现金流累计回正年份）
+    cum_disc = -capex_total
+    dyn_payback = None
+    for y in range(1, years + 1):
+        cf = cashflows[y] if y < len(cashflows) else 0.0
+        cum_disc += cf / ((1 + discount_rate) ** y)
+        if dyn_payback is None and cum_disc >= 0:
+            dyn_payback = float(y)
+
+    # ROI / ROE
+    avg_annual_profit = sum(cashflows[1:]) / years if years > 0 else 0
+    roi = avg_annual_profit / capex_total if capex_total > 0 else None
+    equity_total = capex_total * (1 - float(financial.get("debt_ratio", 0.7)))
+    roe = avg_annual_profit / equity_total if equity_total > 0 else None
+
+    # 盈亏平衡电价（令 NPV=0 的电价倍率）
+    if irr and irr > 0:
+        be_price_factor = (1 + discount_rate) ** years / ((1 + irr) ** years) if irr > 0 else None
+    else:
+        be_price_factor = None
+
     # ── 融资结构分析（银行贷款 or 融资租赁）────────────────────────
     fin_mode = str(financial.get("financing_mode", "loan")).lower()
     debt_ratio = float(financial.get("debt_ratio", 0.7))
@@ -815,6 +837,10 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "equity_irr": round(equity_irr, 4) if equity_irr is not None else None,
         "equity_npv": round(equity_npv_val, 2),
         "dscr_min": round(dscr_min, 3) if dscr_min is not None else None,
+        "dyn_payback_years": round(dyn_payback, 2) if dyn_payback is not None else None,
+        "roi": round(roi, 4) if roi is not None else None,
+        "roe": round(roe, 4) if roe is not None else None,
+        "breakeven_price_factor": round(be_price_factor, 4) if be_price_factor is not None else None,
         "lcoe": round(_lcoe_val, 4) if _lcoe_val is not None else None,
         "lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
     }
