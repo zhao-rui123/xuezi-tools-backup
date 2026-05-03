@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_name": "江苏某工业园区综合能源项目 — 全流程测试",
+    "scenario_type": "zero_carbon_factory",
+    "province": "江苏",
+    "city": "苏州",
+    "grid_operator": "国网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "balanced",
+    "storage_strategy_mode": "peak_shaving"
+  },
+  "resource_data": {
+    "solar": {
+      "available_area_m2": 80000,
+      "annual_irradiation_kwh_per_m2": 1320,
+      "site_latitude_deg": 31.3,
+      "tilt_deg": 25,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.82,
+      "p50_factor": 1.0,
+      "p90_factor": 0.94
+    },
+    "wind": {
+      "annual_avg_speed_mps": 6.2,
+      "capacity_factor_assumption": 0.25,
+      "p50_factor": 1.0,
+      "p90_factor": 0.88
+    }
+  },
+  "load_data": {
+    "annual_consumption_mwh": 85000,
+    "peak_load_kw": 16800,
+    "load_series_kw": [
+      9800, 9500, 9200, 9000, 9200, 9800,
+      11000, 13500, 15500, 16800, 16500, 16000,
+      15800, 15500, 15200, 15600, 16200, 16800,
+      16500, 15800, 14500, 13500, 12000, 10500
+    ],
+    "monthly_load_factors": [1.05, 0.98, 1.00, 1.02, 1.03, 1.08, 1.12, 1.10, 1.04, 1.00, 0.96, 1.02]
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "province_policy_profile": "江苏",
+    "tou_tariff": [
+      {"period": "peak", "price": 1.08},
+      {"period": "flat", "price": 0.72},
+      {"period": "valley", "price": 0.38}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_mode": "max_demand",
+    "demand_charge_rate_per_kw_month": 32
+  },
+  "network_and_design": {
+    "point_of_connection": "园区10kV母线"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [4000, 6000, 8000],
+      "energy_candidate_kwh": [8000, 12000, 16000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.5,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 6800,
+      "annual_degradation_rate": 0.022
+    },
+    "pv": {
+      "candidate_mwp": [6, 8, 10]
+    }
+  },
+  "carbon_data": {
+    "industry_type": "园区综合能源",
+    "major_processes": ["一般工业用电"],
+    "boundary_definition": "factory_scope1_scope2",
+    "scope1_sources": [],
+    "scope2_sources": ["电网购电"],
+    "scope3_considered": false,
+    "baseline_emissions_tco2e": 46800,
+    "carbon_attribute_tools_allowed": ["绿电"],
+    "carbon_claim_target": "低碳园区"
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 850,
+      "pv_cost_per_w": 3.2,
+      "wind_cost_per_w": 6.5,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    },
+    "carbon_price_assumption": 70
+  }
+}

@@ -17,7 +17,7 @@
       "tilt_deg": 20,
       "azimuth_deg": 180,
       "performance_ratio": 0.82,
-      "available_area_m2": 300000,
+      "available_area_m2": 330000,
       "p50_factor": 1.0,
       "p90_factor": 0.92
     },
@@ -45,8 +45,8 @@
   },
   "equipment": {
     "storage": {
-      "power_candidate_kw": [25000, 50000, 75000],
-      "energy_candidate_kwh": [50000, 100000, 150000],
+      "power_candidate_kw": [25000, 50000, 55000],
+      "energy_candidate_kwh": [50000, 100000, 110000],
       "pcs_efficiency": 0.985,
       "transformer_efficiency": 0.99,
       "battery_charge_efficiency": 0.965,
