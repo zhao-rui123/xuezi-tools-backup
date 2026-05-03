@@ -59,6 +59,21 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     pv_result = estimate_pv_generation(data)
     wind_result = estimate_wind_generation(data)
     renewables = {**pv_result, **wind_result}
+    # ── 用户指定风电容量覆盖 ──────────────────────────────────
+    user_wind_mw = float(data.get("resource_data", {}).get("wind", {}).get("wind_mw", 0) or 0)
+    if user_wind_mw > 0:
+        # 保留原有轮廓比例，按用户指定容量重新缩放
+        current_wind_mw = float(renewables.get("wind_mw") or 0)
+        if current_wind_mw > 0 and abs(current_wind_mw - user_wind_mw) > 0.5:
+            scale = user_wind_mw / current_wind_mw
+            renewables["wind_mw"] = round(user_wind_mw, 3)
+            annual_gen = float(renewables.get("annual_wind_generation_mwh") or 0) * scale
+            renewables["annual_wind_generation_mwh"] = round(annual_gen, 2)
+            renewables["wind_hourly_profile_kw"] = [v * scale for v in renewables.get("wind_hourly_profile_kw", [0.0]*24)]
+            renewables["wind_annual_series_kw"] = [v * scale for v in renewables.get("wind_annual_series_kw", [0.0]*8760)]
+            renewables["wind_p50_generation_mwh"] = round(annual_gen, 2)
+            if renewables.get("wind_p90_generation_mwh") is not None:
+                renewables["wind_p90_generation_mwh"] = round(float(renewables["wind_p90_generation_mwh"]) * scale, 2)
     prelim_prices = build_hourly_price_series(data.get("market_data", {}), len(load_series))
     storage = estimate_storage(
         data,
@@ -148,6 +163,36 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         price_series=prelim_prices,
         storage_config=data.get("equipment", {}).get("storage", {}),
     )
+
+    # ── 储能循环次数约束（≥300次/年，有上限保护）─────────────
+    min_annual_cycles = 300.0
+    actual_annual_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
+    max_power_mw = 100.0
+    max_energy_mwh = 500.0
+    max_iter = 3
+    iter_count = 0
+    while actual_annual_cycles < min_annual_cycles and iter_count < max_iter:
+        cur_power = float(storage.get("storage_power_mw") or 0.0)
+        cur_energy = float(storage.get("storage_energy_mwh") or 0.0)
+        if cur_power <= 0 or cur_energy <= 0 or cur_power >= max_power_mw or cur_energy >= max_energy_mwh:
+            break
+        iter_count += 1
+        new_power = min(round(cur_power * 1.4, 3), max_power_mw)
+        new_energy = min(round(cur_energy * 1.4, 3), max_energy_mwh)
+        storage = {**storage, "storage_power_mw": new_power, "storage_energy_mwh": new_energy}
+        annual_dispatch = simulate_storage_dispatch_annual(
+            load_series_kw=load_series,
+            pv_series_kw=renewables.get("pv_annual_series_kw", [0.0] * 8760),
+            wind_series_kw=renewables.get("wind_annual_series_kw", [0.0] * 8760),
+            charging_series_kw=charging_series,
+            thermal_series_kw=thermal_series,
+            storage_power_mw=new_power,
+            storage_energy_mwh=new_energy,
+            strategy_mode=storage_strategy,
+            price_series=prelim_prices,
+            storage_config=data.get("equipment", {}).get("storage", {}),
+        )
+        actual_annual_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
 
     gross_demand = annual_load + annual_charging + (annual_cooling / 3.5 if annual_cooling else 0.0) + (annual_heating / 3.0 if annual_heating else 0.0)
     annual_grid_purchase = annual_dispatch["annual_grid_purchase_mwh"]

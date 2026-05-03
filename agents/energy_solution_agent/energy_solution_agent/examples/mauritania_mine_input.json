@@ -1,0 +1,84 @@
+{
+  "project_info": {
+    "project_name": "毛里塔尼亚矿区风光储项目",
+    "scenario_type": "steel_factory",
+    "province": "Overseas",
+    "city": "Mauritania Mine",
+    "grid_operator": "Offgrid",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "reliability_first",
+    "storage_strategy_mode": "renewable_priority"
+  },
+  "resource_data": {
+    "solar": {
+      "annual_irradiation_kwh_per_m2": 2263,
+      "site_latitude_deg": 23.2,
+      "tilt_deg": 20,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.82,
+      "available_area_m2": 1500000,
+      "p50_factor": 1.0,
+      "p90_factor": 0.92
+    },
+    "wind": {
+      "annual_avg_speed_mps": 6.59,
+      "capacity_factor_assumption": 0.42,
+      "wind_mw": 72.0,
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "annual_consumption_mwh": 521870,
+    "peak_load_kw": 62460,
+    "critical_load_kw": 52000,
+    "backup_hours_required": 6
+  },
+  "market_data": {
+    "market_mode": "offgrid_internal"
+  },
+  "network_and_design": {
+    "point_of_connection": "矿区10kV系统"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [30000, 60000, 100000],
+      "energy_candidate_kwh": [150000, 300000, 600000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.55,
+      "soc_reserve_ratio": 0.10,
+      "backup_soc_ratio": 0.15,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    },
+    "conventional_backup": {
+      "enabled": true,
+      "minimum_output_kw": 15000,
+      "fuel_cost_per_kwh": 0.32
+    }
+  },
+  "financial": {
+    "project_years": 20,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 850,
+      "pv_cost_per_w": 3.1,
+      "wind_cost_per_w": 6.4,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    }
+  }
+}
