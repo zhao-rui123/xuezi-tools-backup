@@ -18,7 +18,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前模型：Feinian / GPT-5.4**"
+        "content": "**当前模型：MiniMax / M2.7**"
       }
     },
     {
@@ -184,6 +184,37 @@
       "text": {
         "tag": "lark_md",
         "content": "  → 快捷动作面板 | 主控制台 | 帮助"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "📊 专业服务"
+          },
+          "type": "primary",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.professional_services_hub",
+            "q": "professional_services_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "  → 电力行业专家 | 零碳专家 | 股票分析专家（即将上线）"
       }
     },
     {
