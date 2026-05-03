@@ -68,7 +68,7 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**最近后台任务名**\n- `cc-wrapper-test-rerun-0501-232229` | claude | 2026-05-01 23:22:29 | cc-wrapper-test-rerun-0501-232229.log\n- `cc-wrapper-test-rerun-0501-232220` | claude | 2026-05-01 23:22:20 | cc-wrapper-test-rerun-0501-232220.log\n- `cc-wrapper-test-rerun-0501-232144` | claude | 2026-05-01 23:21:44 | cc-wrapper-test-rerun-0501-232144.log\n- `cc-wrapper-test-rerun-0501-232122` | claude | 2026-05-01 23:21:22 | cc-wrapper-test-rerun-0501-232122.log\n- `cc-wrapper-test-rerun-0501-232111` | claude | 2026-05-01 23:21:11 | cc-wrapper-test-rerun-0501-232111.log\n- `codex-wrapper-test-rerun-0501-230336` | codex | 2026-05-01 23:03:36 | codex-wrapper-test-rerun-0501-230336.log"
+        "content": "**最近后台任务名**\n- 当前没有可见 agent-screen 任务元数据"
       }
     },
     {

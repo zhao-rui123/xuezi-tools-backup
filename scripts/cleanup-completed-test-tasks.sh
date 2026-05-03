@@ -17,5 +17,8 @@ python3 scripts/clean_test_result_card.py --task cc-wrapper-test --save >/dev/nu
 python3 scripts/clean_test_result_card.py --task codex-wrapper-test --save >/dev/null
 python3 scripts/clean_test_tasks_panel_card.py >/dev/null
 python3 scripts/screen_detail_panel_card.py >/dev/null
+python3 scripts/execution_center_card.py >/dev/null
+python3 scripts/semantic_execution_panel_card.py >/dev/null
+python3 scripts/runtime_tasks_panel_card.py >/dev/null
 printf 'archive=%s\n' "$ARCHIVE_DIR"
 ls -1 "$ARCHIVE_DIR" | wc -l
