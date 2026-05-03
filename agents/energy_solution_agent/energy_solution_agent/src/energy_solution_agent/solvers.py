@@ -521,25 +521,35 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
         if prices:
             avg_price = sum(prices) / len(prices)
-    is_offgrid = str(market.get("market_mode") or "").lower() == "offgrid_internal"
+    market_mode = str(market.get("market_mode") or "").lower()
+    is_offgrid = market_mode == "offgrid_internal"
+    is_ppa = market_mode == "ppa"
     charge_saving = 0.0
     pv_saving = 0.0
     wind_saving = 0.0
-    if is_offgrid:
-        # offgrid：收益 = 柴油替代节省量（燃料成本 × 被替代电量）
-        fuel_cost = float(market.get("fuel_cost_per_kwh") or 0.0)
-        annual_load = float(data.get("load_data", {}).get("annual_consumption_mwh") or 0.0)
-        annual_grid_purchase = float(simulation.get("annual_grid_purchase_mwh") or 0.0)
-        diesel_displaced_mwh = max(0.0, annual_load - annual_grid_purchase)
-        total_savings = diesel_displaced_mwh * fuel_cost * 1000  # MWh * RMB/kWh * 1000 = RMB
-        # 按风光发电量比例拆分收益
-        annual_pv = float(simulation.get("annual_pv_generation_mwh") or 0.0)
-        annual_wind = float(simulation.get("annual_wind_generation_mwh") or 0.0)
-        total_gen = annual_pv + annual_wind
+    annual_load = float(data.get("load_data", {}).get("annual_consumption_mwh") or 0.0)
+    annual_grid_purchase = float(simulation.get("annual_grid_purchase_mwh") or 0.0)
+    annual_pv = float(simulation.get("annual_pv_generation_mwh") or 0.0)
+    annual_wind = float(simulation.get("annual_wind_generation_mwh") or 0.0)
+    total_gen = annual_pv + annual_wind
+    delivered_mwh = max(0.0, annual_load - annual_grid_purchase)
+
+    if is_ppa:
+        # PPA 模式：收益 = 实际供电量 × 购电协议电价
+        ppa_price = float(market.get("ppa_price_per_kwh") or 0.0)
+        total_savings = delivered_mwh * ppa_price * 1000  # MWh * RMB/kWh * 1000 = RMB
         if total_gen > 0:
             pv_saving = total_savings * (annual_pv / total_gen)
             wind_saving = total_savings * (annual_wind / total_gen)
-        charge_saving = 0.0  # 储能收益已包含在总柴油替代里
+        charge_saving = 0.0
+    elif is_offgrid:
+        # offgrid：收益 = 柴油替代节省量（燃料成本 × 被替代电量）
+        fuel_cost = float(market.get("fuel_cost_per_kwh") or 0.0)
+        total_savings = delivered_mwh * fuel_cost * 1000
+        if total_gen > 0:
+            pv_saving = total_savings * (annual_pv / total_gen)
+            wind_saving = total_savings * (annual_wind / total_gen)
+        charge_saving = 0.0
     else:
         charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * max(avg_price - 0.35, 0.1) * 1000
         pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * 0.78 * 1000
