@@ -76,7 +76,8 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
             {'tag': 'hr'},
             {'tag': 'div', 'text': {'tag': 'lark_md', 'content': '**🧭 导航动作**'}},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 快捷'}, 'type': 'default', 'value': quick_action('quick_hub card', 'feishu.quick_actions.quick_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '记忆面板'}, 'type': 'default', 'value': quick_action('memory panel card', 'feishu.quick_actions.memory_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '工作台总览'}, 'type': 'default', 'value': quick_action('workspace card', 'feishu.quick_actions.cockpit_workspace', open_id=open_id)},
             ]},

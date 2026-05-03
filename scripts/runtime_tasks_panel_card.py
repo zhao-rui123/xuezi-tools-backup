@@ -56,7 +56,10 @@ def build_card(open_id: str = DEFAULT_OPEN_ID, *, oc_model: str = '', tokens: st
             {'tag': 'action', 'actions': [
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '查看会话状态'}, 'type': 'primary', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '模型面板'}, 'type': 'default', 'value': quick_action('model panel card', 'feishu.quick_actions.model_panel', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '下一步如果要更强，可以做 ACP/子线程列表、最近后台任务历史、甚至停止/恢复入口。'}

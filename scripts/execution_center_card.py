@@ -111,7 +111,10 @@ def build_card(
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': 'ACP 详情'}, 'type': 'default', 'value': quick_action('acp detail panel card', 'feishu.quick_actions.acp_detail_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '后台任务中心'}, 'type': 'default', 'value': quick_action('runtime tasks panel card', 'feishu.quick_actions.runtime_tasks_panel', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话状态'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 执行链路'}, 'type': 'default', 'value': quick_action('execution_hub card', 'feishu.quick_actions.execution_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '目前 screen 任务名可以通过 agent-screen meta 看到；ACP 暂时只能稳定拿到线程 key / sessionId。'}

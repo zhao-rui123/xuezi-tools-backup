@@ -110,7 +110,10 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '阻塞'}, 'type': 'default', 'value': quick_action('blocked card', 'feishu.quick_actions.blocked', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '高优先级'}, 'type': 'default', 'value': quick_action('high card', 'feishu.quick_actions.high', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '摘要'}, 'type': 'default', 'value': quick_action('digest card', 'feishu.quick_actions.digest', open_id=open_id)},
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '返回主控台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+            ]},
+            {'tag': 'action', 'actions': [
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 任务与记忆'}, 'type': 'default', 'value': quick_action('task_hub card', 'feishu.quick_actions.task_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'default', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
                 {'tag': 'plain_text', 'content': '下一步可以继续做模型面板，把 OpenClaw / Claude Code 模型状态彻底拆开。'}

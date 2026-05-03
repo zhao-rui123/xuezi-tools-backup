@@ -2,7 +2,7 @@
   "header": {
     "title": {
       "tag": "plain_text",
-      "content": "📋 任务面板 V1 | 2026-05-01"
+      "content": "📋 任务面板 V1 | 2026-05-03"
     },
     "template": "blue"
   },
@@ -21,14 +21,14 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Inbox**\n6"
+            "content": "**Inbox**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Blocked**\n5"
+            "content": "**Blocked**\n0"
           }
         },
         {
@@ -42,21 +42,21 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**High**\n4"
+            "content": "**High**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**已导入**\n3"
+            "content": "**已导入**\n0"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**已忽略**\n2"
+            "content": "**已忽略**\n0"
           }
         }
       ]
@@ -68,28 +68,28 @@
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**当前阻塞**\n- `7134ee8d` 等我确认\n- `5d51d62f` 风险关注：不要直接污染 MEMORY.md\n- `5be27f0f` 风险关注：直接污染 MEMORY.md\n- `ee37395d` 风险关注：不要直接写 MEMORY.md\n- ... 还有 1 条"
+        "content": "**当前阻塞**\n- 无"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**高优先级待办**\n- `b4d0a9a2` 统一任务中心最小版落地\n- `de64c2ec` 把候选层接进任务系统\n- `e8bebd8e` 把这个链路接到对话入口\n- `7c690a4c` 把候选状态管理接到后续流程"
+        "content": "**高优先级待办**\n- 无"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**待处理 Inbox**\n- `06a01953ab` progress | 把统一任务中心最小版\n- `6537109672` risk | 不要直接污染 MEMORY.md\n- `a617163570` risk | 直接污染 MEMORY.md\n- `8f4bd4f4f5` blocked | 等我确认\n- ... 还有 2 条"
+        "content": "**待处理 Inbox**\n- 无"
       }
     },
     {
       "tag": "div",
       "text": {
         "tag": "lark_md",
-        "content": "**今日自动导入**\n- `de64c2ec` 把候选层接进任务系统\n- `c1c988fb` 跟进：把统一任务中心最小版\n- `7134ee8d` 等我确认\n- `5d51d62f` 风险关注：不要直接污染 MEMORY.md\n- ... 还有 5 条"
+        "content": "**今日自动导入**\n- 无"
       }
     },
     {
@@ -189,12 +189,36 @@
               "t": "p2p"
             }
           }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 任务与记忆"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.task_hub",
+            "q": "task_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         },
         {
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "返回主控台"
+            "content": "⌂ 主控制台"
           },
           "type": "default",
           "value": {

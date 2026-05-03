@@ -21,35 +21,35 @@
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**当前模型**\nfeinian/gpt-5.4"
+            "content": "**当前模型**\n未知"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Tokens**\n475k in / 3.5k out"
+            "content": "**Tokens**\n未知"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**Context**\n161k / 1.0m"
+            "content": "**Context**\n未知"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**活跃任务**\n1 active · running"
+            "content": "**活跃任务**\n当前 1 active"
           }
         },
         {
           "tag": "field",
           "text": {
             "tag": "lark_md",
-            "content": "**后台线程**\n2 个子会话/ACP 线程"
+            "content": "**后台线程**\n当前未发现子会话"
           }
         }
       ]
@@ -104,12 +104,36 @@
               "t": "p2p"
             }
           }
+        }
+      ]
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 执行链路"
+          },
+          "type": "default",
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.execution_hub",
+            "q": "execution_hub card",
+            "c": {
+              "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579",
+              "e": 1893456000000,
+              "t": "p2p"
+            }
+          }
         },
         {
           "tag": "button",
           "text": {
             "tag": "plain_text",
-            "content": "主控制台"
+            "content": "⌂ 主控制台"
           },
           "type": "default",
           "value": {

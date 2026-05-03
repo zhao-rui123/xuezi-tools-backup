@@ -74,7 +74,8 @@ def build_card(open_id: str = DEFAULT_OPEN_ID) -> dict:
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '会话状态'}, 'type': 'default', 'value': quick_action('/status', 'feishu.quick_actions.oc_status', open_id=open_id)},
             ]},
             {'tag': 'action', 'actions': [
-                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '返回主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '← 模型与控制'}, 'type': 'default', 'value': quick_action('model_control_hub card', 'feishu.quick_actions.model_control_hub', open_id=open_id)},
+                {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '⌂ 主控制台'}, 'type': 'primary', 'value': quick_action('cockpit card', 'feishu.quick_actions.cockpit_home', open_id=open_id)},
                 {'tag': 'button', 'text': {'tag': 'plain_text', 'content': '今日重点建议'}, 'type': 'default', 'value': quick_action('focus panel card', 'feishu.quick_actions.focus_panel', open_id=open_id)},
             ]},
             {'tag': 'note', 'elements': [
