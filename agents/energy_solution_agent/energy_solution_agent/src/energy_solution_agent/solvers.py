@@ -624,7 +624,11 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
 
     # ── 中国税法调整 ───────────────────────────────────────────────
     tax_cfg = financial.get("tax", {})
-    if tax_cfg.get("enabled", True):
+    # 海外项目自动跳过中国税法
+    province = str(data.get("project_info", {}).get("province") or "").lower()
+    is_overseas = province in ("overseas", "海外")
+    apply_tax = tax_cfg.get("enabled", not is_overseas)
+    if apply_tax:
         vat_rate = float(tax_cfg.get("vat_rate", 0.13))
         cit_rate = float(tax_cfg.get("cit_rate", 0.25))
         surcharge_rate = float(tax_cfg.get("surcharge_rate", 0.12))
@@ -707,7 +711,7 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         cashflows = after_tax
 
     net_annual = cashflows[1] if len(cashflows) > 1 else 0.0
-    irr = _calc_irr(cashflows) if not tax_cfg.get("enabled", True) else irr
+    irr = _calc_irr(cashflows) if not apply_tax else irr
     npv = 0.0
     for year, cashflow in enumerate(cashflows):
         npv += cashflow / ((1 + discount_rate) ** year)
