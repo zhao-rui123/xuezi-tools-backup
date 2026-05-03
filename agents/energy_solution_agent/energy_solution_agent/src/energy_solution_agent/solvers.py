@@ -738,7 +738,43 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         _slc = storage_capex + replacement_cost + sum(opex_annual * _ss * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
         _lcos_val = _slc / (_ld * 1000) if _ld > 0 else None
 
-    # ── 融资结构分析（负债/权益）────────────────────────────────────
+    # ── 融资结构分析（银行贷款 or 融资租赁）────────────────────────
+    fin_mode = str(financial.get("financing_mode", "loan")).lower()
+    debt_ratio = float(financial.get("debt_ratio", 0.7))
+    loan_rate = float(financial.get("loan_rate", 0.045))
+    loan_term = int(financial.get("loan_term", min(10, years)))
+    total_loan = capex_total * debt_ratio
+    equity_invest = capex_total * (1 - debt_ratio)
+    annual_principal = total_loan / loan_term if loan_term > 0 else 0.0
+
+    equity_cashflows = [-equity_invest]
+    outstanding = total_loan
+    dscr_values = []
+    for y in range(1, years + 1):
+        cf = cashflows[y] if y < len(cashflows) else 0.0
+        if fin_mode == "lease":
+            # 融资租赁：年租金属性固定，利息部分可抵税
+            lease_pmt = total_loan * loan_rate * (1 + loan_rate)**loan_term / ((1+loan_rate)**loan_term - 1) if loan_term > 0 else 0.0
+            interest = outstanding * loan_rate
+            principal_portion = lease_pmt - interest
+            debt_service = lease_pmt
+            outstanding -= principal_portion
+        else:
+            interest = outstanding * loan_rate
+            principal = min(annual_principal, outstanding)
+            debt_service = interest + principal
+            outstanding -= principal
+        # 利息抵税
+        tax_shield = interest * cit_rate * 0.25 if apply_tax else 0.0
+        equity_cf = cf - debt_service + tax_shield
+        equity_cashflows.append(equity_cf)
+        if debt_service > 0:
+            dscr_values.append(cf / debt_service)
+
+    # 残值回收（项目结束时）
+    residual_value = capex_total * float(financial.get("residual_value_ratio", 0.05))
+    if residual_value > 0:
+        equity_cashflows[-1] += residual_value
     debt_ratio = float(financial.get("debt_ratio", 0.7))
     loan_rate = float(financial.get("loan_rate", 0.045))
     loan_term = int(financial.get("loan_term", min(10, years)))
