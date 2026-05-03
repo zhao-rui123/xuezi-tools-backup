@@ -606,7 +606,8 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         if payback is None and running_cum >= 0:
             payback = float(year)
     net_annual = cashflows[1] if len(cashflows) > 1 else 0.0
-    irr = None if payback is None else max(0.0, min(0.35, 1 / payback))
+    # 牛顿法求 IRR
+    irr = _calc_irr(cashflows)
     npv = 0.0
     for year, cashflow in enumerate(cashflows):
         npv += cashflow / ((1 + discount_rate) ** year)
@@ -632,6 +633,28 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "storage_replacement_cost": round(replacement_cost, 2) if replacement_cost else None,
         "opex_escalation_rate": opex_escalation_rate,
     }
+
+
+def _calc_irr(cashflows: list[float], max_iter: int = 100, tolerance: float = 1e-7) -> float | None:
+    """牛顿法求 IRR"""
+    if not cashflows or cashflows[0] >= 0 or sum(float(v) for v in cashflows[1:]) <= 0:
+        return None
+    rate = 0.15  # 初始猜测
+    for _ in range(max_iter):
+        npv = 0.0
+        dnpv = 0.0  # NPV 对 rate 的一阶导数
+        for t, cf in enumerate(cashflows):
+            denom = (1.0 + rate) ** t
+            npv += cf / denom
+            dnpv += -t * cf / (denom * (1.0 + rate))
+        if abs(npv) < tolerance:
+            return round(max(0.0, rate), 4)
+        if abs(dnpv) < 1e-12:
+            break
+        rate -= npv / dnpv
+        if rate < -0.99:
+            return None
+    return round(max(0.0, rate), 4) if abs(npv) < 0.01 else None
 
 
 def _describe_price_mode(market: dict[str, Any]) -> str:
