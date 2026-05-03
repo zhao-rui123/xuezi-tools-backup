@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_name": "毛里塔尼亚矿区风光储项目",
-    "scenario_type": "steel_factory",
+    "project_name": "毛里塔尼亚矿区光储微电网项目 (最终版)",
+    "scenario_type": "zero_carbon_factory",
     "province": "Overseas",
     "city": "Mauritania Mine",
     "grid_operator": "Offgrid",
     "voltage_level_kv": 10,
-    "grid_connection_mode": "user_side",
+    "grid_connection_mode": "microgrid",
     "target_priority": "reliability_first",
-    "storage_strategy_mode": "renewable_priority"
+    "storage_strategy_mode": "microgrid"
   },
   "resource_data": {
     "solar": {
@@ -17,14 +17,16 @@
       "tilt_deg": 20,
       "azimuth_deg": 180,
       "performance_ratio": 0.82,
-      "available_area_m2": 1500000,
+      "available_area_m2": 300000,
       "p50_factor": 1.0,
       "p90_factor": 0.92
     },
     "wind": {
-      "annual_avg_speed_mps": 6.59,
-      "capacity_factor_assumption": 0.42,
-      "wind_mw": 72.0,
+      "hourly_generation_profile_kw": [
+        30000, 28000, 26000, 25000, 26000, 30000, 36000, 44000,
+        53000, 62000, 70000, 72000, 72000, 71000, 68000, 63000,
+        57000, 51000, 46000, 42000, 39000, 36000, 33000, 31000
+      ],
       "p50_factor": 1.0,
       "p90_factor": 0.9
     }
@@ -43,15 +45,15 @@
   },
   "equipment": {
     "storage": {
-      "power_candidate_kw": [30000, 60000, 100000],
-      "energy_candidate_kwh": [150000, 300000, 600000],
+      "power_candidate_kw": [25000, 50000, 75000],
+      "energy_candidate_kwh": [50000, 100000, 150000],
       "pcs_efficiency": 0.985,
       "transformer_efficiency": 0.99,
       "battery_charge_efficiency": 0.965,
       "battery_discharge_efficiency": 0.965,
-      "initial_soc": 0.55,
-      "soc_reserve_ratio": 0.10,
-      "backup_soc_ratio": 0.15,
+      "initial_soc": 0.50,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.10,
       "soc_max": 0.92,
       "cycle_life": 7000,
       "annual_degradation_rate": 0.022
