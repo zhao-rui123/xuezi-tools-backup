@@ -346,13 +346,18 @@ def simulate_storage_dispatch_annual(
         # 同一小时内禁止既充又放（避免虚假循环）
         threatens_peak = cur_month_peak > 0 and net >= cur_month_peak * 0.98
         should_discharge_arbitrage = is_peak_price and soc > soc_min and not did_charge
+        # 周末无峰价时，在白天时段放电提高利用率
+        is_weekend = (idx // 24) % 7 in {5, 6}
+        should_discharge_weekend = is_weekend and price > 0.5 and hour in range(8, 17) and soc > soc_min and not did_charge
         should_discharge_demand = threatens_peak and soc > soc_min and not is_peak_price and not is_valley_price and not did_charge
         should_discharge_peak = net > target_peak and not did_charge
-        should_discharge = should_discharge_arbitrage or should_discharge_demand or should_discharge_peak
+        should_discharge = should_discharge_arbitrage or should_discharge_weekend or should_discharge_demand or should_discharge_peak
         if should_discharge and soc > soc_min:
             target_cut = max(0.0, net - target_peak) if should_discharge_peak else 0.0
             if should_discharge_arbitrage:
                 target_cut = max(target_cut, power_kw * 0.55)
+            if should_discharge_weekend:
+                target_cut = max(target_cut, power_kw * 0.4)
             if should_discharge_demand and cur_month_peak > 0:
                 # 刚够削过当前月峰值即可，不多放
                 target_cut = max(target_cut, net - cur_month_peak * 0.98)
