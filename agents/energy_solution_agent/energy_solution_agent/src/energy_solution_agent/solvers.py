@@ -231,19 +231,19 @@ def _plan_daily_cycles(prices_24: list[float]) -> list[tuple[list[int], list[int
         else:
             i += 1
     # 配对：每个放电台前必须有充电台（先充后放，不重叠）
+    # 且一个充电块只能配一个放电块
     cycles = []
-    last_charge_end = -1
+    used_charge_idxs = set()
     for db in discharge_blocks:
-        # 找到放电前最后一个充电块
-        best_cb = None
-        for cb in reversed(charge_blocks):
-            if cb[-1] < db[0]:
-                best_cb = cb
-                break
-        if best_cb is not None:
-            cycles.append((best_cb, db))
-    # 看中间是否有可用平价充电窗口（给第二循环用）
-    # 如果两个放电块之间有空隙，用该空隙的平价充电
+        # 找到放电前最后一个未使用的充电块
+        best_idx = -1
+        for i, cb in enumerate(charge_blocks):
+            if i not in used_charge_idxs and cb[-1] < db[0]:
+                best_idx = i
+        if best_idx >= 0:
+            used_charge_idxs.add(best_idx)
+            cycles.append((charge_blocks[best_idx], db))
+    # 如果放电块多于充电块（两峰一谷），用峰间平价充电作为第二循环
     if len(discharge_blocks) >= 2 and len(cycles) < 2:
         d0_end = discharge_blocks[0][-1]
         d1_start = discharge_blocks[1][0]
