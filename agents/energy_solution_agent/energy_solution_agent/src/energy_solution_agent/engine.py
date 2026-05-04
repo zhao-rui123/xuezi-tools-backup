@@ -288,6 +288,14 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False, se
     )
     finance["annual_energy_charge_cost"] = round(annual_energy_charge(annual_dispatch["post_storage_grid_series_kw"], prelim_prices), 2)
     finance["annual_demand_charge_cost"] = round(annual_demand_charge(annual_dispatch["post_storage_grid_series_kw"], data.get("market_data", {})), 2)
+    # 用dispatch实际结果重新计算收益（对齐成本与收益）
+    emc_share = float(data.get("financial", {}).get("emc", {}).get("investor_share_pct", 100)) / 100.0
+    baseline_demand = annual_demand_charge(annual_dispatch.get("baseline_grid_series_kw", []), data.get("market_data", {}))
+    baseline_total = float(finance.get("baseline_annual_energy_cost", 0)) + baseline_demand
+    post_total = float(finance["annual_energy_charge_cost"]) + float(finance["annual_demand_charge_cost"])
+    dispatch_savings = (baseline_total - post_total) * emc_share
+    vpp = float(data.get("financial", {}).get("vpp_revenue_annual_rmb", 0))
+    finance["annual_savings_or_revenue"] = round(dispatch_savings + vpp, 2)
     design = assemble_design_notes(data, profile, scenario, float(charging_summary.get("charging_peak_kw") or 0.0))
 
     output = new_output()

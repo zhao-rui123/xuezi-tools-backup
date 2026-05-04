@@ -6,41 +6,132 @@
     "lon": 117.0,
     "resource_mode": "auto_fetch"
   },
-  "resource_data": {"solar": {}, "wind": {}},
+  "resource_data": {
+    "solar": {},
+    "wind": {}
+  },
   "load_data": {
     "annual_consumption_mwh": 15000,
     "peak_load_kw": 20840,
     "valley_load_kw": 7953,
     "load_factor": 0.73,
     "load_profile_monthly": {
-      "2025-12": {"days": 8, "daily_avg_kwh": 386005, "peak_kw": 19760},
-      "2026-01": {"days": 31, "daily_avg_kwh": 423432, "peak_kw": 21107},
-      "2026-02": {"days": 28, "daily_avg_kwh": 406279, "peak_kw": 20737}
+      "2025-12": {
+        "days": 8,
+        "daily_avg_kwh": 386005,
+        "peak_kw": 19760
+      },
+      "2026-01": {
+        "days": 31,
+        "daily_avg_kwh": 423432,
+        "peak_kw": 21107
+      },
+      "2026-02": {
+        "days": 28,
+        "daily_avg_kwh": 406279,
+        "peak_kw": 20737
+      }
     }
   },
   "market_data": {
     "market_mode": "tou_tariff",
     "tou_tariff": [
-      {"period": "peak", "price": 0.92},
-      {"period": "flat", "price": 0.64},
-      {"period": "valley", "price": 0.31}
+      {
+        "period": "peak",
+        "price": 0.92
+      },
+      {
+        "period": "flat",
+        "price": 0.64
+      },
+      {
+        "period": "valley",
+        "price": 0.31
+      }
     ],
     "tou_schedule": {
-      "peak": [8, 9, 10, 14, 15, 16],
-      "flat": [7, 11, 12, 13, 17, 18, 19, 20, 21, 22],
-      "valley": [23, 0, 1, 2, 3, 4, 5, 6]
+      "peak": [
+        8,
+        9,
+        10,
+        14,
+        15,
+        16
+      ],
+      "flat": [
+        7,
+        11,
+        12,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "valley": [
+        23,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
     },
     "tou_schedule_weekend": {
-      "peak": [8, 9, 10, 14, 15, 16],
-      "flat": [7, 11, 12, 13, 17, 18, 19, 20, 21, 22],
-      "valley": [23, 0, 1, 2, 3, 4, 5, 6]
+      "peak": [
+        8,
+        9,
+        10,
+        14,
+        15,
+        16
+      ],
+      "flat": [
+        7,
+        11,
+        12,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "valley": [
+        23,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
     },
-    "demand_charge_rate_per_kw_month": 33
+    "demand_charge_rate_per_kw_month": 33,
+    "demand_charge_rule": true
   },
   "equipment": {
     "storage": {
-      "power_candidate_kw": [2000, 3750, 4000, 6000, 8000],
-      "energy_candidate_kwh": [4000, 7500, 20000, 30000, 40000],
+      "power_candidate_kw": [
+        2000,
+        3750,
+        4000,
+        6000,
+        8000
+      ],
+      "energy_candidate_kwh": [
+        4000,
+        7500,
+        20000,
+        30000,
+        40000
+      ],
       "battery_type": "LFP",
       "roundtrip_efficiency": 0.85,
       "annual_degradation": 0.02,
@@ -49,7 +140,9 @@
       "soc_reserve_ratio": 0.05,
       "initial_soc": 0.5
     },
-    "solar": {"pv_mwp": 2.0}
+    "solar": {
+      "pv_mwp": 2.0
+    }
   },
   "financial": {
     "project_years": 15,
@@ -69,5 +162,8 @@
     },
     "vpp_revenue_annual_rmb": 320000
   },
-  "network_and_design": {"grid_connection_kv": 110, "transformer_capacity_kva": 40000}
+  "network_and_design": {
+    "grid_connection_kv": 110,
+    "transformer_capacity_kva": 40000
+  }
 }

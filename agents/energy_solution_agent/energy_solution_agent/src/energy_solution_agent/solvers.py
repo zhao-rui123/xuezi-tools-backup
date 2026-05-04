@@ -705,10 +705,17 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         avg_price = sum(price_series_raw) / len(price_series_raw)
         avg_spread = max(0.1, peak_price - valley_price)
     elif tou:
-        prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
-        avg_price = sum(prices) / len(prices) if prices else 0.72
-        default_valley = float(market.get("default_valley_price") or 0.35)
-        avg_spread = max(0.1, avg_price - default_valley)
+        prices_dict = {}
+        for item in tou:
+            p = str(item.get("period", ""))
+            v = float(item.get("price", 0.0))
+            if v > 0:
+                prices_dict[p] = v
+        avg_price = sum(prices_dict.values()) / len(prices_dict) if prices_dict else 0.72
+        # 用实际峰谷价差，不是平均-默认
+        peak_p = prices_dict.get("peak", 0.92)
+        valley_p = prices_dict.get("valley", 0.31)
+        avg_spread = max(0.1, peak_p - valley_p)
     else:
         avg_price = 0.72
         avg_spread = 0.37

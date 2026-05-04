@@ -54,15 +54,15 @@
   "simulation_results": {
     "annual_pv_generation_mwh": 1465.89,
     "annual_wind_generation_mwh": 2251.78,
-    "annual_storage_charge_mwh": 1370.55,
-    "annual_storage_discharge_mwh": 1261.44,
+    "annual_storage_charge_mwh": 2652.38,
+    "annual_storage_discharge_mwh": 2442.77,
     "annual_charging_energy_mwh": 0.0,
     "annual_cooling_energy_mwh": null,
     "annual_heating_energy_mwh": null,
-    "annual_grid_purchase_mwh": 11473.32,
+    "annual_grid_purchase_mwh": 11609.03,
     "annual_export_mwh": 0.0,
     "annual_curtailment_mwh": 0.0,
-    "coverage_ratio": 0.2351,
+    "coverage_ratio": 0.2261,
     "pv_mwp": 2.0,
     "pv_resource_accuracy": "high",
     "pv_resource_basis": "hourly_irradiance_kwh_per_m2_8760",
@@ -17693,94 +17693,94 @@
   },
   "dispatch_results": {
     "baseline_peak_grid_kw": 2460.83,
-    "post_storage_peak_grid_kw": 3107.37,
-    "estimated_peak_reduction_kw": -646.54,
-    "daily_storage_cycles": 0.864,
+    "post_storage_peak_grid_kw": 4017.88,
+    "estimated_peak_reduction_kw": -1557.05,
+    "daily_storage_cycles": 1.673,
     "charging_peak_kw": null,
     "thermal_electric_peak_kw": null,
     "storage_strategy_mode": "market_responding",
     "charging_queue_index": null,
-    "storage_annual_throughput_mwh": 2631.99,
-    "storage_equivalent_full_cycles_per_year": 315.36,
-    "storage_life_years_estimate": 19.03,
-    "storage_charge_from_renewables_ratio": 0.0001,
+    "storage_annual_throughput_mwh": 5095.15,
+    "storage_equivalent_full_cycles_per_year": 610.692,
+    "storage_life_years_estimate": 9.82,
+    "storage_charge_from_renewables_ratio": 0.0,
     "storage_effective_round_trip_efficiency": 0.8941,
     "storage_reserved_soc_ratio": 0.05,
     "storage_backup_soc_ratio": 0.0,
     "storage_degradation_per_year": 0.025,
-    "storage_end_of_life_capacity_ratio": 0.5243531202434667,
+    "storage_end_of_life_capacity_ratio": 0.7543768182846576,
     "monthly_storage_revenue_breakdown": [
       {
         "month": 1,
-        "charge_mwh": 118.055,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.22
+        "charge_mwh": 227.856,
+        "discharge_mwh": 208.329,
+        "gross_margin": 190.62
       },
       {
         "month": 2,
-        "charge_mwh": 105.0,
-        "discharge_mwh": 96.768,
-        "gross_margin": 88.63
+        "charge_mwh": 202.926,
+        "discharge_mwh": 187.016,
+        "gross_margin": 171.43
       },
       {
         "month": 3,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.13
+        "charge_mwh": 225.6,
+        "discharge_mwh": 207.907,
+        "gross_margin": 190.35
       },
       {
         "month": 4,
-        "charge_mwh": 112.5,
-        "discharge_mwh": 103.68,
-        "gross_margin": 94.99
+        "charge_mwh": 217.651,
+        "discharge_mwh": 200.593,
+        "gross_margin": 183.51
       },
       {
         "month": 5,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.17
+        "charge_mwh": 225.478,
+        "discharge_mwh": 207.795,
+        "gross_margin": 190.28
       },
       {
         "month": 6,
-        "charge_mwh": 112.5,
-        "discharge_mwh": 103.68,
-        "gross_margin": 94.95
+        "charge_mwh": 215.308,
+        "discharge_mwh": 198.434,
+        "gross_margin": 181.51
       },
       {
         "month": 7,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 97.86
+        "charge_mwh": 222.891,
+        "discharge_mwh": 205.416,
+        "gross_margin": 188.14
       },
       {
         "month": 8,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.17
+        "charge_mwh": 225.989,
+        "discharge_mwh": 208.272,
+        "gross_margin": 190.58
       },
       {
         "month": 9,
-        "charge_mwh": 112.5,
-        "discharge_mwh": 103.68,
-        "gross_margin": 94.95
+        "charge_mwh": 218.352,
+        "discharge_mwh": 201.227,
+        "gross_margin": 184.23
       },
       {
         "month": 10,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.17
+        "charge_mwh": 225.903,
+        "discharge_mwh": 208.198,
+        "gross_margin": 190.53
       },
       {
         "month": 11,
-        "charge_mwh": 112.5,
-        "discharge_mwh": 103.68,
-        "gross_margin": 94.99
+        "charge_mwh": 218.87,
+        "discharge_mwh": 201.711,
+        "gross_margin": 184.53
       },
       {
         "month": 12,
-        "charge_mwh": 116.25,
-        "discharge_mwh": 107.136,
-        "gross_margin": 98.13
+        "charge_mwh": 225.559,
+        "discharge_mwh": 207.869,
+        "gross_margin": 190.32
       }
     ],
     "charging_diversity_factor": null,
@@ -17795,7 +17795,7 @@
     "revenue_breakdown": [
       {
         "name": "储能节费/削峰收益",
-        "amount": 310314.24
+        "amount": 600921.42
       },
       {
         "name": "光伏自发自用收益",
@@ -17842,43 +17842,43 @@
   "financial_results": {
     "capex_total": 10790000.0,
     "opex_annual": 161850.0,
-    "annual_savings_or_revenue": 2465158.92,
-    "annual_energy_charge_cost": 7405853.03,
+    "annual_savings_or_revenue": 2755766.1,
+    "annual_energy_charge_cost": 7183384.33,
     "annual_demand_charge_cost": 0.0,
     "annual_ancillary_service_revenue": 0.0,
     "annual_demand_response_revenue": -0.0,
     "storage_replacement_year": null,
     "storage_replacement_cost": null,
     "opex_escalation_rate": 0.02,
-    "irr": 0.1322,
+    "irr": 0.161,
     "payback_years": 6.0,
-    "npv": 3394358.74,
+    "npv": 5334983.85,
     "lcoe": 0.2525,
-    "lcos": 0.3066,
-    "equity_irr": 0.25,
-    "equity_npv": 4738923.58,
-    "dscr_min": 1.709,
-    "dyn_payback_years": 9.0,
-    "roi": 0.1485,
-    "roe": 0.495,
-    "breakeven_price_factor": 0.4926,
+    "lcos": 0.1583,
+    "equity_irr": 0.3291,
+    "equity_npv": 6679548.7,
+    "dscr_min": 1.951,
+    "dyn_payback_years": 8.0,
+    "roi": 0.1681,
+    "roe": 0.5603,
+    "breakeven_price_factor": 0.338,
     "gec_revenue_annual": 111530.1,
-    "ccer_total_value": 1207682.91,
+    "ccer_total_value": 1494213.84,
     "residual_salvage_value": 539500.0,
     "abatement_cost_per_tco2e": 0.0,
     "baseline_annual_energy_cost": 10800000.0,
     "pv_lcoe": 0.2374,
     "wind_lcoe": 0.1139,
-    "storage_lcos": 0.3066
+    "storage_lcos": 0.1583
   },
   "carbon_results": {
-    "baseline_emissions_tco2e": 6310.33,
-    "post_project_emissions_tco2e": 3571.82,
-    "annual_reduction_tco2e": 2738.51,
+    "baseline_emissions_tco2e": 6384.97,
+    "post_project_emissions_tco2e": 2996.72,
+    "annual_reduction_tco2e": 3388.24,
     "scope1_reduction_tco2e": 0.0,
-    "scope2_reduction_tco2e": 2738.51,
+    "scope2_reduction_tco2e": 3388.24,
     "scope3_reduction_tco2e": 0.0,
-    "green_power_coverage_ratio": 0.2447,
+    "green_power_coverage_ratio": 0.2426,
     "claim_boundary_summary": "需按范围一/二边界、环境属性归属和外部核证要求进一步确认零碳声明边界",
     "carbon_path_breakdown": [
       {
@@ -17888,7 +17888,7 @@
       },
       {
         "path": "绿电/光伏/储能替代购电排放",
-        "reduction_tco2e": 2738.51,
+        "reduction_tco2e": 3388.24,
         "share": 1.0
       }
     ]
@@ -17897,16 +17897,16 @@
     {
       "factor": "设备投资上升10%",
       "impact_on_annual_revenue": 0.0,
-      "impact_on_irr": -0.78,
-      "irr_after": 0.1244,
-      "npv_after": 2973315.49
+      "impact_on_irr": -0.86,
+      "irr_after": 0.1524,
+      "npv_after": 4914262.55
     },
     {
       "factor": "发电量下降10%",
-      "impact_on_annual_revenue": -183485.94,
-      "impact_on_irr": -1.87,
-      "irr_after": 0.1135,
-      "npv_after": 2141345.94
+      "impact_on_annual_revenue": -181818.06,
+      "impact_on_irr": -1.8,
+      "irr_after": 0.143,
+      "npv_after": 4093620.75
     },
     {
       "factor": "双变量敏感性（CAPEX × 发电量）",
@@ -17919,9 +17919,9 @@
             1.1
           ],
           "irr_values": [
-            0.1291,
-            0.1489,
-            0.1682
+            0.1604,
+            0.1794,
+            0.1978
           ]
         },
         {
@@ -17932,9 +17932,9 @@
             1.1
           ],
           "irr_values": [
-            0.1135,
-            0.1322,
-            0.1505
+            0.143,
+            0.161,
+            0.1784
           ]
         },
         {
@@ -17945,9 +17945,9 @@
             1.1
           ],
           "irr_values": [
-            0.0997,
-            0.1176,
-            0.135
+            0.1277,
+            0.1448,
+            0.1613
           ]
         }
       ],
@@ -17956,20 +17956,20 @@
     {
       "factor": "蒙特卡洛 IRR 分布（500次模拟）",
       "monte_carlo": {
-        "p10": 0.115,
-        "p50": 0.1314,
-        "p90": 0.1522,
+        "p10": 0.1406,
+        "p50": 0.159,
+        "p90": 0.1858,
         "samples": 500,
-        "confidence": "13.1% 中位数，90%概率 ≥11.5%"
+        "confidence": "15.9% 中位数，90%概率 ≥14.1%"
       },
       "irr_impact": "monte_carlo"
     },
     {
       "factor": "绿电覆盖率下降5%",
-      "impact_on_annual_revenue": -91740.39,
-      "impact_on_irr": -0.93,
-      "impact_on_carbon_reduction": -102.23,
-      "irr_after": 0.1229
+      "impact_on_annual_revenue": -90055.29,
+      "impact_on_irr": -0.89,
+      "impact_on_carbon_reduction": -98.46,
+      "irr_after": 0.1521
     }
   ],
   "data_quality_results": {
@@ -18023,9 +18023,7 @@
     "network_and_design.point_of_connection",
     "province profile not found"
   ],
-  "risks": [
-    "储能年循环315次，低于每日1次理想值，建议关注实际利用率。"
-  ],
+  "risks": [],
   "confidence": {
     "level": "medium",
     "reason": "数据完整度 B，缺失字段 2 项，未命中省级 profile，PV资源精度 high，风资源精度 high"
