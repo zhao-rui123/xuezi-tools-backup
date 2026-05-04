@@ -321,8 +321,10 @@ def simulate_storage_dispatch_annual(
             continue
         # ── 综合充放电策略：价差套利 + 削峰填谷 + 需量管理 ──────────
         is_night = hour in {23, 0, 1, 2, 3, 4, 5, 6, 7}  # 夜间/谷段充电窗口
-        is_valley_price = price <= cheap_threshold
-        is_peak_price = price >= expensive_threshold
+        daily_price_range = max(day_slice) - min(day_slice) if day_slice else 0
+        has_arbitrage = daily_price_range > 0.01  # 全天同价时无套利空间
+        is_valley_price = has_arbitrage and price <= cheap_threshold
+        is_peak_price = has_arbitrage and price >= expensive_threshold
         # 当前月已出现的最高并网功率
         cur_month_peak = monthly_grid_peak[month_idx]
         # 充电：谷价时段优先（保障夜间充电）→ 负荷填谷次之 → 光伏消纳兜底
