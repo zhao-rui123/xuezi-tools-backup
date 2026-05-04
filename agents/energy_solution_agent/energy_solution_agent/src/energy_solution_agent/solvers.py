@@ -606,13 +606,20 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * avg_spread * 1000
         pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * pv_sc_ratio * 1000
         wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * wind_sc_ratio * 1000
+    # ── EMC分成 + VPP收益 ───────────────────────────────────────
+    emc_cfg = financial.get("emc", {})
+    emc_investor_share = float(emc_cfg.get("investor_share_pct", 100.0)) / 100.0
+    vpp_revenue = float(financial.get("vpp_revenue_annual_rmb", 0.0))
+
     charging_margin = float(simulation.get("annual_charging_energy_mwh") or 0.0) * 120
     thermal_saving = (float(simulation.get("annual_cooling_energy_mwh") or 0.0) + float(simulation.get("annual_heating_energy_mwh") or 0.0)) * 70
     carbon_value = float(carbon.get("annual_reduction_tco2e") or 0.0) * float(financial.get("carbon_price_assumption") or 0.0)
-    # 绿证收益
     gec_revenue = annual_gec_revenue(annual_pv + annual_wind, market)
-    
-    annual_revenue = charge_saving + pv_saving + wind_saving + charging_margin + thermal_saving + carbon_value + gec_revenue
+
+    charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * avg_spread * 1000 * emc_investor_share
+    pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * pv_sc_ratio * 1000
+    wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * wind_sc_ratio * 1000
+    annual_revenue = charge_saving + pv_saving + wind_saving + charging_margin + thermal_saving + carbon_value + gec_revenue + vpp_revenue
 
     capex = financial.get("capex", {})
     storage_capex = (simulation.get("storage_energy_mwh") or 0.0) * 1000 * float(capex.get("storage_system_cost_per_kwh") or 850)
