@@ -44,6 +44,7 @@ def _add_table(doc, headers, rows, col_widths=None):
     return t
 
 from .analysis_narrative import generate_narrative
+from .report_charts import build_report_charts
 
 def build_docx(result_json: dict) -> str:
     out = result_json
@@ -58,6 +59,9 @@ def build_docx(result_json: dict) -> str:
     risks = out.get('risks', [])
 
     doc = Document()
+    # 生成图表（保存到与docx同目录一致的临时目录）
+    chart_dir = Path('/tmp/energy_report_charts')
+    charts = build_report_charts(result_json, chart_dir)
     
     # ===== Cover =====
     p = doc.add_paragraph()
@@ -113,6 +117,8 @@ def build_docx(result_json: dict) -> str:
         doc.add_heading('储能月度充放电量', level=2)
         mrows = [[str(m['month']), f"{m['charge_mwh']:.0f}", f"{m['discharge_mwh']:.0f}"] for m in monthly]
         _add_table(doc, ['月份', '充电 (MWh)', '放电 (MWh)'], mrows)
+        if charts.get('storage_monthly'):
+            doc.add_picture(charts['storage_monthly'], width=Inches(6.5))
     
     # ===== 3. 发电量 =====
     doc.add_heading('3. 发电量及绿电覆盖率', level=1)
@@ -160,6 +166,10 @@ def build_docx(result_json: dict) -> str:
                 rb_rows.append([item.get('name',''), f"{item.get('amount',0)/1e4:,.0f} 万元"])
         if rb_rows:
             _add_table(doc, ['收益项', '金额'], rb_rows)
+        if charts.get('revenue_breakdown'):
+            doc.add_picture(charts['revenue_breakdown'], width=Inches(6.3))
+        if charts.get('cost_structure'):
+            doc.add_picture(charts['cost_structure'], width=Inches(5.6))
     
     # ===== 5. 融资分析 =====
     doc.add_heading('5. 融资结构分析', level=1)
@@ -213,8 +223,11 @@ def build_docx(result_json: dict) -> str:
             doc.add_paragraph(f"置信度：90% 概率 IRR ≥ {mc['p10']*100:.1f}%")
     
     # 风险项
+    if charts.get('tornado'):
+        doc.add_heading('7.4 Tornado 敏感性图', level=2)
+        doc.add_picture(charts['tornado'], width=Inches(6.5))
     if risks:
-        doc.add_heading('7.4 风险提示', level=2)
+        doc.add_heading('7.5 风险提示', level=2)
         for r in risks:
             doc.add_paragraph(f"⚠ {r}", style='List Bullet')
     
