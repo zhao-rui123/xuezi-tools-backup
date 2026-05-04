@@ -329,13 +329,18 @@ def simulate_storage_dispatch_annual(
         cur_month_peak = monthly_grid_peak[month_idx]
         # 充电：谷价时段优先（保障夜间充电）→ 负荷填谷次之 → 光伏消纳兜底
         should_charge_arbitrage = (is_night or is_valley_price) and soc < soc_max
+        # 平段补电：早峰放完后，为午峰第二循环准备
+        is_midday = hour in {11, 12, 13}
+        should_charge_midday = is_midday and not is_valley_price and not is_peak_price and soc < soc_max * 0.5
         should_charge_valley = net < valley_threshold and net < cur_month_peak * 0.9 if cur_month_peak > 0 else False
         should_charge_renewable = renewable_surplus > 0
-        should_charge = should_charge_arbitrage or should_charge_valley or should_charge_renewable
+        should_charge = should_charge_arbitrage or should_charge_midday or should_charge_valley or should_charge_renewable
         did_charge = False
         if should_charge and soc < soc_max:
             headroom = max(0.0, valley_threshold - net)
-            charge_limit = max(headroom, renewable_surplus, power_kw * 1.0)
+            # 平段补电时限制功率，避免过度充电影响下午峰放电
+            midday_power_limit = power_kw * 0.6 if is_midday else power_kw * 1.0
+            charge_limit = max(headroom, renewable_surplus, midday_power_limit)
             charge_kw = min(power_kw, soc_max - soc, charge_limit)
             if charge_kw > 0:
                 soc += charge_kw * battery_charge_eff
