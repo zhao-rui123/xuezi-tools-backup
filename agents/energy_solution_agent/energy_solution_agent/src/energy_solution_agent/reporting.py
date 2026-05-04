@@ -86,6 +86,7 @@ def build_report(output: dict[str, Any], diagnostics: dict[str, Any]) -> str:
             f"- 年等效满循环：{dispatch.get('storage_equivalent_full_cycles_per_year')}",
             f"- 估算寿命年限：{dispatch.get('storage_life_years_estimate')}",
             f"- 绿电/新能源充电占比：{dispatch.get('storage_charge_from_renewables_ratio')}",
+            f"- 系统新能源自行消纳率：{sim.get('renewable_self_consumption_ratio')}",
             f"- 有效往返效率：{dispatch.get('storage_effective_round_trip_efficiency')}",
             f"- 预留SOC/保供SOC：{dispatch.get('storage_reserved_soc_ratio')} / {dispatch.get('storage_backup_soc_ratio')}",
             f"- 年衰减率/寿命末容量比：{dispatch.get('storage_degradation_per_year')} / {dispatch.get('storage_end_of_life_capacity_ratio')}",
@@ -95,6 +96,7 @@ def build_report(output: dict[str, Any], diagnostics: dict[str, Any]) -> str:
             f"- 冷/热峰值需求：{dispatch.get('thermal_cooling_peak_kwth')} / {dispatch.get('thermal_heating_peak_kwth')}",
             "",
             "## 财务结果",
+            f"- 基线年能源成本：{fin.get('baseline_annual_energy_cost')}",
             f"- 年收益/节费：{fin.get('annual_savings_or_revenue')}",
             f"- 年电量电费：{fin.get('annual_energy_charge_cost')}",
             f"- 年需量电费：{fin.get('annual_demand_charge_cost')}",
@@ -102,6 +104,8 @@ def build_report(output: dict[str, Any], diagnostics: dict[str, Any]) -> str:
             f"- 年需求响应收益：{fin.get('annual_demand_response_revenue')}",
             f"- 储能更换年份/成本：{fin.get('storage_replacement_year')} / {fin.get('storage_replacement_cost')}",
             f"- 运维递增率：{fin.get('opex_escalation_rate')}",
+            f"- 系统 LCOE / LCOS：{fin.get('lcoe')} / {fin.get('lcos')}",
+            f"- 光伏 LCOE / 风电 LCOE / 储能 LCOS：{fin.get('pv_lcoe')} / {fin.get('wind_lcoe')} / {fin.get('storage_lcos')}",
             f"- 项目 IRR：{fin.get('irr')}",
             f"- 回收期：{fin.get('payback_years')}",
             f"- NPV：{fin.get('npv')}",
@@ -124,6 +128,13 @@ def build_report(output: dict[str, Any], diagnostics: dict[str, Any]) -> str:
             lines.append(f"- 推荐路径：{path}")
         for item in carbon["industry_template"].get("hard_to_abate", []):
             lines.append(f"- 难减排项：{item}")
+    if market.get("revenue_breakdown"):
+        lines.extend(["", "## 收益拆解"])
+        for item in market["revenue_breakdown"]:
+            if isinstance(item, dict):
+                lines.append(f"- {item.get('name')}：{item.get('amount')} 元/年")
+            else:
+                lines.append(f"- {item}")
     if dispatch.get("monthly_storage_revenue_breakdown"):
         lines.extend(["", "## 储能月度视图"])
         for item in dispatch["monthly_storage_revenue_breakdown"]:
@@ -150,8 +161,6 @@ def build_report(output: dict[str, Any], diagnostics: dict[str, Any]) -> str:
     if sensitivity:
         lines.extend(["", "## 敏感性分析"])
         for item in sensitivity:
-            lines.append(
-                f"- {item.get(chr(102)+chr(97)+chr(99)+chr(116)+chr(111)+chr(114),chr(63))}：年度收益影响 {item.get(chr(105)+chr(109)+chr(112)+chr(97)+chr(99)+chr(116)+chr(95)+chr(111)+chr(110)+chr(95)+chr(97)+chr(110)+chr(110)+chr(117)+chr(97)+chr(108)+chr(95)+chr(114)+chr(101)+chr(118)+chr(101)+chr(110)+chr(117)+chr(101),chr(63))}，IRR 敏感度 {item.get(chr(105)+chr(109)+chr(112)+chr(97)+chr(99)+chr(116)+chr(95)+chr(111)+chr(110)+chr(95)+chr(105)+chr(114)+chr(114),chr(63))}"
-            )
+            lines.append(f"- {item.get('factor','?')}：{_format_sensitivity(item)}")
 
     return "\n".join(lines) + "\n"

@@ -946,23 +946,20 @@ def _describe_price_mode(market: dict[str, Any]) -> str:
     return "unspecified"
 
 
-def _revenue_breakdown(charge: float, pv: float, wind: float, charging: float, thermal: float, carbon: float) -> list[str]:
-    items = []
+def _revenue_breakdown(charge: float, pv: float, wind: float, charging: float, thermal: float, carbon: float) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
     if charge > 0:
-        items.append("储能节费/削峰收益")
+        items.append({"name": "储能节费/削峰收益", "amount": round(charge, 2)})
     if pv > 0:
-        items.append("光伏自发自用收益")
+        items.append({"name": "光伏自发自用收益", "amount": round(pv, 2)})
     if wind > 0:
-        items.append("风电替代收益")
+        items.append({"name": "风电替代收益", "amount": round(wind, 2)})
     if charging > 0:
-        items.append("充电服务毛收益")
+        items.append({"name": "充电服务毛收益", "amount": round(charging, 2)})
     if thermal > 0:
-        items.append("冷热系统节费收益")
+        items.append({"name": "冷热系统节费收益", "amount": round(thermal, 2)})
     if carbon > 0:
-        items.append("碳减排价值")
-    if pv > 0 and wind > 0 and charge == 0:
-        # offgrid 模式下 pv 和 wind 的收益标签已改，这里不动显示
-        pass
+        items.append({"name": "碳减排价值", "amount": round(carbon, 2)})
     return items
 
 
