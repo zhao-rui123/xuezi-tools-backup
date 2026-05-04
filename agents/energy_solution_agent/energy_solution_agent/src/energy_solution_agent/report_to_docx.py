@@ -103,13 +103,13 @@ def build_docx(result_json: dict) -> str:
     # ===== 2. 推荐方案 =====
     doc.add_heading('2. 推荐方案', level=1)
     _add_table(doc, ['设备', '规模', '说明'], [
-        ['光伏', f"{s.get('pv_mwp') or 0} MWp", f"年发电 {sim.get('annual_pv_generation_mwh',0):,.0f} MWh"],
-        ['风电', f"{s.get('wind_mw') or 0} MW", f"年发电 {sim.get('annual_wind_generation_mwh',0):,.0f} MWh"],
-        ['储能', f"{s.get('storage_power_mw') or 0} MW / {s.get('storage_energy_mwh') or 0} MWh", f"年循环 {d.get('storage_equivalent_full_cycles_per_year',0):.0f} 次"],
+        ['光伏', f"{s.get('pv_mwp') or 0} MWp", f"年发电 {float(sim.get('annual_pv_generation_mwh') or 0):,.0f} MWh"],
+        ['风电', f"{s.get('wind_mw') or 0} MW", f"年发电 {float(sim.get('annual_wind_generation_mwh') or 0):,.0f} MWh"],
+        ['储能', f"{s.get('storage_power_mw') or 0} MW / {s.get('storage_energy_mwh') or 0} MWh", f"年循环 {float(d.get('storage_equivalent_full_cycles_per_year') or 0):.0f} 次"],
     ])
     
     doc.add_paragraph(f"调度策略：{d.get('storage_strategy_mode','')}")
-    doc.add_paragraph(f"日储能循环：{d.get('daily_storage_cycles')}    削峰量：{d.get('estimated_peak_reduction_kw',0):.0f} kW")
+    doc.add_paragraph(f"日储能循环：{d.get('daily_storage_cycles')}    削峰量：{float(d.get('estimated_peak_reduction_kw') or 0):.0f} kW")
     
     # Monthly chart
     monthly = d.get('monthly_storage_revenue_breakdown', [])
@@ -122,14 +122,16 @@ def build_docx(result_json: dict) -> str:
     
     # ===== 3. 发电量 =====
     doc.add_heading('3. 发电量及绿电覆盖率', level=1)
-    gen_total = (sim.get('annual_pv_generation_mwh',0) + sim.get('annual_wind_generation_mwh',0))
+    pv_gen = float(sim.get('annual_pv_generation_mwh') or 0)
+    wind_gen = float(sim.get('annual_wind_generation_mwh') or 0)
+    gen_total = pv_gen + wind_gen
     cov = sim.get('coverage_ratio', 0)
     _add_table(doc, ['指标', '数值'], [
-        ['年光伏发电量', f"{sim.get('annual_pv_generation_mwh',0):,.0f} MWh"],
-        ['年风电发电量', f"{sim.get('annual_wind_generation_mwh',0):,.0f} MWh"],
+        ['年光伏发电量', f"{pv_gen:,.0f} MWh"],
+        ['年风电发电量', f"{wind_gen:,.0f} MWh"],
         ['年总发电量', f"{gen_total:,.0f} MWh"],
-        ['年储能放电量', f"{sim.get('annual_storage_discharge_mwh',0):,.0f} MWh"],
-        ['年购电量', f"{sim.get('annual_grid_purchase_mwh',0):,.0f} MWh"],
+        ['年储能放电量', f"{float(sim.get('annual_storage_discharge_mwh') or 0):,.0f} MWh"],
+        ['年购电量', f"{float(sim.get('annual_grid_purchase_mwh') or 0):,.0f} MWh"],
         ['绿电覆盖率', f"{cov*100:.1f}%" if cov else 'N/A'],
         ['新能源自行消纳率', f"{sim.get('renewable_self_consumption_ratio',0)*100:.1f}%" if sim.get('renewable_self_consumption_ratio') else 'N/A'],
     ])
@@ -146,8 +148,8 @@ def build_docx(result_json: dict) -> str:
         ['权益净现值 (Equity NPV)', f"{f.get('equity_npv',0)/1e4:,.0f} 万元"],
         ['静态回收期', f"{f.get('payback_years','N/A')} 年"],
         ['动态回收期', f"{f.get('dyn_payback_years','N/A')} 年" if f.get('dyn_payback_years') else 'N/A'],
-        ['总投资收益率 (ROI)', f"{f.get('roi',0)*100:.1f}%"],
-        ['净资产收益率 (ROE)', f"{f.get('roe',0)*100:.1f}%"],
+        ['总投资收益率 (ROI)', f"{f.get('roi')*100:.1f}%" if f.get('roi') is not None else 'N/A'],
+        ['净资产收益率 (ROE)', f"{f.get('roe')*100:.1f}%" if f.get('roe') is not None else 'N/A'],
         ['偿债覆盖率 (DSCR)', f"{f.get('dscr_min','N/A')}"],
         ['系统平准化度电成本 (LCOE)', f"{f.get('lcoe','N/A')} 元/kWh"],
         ['平准化储能成本 (LCOS)', f"{f.get('lcos','N/A')} 元/kWh"],
