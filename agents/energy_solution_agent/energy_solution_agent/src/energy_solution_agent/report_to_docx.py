@@ -125,6 +125,7 @@ def build_docx(result_json: dict) -> str:
         ['年储能放电量', f"{sim.get('annual_storage_discharge_mwh',0):,.0f} MWh"],
         ['年购电量', f"{sim.get('annual_grid_purchase_mwh',0):,.0f} MWh"],
         ['绿电覆盖率', f"{cov*100:.1f}%" if cov else 'N/A'],
+        ['新能源自行消纳率', f"{sim.get('renewable_self_consumption_ratio',0)*100:.1f}%" if sim.get('renewable_self_consumption_ratio') else 'N/A'],
     ])
     
     # ===== 4. 财务分析 =====
@@ -142,15 +143,28 @@ def build_docx(result_json: dict) -> str:
         ['总投资收益率 (ROI)', f"{f.get('roi',0)*100:.1f}%"],
         ['净资产收益率 (ROE)', f"{f.get('roe',0)*100:.1f}%"],
         ['偿债覆盖率 (DSCR)', f"{f.get('dscr_min','N/A')}"],
-        ['平准化度电成本 (LCOE)', f"{f.get('lcoe','N/A')} 元/kWh"],
+        ['系统平准化度电成本 (LCOE)', f"{f.get('lcoe','N/A')} 元/kWh"],
         ['平准化储能成本 (LCOS)', f"{f.get('lcos','N/A')} 元/kWh"],
+        ['光伏 LCOE', f"{f.get('pv_lcoe','N/A')} 元/kWh"],
+        ['风电 LCOE', f"{f.get('wind_lcoe','N/A')} 元/kWh"],
+        ['储能 LCOS', f"{f.get('storage_lcos','N/A')} 元/kWh"],
     ]
     _add_table(doc, ['财务指标', '数值'], frows)
+    if f.get('baseline_annual_energy_cost') is not None:
+        doc.add_paragraph(f"基线年能源成本：{f.get('baseline_annual_energy_cost',0)/1e4:,.0f} 万元")
+    if market.get('revenue_breakdown'):
+        doc.add_heading('收益拆解', level=2)
+        rb_rows = []
+        for item in market.get('revenue_breakdown', []):
+            if isinstance(item, dict):
+                rb_rows.append([item.get('name',''), f"{item.get('amount',0)/1e4:,.0f} 万元"])
+        if rb_rows:
+            _add_table(doc, ['收益项', '金额'], rb_rows)
     
     # ===== 5. 融资分析 =====
     doc.add_heading('5. 融资结构分析', level=1)
-    doc.add_paragraph("融资模式：银行贷款（等额本金还款）")
-    doc.add_paragraph(f"负债率：70%    贷款利率：4.5%    贷款期限：10 年")
+    fin_mode = out.get('market_and_settlement', {}).get('financing_mode') or '贷款'
+    doc.add_paragraph(f"融资模式：{fin_mode}")
     doc.add_paragraph(f"权益 IRR：{f.get('equity_irr',0)*100:.2f}%    （项目 IRR {f['irr']*100:.2f}%，杠杆放大 {f.get('equity_irr',0)/f['irr']:.1f}x）" if f.get('equity_irr') and f.get('irr') else "")
     doc.add_paragraph(f"DSCR 最低值：{f.get('dscr_min','N/A')}    （银行可贷标准：>1.2）")
     
