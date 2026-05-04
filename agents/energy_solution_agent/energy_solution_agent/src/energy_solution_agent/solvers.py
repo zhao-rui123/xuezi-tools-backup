@@ -493,25 +493,57 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
     peak_load_kw = float(load.get("peak_load_kw") or 0.0)
     candidate_powers = [float(v) for v in equipment.get("power_candidate_kw") or []]
     candidate_energies = [float(v) for v in equipment.get("energy_candidate_kwh") or []]
+    financial = data.get("financial", {})
+    project_years = int(financial.get("project_years") or 15)
+    discount_rate = float(financial.get("discount_rate") or 0.08)
+    cost_per_kwh = float(financial.get("capex", {}).get("storage_system_cost_per_kwh") or 850)
+    fuel_cost = float(market.get("fuel_cost_per_kwh") or 0.0)
 
-    if candidate_powers:
-        power_kw = candidate_powers[-1]  # 用最大的那个（直接取最后一个，而非硬算）
-    else:
+    if not candidate_powers or not candidate_energies:
         base = peak_load_kw * 0.22 + charging_peak_kw * 0.35 + thermal_coupling_kw * 0.2
         if market.get("demand_charge_rule"):
             base *= 1.15
         power_kw = max(500.0, round(base, 0))
-    if candidate_energies:
-        energy_kwh = candidate_energies[-1]  # 用最大的那个
-    else:
         energy_kwh = power_kw * 2.0
+        rte = float(equipment.get("round_trip_efficiency") or 0.88)
+        annual_discharge = power_kw * 0.55 * 365 / 1000
+        annual_charge = annual_discharge / max(rte, 0.01)
+        return {
+            "storage_power_mw": round(power_kw / 1000, 3),
+            "storage_energy_mwh": round(energy_kwh / 1000, 3),
+            "annual_storage_charge_mwh": round(annual_charge, 2),
+            "annual_storage_discharge_mwh": round(annual_discharge, 2),
+        }
 
+    # ── 遍历候选方案，按经济最优选择 ──────────────────────────
+    # 年度化储能成本因子 = discount_rate / (1 - (1+discount_rate)^-project_years)
+    annuity = discount_rate / (1.0 - (1.0 + discount_rate) ** -project_years) if discount_rate > 0 else 0.1
+    best_score = float("-inf")
+    best_power_kw = candidate_powers[0]
+    best_energy_kwh = candidate_energies[0]
     rte = float(equipment.get("round_trip_efficiency") or 0.88)
-    annual_discharge = power_kw * 0.55 * 365 / 1000
+
+    for power_kw, energy_kwh in zip(candidate_powers, candidate_energies):
+        if power_kw <= 0 or energy_kwh <= 0:
+            continue
+        # 估算年吞吐量（假设55%利用率）
+        annual_discharge = power_kw * 0.55 * 365 / 1000
+        # 年化燃料节省
+        annual_benefit = annual_discharge * fuel_cost * 1000
+        # 年化储能成本
+        annual_storage_cost = (energy_kwh * cost_per_kwh) * annuity
+        # 净得分 = 年收益 - 年成本
+        score = annual_benefit - annual_storage_cost
+        if score > best_score:
+            best_score = score
+            best_power_kw = power_kw
+            best_energy_kwh = energy_kwh
+
+    annual_discharge = best_power_kw * 0.55 * 365 / 1000
     annual_charge = annual_discharge / max(rte, 0.01)
     return {
-        "storage_power_mw": round(power_kw / 1000, 3),
-        "storage_energy_mwh": round(energy_kwh / 1000, 3),
+        "storage_power_mw": round(best_power_kw / 1000, 3),
+        "storage_energy_mwh": round(best_energy_kwh / 1000, 3),
         "annual_storage_charge_mwh": round(annual_charge, 2),
         "annual_storage_discharge_mwh": round(annual_discharge, 2),
     }

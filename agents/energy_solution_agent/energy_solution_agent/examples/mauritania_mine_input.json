@@ -38,15 +38,16 @@
     "backup_hours_required": 6
   },
   "market_data": {
-    "market_mode": "offgrid_internal"
+    "market_mode": "offgrid_internal",
+    "fuel_cost_per_kwh": 0.15
   },
   "network_and_design": {
     "point_of_connection": "矿区10kV系统"
   },
   "equipment": {
     "storage": {
-      "power_candidate_kw": [25000, 50000, 55000],
-      "energy_candidate_kwh": [50000, 100000, 110000],
+      "power_candidate_kw": [25000, 38000, 51000],
+      "energy_candidate_kwh": [50000, 76000, 102000],
       "pcs_efficiency": 0.985,
       "transformer_efficiency": 0.99,
       "battery_charge_efficiency": 0.965,
@@ -61,7 +62,7 @@
     "conventional_backup": {
       "enabled": true,
       "minimum_output_kw": 15000,
-      "fuel_cost_per_kwh": 0.32
+      "fuel_cost_per_kwh": 0.15
     }
   },
   "financial": {

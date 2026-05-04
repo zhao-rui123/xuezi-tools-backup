@@ -152,8 +152,20 @@ def estimate_wind_generation(data: dict[str, Any]) -> dict[str, Any]:
         mean_speed = None
         monthly_shape = [1.0] * 12
     p50_factor, p90_factor = _resource_scenario_factors(wind, default_p90=0.88)
-    p50_generation = annual_generation * p50_factor
-    p90_generation = annual_generation * p90_factor
+    # ── 用户指定风电容量覆盖 ──────────────────────────────────
+    user_wind_mw = float(wind.get("wind_mw") or 0)
+    if user_wind_mw > 0 and wind_mw > 0 and abs(wind_mw - user_wind_mw) > 0.5:
+        scale = user_wind_mw / wind_mw
+        wind_mw = round(user_wind_mw, 3)
+        annual_generation *= scale
+        scaled_profile = [v * scale for v in scaled_profile]
+        p50_generation = annual_generation * p50_factor
+        p90_generation = annual_generation * p90_factor
+        accuracy = accuracy if accuracy != "low" else "medium"
+        basis = basis + " (user-override)"
+    else:
+        p50_generation = annual_generation * p50_factor
+        p90_generation = annual_generation * p90_factor
     annual_series = expand_daily_profile_to_year(
         scale_hourly_profile(scaled_profile, p50_generation),
         monthly_factors=monthly_shape,

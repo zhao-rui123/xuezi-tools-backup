@@ -59,21 +59,6 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     pv_result = estimate_pv_generation(data)
     wind_result = estimate_wind_generation(data)
     renewables = {**pv_result, **wind_result}
-    # ── 用户指定风电容量覆盖 ──────────────────────────────────
-    user_wind_mw = float(data.get("resource_data", {}).get("wind", {}).get("wind_mw", 0) or 0)
-    if user_wind_mw > 0:
-        # 保留原有轮廓比例，按用户指定容量重新缩放
-        current_wind_mw = float(renewables.get("wind_mw") or 0)
-        if current_wind_mw > 0 and abs(current_wind_mw - user_wind_mw) > 0.5:
-            scale = user_wind_mw / current_wind_mw
-            renewables["wind_mw"] = round(user_wind_mw, 3)
-            annual_gen = float(renewables.get("annual_wind_generation_mwh") or 0) * scale
-            renewables["annual_wind_generation_mwh"] = round(annual_gen, 2)
-            renewables["wind_hourly_profile_kw"] = [v * scale for v in renewables.get("wind_hourly_profile_kw", [0.0]*24)]
-            renewables["wind_annual_series_kw"] = [v * scale for v in renewables.get("wind_annual_series_kw", [0.0]*8760)]
-            renewables["wind_p50_generation_mwh"] = round(annual_gen, 2)
-            if renewables.get("wind_p90_generation_mwh") is not None:
-                renewables["wind_p90_generation_mwh"] = round(float(renewables["wind_p90_generation_mwh"]) * scale, 2)
     prelim_prices = build_hourly_price_series(data.get("market_data", {}), len(load_series))
     storage = estimate_storage(
         data,

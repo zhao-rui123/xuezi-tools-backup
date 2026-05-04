@@ -1,0 +1,18 @@
+{
+  "pv_mwp": 7.69,
+  "wind_mw": 72.0,
+  "storage_mw": 0.01,
+  "storage_mwh": 0.02,
+  "pv_gen_mwh": 12719.73,
+  "wind_gen_mwh": 405515.0,
+  "discharge_mwh": 9.18,
+  "grid_purchase_mwh": 103430.62,
+  "coverage_pct": 80.2,
+  "cycles": 459.2,
+  "capex": 484656000.0,
+  "annual_opex": 8723808.0,
+  "annual_revenue": 138078855.9,
+  "irr": 0.2352,
+  "npv": 635927434.7,
+  "payback_years": 5.0
+}
