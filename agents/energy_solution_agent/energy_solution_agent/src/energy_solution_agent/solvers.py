@@ -652,9 +652,14 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     thermal_capex = float(capex.get("thermal_system_total") or 0.0)
     charging_capex = float(capex.get("charging_system_total") or 0.0)
     capex_total = storage_capex + pv_capex + wind_capex + thermal_capex + charging_capex
-    opex_ratio = float((financial.get("opex") or {}).get("annual_om_ratio") or 0.015)
-    opex_escalation_rate = float((financial.get("opex") or {}).get("annual_opex_escalation_rate") or 0.02)
-    opex_annual = capex_total * opex_ratio
+    opex_cfg = financial.get("opex") or {}
+    storage_kwh = (simulation.get("storage_energy_mwh") or 0.0) * 1000
+    pv_kw = (simulation.get("pv_mwp") or 0.0) * 1000
+    storage_opex = float(storage_kwh) * float(opex_cfg.get("storage_cost_per_kwh_year") or 0)
+    pv_opex = float(pv_kw) * float(opex_cfg.get("pv_cost_per_kw_year") or 0)
+    # 如果有固定运维费就用固定，否则用比例
+    opex_annual = storage_opex + pv_opex if storage_opex + pv_opex > 0 else capex_total * float(opex_cfg.get("annual_om_ratio") or 0.015)
+    opex_escalation_rate = float(opex_cfg.get("annual_opex_escalation_rate") or 0.02)
     storage_degradation = float(degradation.get("storage_capacity_fade_per_year") or 0.025)
     pv_degradation = float(degradation.get("pv_degradation_per_year") or 0.005)
     wind_degradation = float(degradation.get("wind_degradation_per_year") or 0.003)
