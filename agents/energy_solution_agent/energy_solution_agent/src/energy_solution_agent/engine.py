@@ -9,6 +9,7 @@ from .data_quality import assess_data_quality
 from .industry_templates import get_industry_template
 from .live_rules import apply_live_rule_patch, fetch_live_rule_patch
 from .data_ingest import ingest_external_series
+from .resource_fetch import auto_fetch_resources
 from .normalize import normalize_input
 from .profiles import get_province_profile
 from .province_overrides import apply_province_overrides
@@ -34,7 +35,9 @@ from .timeseries import to_hourly_profile
 
 
 def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False, sensitivity_depth: int = 1) -> tuple[dict[str, Any], dict[str, Any], str]:
-    data = apply_province_overrides(ingest_external_series(normalize_input(payload)))
+    data = normalize_input(payload)
+    data = auto_fetch_resources(data)
+    data = apply_province_overrides(ingest_external_series(data))
     data_quality = assess_data_quality(data)
     completeness_grade, missing_fields = evaluate_data_completeness(data)
     scenario, secondary, reason = route_scenario(data)
