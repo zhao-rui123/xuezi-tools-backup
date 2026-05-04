@@ -55,6 +55,8 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         fallback_daily=load_profile,
         annual_target_mwh=float(data.get("load_data", {}).get("annual_consumption_mwh") or 0.0) or None,
         monthly_factors=data.get("load_data", {}).get("monthly_load_factors"),
+        weekend_daily=data.get("load_data", {}).get("weekend_load_profile_kw"),
+        seasonal_profiles=data.get("load_data", {}).get("seasonal_daily_profiles_kw"),
     )
     pv_result = estimate_pv_generation(data)
     wind_result = estimate_wind_generation(data)
@@ -80,18 +82,24 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         fallback_daily=charging_profile,
         annual_target_mwh=float(charging_summary.get("annual_charging_energy_mwh") or 0.0) or None,
         monthly_factors=data.get("charging_data", {}).get("monthly_energy_factors"),
+        weekend_daily=data.get("charging_data", {}).get("weekend_arrival_profile"),
+        seasonal_profiles=data.get("charging_data", {}).get("seasonal_daily_profiles_kw"),
     )
     cooling_series = build_annual_series(
         raw_series=[float(v) for v in (data.get("load_data", {}).get("cooling_load_series_kw") or [])],
         fallback_daily=thermal_profile.get("cooling_kw", [0.0] * 24),
         annual_target_mwh=float(annual_cooling or 0.0) or None,
         monthly_factors=data.get("thermal_system", {}).get("cooling_monthly_factors"),
+        weekend_daily=data.get("load_data", {}).get("weekend_cooling_profile_kw"),
+        seasonal_profiles=data.get("load_data", {}).get("seasonal_cooling_profiles_kw"),
     )
     heating_series = build_annual_series(
         raw_series=[float(v) for v in (data.get("load_data", {}).get("heating_load_series_kw") or [])],
         fallback_daily=thermal_profile.get("heating_kw", [0.0] * 24),
         annual_target_mwh=float(annual_heating or 0.0) or None,
         monthly_factors=data.get("thermal_system", {}).get("heating_monthly_factors"),
+        weekend_daily=data.get("load_data", {}).get("weekend_heating_profile_kw"),
+        seasonal_profiles=data.get("load_data", {}).get("seasonal_heating_profiles_kw"),
     )
     thermal_annual = simulate_thermal_equipment_annual(
         cooling_series_kw=cooling_series,
