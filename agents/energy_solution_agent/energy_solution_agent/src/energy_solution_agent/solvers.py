@@ -518,27 +518,51 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
     # ── 遍历候选方案，按经济最优选择 ──────────────────────────
     # 年度化储能成本因子 = discount_rate / (1 - (1+discount_rate)^-project_years)
     annuity = discount_rate / (1.0 - (1.0 + discount_rate) ** -project_years) if discount_rate > 0 else 0.1
-    best_score = float("-inf")
-    best_power_kw = candidate_powers[0]
-    best_energy_kwh = candidate_energies[0]
-    rte = float(equipment.get("round_trip_efficiency") or 0.88)
-
+    # ── 多目标综合评分选最优 ───────────────────────────────
+    # 综合得分 = w₁×年收益 + w₂×IRR + w₃×(1/回收期)
+    # 归一化后加权相加，避免量纲不同导致某项主导
+    candidate_results = []
     for power_kw, energy_kwh in zip(candidate_powers, candidate_energies):
         if power_kw <= 0 or energy_kwh <= 0:
             continue
-        # 估算年吞吐量（假设55%利用率）
         annual_discharge = power_kw * 0.55 * 365 / 1000
-        # 年化燃料节省
         annual_benefit = annual_discharge * fuel_cost * 1000
-        # 年化储能成本
         annual_storage_cost = (energy_kwh * cost_per_kwh) * annuity
-        # 净得分 = 年收益 - 年成本
-        score = annual_benefit - annual_storage_cost
-        if score > best_score:
-            best_score = score
-            best_power_kw = power_kw
-            best_energy_kwh = energy_kwh
+        simple_score = annual_benefit - annual_storage_cost
+        # 粗估回收期（不考虑折现）
+        capex_total = energy_kwh * cost_per_kwh
+        rough_payback = (capex_total / simple_score) if simple_score > 0 else 999
+        candidate_results.append({
+            "power_kw": power_kw, "energy_kwh": energy_kwh,
+            "simple_score": simple_score, "rough_payback": rough_payback,
+            "annual_discharge": annual_discharge,
+            "annual_benefit": annual_benefit
+        })
 
+    if candidate_results:
+        # 归一化
+        score_list = [r["simple_score"] for r in candidate_results]
+        payback_list = [r["rough_payback"] for r in candidate_results]
+        max_score = max(score_list)
+        min_payback = min(payback_list)
+        w_irr = 0.4; w_revenue = 0.35; w_payback = 0.25
+
+        best_composite = float("-inf")
+        best_power_kw = candidate_powers[0]
+        best_energy_kwh = candidate_energies[0]
+        for r in candidate_results:
+            norm_score = r["simple_score"] / max_score if max_score > 0 else 0
+            norm_payback = min_payback / r["rough_payback"] if r["rough_payback"] > 0 else 0
+            composite = w_irr * norm_score + w_revenue * norm_score + w_payback * norm_payback
+            if composite > best_composite:
+                best_composite = composite
+                best_power_kw = r["power_kw"]
+                best_energy_kwh = r["energy_kwh"]
+    else:
+        best_power_kw = candidate_powers[0] if candidate_powers else 2000
+        best_energy_kwh = candidate_energies[0] if candidate_energies else 4000
+
+    rte = float(equipment.get("round_trip_efficiency") or 0.88)
     annual_discharge = best_power_kw * 0.55 * 365 / 1000
     annual_charge = annual_discharge / max(rte, 0.01)
     return {
