@@ -20,15 +20,17 @@
   },
   "market_data": {
     "market_mode": "tou_tariff",
-    "shandong_tou": {
-      "peak_hours": [[8,11],[14,17]],
-      "shoulder_hours": [[7,8],[11,14],[17,18]],
-      "valley_hours": [[23,7]],
-      "peak_price_rmb_per_kwh": 0.92,
-      "shoulder_price_rmb_per_kwh": 0.64,
-      "valley_price_rmb_per_kwh": 0.31,
-      "demand_charge_rmb_per_kw_month": 33
-    }
+    "tou_tariff": [
+      {"period": "peak", "price": 0.92},
+      {"period": "flat", "price": 0.64},
+      {"period": "valley", "price": 0.31}
+    ],
+    "tou_schedule": {
+      "peak": [8, 9, 10, 14, 15, 16],
+      "flat": [7, 11, 12, 13, 17, 18, 19, 20, 21, 22],
+      "valley": [23, 0, 1, 2, 3, 4, 5, 6]
+    },
+    "demand_charge_rate_per_kw_month": 33
   },
   "equipment": {
     "storage": {

@@ -330,20 +330,24 @@ def simulate_storage_dispatch_annual(
         should_charge_valley = net < valley_threshold and net < cur_month_peak * 0.9 if cur_month_peak > 0 else False
         should_charge_renewable = renewable_surplus > 0
         should_charge = should_charge_arbitrage or should_charge_valley or should_charge_renewable
+        did_charge = False
         if should_charge and soc < soc_max:
             headroom = max(0.0, valley_threshold - net)
             charge_limit = max(headroom, renewable_surplus, power_kw * 1.0)
             charge_kw = min(power_kw, soc_max - soc, charge_limit)
-            soc += charge_kw * battery_charge_eff
-            net += charge_kw
-            charged += charge_kw
-            monthly_charge[month_idx] += charge_kw / 1000
-            renewable_charged += min(charge_kw, renewable_surplus)
+            if charge_kw > 0:
+                soc += charge_kw * battery_charge_eff
+                net += charge_kw
+                charged += charge_kw
+                monthly_charge[month_idx] += charge_kw / 1000
+                renewable_charged += min(charge_kw, renewable_surplus)
+                did_charge = True
         # 放电：峰价套利优先 → 需量控制次之 → 负荷削峰兜底
+        # 同一小时内禁止既充又放（避免虚假循环）
         threatens_peak = cur_month_peak > 0 and net >= cur_month_peak * 0.98
-        should_discharge_arbitrage = is_peak_price and soc > soc_min
-        should_discharge_demand = threatens_peak and soc > soc_min and not is_peak_price and not is_valley_price
-        should_discharge_peak = net > target_peak
+        should_discharge_arbitrage = is_peak_price and soc > soc_min and not did_charge
+        should_discharge_demand = threatens_peak and soc > soc_min and not is_peak_price and not is_valley_price and not did_charge
+        should_discharge_peak = net > target_peak and not did_charge
         should_discharge = should_discharge_arbitrage or should_discharge_demand or should_discharge_peak
         if should_discharge and soc > soc_min:
             target_cut = max(0.0, net - target_peak) if should_discharge_peak else 0.0
