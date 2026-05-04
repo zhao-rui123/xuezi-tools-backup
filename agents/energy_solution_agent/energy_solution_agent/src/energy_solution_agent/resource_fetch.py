@@ -147,7 +147,7 @@ def _fetch_open_meteo(lat: float, lon: float, timeout: float = 20.0) -> dict[str
     params = {
         "latitude": lat,
         "longitude": lon,
-        "hourly": "temperature_2m,wind_speed_10m",
+        "hourly": "temperature_2m,wind_speed_10m,shortwave_radiation",
         "timezone": "UTC",
         "start_date": "2020-01-01",
         "end_date": "2020-12-31",
@@ -159,15 +159,21 @@ def _fetch_open_meteo(lat: float, lon: float, timeout: float = 20.0) -> dict[str
     hourly = payload.get("hourly", {})
     temp = hourly.get("temperature_2m") or []
     wind = hourly.get("wind_speed_10m") or []
+    solar_rad = hourly.get("shortwave_radiation") or []  # W/m²
     if not wind:
         return None
     wind_vals = [float(v) for v in wind[:8760]]
     temp_vals = [float(v) for v in temp[:8760]] if temp else []
+    # shortwave_radiation W/m² → kWh/m² per hour (除以1000)
+    solar_vals = [float(v) / 1000.0 for v in solar_rad[:8760]] if solar_rad else []
     avg_wind = sum(wind_vals) / len(wind_vals) if wind_vals else 0.0
     temp_24h = temp_vals[:24] if temp_vals else []
-    return {
+    result = {
         "wind_speed_8760_mps": wind_vals,
         "annual_avg_wind_speed_mps": round(avg_wind, 3),
         "temperature_profile_24h_c": temp_24h,
         "temperature_8760_c": temp_vals[:8760] if temp_vals else None,
     }
+    if solar_vals:
+        result["hourly_irradiance_kwh_per_m2"] = solar_vals
+    return result

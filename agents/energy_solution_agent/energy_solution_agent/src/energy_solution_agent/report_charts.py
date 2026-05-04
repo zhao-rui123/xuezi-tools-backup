@@ -96,21 +96,59 @@ def build_report_charts(result_json: dict[str, Any], out_dir: str | Path) -> dic
         plt.close()
         charts["cost_structure"] = str(fp)
 
-    # 4. 敏感性 Tornado 图
+    # 4. 现金流曲线图
+    fin = result_json.get("financial_results", {})
+    cap = float(fin.get("capex_total") or 0)
+    rev = float(fin.get("annual_savings_or_revenue") or 0)
+    if cap > 0 and rev > 0:
+        proj_yrs = int(fin.get("project_years") or 15)
+        disc = float(fin.get("discount_rate") or 0.08)
+        yrs = list(range(proj_yrs + 1))
+        cum_cf = [-cap]
+        for y in range(1, proj_yrs + 1):
+            cum_cf.append(cum_cf[-1] + rev * 0.9 ** (y-1) / (1+disc)**y)
+        if cum_cf:
+            plt.figure(figsize=(9, 4.8))
+            plt.plot(yrs, cum_cf, marker="o", color="#4F81BD", linewidth=2)
+            plt.axhline(y=0, color="gray", linestyle="--", linewidth=0.8)
+            plt.title("项目折现现金流累计曲线")
+            plt.xlabel("年份")
+            plt.ylabel("累计折现现金流 (元)")
+            plt.tight_layout()
+            fp = out_path / "chart_cashflow.png"
+            plt.savefig(fp, dpi=180)
+            plt.close()
+            charts["cashflow"] = str(fp)
+
+    # 5. 敏感性 Tornado 图
     sens = result_json.get("sensitivity_results", []) or []
     tornado_labels = []
     tornado_values = []
+    irr_after_vals = []
     for item in sens:
         if isinstance(item, dict) and isinstance(item.get("impact_on_annual_revenue"), (int, float)):
             tornado_labels.append(str(item.get("factor") or "未命名"))
             tornado_values.append(float(item.get("impact_on_annual_revenue")) / 1e4)
+            # 获取扰动后IRR用于注释
+            ia = item.get("irr_after")
+            irr_after_vals.append(ia if ia else None)
     if tornado_labels and tornado_values:
-        pairs = sorted(zip(tornado_labels, tornado_values), key=lambda x: abs(x[1]))
+        pairs = sorted(zip(tornado_labels, tornado_values, irr_after_vals), key=lambda x: abs(x[1]))
         labels = [p[0] for p in pairs]
         values = [p[1] for p in pairs]
         colors = ["#C0504D" if v < 0 else "#9BBB59" for v in values]
-        plt.figure(figsize=(8.5, 5.2))
-        plt.barh(labels, values, color=colors)
+        plt.figure(figsize=(9, 5.5))
+        bars = plt.barh(labels, values, color=colors, edgecolor="white")
+        # 在柱上标注扰动后IRR
+        for bar, v, ia_val in zip(bars, values, [p[2] for p in pairs]):
+            if ia_val:
+                label = f"IRR后{ia_val*100:.1f}%"
+            else:
+                label = ""
+            if v >= 0:
+                plt.text(bar.get_width() + max(values)*0.02, bar.get_y() + bar.get_height()/2, label, va="center", fontsize=8)
+            else:
+                plt.text(bar.get_width() + bar.get_width()*0.05 - max(values)*0.02, bar.get_y() + bar.get_height()/2, label, va="center", ha="right", fontsize=8)
         plt.title("敏感性 Tornado 图（年收益影响）")
         plt.xlabel("万元/年")
         plt.tight_layout()

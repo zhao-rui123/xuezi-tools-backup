@@ -172,6 +172,9 @@ def build_docx(result_json: dict) -> str:
             doc.add_picture(charts['revenue_breakdown'], width=Inches(6.3))
         if charts.get('cost_structure'):
             doc.add_picture(charts['cost_structure'], width=Inches(5.6))
+    if charts.get('cashflow'):
+        doc.add_heading('项目现金流曲线', level=2)
+        doc.add_picture(charts['cashflow'], width=Inches(6.5))
     
     # ===== 5. 融资分析 =====
     doc.add_heading('5. 融资结构分析', level=1)
