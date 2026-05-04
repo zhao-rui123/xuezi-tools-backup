@@ -9,8 +9,11 @@ from .constants import REPORT_TITLE
 def _format_sensitivity(item: dict) -> str:
     if "impact_on_annual_revenue" in item:
         rev = item["impact_on_annual_revenue"]
-        imp = item.get("irr_impact", item.get("impact_on_irr", ""))
-        return f"年度收益影响 {rev}，敏感度 {imp}"
+        irr_after = item.get("irr_after")
+        irr_impact = item.get("impact_on_irr")
+        extra = f"，IRR变化 {irr_impact:+.2f}pct" if isinstance(irr_impact, (int, float)) else ""
+        extra2 = f"，扰动后IRR {irr_after*100:.2f}%" if isinstance(irr_after, (int, float)) else ""
+        return f"年度收益影响 {rev}{extra}{extra2}"
     if "heatmap" in item:
         return "双变量敏感性分析 (见 JSON 输出)"
     if "monte_carlo" in item:

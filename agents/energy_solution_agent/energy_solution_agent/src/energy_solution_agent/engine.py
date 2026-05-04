@@ -17,7 +17,7 @@ from .resource_models import estimate_pv_generation, estimate_wind_generation
 from .reporting import build_report
 from .router import route_scenario
 from .schema import new_output
-from .sensitivity import run_sensitivity
+from .sensitivity import run_sensitivity, set_sensitivity_runner
 from .settlement import ancillary_and_dr_revenue, annual_demand_charge, annual_energy_charge, build_hourly_price_series
 from .solvers import (
     assemble_design_notes,
@@ -33,7 +33,7 @@ from .solvers import (
 from .timeseries import to_hourly_profile
 
 
-def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) -> tuple[dict[str, Any], dict[str, Any], str]:
+def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False, sensitivity_depth: int = 1) -> tuple[dict[str, Any], dict[str, Any], str]:
     data = apply_province_overrides(ingest_external_series(normalize_input(payload)))
     data_quality = assess_data_quality(data)
     completeness_grade, missing_fields = evaluate_data_completeness(data)
@@ -427,7 +427,11 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     output["carbon_results"].update(carbon)
     if industry_template:
         output["carbon_results"]["industry_template"] = industry_template
-    output["sensitivity_results"] = run_sensitivity(output)
+    if sensitivity_depth > 0:
+        set_sensitivity_runner(analyze_project)
+        output["sensitivity_results"] = run_sensitivity(output, payload, enable_live_rules=enable_live_rules)
+    else:
+        output["sensitivity_results"] = []
     output["data_quality_results"] = data_quality
     output["assumptions"] = _assumptions(data, scenario)
     output["data_gaps"] = missing_fields + _scenario_specific_gaps(data, scenario, profile, renewables)
