@@ -230,8 +230,13 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False, se
             if cur_power <= 0 or cur_energy <= 0 or cur_power >= max_power_mw or cur_energy >= max_energy_mwh:
                 break
             iter_count += 1
+            # 只增加功率，保持时长比例不变（避免能量越来越大/功率比越来越低）
             new_power = min(round(cur_power * 1.4, 3), max_power_mw)
-            new_energy = min(round(cur_energy * 1.4, 3), max_energy_mwh)
+            # 能量按同等比例放大，保持时长(DOD)不变
+            duration_h = cur_energy / cur_power if cur_power > 0 else 4.0
+            new_energy = min(round(new_power * duration_h, 3), max_energy_mwh)
+            if new_energy >= max_energy_mwh:
+                break  # 能量已达上限仍不满足则放弃
             storage = {**storage, "storage_power_mw": new_power, "storage_energy_mwh": new_energy}
             annual_dispatch = simulate_storage_dispatch_annual(
                 load_series_kw=load_series,
