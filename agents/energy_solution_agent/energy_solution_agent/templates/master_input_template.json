@@ -1,0 +1,111 @@
+{
+  "project_info": {
+    "project_name": "标准项目模板",
+    "scenario_type": "zero_carbon_factory",
+    "province": "Overseas",
+    "city": "Project Site",
+    "grid_operator": "Offgrid",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "microgrid",
+    "target_priority": "balanced",
+    "storage_strategy_mode": "auto",
+    "resource_mode": "auto_fetch",
+    "lat": 23.196941,
+    "lon": -11.959593
+  },
+  "resource_data": {
+    "resource_mode": "auto_fetch",
+    "solar": {
+      "module_model": "desert_utility_pv",
+      "tilt_deg": 20,
+      "azimuth_deg": 180,
+      "available_area_m2": 300000
+    },
+    "wind": {
+      "turbine_model": "onshore_3mw_ieciii",
+      "wind_mw": 72.0,
+      "hub_height_m": 100.0,
+      "reference_height_m": 10.0,
+      "shear_exponent": 0.14
+    }
+  },
+  "load_data": {
+    "annual_consumption_mwh": 100000,
+    "peak_load_kw": 12000,
+    "load_series_kw": [],
+    "weekend_load_profile_kw": [],
+    "seasonal_daily_profiles_kw": {}
+  },
+  "charging_data": {
+    "arrival_profile": [],
+    "weekend_arrival_profile": [],
+    "seasonal_daily_profiles_kw": {}
+  },
+  "market_data": {
+    "market_mode": "offgrid_internal",
+    "fuel_cost_per_kwh": 0.30,
+    "pv_self_consumption_ratio": 0.85,
+    "wind_self_consumption_ratio": 0.80,
+    "default_valley_price": 0.35
+  },
+  "network_and_design": {
+    "point_of_connection": "项目母线",
+    "max_export_ratio": 0.65,
+    "curtailment_ratio": 0.20
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [10000, 20000, 30000],
+      "energy_candidate_kwh": [20000, 35000, 50000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.50,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.10,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    },
+    "thermal": {
+      "cooling_cop": 3.5,
+      "heating_cop": 3.0
+    },
+    "conventional_backup": {
+      "enabled": true,
+      "minimum_output_kw": 10000,
+      "fuel_cost_per_kwh": 0.30
+    }
+  },
+  "financial": {
+    "project_years": 20,
+    "discount_rate": 0.08,
+    "optimization_target": "irr",
+    "is_overseas_project": true,
+    "debt_ratio": 0.70,
+    "loan_rate": 0.045,
+    "loan_term": 10,
+    "capex": {
+      "storage_system_cost_per_kwh": 850,
+      "pv_cost_per_w": 3.1,
+      "wind_cost_per_w": 6.4,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    },
+    "tax": {
+      "applicable": false
+    }
+  },
+  "carbon_data": {
+    "carbon_claim_target": "零碳工厂"
+  }
+}

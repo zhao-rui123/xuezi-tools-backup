@@ -101,11 +101,19 @@ benchmark 会生成：
 - 深化行业模板
 - 增强 `8760` 真数据清洗与接管
 
+## 模板包（大师级交付）
+
+- `templates/master_input_template.json`：标准输入模板
+- `templates/master_delivery_checklist.md`：交付核对清单
+- `templates/device_model_catalog.md`：设备模型目录
+
 ## 目录重点
 
 - `src/energy_solution_agent/engine.py`：主引擎
 - `src/energy_solution_agent/solvers.py`：调度和求解
 - `src/energy_solution_agent/resource_models.py`：光伏/风电资源模型
+- `src/energy_solution_agent/resource_fetch.py`：自动抓取资源数据（NASA POWER / Open-Meteo）
+- `src/energy_solution_agent/device_models.py`：设备模型库
 - `src/energy_solution_agent/settlement.py`：结算逻辑
 - `src/energy_solution_agent/live_rules.py`：联网规则刷新与解析
 - `src/energy_solution_agent/benchmark.py`：benchmark 批跑与汇总
