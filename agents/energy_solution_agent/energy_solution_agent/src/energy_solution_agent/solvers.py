@@ -668,10 +668,15 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
 
     # ── 中国税法调整 ───────────────────────────────────────────────
     tax_cfg = financial.get("tax", {})
-    # 海外项目自动跳过中国税法
+    # 海外项目优先用显式字段控制；没有时再回退到 province 判断
+    explicit_overseas = financial.get("is_overseas_project")
+    explicit_tax_applicable = tax_cfg.get("applicable")
     province = str(data.get("project_info", {}).get("province") or "").lower()
-    is_overseas = province in ("overseas", "海外")
-    apply_tax = tax_cfg.get("enabled", not is_overseas)
+    is_overseas = bool(explicit_overseas) if explicit_overseas is not None else province in ("overseas", "海外")
+    if explicit_tax_applicable is not None:
+        apply_tax = bool(explicit_tax_applicable)
+    else:
+        apply_tax = tax_cfg.get("enabled", not is_overseas)
     if apply_tax:
         vat_rate = float(tax_cfg.get("vat_rate", 0.13))
         cit_rate = float(tax_cfg.get("cit_rate", 0.25))
@@ -707,6 +712,11 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             rev = cashflows[year] + opex_annual * ((1 + opex_escalation_rate) ** (year - 1))
             y_opex = opex_annual * ((1 + opex_escalation_rate) ** (year - 1))
 
+            # 投资模式调整（第三方投资：收入与运维按 share_ratio 等比缩放）
+            if invest_mode == "third_party":
+                rev = rev * share_ratio
+                y_opex = y_opex * share_ratio
+
             # 销项增值税
             output_vat = rev * vat_rate if rev > 0 else 0.0
             # 运维进项（仅运维成本的小部分有增值税）
@@ -733,12 +743,6 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
                 cit = taxable * cit_rate * 0.5
             else:
                 cit = taxable * cit_rate
-
-            # 投资模式调整
-            if invest_mode == "third_party":
-                rev = rev * share_ratio
-                cit = cit * share_ratio
-                # 第三方投资模式下，进项税也在投资方账上
 
             year_at = rev - y_opex - surcharge - cit - (cashflows[year] - rev + y_opex)
             after_tax.append(year_at)
@@ -767,15 +771,29 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             lifetime_revenue = sum(cashflows[1:]) + replacement_cost + sum(opex_annual * ((1 + opex_escalation_rate) ** (year - 1)) for year in range(1, years + 1))
             abatement_cost = max(0.0, (lifetime_cost - lifetime_revenue) / lifetime_reduction)
 
-    # LCOE/LCOS
+    # LCOE/LCOS（系统级 + 分项拆解）
     _gen = float(simulation.get("annual_pv_generation_mwh") or 0.0) + float(simulation.get("annual_wind_generation_mwh") or 0.0)
     _dis = float(simulation.get("annual_storage_discharge_mwh") or 0.0)
     _lcoe_val = None
     _lcos_val = None
+    _pv_lcoe = None
+    _wind_lcoe = None
     if _gen > 0 and years > 0:
         _lg = sum(_gen * max(0.0, 1.0 - pv_degradation * (y-1)) for y in range(1, years+1))
         _lc = capex_total + replacement_cost + sum(opex_annual * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
         _lcoe_val = _lc / (_lg * 1000) if _lg > 0 else None
+    # 分项光伏 LCOE
+    if annual_pv > 0 and years > 0:
+        _pv_g = sum(annual_pv * max(0.0, 1.0 - pv_degradation * (y-1)) for y in range(1, years+1))
+        _pv_share = pv_capex / capex_total if capex_total > 0 else 0.0
+        _pv_c = pv_capex + sum(opex_annual * _pv_share * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
+        _pv_lcoe = _pv_c / (_pv_g * 1000) if _pv_g > 0 else None
+    # 分项风电 LCOE
+    if annual_wind > 0 and years > 0:
+        _wind_g = sum(annual_wind * max(0.0, 1.0 - wind_degradation * (y-1)) for y in range(1, years+1))
+        _wind_share = wind_capex / capex_total if capex_total > 0 else 0.0
+        _wind_c = wind_capex + sum(opex_annual * _wind_share * ((1+opex_escalation_rate)**(y-1)) for y in range(1, years+1))
+        _wind_lcoe = _wind_c / (_wind_g * 1000) if _wind_g > 0 else None
     if _dis > 0 and years > 0:
         _ld = sum(_dis * max(0.0, 1.0 - storage_degradation * (y-1)) for y in range(1, years+1))
         _ss = storage_capex / capex_total if capex_total > 0 else 0.0
@@ -860,26 +878,6 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     residual_value = capex_total * float(financial.get("residual_value_ratio", 0.05))
     if residual_value > 0:
         equity_cashflows[-1] += residual_value
-    debt_ratio = float(financial.get("debt_ratio", 0.7))
-    loan_rate = float(financial.get("loan_rate", 0.045))
-    loan_term = int(financial.get("loan_term", min(10, years)))
-    total_loan = capex_total * debt_ratio
-    equity_invest = capex_total * (1 - debt_ratio)
-    annual_principal = total_loan / loan_term if loan_term > 0 else 0.0
-    equity_cashflows = [-equity_invest]
-    outstanding = total_loan
-    dscr_values = []
-    for y in range(1, years + 1):
-        cf = cashflows[y] if y < len(cashflows) else 0.0
-        interest = outstanding * loan_rate
-        principal = min(annual_principal, outstanding)
-        debt_service = interest + principal
-        tax_shield = interest * cit_rate * 0.25 if apply_tax else 0.0
-        equity_cf = cf - debt_service + tax_shield
-        equity_cashflows.append(equity_cf)
-        outstanding -= principal
-        if debt_service > 0:
-            dscr_values.append(cf / debt_service)
     equity_irr = _calc_irr(equity_cashflows)
     equity_npv_val = sum(cf / ((1 + discount_rate) ** y) for y, cf in enumerate(equity_cashflows))
     dscr_min = min(dscr_values) if dscr_values else None
@@ -909,6 +907,9 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
         "residual_salvage_value": round(residual_value, 2) if residual_value > 0 else None,
         "lcoe": round(_lcoe_val, 4) if _lcoe_val is not None else None,
         "lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
+        "pv_lcoe": round(_pv_lcoe, 4) if _pv_lcoe is not None else None,
+        "wind_lcoe": round(_wind_lcoe, 4) if _wind_lcoe is not None else None,
+        "storage_lcos": round(_lcos_val, 4) if _lcos_val is not None else None,
     }
 
 

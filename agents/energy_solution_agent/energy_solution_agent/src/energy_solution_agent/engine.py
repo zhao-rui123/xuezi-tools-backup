@@ -127,6 +127,61 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             storage_strategy = "renewable_priority"
         else:
             storage_strategy = "peak_shaving"
+    # ── 候选储能真实 dispatch + 财务择优（大师级优化）─────────────
+    candidate_powers = [float(v) for v in (data.get("equipment", {}).get("storage", {}).get("power_candidate_kw") or [])]
+    candidate_energies = [float(v) for v in (data.get("equipment", {}).get("storage", {}).get("energy_candidate_kwh") or [])]
+    optimization_target = str(data.get("financial", {}).get("optimization_target") or "irr").lower()
+    if candidate_powers and candidate_energies and len(candidate_powers) == len(candidate_energies):
+        best_metric = float("-inf")
+        best_storage = storage
+        cop_cooling = float(data.get("equipment", {}).get("thermal", {}).get("cooling_cop") or 3.5)
+        cop_heating = float(data.get("equipment", {}).get("thermal", {}).get("heating_cop") or 3.0)
+        export_ratio = float(data.get("network_and_design", {}).get("max_export_ratio") or 0.65)
+        curtail_ratio = float(data.get("network_and_design", {}).get("curtailment_ratio") or 0.20)
+        gross_demand = annual_load + annual_charging + (annual_cooling / cop_cooling if annual_cooling else 0.0) + (annual_heating / cop_heating if annual_heating else 0.0)
+        for p_kw, e_kwh in zip(candidate_powers, candidate_energies):
+            cand_storage = {
+                **storage,
+                "storage_power_mw": round(p_kw / 1000, 3),
+                "storage_energy_mwh": round(e_kwh / 1000, 3),
+            }
+            cand_dispatch = simulate_storage_dispatch_annual(
+                load_series_kw=load_series,
+                pv_series_kw=renewables.get("pv_annual_series_kw", [0.0] * 8760),
+                wind_series_kw=renewables.get("wind_annual_series_kw", [0.0] * 8760),
+                charging_series_kw=charging_series,
+                thermal_series_kw=thermal_series,
+                storage_power_mw=cand_storage["storage_power_mw"],
+                storage_energy_mwh=cand_storage["storage_energy_mwh"],
+                strategy_mode=storage_strategy,
+                price_series=prelim_prices,
+                storage_config=data.get("equipment", {}).get("storage", {}),
+            )
+            cand_grid_purchase = cand_dispatch["annual_grid_purchase_mwh"]
+            cand_export = max(0.0, annual_pv + annual_wind - gross_demand * export_ratio)
+            cand_curtail = max(0.0, cand_export * curtail_ratio)
+            cand_coverage = (gross_demand - cand_grid_purchase) / gross_demand if gross_demand > 0 else None
+            cand_simulation = {
+                **renewables,
+                **cand_storage,
+                **charging_summary,
+                **thermal_summary,
+                "annual_storage_charge_mwh": round(cand_dispatch["daily_storage_charge_mwh"] * 365, 2),
+                "annual_storage_discharge_mwh": round(cand_dispatch["daily_storage_discharge_mwh"] * 365, 2),
+                "annual_grid_purchase_mwh": round(cand_grid_purchase, 2),
+                "annual_export_mwh": round(cand_export, 2),
+                "annual_curtailment_mwh": round(cand_curtail, 2),
+                "coverage_ratio": round(cand_coverage, 4) if cand_coverage is not None else None,
+                "storage_equivalent_full_cycles_per_year": float(cand_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0),
+            }
+            cand_carbon = estimate_carbon(data, cand_simulation)
+            cand_finance = settlement_and_finance(data, cand_simulation, cand_carbon)
+            metric = cand_finance.get("npv") if optimization_target == "npv" else cand_finance.get("irr")
+            metric_val = float(metric) if metric is not None else float("-inf")
+            if metric_val > best_metric:
+                best_metric = metric_val
+                best_storage = cand_storage
+        storage = best_storage
     dispatch = simulate_storage_dispatch(
         load_profile_kw=load_profile,
         pv_profile_kw=renewables.get("pv_hourly_profile_kw", [0.0] * 24),
@@ -346,6 +401,9 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "opex_escalation_rate": finance["opex_escalation_rate"],
             "lcoe": finance.get("lcoe"),
             "lcos": finance.get("lcos"),
+            "pv_lcoe": finance.get("pv_lcoe"),
+            "wind_lcoe": finance.get("wind_lcoe"),
+            "storage_lcos": finance.get("storage_lcos"),
             "equity_irr": finance.get("equity_irr"),
             "equity_npv": finance.get("equity_npv"),
             "dscr_min": finance.get("dscr_min"),
