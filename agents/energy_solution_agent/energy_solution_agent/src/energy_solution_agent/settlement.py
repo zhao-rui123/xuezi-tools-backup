@@ -186,7 +186,9 @@ def build_spot_price_series(market: dict[str, Any], length: int) -> list[float]:
     base = float(market.get("spot_base_price", 0.42))  # 现货基准价
     volatility = float(market.get("spot_volatility", 0.20))  # 波动率
     import random
-    random.seed(int(market.get("spot_seed", 42)))
+    spot_seed = int(market.get("spot_seed", 0))
+    if spot_seed:
+        random.seed(spot_seed)
     series = []
     for h in range(length):
         hour = h % 24

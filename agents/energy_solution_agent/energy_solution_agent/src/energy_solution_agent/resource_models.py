@@ -28,7 +28,8 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
     if candidate_mwp_list:
         pv_mwp = float(candidate_mwp_list[-1])  # 取最后一个（最大候选）
     elif available_area:
-        pv_mwp = round(available_area / 6500, 2)
+        area_per_mwp = float(solar.get("area_per_mwp") or 6500)
+        pv_mwp = round(available_area / area_per_mwp, 2)
     else:
         pv_mwp = 2.0 if annual_load else 0.0
     if hourly_profile:
@@ -39,13 +40,15 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
         scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
         monthly_shape = [1.0] * 12
     elif monthly_irr:
-        annual_generation = pv_mwp * sum(monthly_irr) * pr * 0.16 * tilt_factor * azimuth_factor * temperature_factor
+        derating = float(solar.get("derating_factor") or 0.9)
+        annual_generation = pv_mwp * sum(monthly_irr) * pr * derating * tilt_factor * azimuth_factor * temperature_factor
         accuracy = "medium"
         basis = "monthly_irradiation_kwh_per_m2"
         scaled_profile = scale_hourly_profile(_default_pv_shape(), annual_generation)
         monthly_shape = monthly_irr
     elif annual_irr:
-        annual_generation = pv_mwp * annual_irr * pr * 0.9 * tilt_factor * azimuth_factor * temperature_factor
+        derating = float(solar.get("derating_factor") or 0.9)
+        annual_generation = pv_mwp * annual_irr * pr * derating * tilt_factor * azimuth_factor * temperature_factor
         accuracy = "medium"
         basis = "annual_irradiation_kwh_per_m2"
         scaled_profile = scale_hourly_profile(_default_pv_shape(), annual_generation)

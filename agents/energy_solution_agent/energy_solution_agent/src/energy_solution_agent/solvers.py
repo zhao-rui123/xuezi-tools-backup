@@ -257,7 +257,7 @@ def simulate_storage_dispatch_annual(
     valley_threshold = min(target_peak * (0.62 if strategy_mode == "arbitrage" else 0.55), (sum(positive) / len(positive)) if positive else target_peak)
     # 确保 valley_threshold 不低于最小净负荷+20%，否则电池永远无法充电
     if positive:
-        min_positive = positive[0] if len(positive) > 0 else 0.0
+        min_positive = min(positive) if positive else 0.0
         floor_threshold = min_positive * 1.2 + 50.0  # 比最小净负荷高20%+50kW
         valley_threshold = max(valley_threshold, floor_threshold)
     grid = []
@@ -568,7 +568,8 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
     elif tou:
         prices = [float(item.get("price", 0.0)) for item in tou if item.get("price") is not None]
         avg_price = sum(prices) / len(prices) if prices else 0.72
-        avg_spread = max(0.1, avg_price - 0.35)
+        default_valley = float(market.get("default_valley_price") or 0.35)
+        avg_spread = max(0.1, avg_price - default_valley)
     else:
         avg_price = 0.72
         avg_spread = 0.37
@@ -600,9 +601,11 @@ def settlement_and_finance(data: dict[str, Any], simulation: dict[str, Any], car
             wind_saving = total_savings * (annual_wind / total_gen)
         charge_saving = 0.0
     else:
+        pv_sc_ratio = float(market.get("pv_self_consumption_ratio") or 0.78)
+        wind_sc_ratio = float(market.get("wind_self_consumption_ratio") or 0.72)
         charge_saving = float(simulation.get("annual_storage_discharge_mwh") or 0.0) * avg_spread * 1000
-        pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * 0.78 * 1000
-        wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * 0.72 * 1000
+        pv_saving = float(simulation.get("annual_pv_generation_mwh") or 0.0) * avg_price * pv_sc_ratio * 1000
+        wind_saving = float(simulation.get("annual_wind_generation_mwh") or 0.0) * avg_price * wind_sc_ratio * 1000
     charging_margin = float(simulation.get("annual_charging_energy_mwh") or 0.0) * 120
     thermal_saving = (float(simulation.get("annual_cooling_energy_mwh") or 0.0) + float(simulation.get("annual_heating_energy_mwh") or 0.0)) * 70
     carbon_value = float(carbon.get("annual_reduction_tco2e") or 0.0) * float(financial.get("carbon_price_assumption") or 0.0)
@@ -975,7 +978,7 @@ def estimate_carbon(data: dict[str, Any], simulation: dict[str, Any]) -> dict[st
         baseline = annual_grid_purchase * DEFAULT_GRID_EMISSION_FACTOR + annual_heating * DEFAULT_GAS_EMISSION_FACTOR * 0.18
     baseline = float(baseline)
     scope1_reduction = annual_heating * 0.06
-    scope2_reduction = (annual_pv + annual_wind + float(simulation.get("annual_storage_discharge_mwh") or 0.0) * 0.15) * DEFAULT_GRID_EMISSION_FACTOR
+    scope2_reduction = (annual_pv + annual_wind + float(simulation.get("annual_storage_discharge_mwh") or 0.0)) * DEFAULT_GRID_EMISSION_FACTOR
     scope3_reduction = 0.0
     post_project = max(0.0, baseline - scope1_reduction - scope2_reduction - scope3_reduction)
     annual_reduction = baseline - post_project

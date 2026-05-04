@@ -59,13 +59,15 @@ def run_sensitivity(output: dict[str, Any]) -> list[dict[str, Any]]:
 
     # ── 蒙特卡洛 IRR 模拟 ──
     if irr and capex > 0:
-        random.seed(42)
+        random.seed(random.randint(0, 999999))  # 每次不同种子
         samples = []
         for _ in range(500):
             capex_noise = random.gauss(1.0, 0.08)  # CAPEX ±8% 标准差
             gen_noise = random.gauss(1.0, 0.06)     # 发电量 ±6% 标准差
             price_noise = random.gauss(1.0, 0.05)   # 电价 ±5% 标准差
-            sampled_irr = irr * (gen_noise * price_noise / capex_noise)
+            # 综合噪声 = 收益端（发电量×电价）÷ 成本端（CAPEX）
+            combined = (gen_noise * price_noise) / capex_noise
+            sampled_irr = irr * combined
             samples.append(min(max(sampled_irr, 0.0), 0.60))
 
         samples.sort()

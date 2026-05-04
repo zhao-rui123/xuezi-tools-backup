@@ -181,10 +181,14 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             )
             actual_annual_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
 
-    gross_demand = annual_load + annual_charging + (annual_cooling / 3.5 if annual_cooling else 0.0) + (annual_heating / 3.0 if annual_heating else 0.0)
+    cop_cooling = float(data.get("equipment", {}).get("thermal", {}).get("cooling_cop") or 3.5)
+    cop_heating = float(data.get("equipment", {}).get("thermal", {}).get("heating_cop") or 3.0)
+    export_ratio = float(data.get("network_and_design", {}).get("max_export_ratio") or 0.65)
+    curtail_ratio = float(data.get("network_and_design", {}).get("curtailment_ratio") or 0.20)
+    gross_demand = annual_load + annual_charging + (annual_cooling / cop_cooling if annual_cooling else 0.0) + (annual_heating / cop_heating if annual_heating else 0.0)
     annual_grid_purchase = annual_dispatch["annual_grid_purchase_mwh"]
-    annual_export = max(0.0, annual_pv + annual_wind - gross_demand * 0.65)
-    annual_curtailment = max(0.0, annual_export * 0.2)
+    annual_export = max(0.0, annual_pv + annual_wind - gross_demand * export_ratio)
+    annual_curtailment = max(0.0, annual_export * curtail_ratio)
     coverage_ratio = (gross_demand - annual_grid_purchase) / gross_demand if gross_demand > 0 else None
 
     simulation = {
@@ -201,7 +205,6 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     }
     industry_template = get_industry_template(data.get("carbon_data", {}).get("industry_type"))
     carbon = estimate_carbon(data, simulation)
-    prices = build_hourly_price_series(data.get("market_data", {}), len(annual_dispatch["post_storage_grid_series_kw"]))
     finance = settlement_and_finance(data, simulation, carbon)
     storage_power_mw = float(storage.get("storage_power_mw") or 0.0)
     peak_reduction_kw = float(annual_dispatch.get("peak_reduction_kw") or 0.0)
@@ -211,7 +214,7 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         float(finance["annual_savings_or_revenue"]) + finance["annual_ancillary_service_revenue"] + finance["annual_demand_response_revenue"],
         2,
     )
-    finance["annual_energy_charge_cost"] = round(annual_energy_charge(annual_dispatch["post_storage_grid_series_kw"], prices), 2)
+    finance["annual_energy_charge_cost"] = round(annual_energy_charge(annual_dispatch["post_storage_grid_series_kw"], prelim_prices), 2)
     finance["annual_demand_charge_cost"] = round(annual_demand_charge(annual_dispatch["post_storage_grid_series_kw"], data.get("market_data", {})), 2)
     design = assemble_design_notes(data, profile, scenario, float(charging_summary.get("charging_peak_kw") or 0.0))
 
@@ -232,7 +235,7 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "microgrid_recommended": scenario == "microgrid",
             "charging_recommended": bool(charging_summary.get("annual_charging_energy_mwh")),
             "thermal_system_recommended": bool(thermal_summary.get("annual_cooling_energy_mwh") or thermal_summary.get("annual_heating_energy_mwh")),
-            "zero_carbon_factory_recommended": scenario == "zero_carbon_factory" or bool(data.get("carbon_data")),
+            "zero_carbon_factory_recommended": scenario == "zero_carbon_factory",
         }
     )
     output["recommended_solution"].update(
@@ -402,16 +405,6 @@ def _market_summary(data: dict[str, Any], profile: dict[str, Any] | None) -> str
     if profile:
         return f"按 {market_mode} 机制建模，并参考 {profile.get('verification_status')} 省级 profile 处理市场差异。"
     return f"按 {market_mode} 机制建模，省级差异待补充。"
-
-
-def _alternatives(solution: dict[str, Any]) -> list[dict[str, Any]]:
-    base_storage = float(solution.get("storage_power_mw") or 0.0)
-    base_energy = float(solution.get("storage_energy_mwh") or 0.0)
-    options = []
-    if base_storage > 0:
-        options.append({"name": "保守方案", "storage_power_mw": round(base_storage * 0.7, 3), "storage_energy_mwh": round(base_energy * 0.7, 3)})
-        options.append({"name": "激进方案", "storage_power_mw": round(base_storage * 1.25, 3), "storage_energy_mwh": round(base_energy * 1.25, 3)})
-    return options
 
 
 def _carbon_path_summary(data: dict[str, Any]) -> str:
