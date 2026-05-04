@@ -521,7 +521,19 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
     project_years = int(financial.get("project_years") or 15)
     discount_rate = float(financial.get("discount_rate") or 0.08)
     cost_per_kwh = float(financial.get("capex", {}).get("storage_system_cost_per_kwh") or 850)
+    # 粗估默认燃料成本：储能赚的是峰谷价差，不是平均电价
     fuel_cost = float(market.get("fuel_cost_per_kwh") or 0.0)
+    if fuel_cost <= 0:
+        # 从TOU推算：峰价 - 谷价/效率 ≈ 每度套利毛利
+        tou_tariff = market.get("tou_tariff") or []
+        peak_prices = [float(t.get("price", 0)) for t in tou_tariff if str(t.get("period", "")) == "peak" and float(t.get("price", 0)) > 0]
+        valley_prices = [float(t.get("price", 0)) for t in tou_tariff if str(t.get("period", "")) == "valley" and float(t.get("price", 0)) > 0]
+        rte_est = float(equipment.get("roundtrip_efficiency") or 0.85)
+        if peak_prices and valley_prices:
+            fuel_cost = round(peak_prices[0] - valley_prices[0] / rte_est, 4)
+        else:
+            # 无TOU数据时兜底
+            fuel_cost = 0.55
 
     if not candidate_powers or not candidate_energies:
         base = peak_load_kw * 0.22 + charging_peak_kw * 0.35 + thermal_coupling_kw * 0.2
