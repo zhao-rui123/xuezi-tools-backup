@@ -1,0 +1,122 @@
+{
+  "config": {
+    "wide_screen_mode": true
+  },
+  "header": {
+    "template": "wathet",
+    "title": {
+      "content": "📊 专业服务 — 领域 Agent 入口",
+      "tag": "plain_text"
+    }
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📊 专业服务** — 你说需求，Agent 执行"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "专业领域 Agent，**你说需求，Agent 执行**。"
+      }
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**⚡ 电力及零碳专家**"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "项目分析：风光储优化设计 / 微电网能量平衡 / 储能容量测算\n零碳领域：零碳园区 / 碳排放计算 / 光储充 / 项目经济测算"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "type": "primary",
+          "text": {
+            "tag": "plain_text",
+            "content": "⚡ 电力及零碳专家"
+          },
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.energy_agent_console",
+            "q": "能源Agent 打开控制台",
+            "c": { "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579", "e": 1893456000000, "t": "p2p" }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "**📈 股票分析专家** *(即将上线)*"
+      }
+    },
+    {
+      "tag": "div",
+      "text": {
+        "tag": "lark_md",
+        "content": "技术分析 / 策略筛选 / 持仓监控"
+      }
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "type": "default",
+          "text": {
+            "tag": "plain_text",
+            "content": "📈 股票分析专家"
+          },
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.stock_agent_console",
+            "q": "股票Agent 打开控制台",
+            "c": { "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579", "e": 1893456000000, "t": "p2p" }
+          }
+        }
+      ]
+    },
+    {
+      "tag": "hr"
+    },
+    {
+      "tag": "action",
+      "actions": [
+        {
+          "tag": "button",
+          "type": "default",
+          "text": {
+            "tag": "plain_text",
+            "content": "← 返回主控制台"
+          },
+          "value": {
+            "oc": "ocf1",
+            "k": "quick",
+            "a": "feishu.quick_actions.cockpit_v6_hub",
+            "q": "cockpit card",
+            "c": { "u": "ou_5a7b7ec0339ffe0c1d5bb6c5bc162579", "e": 1893456000000, "t": "p2p" }
+          }
+        }
+      ]
+    }
+  ]
+}
