@@ -549,12 +549,9 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
     for power_kw, energy_kwh in zip(candidate_powers, candidate_energies):
         if power_kw <= 0 or energy_kwh <= 0:
             continue
-        # 粗估循环次数，不满足最低要求则跳过
-        min_cycles = int(data.get("equipment", {}).get("storage", {}).get("min_cycles_per_year") or 300)
+        # 粗估循环次数（仅用于参考，不在此过滤——真实dispatch后才应用循环约束）
         annual_discharge = power_kw * 0.55 * 365 / 1000
         rough_cycles = annual_discharge / (energy_kwh / 1000) if energy_kwh > 0 else 0
-        if rough_cycles < min_cycles:
-            continue  # 不满足最低循环次数门槛，跳过
 
         annual_benefit = annual_discharge * fuel_cost * 1000
         annual_storage_cost = (energy_kwh * cost_per_kwh) * annuity

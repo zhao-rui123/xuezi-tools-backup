@@ -17714,73 +17714,73 @@
         "month": 1,
         "charge_mwh": 118.055,
         "discharge_mwh": 107.136,
-        "gross_margin": 90.82
+        "gross_margin": 98.22
       },
       {
         "month": 2,
         "charge_mwh": 105.0,
         "discharge_mwh": 96.768,
-        "gross_margin": 81.24
+        "gross_margin": 88.63
       },
       {
         "month": 3,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 89.81
+        "gross_margin": 98.13
       },
       {
         "month": 4,
         "charge_mwh": 112.5,
         "discharge_mwh": 103.68,
-        "gross_margin": 86.68
+        "gross_margin": 94.99
       },
       {
         "month": 5,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 90.78
+        "gross_margin": 98.17
       },
       {
         "month": 6,
         "charge_mwh": 112.5,
         "discharge_mwh": 103.68,
-        "gross_margin": 86.63
+        "gross_margin": 94.95
       },
       {
         "month": 7,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 89.86
+        "gross_margin": 97.86
       },
       {
         "month": 8,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 90.78
+        "gross_margin": 98.17
       },
       {
         "month": 9,
         "charge_mwh": 112.5,
         "discharge_mwh": 103.68,
-        "gross_margin": 85.71
+        "gross_margin": 94.95
       },
       {
         "month": 10,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 90.78
+        "gross_margin": 98.17
       },
       {
         "month": 11,
         "charge_mwh": 112.5,
         "discharge_mwh": 103.68,
-        "gross_margin": 87.6
+        "gross_margin": 94.99
       },
       {
         "month": 12,
         "charge_mwh": 116.25,
         "discharge_mwh": 107.136,
-        "gross_margin": 88.89
+        "gross_margin": 98.13
       }
     ],
     "charging_diversity_factor": null,
@@ -17843,7 +17843,7 @@
     "capex_total": 10790000.0,
     "opex_annual": 161850.0,
     "annual_savings_or_revenue": 2465158.92,
-    "annual_energy_charge_cost": 7379430.83,
+    "annual_energy_charge_cost": 7405853.03,
     "annual_demand_charge_cost": 0.0,
     "annual_ancillary_service_revenue": 0.0,
     "annual_demand_response_revenue": -0.0,
@@ -17956,11 +17956,11 @@
     {
       "factor": "蒙特卡洛 IRR 分布（500次模拟）",
       "monte_carlo": {
-        "p10": 0.115,
-        "p50": 0.1331,
-        "p90": 0.1555,
+        "p10": 0.114,
+        "p50": 0.1318,
+        "p90": 0.1506,
         "samples": 500,
-        "confidence": "13.3% 中位数，90%概率 ≥11.5%"
+        "confidence": "13.2% 中位数，90%概率 ≥11.4%"
       },
       "irr_impact": "monte_carlo"
     },
