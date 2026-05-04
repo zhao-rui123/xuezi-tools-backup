@@ -201,6 +201,7 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
         "annual_grid_purchase_mwh": round(annual_grid_purchase, 2),
         "annual_export_mwh": round(annual_export, 2),
         "annual_curtailment_mwh": round(annual_curtailment, 2),
+        "renewable_self_consumption_ratio": round((annual_pv + annual_wind - annual_export - annual_curtailment) / max(annual_pv + annual_wind, 0.001), 4) if (annual_pv + annual_wind) > 0 else None,
         "coverage_ratio": round(coverage_ratio, 4) if coverage_ratio is not None else None,
     }
     industry_template = get_industry_template(data.get("carbon_data", {}).get("industry_type"))
@@ -317,10 +318,19 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
             "live_rule_effective_patch": (live_patch or {}).get("structured_patch", {}),
         }
     )
+    # ── 基线对比（无项目时年能源成本） ──────────────────────────
+    market_mode = str(data.get("market_data", {}).get("market_mode") or "").lower()
+    fuel_cost = float(data.get("market_data", {}).get("fuel_cost_per_kwh") or 0.0)
+    if market_mode == "offgrid_internal" and fuel_cost > 0:
+        baseline_annual_cost = annual_load * fuel_cost * 1000
+    else:
+        baseline_annual_cost = annual_load * 0.72 * 1000  # 默认平均电价0.72元
+    finance["baseline_annual_energy_cost"] = round(baseline_annual_cost, 2)
     output["design_and_interconnection"].update(design)
     output["financial_results"].update(
         {
             "capex_total": finance["capex_total"],
+            "baseline_annual_energy_cost": finance["baseline_annual_energy_cost"],
             "opex_annual": finance["opex_annual"],
             "annual_savings_or_revenue": finance["annual_savings_or_revenue"],
             "irr": finance["irr"],
@@ -355,7 +365,14 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False) ->
     output["data_quality_results"] = data_quality
     output["assumptions"] = _assumptions(data, scenario)
     output["data_gaps"] = missing_fields + _scenario_specific_gaps(data, scenario, profile, renewables)
-    output["risks"] = _risks(data, scenario, completeness_grade, profile, renewables) + data_quality["warnings"]
+    # ── 储能循环效率预警 ──────────────────────────────────────
+    storage_cycles = float(annual_dispatch.get("storage_equivalent_full_cycles_per_year") or 0.0)
+    cycle_warnings = []
+    if float(storage.get("storage_power_mw") or 0) > 0 and storage_cycles < 200:
+        cycle_warnings.append(f"储能年循环仅{storage_cycles:.0f}次，低于200次经济下限，建议重新评估储能配置。")
+    elif float(storage.get("storage_power_mw") or 0) > 0 and storage_cycles < 365:
+        cycle_warnings.append(f"储能年循环{storage_cycles:.0f}次，低于每日1次理想值，建议关注实际利用率。")
+    output["risks"] = _risks(data, scenario, completeness_grade, profile, renewables) + data_quality["warnings"] + cycle_warnings
     output["confidence"] = _confidence(completeness_grade, missing_fields, profile, renewables)
 
     diagnostics = {
