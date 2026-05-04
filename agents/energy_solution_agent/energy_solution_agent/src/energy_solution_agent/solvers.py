@@ -194,6 +194,65 @@ def simulate_storage_dispatch(
     }
 
 
+def _plan_daily_cycles(prices_24: list[float]) -> list[tuple[list[int], list[int]]]:
+    """分析24小时电价，规划当天充放窗口对（先充后放，不重叠）"""
+    if not prices_24 or len(set(prices_24)) < 2:
+        return []
+    # 按价格排序，识别谷/峰价时段
+    sorted_prices = sorted(prices_24)
+    price_counts = {}
+    for p in prices_24:
+        price_counts[p] = price_counts.get(p, 0) + 1
+    price_levels = sorted(price_counts.keys())
+    if len(price_levels) < 2:
+        return []
+    valley_price = price_levels[0]
+    peak_price = price_levels[-1]
+    # 找连续谷价块 → 充电窗口
+    charge_blocks = []
+    i = 0
+    while i < 24:
+        if prices_24[i] == valley_price:
+            start = i
+            while i < 24 and prices_24[i] == valley_price:
+                i += 1
+            charge_blocks.append(list(range(start, i)))
+        else:
+            i += 1
+    # 找连续峰价块 → 放电窗口
+    discharge_blocks = []
+    i = 0
+    while i < 24:
+        if prices_24[i] == peak_price:
+            start = i
+            while i < 24 and prices_24[i] == peak_price:
+                i += 1
+            discharge_blocks.append(list(range(start, i)))
+        else:
+            i += 1
+    # 配对：每个放电台前必须有充电台（先充后放，不重叠）
+    cycles = []
+    last_charge_end = -1
+    for db in discharge_blocks:
+        # 找到放电前最后一个充电块
+        best_cb = None
+        for cb in reversed(charge_blocks):
+            if cb[-1] < db[0]:
+                best_cb = cb
+                break
+        if best_cb is not None:
+            cycles.append((best_cb, db))
+    # 看中间是否有可用平价充电窗口（给第二循环用）
+    # 如果两个放电块之间有空隙，用该空隙的平价充电
+    if len(discharge_blocks) >= 2 and len(cycles) < 2:
+        d0_end = discharge_blocks[0][-1]
+        d1_start = discharge_blocks[1][0]
+        mid_charge = list(range(d0_end + 1, d1_start))
+        if mid_charge and any(prices_24[h] < peak_price for h in mid_charge):
+            cycles.append((mid_charge, discharge_blocks[1]))
+    return cycles
+
+
 def simulate_storage_dispatch_annual(
     load_series_kw: list[float],
     pv_series_kw: list[float],
@@ -272,8 +331,9 @@ def simulate_storage_dispatch_annual(
     monthly_charge = [0.0] * 12
     monthly_discharge = [0.0] * 12
     monthly_margin = [0.0] * 12
-    # 每月并网峰值跟踪（需量管理用）：记录每月的最高并网功率
+    # 每月并网峰值跟踪（需量管理用）+ 每日循环规划
     monthly_grid_peak = [0.0] * 12
+    daily_plan = []  # 每日充放窗口计划，由_plan_daily_cycles生成
     month_idx = 0
     next_month_cutoff = month_hours[0]
     for idx, base in enumerate(baseline):
@@ -319,6 +379,12 @@ def simulate_storage_dispatch_annual(
             else:
                 grid.append(max(0.0, -surplus_kw))
             continue
+        # ── 每日循环规划：自动分析电价，规划充放窗口 ─────────────
+        if hour == 0:
+            daily_plan = _plan_daily_cycles(day_slice)
+        # 检查当前小时在哪个窗口中
+        in_charge_plan = any(hour in ch for ch, _ in daily_plan)
+        in_discharge_plan = any(hour in dh for _, dh in daily_plan)
         # ── 综合充放电策略：价差套利 + 削峰填谷 + 需量管理 ──────────
         is_night = hour in {23, 0, 1, 2, 3, 4, 5, 6, 7}  # 夜间/谷段充电窗口
         daily_price_range = max(day_slice) - min(day_slice) if day_slice else 0
@@ -327,20 +393,17 @@ def simulate_storage_dispatch_annual(
         is_peak_price = has_arbitrage and price >= expensive_threshold
         # 当前月已出现的最高并网功率
         cur_month_peak = monthly_grid_peak[month_idx]
-        # 充电：谷价时段优先（保障夜间充电）→ 负荷填谷次之 → 光伏消纳兜底
+        # 充电：每日循环计划优先 → 负荷填谷次之 → 光伏消纳兜底
         should_charge_arbitrage = (is_night or is_valley_price) and soc < soc_max
-        # 平段补电：早峰放完后，为午峰第二循环准备
-        is_midday = hour in {11, 12, 13}
-        should_charge_midday = is_midday and not is_valley_price and not is_peak_price and soc < soc_max * 0.5
+        # 每日循环规划充电：自动识别各循环的充电窗口
+        should_charge_planned = in_charge_plan and not in_discharge_plan and soc < soc_max
         should_charge_valley = net < valley_threshold and net < cur_month_peak * 0.9 if cur_month_peak > 0 else False
         should_charge_renewable = renewable_surplus > 0
-        should_charge = should_charge_arbitrage or should_charge_midday or should_charge_valley or should_charge_renewable
+        should_charge = should_charge_arbitrage or should_charge_planned or should_charge_valley or should_charge_renewable
         did_charge = False
         if should_charge and soc < soc_max:
             headroom = max(0.0, valley_threshold - net)
-            # 平段补电时限制功率，避免过度充电影响下午峰放电
-            midday_power_limit = power_kw * 0.6 if is_midday else power_kw * 1.0
-            charge_limit = max(headroom, renewable_surplus, midday_power_limit)
+            charge_limit = max(headroom, renewable_surplus, power_kw * 1.0)
             charge_kw = min(power_kw, soc_max - soc, charge_limit)
             if charge_kw > 0:
                 soc += charge_kw * battery_charge_eff
@@ -349,16 +412,24 @@ def simulate_storage_dispatch_annual(
                 monthly_charge[month_idx] += charge_kw / 1000
                 renewable_charged += min(charge_kw, renewable_surplus)
                 did_charge = True
-        # 放电：峰价套利优先 → 需量控制次之 → 负荷削峰兜底
+        # 放电：每日循环计划优先 → 需量控制次之 → 负荷削峰兜底
         # 同一小时内禁止既充又放（避免虚假循环）
         threatens_peak = cur_month_peak > 0 and net >= cur_month_peak * 0.98
         should_discharge_arbitrage = is_peak_price and soc > soc_min and not did_charge
+        # 每日循环规划放电：自动识别各循环的放电窗口
+        should_discharge_planned = in_discharge_plan and soc > soc_min and not did_charge
         # 周末无峰价时，在白天时段放电提高利用率
         is_weekend = (idx // 24) % 7 in {5, 6}
         should_discharge_weekend = is_weekend and price > 0.5 and hour in range(8, 17) and soc > soc_min and not did_charge
         should_discharge_demand = threatens_peak and soc > soc_min and not is_peak_price and not is_valley_price and not did_charge
         should_discharge_peak = net > target_peak and not did_charge
-        should_discharge = should_discharge_arbitrage or should_discharge_weekend or should_discharge_demand or should_discharge_peak
+        should_discharge = should_discharge_arbitrage or should_discharge_planned or should_discharge_weekend or should_discharge_demand or should_discharge_peak
+        if should_discharge and soc > soc_min:
+            target_cut = max(0.0, net - target_peak) if should_discharge_peak else 0.0
+            if should_discharge_arbitrage:
+                target_cut = max(target_cut, power_kw * 0.55)
+            if should_discharge_planned or should_discharge_arbitrage:
+                target_cut = max(target_cut, power_kw * 0.5)
         if should_discharge and soc > soc_min:
             target_cut = max(0.0, net - target_peak) if should_discharge_peak else 0.0
             if should_discharge_arbitrage:
