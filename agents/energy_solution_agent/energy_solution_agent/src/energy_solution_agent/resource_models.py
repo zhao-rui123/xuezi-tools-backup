@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from .constants import DEFAULT_PV_FULL_LOAD_HOURS, DEFAULT_WIND_CAPACITY_FACTOR
+from .device_models import PV_MODULE_MODELS, WIND_TURBINE_MODELS
 from .timeseries import expand_daily_profile_to_year, scale_hourly_profile
 
 
@@ -10,13 +11,16 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
     solar = data.get("resource_data", {}).get("solar", {})
     annual_load = float(data.get("load_data", {}).get("annual_consumption_mwh") or 0.0)
     available_area = float(solar.get("available_area_m2") or 0.0)
-    pr = _effective_pr(solar)
+    module_model = PV_MODULE_MODELS.get(str(solar.get("module_model") or "").lower(), {})
+    pr = _effective_pr({**module_model, **solar})
     tilt_factor = _tilt_factor(float(solar.get("tilt_deg") or 25.0), float(solar.get("site_latitude_deg") or 30.0))
     azimuth_factor = _azimuth_factor(float(solar.get("azimuth_deg") or 180.0))
+    temp_coeff = float(solar.get("temp_coefficient_pct_per_c") or module_model.get("temp_coefficient_pct_per_c") or -0.35)
+    ref_temp = float(solar.get("reference_temp_c") or module_model.get("reference_temp_c") or 25.0)
     temperature_factor = _temperature_factor(
         [float(v) for v in (solar.get("temperature_profile_c") or [])],
-        float(solar.get("temp_coefficient_pct_per_c") or -0.35),
-        float(solar.get("reference_temp_c") or 25.0),
+        temp_coeff,
+        ref_temp,
     )
 
     hourly_profile = [float(v) for v in (solar.get("hourly_generation_profile_kw") or [])]
@@ -30,7 +34,7 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
     if candidate_mwp_list:
         pv_mwp = float(candidate_mwp_list[-1])  # 取最后一个（最大候选）
     elif available_area:
-        area_per_mwp = float(solar.get("area_per_mwp") or 6500)
+        area_per_mwp = float(solar.get("area_per_mwp") or module_model.get("area_per_mwp") or 6500)
         pv_mwp = round(available_area / area_per_mwp, 2)
     else:
         pv_mwp = 2.0 if annual_load else 0.0
@@ -51,10 +55,16 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
             scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
             monthly_shape = [1.0] * 12
     elif hourly_irr:
-        derating = float(solar.get("derating_factor") or 0.9)
-        temp_factor_hourly = _temperature_factor([float(v) for v in (solar.get("temperature_profile_c") or [])], float(solar.get("temp_coefficient_pct_per_c") or -0.35), float(solar.get("reference_temp_c") or 25.0))
+        derating = float(solar.get("derating_factor") or module_model.get("derating_factor") or 0.9)
+        temp_series = [float(v) for v in (solar.get("temperature_series_c") or [])]
+        noct = float(solar.get("noct_c") or module_model.get("noct_c") or 45.0)
         if len(hourly_irr) >= 8760:
-            exact_series = [pv_mwp * float(v) * pr * derating * tilt_factor * azimuth_factor * temp_factor_hourly for v in hourly_irr[:8760]]
+            exact_series = []
+            for i, irr in enumerate(hourly_irr[:8760]):
+                amb = temp_series[i] if i < len(temp_series) else ref_temp
+                module_temp = amb + (noct - 20.0) / 0.8 * max(float(irr), 0.0)
+                temp_loss = max(0.7, 1.0 + (module_temp - ref_temp) * (temp_coeff / 100.0))
+                exact_series.append(pv_mwp * float(irr) * pr * derating * tilt_factor * azimuth_factor * temp_loss)
             annual_generation = sum(exact_series) / 1000
             basis = "hourly_irradiance_kwh_per_m2_8760"
             scaled_profile = scale_hourly_profile(exact_series[:24], annual_generation)
@@ -68,14 +78,14 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
             monthly_shape = [1.0] * 12
             accuracy = "medium"
     elif monthly_irr:
-        derating = float(solar.get("derating_factor") or 0.9)
+        derating = float(solar.get("derating_factor") or module_model.get("derating_factor") or 0.9)
         annual_generation = pv_mwp * sum(monthly_irr) * pr * derating * tilt_factor * azimuth_factor * temperature_factor
         accuracy = "medium"
         basis = "monthly_irradiation_kwh_per_m2"
         scaled_profile = scale_hourly_profile(_default_pv_shape(), annual_generation)
         monthly_shape = monthly_irr
     elif annual_irr:
-        derating = float(solar.get("derating_factor") or 0.9)
+        derating = float(solar.get("derating_factor") or module_model.get("derating_factor") or 0.9)
         annual_generation = pv_mwp * annual_irr * pr * derating * tilt_factor * azimuth_factor * temperature_factor
         accuracy = "medium"
         basis = "annual_irradiation_kwh_per_m2"
@@ -167,9 +177,16 @@ def estimate_wind_generation(data: dict[str, Any]) -> dict[str, Any]:
         mean_speed = round(sum(wind_speed_profile) / len(wind_speed_profile), 3) if wind_speed_profile else None
         monthly_shape = [1.08, 1.06, 1.02, 0.98, 0.95, 0.92, 0.90, 0.92, 0.96, 1.00, 1.06, 1.15]
     elif wind_speed_profile:
-        # 若只有风速时序、无功率曲线，则使用默认立方功率近似
-        speed_profile = [float(v) for v in wind_speed_profile[:8760]]
-        hourly_fraction = [_default_wind_power_fraction(v) for v in speed_profile]
+        # 若只有风速时序、无功率曲线，则使用默认风机模型 + 高度换算 + 立方功率近似
+        turbine_model = WIND_TURBINE_MODELS.get(str(wind.get("turbine_model") or "").lower(), {})
+        hub_h = float(wind.get("hub_height_m") or turbine_model.get("hub_height_m") or 100.0)
+        ref_h = float(wind.get("reference_height_m") or turbine_model.get("reference_height_m") or 10.0)
+        shear = float(wind.get("shear_exponent") or turbine_model.get("shear_exponent") or 0.14)
+        cut_in = float(wind.get("cut_in_mps") or turbine_model.get("cut_in_mps") or 3.0)
+        rated = float(wind.get("rated_mps") or turbine_model.get("rated_mps") or 12.0)
+        cut_out = float(wind.get("cut_out_mps") or turbine_model.get("cut_out_mps") or 25.0)
+        speed_profile = [float(v) * (hub_h / max(ref_h, 1.0)) ** shear for v in wind_speed_profile[:8760]]
+        hourly_fraction = [_default_wind_power_fraction(v, cut_in, rated, cut_out) for v in speed_profile]
         derived_cf = sum(hourly_fraction) / len(hourly_fraction) if hourly_fraction else max(_wind_cf_from_speed(avg_speed), 0.12)
         user_wind = float(wind.get("wind_mw") or 0.0)
         wind_mw = round(user_wind if user_wind > 0 else (annual_load * 0.15 / (8760 * max(derived_cf, 0.12)) if annual_load else 0.0), 2)
@@ -320,15 +337,15 @@ def _temperature_factor(temperature_profile_c: list[float], temp_coeff_pct_per_c
     return max(0.88, min(1.02, 1.0 + delta * (temp_coeff_pct_per_c / 100.0)))
 
 
-def _default_wind_power_fraction(speed_mps: float) -> float:
-    # 简化风机功率曲线：cut-in 3m/s，rated 12m/s，cut-out 25m/s
-    if speed_mps < 3.0:
+def _default_wind_power_fraction(speed_mps: float, cut_in: float = 3.0, rated: float = 12.0, cut_out: float = 25.0) -> float:
+    # 简化风机功率曲线
+    if speed_mps < cut_in:
         return 0.0
-    if speed_mps >= 25.0:
+    if speed_mps >= cut_out:
         return 0.0
-    if speed_mps >= 12.0:
+    if speed_mps >= rated:
         return 1.0
-    return ((speed_mps - 3.0) / (12.0 - 3.0)) ** 3
+    return ((speed_mps - cut_in) / max(rated - cut_in, 0.1)) ** 3
 
 
 def _power_from_curve(wind_speeds: list[float], power_curve: list[dict[str, float]]) -> list[float]: 

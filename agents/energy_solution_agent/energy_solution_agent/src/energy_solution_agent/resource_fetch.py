@@ -58,6 +58,8 @@ def auto_fetch_resources(data: dict[str, Any], timeout: float = 20.0) -> dict[st
             wind.setdefault("resource_source", "Open-Meteo")
         if not solar.get("temperature_profile_c"):
             solar.setdefault("temperature_profile_c", openmeteo.get("temperature_profile_24h_c"))
+        if not solar.get("temperature_series_c") and openmeteo.get("temperature_8760_c"):
+            solar.setdefault("temperature_series_c", openmeteo.get("temperature_8760_c"))
 
     return data
 
@@ -167,4 +169,5 @@ def _fetch_open_meteo(lat: float, lon: float, timeout: float = 20.0) -> dict[str
         "wind_speed_8760_mps": wind_vals,
         "annual_avg_wind_speed_mps": round(avg_wind, 3),
         "temperature_profile_24h_c": temp_24h,
+        "temperature_8760_c": temp_vals[:8760] if temp_vals else None,
     }
