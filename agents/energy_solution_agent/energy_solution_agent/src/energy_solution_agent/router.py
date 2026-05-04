@@ -82,6 +82,9 @@ def route_scenario(data: dict[str, Any]) -> tuple[str, list[str], str]:
     # PPA
     if has_ppa and high_load:
         return "zero_carbon_factory", secondary_candidates, "auto: PPA + high load"
+    # 仅有碳数据 → zero_carbon_factory
+    if has_carbon:
+        return "zero_carbon_factory", secondary_candidates, "auto: carbon data detected"
     # PV+Wind
     if has_pv and has_wind:
         return "wind_pv_storage", secondary_candidates, "auto: PV + wind detected"
