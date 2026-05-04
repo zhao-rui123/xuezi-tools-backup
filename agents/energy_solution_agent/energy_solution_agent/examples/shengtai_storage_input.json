@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_name": "山东盛泰药业用户侧储能项目",
+    "scenario_type": "user_side_storage",
+    "location": {"lat": 36.65, "lon": 117.0, "province": "山东", "city": "济南"},
+    "resource_mode": "auto_fetch",
+    "description": "山东盛泰药业用户侧储能项目，40000KVA主线+2000KVA支线，日均用电约41万kWh，峰谷差大，适合储能削峰填谷"
+  },
+  "load_data": {
+    "annual_consumption_mwh": 15000,
+    "peak_load_kw": 20840,
+    "valley_load_kw": 7953,
+    "load_factor": 0.73,
+    "load_profile_monthly": {
+      "2025-12": {"days": 8, "daily_avg_kwh": 386005, "peak_kw": 19760},
+      "2026-01": {"days": 31, "daily_avg_kwh": 423432, "peak_kw": 21107},
+      "2026-02": {"days": 28, "daily_avg_kwh": 406279, "peak_kw": 20737}
+    },
+    "time_series_15min": false
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "shandong_tou": {
+      "peak_hours": [[8,11],[14,17]],
+      "shoulder_hours": [[7,8],[11,14],[17,18]],
+      "valley_hours": [[23,7]],
+      "peak_price_rmb_per_kwh": 0.92,
+      "shoulder_price_rmb_per_kwh": 0.64,
+      "valley_price_rmb_per_kwh": 0.31,
+      "demand_charge_rmb_per_kw_month": 33
+    },
+    "fuel_cost_per_kwh": null
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [4000, 6000, 8000, 10000],
+      "energy_candidate_kwh": [20000, 30000, 40000],
+      "selected_power_kw": null,
+      "selected_energy_kwh": null,
+      "battery_type": "LFP",
+      "roundtrip_efficiency": 0.88,
+      "annual_degradation": 0.02,
+      "battery_cycles_per_year": 365
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex_per_kwh": 1600,
+    "opex_pct_of_capex": 1.5,
+    "optimization_target": "irr",
+    "is_overseas_project": false,
+    "tax_rate_pct": 25,
+    "residual_value_pct": 5
+  },
+  "network_and_design": {
+    "grid_connection_kv": 110,
+    "transformer_capacity_kva": 40000,
+    "main_line_max_kw": 20840,
+    "sub_line_max_kw": 846
+  }
+}

@@ -255,10 +255,13 @@ def simulate_storage_dispatch_annual(
         percentile = 0.82
     target_peak = sorted(positive)[int(len(positive) * percentile)] if positive else 0.0 if strategy_mode != "microgrid" else 0.0
     valley_threshold = min(target_peak * (0.62 if strategy_mode == "arbitrage" else 0.55), (sum(positive) / len(positive)) if positive else target_peak)
-    # 确保 valley_threshold 不低于最小净负荷+20%，否则电池永远无法充电
-    if positive:
-        min_positive = min(positive) if positive else 0.0
-        floor_threshold = min_positive * 1.2 + 50.0  # 比最小净负荷高20%+50kW
+    # 计算夜间（PV=0时段）最小净负荷，用于 floor_threshold
+    # 避免被白天PV拉低的最小值导致凌晨充电条件失效
+    night_hours = {23, 0, 1, 2, 3, 4, 5, 6, 7}
+    night_baseline = [v for i, v in enumerate(baseline) if i % 24 in night_hours and v > 0]
+    night_min = min(night_baseline) if night_baseline else 0.0
+    if night_min > 0:
+        floor_threshold = night_min * 1.2 + 50.0
         valley_threshold = max(valley_threshold, floor_threshold)
     grid = []
     charged = 0.0
@@ -269,6 +272,8 @@ def simulate_storage_dispatch_annual(
     monthly_charge = [0.0] * 12
     monthly_discharge = [0.0] * 12
     monthly_margin = [0.0] * 12
+    # 每月并网峰值跟踪（需量管理用）：记录每月的最高并网功率
+    monthly_grid_peak = [0.0] * 12
     month_idx = 0
     next_month_cutoff = month_hours[0]
     for idx, base in enumerate(baseline):
@@ -287,10 +292,6 @@ def simulate_storage_dispatch_annual(
         else:
             renewable_surplus = max(0.0, ((pv_series_kw[idx] if idx < len(pv_series_kw) else 0.0) + (wind_series_kw[idx] if idx < len(wind_series_kw) else 0.0)) - ((load_series_kw[idx] if idx < len(load_series_kw) else 0.0) + (charging_series_kw[idx] if idx < len(charging_series_kw) else 0.0) + (thermal_series_kw[idx] if idx < len(thermal_series_kw) else 0.0)))
         # ── 微电网能量平衡策略 ──────────────────────────────────────
-        # 逻辑：
-        #   风光发电 > 负荷  →  充电（存余量）
-        #   负荷 > 风光发电  →  放电（补缺口）
-        # 两者互斥，不同时发生
         if strategy_mode == "microgrid":
             pv_kw = pv_series_kw[idx] if idx < len(pv_series_kw) else 0.0
             wind_kw = wind_series_kw[idx] if idx < len(wind_series_kw) else 0.0
@@ -299,48 +300,58 @@ def simulate_storage_dispatch_annual(
             charging_kw = charging_series_kw[idx] if idx < len(charging_series_kw) else 0.0
             thermal_kw = thermal_series_kw[idx] if idx < len(thermal_series_kw) else 0.0
             total_load_kw = load_kw + charging_kw + thermal_kw
-            surplus_kw = gen_kw - total_load_kw  # >0 = 过剩，<0 = 缺口
-
+            surplus_kw = gen_kw - total_load_kw
             if surplus_kw > 0 and soc < soc_max:
-                # 风光过剩 → 充电
                 charge_kw = min(power_kw, max(0.0, soc_max - soc), surplus_kw / battery_charge_eff)
                 soc += charge_kw * battery_charge_eff
                 charged += charge_kw
                 monthly_charge[month_idx] += charge_kw / 1000
                 renewable_charged += min(charge_kw * battery_charge_eff, surplus_kw)
-                grid.append(0.0)  # 过剩电力全部被储能消纳，电网无需供电
+                grid.append(0.0)
             elif surplus_kw < 0 and soc > soc_min:
-                # 负荷缺口 → 放电
                 deficit_kw = abs(surplus_kw)
                 discharge_kw = min(power_kw, max(0.0, soc - soc_min) * battery_discharge_eff, deficit_kw)
                 soc -= discharge_kw / max(battery_discharge_eff, 0.01)
                 discharged += discharge_kw
                 monthly_discharge[month_idx] += discharge_kw / 1000
                 monthly_margin[month_idx] += (discharge_kw / 1000) * price
-                grid.append(0.0)  # 储能填补缺口，电网无需供电
+                grid.append(0.0)
             else:
-                # 刚好平衡或电池无能为力
                 grid.append(max(0.0, -surplus_kw))
-            continue  # 进入下一小时
-        should_charge = (hour in {0, 1, 2, 3, 4, 5, 12, 13} and net < valley_threshold) or renewable_surplus > 0
-        if strategy_mode == "market_responding":
-            should_charge = should_charge or price <= cheap_threshold
+            continue
+        # ── 综合充放电策略：价差套利 + 削峰填谷 + 需量管理 ──────────
+        is_night = hour in {23, 0, 1, 2, 3, 4, 5, 6, 7}  # 夜间/谷段充电窗口
+        is_valley_price = price <= cheap_threshold
+        is_peak_price = price >= expensive_threshold
+        # 当前月已出现的最高并网功率
+        cur_month_peak = monthly_grid_peak[month_idx]
+        # 充电：谷价时段优先（保障夜间充电）→ 负荷填谷次之 → 光伏消纳兜底
+        should_charge_arbitrage = (is_night or is_valley_price) and soc < soc_max
+        should_charge_valley = net < valley_threshold and net < cur_month_peak * 0.9 if cur_month_peak > 0 else False
+        should_charge_renewable = renewable_surplus > 0
+        should_charge = should_charge_arbitrage or should_charge_valley or should_charge_renewable
         if should_charge and soc < soc_max:
             headroom = max(0.0, valley_threshold - net)
-            charge_limit = max(headroom, renewable_surplus, power_kw * (0.65 if strategy_mode == "market_responding" else 1.0))
+            charge_limit = max(headroom, renewable_surplus, power_kw * 1.0)
             charge_kw = min(power_kw, soc_max - soc, charge_limit)
             soc += charge_kw * battery_charge_eff
             net += charge_kw
             charged += charge_kw
             monthly_charge[month_idx] += charge_kw / 1000
             renewable_charged += min(charge_kw, renewable_surplus)
-        should_discharge = net > target_peak
-        if strategy_mode == "market_responding":
-            should_discharge = should_discharge or price >= expensive_threshold
+        # 放电：峰价套利优先 → 需量控制次之 → 负荷削峰兜底
+        threatens_peak = cur_month_peak > 0 and net >= cur_month_peak * 0.98
+        should_discharge_arbitrage = is_peak_price and soc > soc_min
+        should_discharge_demand = threatens_peak and soc > soc_min and not is_peak_price and not is_valley_price
+        should_discharge_peak = net > target_peak
+        should_discharge = should_discharge_arbitrage or should_discharge_demand or should_discharge_peak
         if should_discharge and soc > soc_min:
-            target_cut = max(0.0, net - target_peak)
-            if strategy_mode == "market_responding" and price >= expensive_threshold:
+            target_cut = max(0.0, net - target_peak) if should_discharge_peak else 0.0
+            if should_discharge_arbitrage:
                 target_cut = max(target_cut, power_kw * 0.55)
+            if should_discharge_demand and cur_month_peak > 0:
+                # 刚够削过当前月峰值即可，不多放
+                target_cut = max(target_cut, net - cur_month_peak * 0.98)
             available_kw = (soc - soc_min) * battery_discharge_eff
             discharge_kw = min(power_kw, available_kw, target_cut)
             soc -= discharge_kw / max(battery_discharge_eff, 0.01)
@@ -348,7 +359,9 @@ def simulate_storage_dispatch_annual(
             discharged += discharge_kw
             monthly_discharge[month_idx] += discharge_kw / 1000
             monthly_margin[month_idx] += (discharge_kw / 1000) * price
-        grid.append(max(0.0, net))
+        grid_val = max(0.0, net)
+        monthly_grid_peak[month_idx] = max(monthly_grid_peak[month_idx], grid_val)
+        grid.append(grid_val)
     annual_purchase = sum(grid) / 1000
     daily_cycles = (discharged / energy_kwh) / 365 if energy_kwh > 0 else 0.0
     throughput_mwh = (charged + discharged) / 1000
@@ -525,7 +538,13 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
     for power_kw, energy_kwh in zip(candidate_powers, candidate_energies):
         if power_kw <= 0 or energy_kwh <= 0:
             continue
+        # 粗估循环次数，不满足最低要求则跳过
+        min_cycles = int(data.get("equipment", {}).get("storage", {}).get("min_cycles_per_year") or 300)
         annual_discharge = power_kw * 0.55 * 365 / 1000
+        rough_cycles = annual_discharge / (energy_kwh / 1000) if energy_kwh > 0 else 0
+        if rough_cycles < min_cycles:
+            continue  # 不满足最低循环次数门槛，跳过
+
         annual_benefit = annual_discharge * fuel_cost * 1000
         annual_storage_cost = (energy_kwh * cost_per_kwh) * annuity
         simple_score = annual_benefit - annual_storage_cost
@@ -536,7 +555,7 @@ def estimate_storage(data: dict[str, Any], charging_peak_kw: float = 0.0, therma
             "power_kw": power_kw, "energy_kwh": energy_kwh,
             "simple_score": simple_score, "rough_payback": rough_payback,
             "annual_discharge": annual_discharge,
-            "annual_benefit": annual_benefit
+            "annual_benefit": annual_benefit, "rough_cycles": rough_cycles
         })
 
     if candidate_results:

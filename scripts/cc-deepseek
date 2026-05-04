@@ -1,0 +1,2 @@
+#!/bin/bash
+exec /Users/zhaoruicn/.openclaw/workspace/scripts/cc-model-switch.sh deepseek "$@"

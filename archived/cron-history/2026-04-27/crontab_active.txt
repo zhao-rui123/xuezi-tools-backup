@@ -1,0 +1,68 @@
+# ========== 雪子助手定时任务 ==========
+
+# 股票自选股日报推送 (工作日16:30)
+30 16 * * 1-5 cd /Users/zhaoruicn/.openclaw/workspace && /opt/homebrew/bin/python3 scripts/stock_push_fast.py >> /tmp/stock_push.log 2>&1
+
+# ========== 每日备份 ==========
+# 每日备份 (22:00)
+00 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-with-retry.sh >> /tmp/backup_cron.log 2>&1
+
+# 备份检查 (22:05)
+05 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/backup-check.sh >> /tmp/backup_check.log 2>&1
+
+# 云端备份同步 (22:35) - 备份后同步到腾讯云
+35 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/cloud-backup-sync.sh >> /tmp/cloud-backup.log 2>&1
+
+# ========== 夜间任务 (22:00-06:00) ==========
+# 每日自我进化 (23:00) - 使用memory-suite调度器
+00 23 * * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-daily >> /tmp/memory-suite.log 2>&1
+
+# ========== 凌晨任务 (00:00-08:00) ==========
+# 每日记忆归档 (00:30)
+30 00 * * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run archive >> /tmp/memory-suite.log 2>&1
+
+# 知识图谱自动更新 (01:00)
+00 01 * * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run knowledge-graph >> /tmp/memory-suite.log 2>&1
+
+# 日志轮转 (每天03:00)
+00 03 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/log_rotate.sh >> /tmp/memory-suite-maintenance.log 2>&1
+
+# ========== 每周任务 ==========
+# 系统维护 (周日02:00)
+00 02 * * 0 /Users/zhaoruicn/.openclaw/workspace/scripts/system-maintenance.sh >> /tmp/system-maintenance.log 2>&1
+
+# OUC清理 (周日03:00)
+00 03 * * 0 /Users/zhaoruicn/.openclaw/workspace/scripts/ouc-cleanup.sh >> /tmp/ouc-cleanup.log 2>&1
+
+# 文件清理 (周一03:00)
+00 03 * * 1 /Users/zhaoruicn/.openclaw/workspace/scripts/file-cleanup.sh >> /tmp/file-cleanup.log 2>&1
+
+# 安全扫描 (周一04:00)
+00 04 * * 1 /Users/zhaoruicn/.openclaw/workspace/scripts/security-scan.sh >> /tmp/system-guard-scan.log 2>&1
+
+# 健康检查 (周一06:30)
+30 06 * * 1 /Users/zhaoruicn/.openclaw/workspace/scripts/daily-health-check.sh >> /tmp/memory-suite-maintenance.log 2>&1
+
+# ========== 每日知识同步 (06:00) ==========
+00 06 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/feishu-bitable-sync.sh >> /tmp/memory-suite.log 2>&1
+
+# ========== 每日报告 (08:00) ==========
+# 早安问候 (每天08:00)
+00 08 * * * /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py --task send --message '🔔 早安！系统状态正常' --target group >> /tmp/kilo_notify.log 2>&1
+
+# 每日任务汇总 (每天08:05)
+05 08 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/daily-task-report.sh >> /tmp/daily_task_report.log 2>&1
+
+# ========== 月度任务 (已优化时间避免重叠) ==========
+# 月度记忆深度分析 (每月1号02:00)
+00 02 1 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run analyze-daily >> /tmp/memory-suite.log 2>&1
+
+# 月度归档备份 (每月1号04:00) - 从03:00调整
+00 04 1 * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_archive.log 2>&1
+
+# 每月深度进化 (每月1号10:00) - 从08:00调整，错开早高峰
+00 10 1 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-monthly >> /tmp/memory-suite.log 2>&1
+
+# 自我进化报告 (每月2号09:00)
+00 09 2 * * /opt/homebrew/bin/python3 /Users/zhaoruicn/.openclaw/workspace/skills/memory-suite-v4/scheduler.py run evolution-report >> /tmp/memory-suite.log 2>&1
+

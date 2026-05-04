@@ -1,0 +1,19 @@
+# Restored on 2026-04-23 after crontab was reduced to session snapshot only.
+
+# Session snapshot autosave
+*/10 * * * * /usr/bin/python3 /Users/zhaoruicn/.openclaw/workspace/scripts/session-snapshot.py save "自动保存" >> /tmp/session-snapshot.log 2>&1
+
+# Stock watchlist report, weekdays 16:30
+30 16 * * 1-5 cd /Users/zhaoruicn/.openclaw/workspace && /opt/homebrew/bin/python3 scripts/stock_push_fast.py >> /tmp/stock_push.log 2>&1
+
+# Daily OpenClaw backup
+00 22 * * * /Users/zhaoruicn/.openclaw/workspace/skills/system-backup/scripts/daily-backup-v2.sh >> /tmp/backup_cron.log 2>&1
+
+# Backup verification
+05 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/archive/backup-check.sh >> /tmp/backup_check.log 2>&1
+
+# Cloud backup sync
+35 22 * * * /Users/zhaoruicn/.openclaw/workspace/scripts/cloud-backup-sync.sh >> /tmp/cloud-backup.log 2>&1
+
+# Morning status ping
+00 08 * * * /Users/zhaoruicn/.openclaw/workspace/agents/kilo/broadcaster.py --task send --message '🔔 早安！系统状态正常' --target group >> /tmp/kilo_notify.log 2>&1
