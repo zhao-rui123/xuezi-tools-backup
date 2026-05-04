@@ -329,12 +329,14 @@ def analyze_project(payload: dict[str, Any], enable_live_rules: bool = False, se
             "pv_azimuth_factor": renewables.get("pv_azimuth_factor"),
             "pv_temperature_factor": renewables.get("pv_temperature_factor"),
             "pv_pr_effective": renewables.get("pv_pr_effective"),
+            "pv_resource_source": renewables.get("pv_resource_source"),
             "wind_resource_accuracy": renewables.get("wind_resource_accuracy"),
             "wind_resource_basis": renewables.get("wind_resource_basis"),
             "wind_p50_generation_mwh": renewables.get("wind_p50_generation_mwh"),
             "wind_p90_generation_mwh": renewables.get("wind_p90_generation_mwh"),
             "wind_power_curve_used": renewables.get("wind_power_curve_used"),
             "wind_mean_speed_mps": renewables.get("wind_mean_speed_mps"),
+            "wind_resource_source": renewables.get("wind_resource_source"),
         }
     )
     output["dispatch_results"].update(

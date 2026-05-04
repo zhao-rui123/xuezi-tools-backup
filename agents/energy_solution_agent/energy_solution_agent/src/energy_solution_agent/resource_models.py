@@ -22,6 +22,7 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
     hourly_profile = [float(v) for v in (solar.get("hourly_generation_profile_kw") or [])]
     monthly_irr = [float(v) for v in (solar.get("monthly_irradiation_kwh_per_m2") or [])]
     annual_irr = float(solar.get("annual_irradiation_kwh_per_m2") or 0.0)
+    source = solar.get("resource_source") or solar.get("provider") or None
 
     # 优先用 equipment.pv.candidate_mwp（最大那个），否则用 available_area 估算
     candidate_mwp_list = data.get("equipment", {}).get("pv", {}).get("candidate_mwp") or []
@@ -32,13 +33,22 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
         pv_mwp = round(available_area / area_per_mwp, 2)
     else:
         pv_mwp = 2.0 if annual_load else 0.0
+    annual_series = None
     if hourly_profile:
-        daily_kwh = sum(hourly_profile)
-        annual_generation = daily_kwh * 365 / 1000
         accuracy = "high"
-        basis = "hourly_generation_profile_kw"
-        scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
-        monthly_shape = [1.0] * 12
+        if len(hourly_profile) >= 8760:
+            exact_series = [float(v) for v in hourly_profile[:8760]]
+            annual_generation = sum(exact_series) / 1000
+            basis = "hourly_generation_profile_kw_8760"
+            scaled_profile = scale_hourly_profile(exact_series[:24], annual_generation)
+            annual_series = exact_series
+            monthly_shape = [1.0] * 12
+        else:
+            daily_kwh = sum(hourly_profile)
+            annual_generation = daily_kwh * 365 / 1000
+            basis = "hourly_generation_profile_kw"
+            scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
+            monthly_shape = [1.0] * 12
     elif monthly_irr:
         derating = float(solar.get("derating_factor") or 0.9)
         annual_generation = pv_mwp * sum(monthly_irr) * pr * derating * tilt_factor * azimuth_factor * temperature_factor
@@ -62,11 +72,15 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
     p50_factor, p90_factor = _resource_scenario_factors(solar, default_p90=0.92)
     p50_generation = annual_generation * p50_factor
     p90_generation = annual_generation * p90_factor
-    annual_series = expand_daily_profile_to_year(
-        scale_hourly_profile(scaled_profile, p50_generation),
-        monthly_factors=monthly_shape,
-        annual_target_mwh=p50_generation,
-    )
+    if annual_series is None:
+        annual_series = expand_daily_profile_to_year(
+            scale_hourly_profile(scaled_profile, p50_generation),
+            monthly_factors=monthly_shape,
+            annual_target_mwh=p50_generation,
+        )
+    elif p50_factor != 1.0 and sum(annual_series) > 0:
+        scale = p50_generation * 1000 / sum(annual_series)
+        annual_series = [v * scale for v in annual_series]
 
     return {
         "pv_mwp": pv_mwp if pv_mwp > 0 else None,
@@ -81,6 +95,7 @@ def estimate_pv_generation(data: dict[str, Any]) -> dict[str, Any]:
         "pv_azimuth_factor": round(azimuth_factor, 4),
         "pv_temperature_factor": round(temperature_factor, 4),
         "pv_pr_effective": round(pr, 4),
+        "pv_resource_source": source,
     }
 
 
@@ -94,25 +109,42 @@ def estimate_wind_generation(data: dict[str, Any]) -> dict[str, Any]:
     avg_speed = float(wind.get("annual_avg_speed_mps") or 0.0)
     cf_assumption = float(wind.get("capacity_factor_assumption") or DEFAULT_WIND_CAPACITY_FACTOR)
     power_curve = wind.get("power_curve") or []
+    source = wind.get("resource_source") or wind.get("provider") or None
 
+    annual_series = None
     if hourly_profile:
         peak_kw = max(hourly_profile) if hourly_profile else 0.0
         wind_mw = round(peak_kw / 1000, 2) if peak_kw else 0.0
-        annual_generation = sum(hourly_profile) * 365 / 1000
         accuracy = "high"
-        basis = "hourly_generation_profile_kw"
-        scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
+        if len(hourly_profile) >= 8760:
+            exact_series = [float(v) for v in hourly_profile[:8760]]
+            annual_generation = sum(exact_series) / 1000
+            basis = "hourly_generation_profile_kw_8760"
+            scaled_profile = scale_hourly_profile(exact_series[:24], annual_generation)
+            annual_series = exact_series
+            monthly_shape = [1.0] * 12
+        else:
+            annual_generation = sum(hourly_profile) * 365 / 1000
+            basis = "hourly_generation_profile_kw"
+            scaled_profile = scale_hourly_profile(hourly_profile, annual_generation)
+            monthly_shape = [1.0] * 12
         power_curve_used = False
         mean_speed = None
-        monthly_shape = [1.0] * 12
     elif wind_speed_profile and power_curve:
         power_output = _power_from_curve(wind_speed_profile, power_curve)
         peak_kw = max(power_output) if power_output else 0.0
         wind_mw = round(peak_kw / 1000, 2) if peak_kw else 0.0
-        annual_generation = sum(power_output) * 365 / 1000
         accuracy = "high"
-        basis = "wind_speed_series_mps + power_curve"
-        scaled_profile = scale_hourly_profile(power_output, annual_generation)
+        if len(power_output) >= 8760:
+            exact_series = [float(v) for v in power_output[:8760]]
+            annual_generation = sum(exact_series) / 1000
+            basis = "wind_speed_series_mps_8760 + power_curve"
+            scaled_profile = scale_hourly_profile(exact_series[:24], annual_generation)
+            annual_series = exact_series
+        else:
+            annual_generation = sum(power_output) * 365 / 1000
+            basis = "wind_speed_series_mps + power_curve"
+            scaled_profile = scale_hourly_profile(power_output, annual_generation)
         power_curve_used = True
         mean_speed = round(sum(wind_speed_profile) / len(wind_speed_profile), 3) if wind_speed_profile else None
         monthly_shape = [1.08, 1.06, 1.02, 0.98, 0.95, 0.92, 0.90, 0.92, 0.96, 1.00, 1.06, 1.15]
@@ -169,11 +201,15 @@ def estimate_wind_generation(data: dict[str, Any]) -> dict[str, Any]:
     else:
         p50_generation = annual_generation * p50_factor
         p90_generation = annual_generation * p90_factor
-    annual_series = expand_daily_profile_to_year(
-        scale_hourly_profile(scaled_profile, p50_generation),
-        monthly_factors=monthly_shape,
-        annual_target_mwh=p50_generation,
-    )
+    if annual_series is None:
+        annual_series = expand_daily_profile_to_year(
+            scale_hourly_profile(scaled_profile, p50_generation),
+            monthly_factors=monthly_shape,
+            annual_target_mwh=p50_generation,
+        )
+    elif p50_factor != 1.0 and sum(annual_series) > 0:
+        scale = p50_generation * 1000 / sum(annual_series)
+        annual_series = [v * scale for v in annual_series]
 
     return {
         "wind_mw": wind_mw if wind_mw > 0 else None,
@@ -186,6 +222,7 @@ def estimate_wind_generation(data: dict[str, Any]) -> dict[str, Any]:
         "wind_p90_generation_mwh": round(p90_generation, 2) if wind_mw > 0 else None,
         "wind_power_curve_used": power_curve_used,
         "wind_mean_speed_mps": mean_speed,
+        "wind_resource_source": source,
     }
 
 
