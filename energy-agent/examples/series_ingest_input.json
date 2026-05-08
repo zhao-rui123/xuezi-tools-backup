@@ -1,0 +1,78 @@
+{
+  "project_info": {
+    "project_name": "示例8760接管前的文件序列项目",
+    "scenario_type": "user_side_storage",
+    "province": "湖北",
+    "city": "武汉",
+    "grid_operator": "国网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "balanced",
+    "storage_strategy_mode": "peak_shaving"
+  },
+  "resource_data": {
+    "solar": {
+      "hourly_generation_profile_kw_path": "examples/pv_24h.csv",
+      "site_latitude_deg": 30.6,
+      "tilt_deg": 25,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.82,
+      "p50_factor": 1.0,
+      "p90_factor": 0.94
+    },
+    "wind": {
+      "wind_speed_series_mps_path": "examples/wind_speed_24h.csv",
+      "power_curve": [
+        {"speed_mps": 0, "power_kw": 0},
+        {"speed_mps": 3, "power_kw": 0},
+        {"speed_mps": 4, "power_kw": 100},
+        {"speed_mps": 5, "power_kw": 260},
+        {"speed_mps": 6, "power_kw": 430},
+        {"speed_mps": 7, "power_kw": 610},
+        {"speed_mps": 8, "power_kw": 760}
+      ],
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "load_series_kw_path": "examples/load_24h.csv",
+    "annual_consumption_mwh": 9800,
+    "peak_load_kw": 3600
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "province_policy_profile": "湖北",
+    "tou_tariff": [
+      {"period": "peak", "price": 1.02},
+      {"period": "flat", "price": 0.69},
+      {"period": "valley", "price": 0.34}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_rate_per_kw_month": 29
+  },
+  "network_and_design": {
+    "point_of_connection": "厂区10kV母线"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [800, 1200, 1600],
+      "energy_candidate_kwh": [1600, 2400, 3200],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965
+    }
+  },
+  "financial": {
+    "project_years": 10,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 820,
+      "pv_cost_per_w": 3.0
+    },
+    "opex": {
+      "annual_om_ratio": 0.016
+    }
+  }
+}

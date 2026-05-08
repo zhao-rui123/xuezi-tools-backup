@@ -1,0 +1,72 @@
+{
+  "project_info": {
+    "project_name": "项目名称",
+    "scenario_type": "user_side_storage",
+    "province": "项目所在省份",
+    "city": "项目所在城市",
+    "grid_operator": "国网或南网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "economic_first",
+    "storage_strategy_mode": "market_responding"
+  },
+  "load_data": {
+    "load_series_kw_path": "D:/Codex/应用/你的项目/原始15min负荷曲线.json",
+    "peak_load_kw": 0
+  },
+  "market_data": {
+    "market_mode": "market_price_series",
+    "market_price_series_path": "D:/Codex/应用/你的项目/现货价格表.xlsx",
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_mode": "contract_capacity",
+    "contract_capacity_kw": 0,
+    "transformer_capacity_kva": 0,
+    "ancillary_service_mode": "energy_called",
+    "ancillary_service_rate_per_mw_year": 0,
+    "ancillary_service_called_hours": 0,
+    "demand_response_rate_per_kw_year": 0,
+    "demand_response_events_per_year": 0,
+    "arbitrage_plan": {
+      "mode": "spot_intraday",
+      "continuous_horizon": false,
+      "min_charge_hours": 2,
+      "min_discharge_hours": 2,
+      "max_charge_hours": 6,
+      "max_discharge_hours": 6,
+      "min_spread_yuan_per_mwh": 250
+    }
+  },
+  "network_and_design": {
+    "point_of_connection": "并网点说明"
+  },
+  "equipment": {
+    "storage": {
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.45,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022,
+      "sizing_target_day_coverage_ratio": 0.9
+    }
+  },
+  "financial": {
+    "project_years": 12,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 830,
+      "storage_replacement_cost_ratio": 0.5
+    },
+    "opex": {
+      "annual_om_ratio": 0.016,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022
+    }
+  }
+}

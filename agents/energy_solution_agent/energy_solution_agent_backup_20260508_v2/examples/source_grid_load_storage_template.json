@@ -1,0 +1,94 @@
+{
+  "project_info": {
+    "project_name": "项目名称",
+    "scenario_type": "source_grid_load_storage",
+    "province": "项目所在省份",
+    "city": "项目所在城市",
+    "grid_operator": "国网或南网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "balanced",
+    "operation_mode": "",
+    "analysis_mode": "historical_backtest",
+    "storage_strategy_mode": "renewable_priority"
+  },
+  "resource_data": {
+    "solar": {
+      "installed_capacity_mwp": 0,
+      "hourly_generation_profile_kw_path": "D:/Codex/应用/你的项目/光伏小时出力.csv",
+      "site_latitude_deg": 0,
+      "tilt_deg": 25,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.82,
+      "p50_factor": 1.0,
+      "p90_factor": 0.94
+    },
+    "wind": {
+      "installed_capacity_mw": 0,
+      "wind_speed_series_mps_path": "D:/Codex/应用/你的项目/风速序列.csv",
+      "power_curve": [],
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "load_series_kw_path": "D:/Codex/应用/你的项目/原始15min负荷曲线.json",
+    "peak_load_kw": 0,
+    "annual_consumption_mwh": 0
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "province_policy_profile": "项目所在省份",
+    "renewable_charge_threshold_price_per_kwh": 0,
+    "cooptimization_min_sell_spread_per_kwh": 0.15,
+    "export_price_per_kwh": 0,
+    "tou_tariff": [
+      {"period": "peak", "price": 0},
+      {"period": "flat", "price": 0},
+      {"period": "valley", "price": 0}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_mode": "contract_capacity",
+    "contract_capacity_kw": 0,
+    "transformer_capacity_kva": 0,
+    "demand_charge_rate_per_kw_month": 0,
+    "allow_export_to_grid": false
+  },
+  "network_and_design": {
+    "point_of_connection": "并网点说明"
+  },
+  "equipment": {
+    "storage": {
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.45,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022,
+      "sizing_target_day_coverage_ratio": 0.9
+    }
+  },
+  "financial": {
+    "project_years": 12,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 0,
+      "pv_cost_per_w": 0,
+      "wind_cost_per_w": 0,
+      "storage_replacement_cost_ratio": 0.5
+    },
+    "opex": {
+      "annual_om_ratio": 0.016,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    }
+  }
+}

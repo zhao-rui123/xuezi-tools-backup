@@ -1,0 +1,32 @@
+{
+  "monthly_irradiation_kwh_per_m2": [
+    5.6,
+    5.9,
+    6.3,
+    6.5,
+    6.7,
+    6.8,
+    6.7,
+    6.5,
+    6.3,
+    6.0,
+    5.7,
+    5.5
+  ],
+  "annual_irradiation_kwh_per_m2": 2263,
+  "monthly_temperature_c": [
+    21,
+    22,
+    24,
+    27,
+    30,
+    33,
+    35,
+    35,
+    33,
+    30,
+    26,
+    22
+  ],
+  "annual_avg_speed_50m_mps": 6.59
+}

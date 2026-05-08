@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_name": "毛里塔尼亚矿区光储项目（一期）",
+    "scenario_type": "microgrid",
+    "province": "Overseas",
+    "city": "Mauritania Mining Site",
+    "latitude": 23.196941,
+    "longitude": -11.959593,
+    "grid_operator": "offgrid",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "microgrid",
+    "target_priority": "cost_optimized",
+    "storage_strategy_mode": "cost_optimized",
+    "phase_info": {
+      "phase1": "光伏+储能+柴发",
+      "phase2_reserved": "风电72MW"
+    }
+  },
+  "load_data": {
+    "load_series_kw": [
+      44460, 44460, 44460, 44460, 44460,
+      62460, 62460, 62460, 62460, 62460,
+      62460, 62460, 62460, 62460, 62460,
+      62460, 62460, 62460, 62460, 62460,
+      62460, 62460, 62460, 62460
+    ],
+    "peak_load_kw": 62460,
+    "critical_load_kw": 62460,
+    "backup_hours_required": 4
+  },
+  "resource_data": {
+    "solar": {
+      "annual_irradiation_kwh_per_m2": 2263,
+      "site_latitude_deg": 23.2,
+      "tilt_deg": 15,
+      "azimuth_deg": 0,
+      "performance_ratio": 0.82,
+      "available_area_m2": 2000000,
+      "p50_factor": 1.0,
+      "p90_factor": 0.92
+    },
+    "wind": {
+      "annual_avg_speed_mps": 6.59,
+      "capacity_factor_assumption": 0.42,
+      "p50_factor": 1.0,
+      "p90_factor": 0.9,
+      "reserved_capacity_mw": 72,
+      "phase2_planned": true
+    }
+  },
+  "network_and_design": {
+    "point_of_connection": "矿区10kV微网系统",
+    "high_voltage_kv": 10,
+    "low_voltage_v": 380,
+    "frequency_hz": 50,
+    "control_power": "220VAC/24VDC"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [5000, 10000, 15000, 20000],
+      "energy_candidate_kwh": [20000, 40000, 60000, 80000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.5,
+      "soc_reserve_ratio": 0.15,
+      "backup_soc_ratio": 0.10,
+      "soc_max": 0.90,
+      "cycle_life": 6000,
+      "annual_degradation_rate": 0.022
+    },
+    "conventional_backup": {
+      "enabled": true,
+      "minimum_output_kw": 5000,
+      "fuel_cost_per_kwh": 0.30
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 1200,
+      "pv_cost_per_w": 3.5,
+      "wind_cost_per_w": 6.5,
+      "storage_replacement_cost_ratio": 0.55
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    }
+  }
+}

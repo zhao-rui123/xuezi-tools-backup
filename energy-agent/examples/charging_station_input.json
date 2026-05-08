@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_name": "示例光储充项目",
+    "scenario_type": "charging_station",
+    "province": "广东",
+    "city": "深圳",
+    "grid_operator": "南网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "economic_first",
+    "storage_strategy_mode": "peak_shaving"
+  },
+  "resource_data": {
+    "solar": {
+      "available_area_m2": 10000,
+      "monthly_irradiation_kwh_per_m2": [82, 96, 118, 132, 145, 156, 168, 160, 136, 118, 92, 80],
+      "site_latitude_deg": 22.5,
+      "tilt_deg": 18,
+      "azimuth_deg": 180,
+      "temperature_profile_c": [20, 20, 21, 23, 25, 27, 29, 30, 29, 27, 24, 22, 21, 20, 20, 21, 22, 24, 25, 24, 23, 22, 21, 20],
+      "performance_ratio": 0.82,
+      "p50_factor": 1.0,
+      "p90_factor": 0.94
+    },
+    "wind": {}
+  },
+  "load_data": {
+    "annual_consumption_mwh": 3000,
+    "peak_load_kw": 2400
+  },
+  "charging_data": {
+    "station_type": "public_fast_charge",
+    "vehicle_type": "passenger",
+    "charger_power_kw": [120, 180],
+    "num_chargers": [8, 4],
+    "simultaneity_factor": 0.52,
+    "daily_energy_kwh": 7200,
+    "monthly_energy_factors": [0.88, 0.90, 0.95, 0.98, 1.00, 1.02, 1.06, 1.08, 1.05, 1.00, 0.94, 0.90],
+    "vehicle_segments": [
+      {"vehicle_type": "passenger", "charger_power_kw": 120, "num_chargers": 8, "daily_energy_kwh": 4200, "simultaneity_factor": 0.50, "peak_hours": [18, 19, 20, 21]},
+      {"vehicle_type": "ride_hailing", "charger_power_kw": 180, "num_chargers": 4, "daily_energy_kwh": 3000, "simultaneity_factor": 0.58, "peak_hours": [11, 12, 13, 14, 22]}
+    ]
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "tou_tariff": [
+      {"period": "peak", "price": 1.18},
+      {"period": "flat", "price": 0.78},
+      {"period": "valley", "price": 0.41}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_rate_per_kw_month": 32
+  },
+  "network_and_design": {
+    "point_of_connection": "站内10kV配电室"
+  },
+  "equipment": {
+    "storage": {
+      "round_trip_efficiency": 0.9,
+      "power_candidate_kw": [800, 1200, 1600],
+      "energy_candidate_kwh": [1600, 2400, 3200]
+    }
+  },
+  "financial": {
+    "project_years": 12,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 820,
+      "pv_cost_per_w": 3.0,
+      "charging_system_total": 4600000
+    },
+    "opex": {
+      "annual_om_ratio": 0.018
+    }
+  }
+}

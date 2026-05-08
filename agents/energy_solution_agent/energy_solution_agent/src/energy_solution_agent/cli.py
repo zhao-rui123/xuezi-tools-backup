@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from .benchmark import run_benchmarks
-from pathlib import Path
 from .engine import analyze_project
+from .report_docx import build_docx_report
+from .report_excel import build_excel_report
 from .utils import read_json, write_json, write_text
 
 
@@ -16,8 +18,9 @@ def build_parser() -> argparse.ArgumentParser:
     analyze = sub.add_parser("analyze")
     analyze.add_argument("--input", required=True, help="Input JSON file")
     analyze.add_argument("--output", required=True, help="Output JSON file")
-    analyze.add_argument("--narrative", type=str, help="Narrative analysis output path")
     analyze.add_argument("--report", help="Markdown report file")
+    analyze.add_argument("--report-docx", help="Professional DOCX report file (design-institute level)")
+    analyze.add_argument("--report-xlsx", help="Professional Excel report file (design-institute level)")
     analyze.add_argument("--live-rules", action="store_true", help="Refresh province rules from configured official links")
     benchmark = sub.add_parser("benchmark")
     benchmark.add_argument("--examples", required=True, help="Example JSON directory")
@@ -29,22 +32,28 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     if args.command == "analyze":
-        payload = read_json(Path(args.input))
-        output, diagnostics, report = analyze_project(payload, enable_live_rules=args.live_rules)
-    if args.narrative:
-        from .analysis_narrative import generate_narrative
-        Path(args.narrative).write_text(generate_narrative(output), encoding="utf-8")
-        print(f"Narrative: {args.narrative}")
-    if args.narrative:
-        from .analysis_narrative import generate_narrative
-        Path(args.narrative).write_text(generate_narrative(output), encoding='utf-8')
-        print(f'Narrative saved to {args.narrative}')
+        try:
+            payload = read_json(Path(args.input))
+        except Exception as exc:
+            print(f"Error reading input file {args.input}: {exc}", file=sys.stderr)
+            return 1
+        try:
+            output, diagnostics, report = analyze_project(payload, enable_live_rules=args.live_rules)
+        except Exception as exc:
+            print(f"Error during analysis: {exc}", file=sys.stderr)
+            return 1
         write_json(Path(args.output), output, pretty=True)
         if args.report:
             write_text(Path(args.report), report)
-        else:
+        elif not args.report_docx:
             print(report)
-        if diagnostics["missing_fields"]:
+        if args.report_docx:
+            docx_path = build_docx_report(output, diagnostics, args.report_docx)
+            print(f"DOCX report saved: {docx_path}", file=sys.stderr)
+        if args.report_xlsx:
+            xlsx_path = build_excel_report(output, diagnostics, args.report_xlsx)
+            print(f"XLSX report saved: {xlsx_path}", file=sys.stderr)
+        if diagnostics.get("missing_fields", []):
             return 2
         return 0
     if args.command == "benchmark":
@@ -53,5 +62,5 @@ def main(argv: list[str] | None = None) -> int:
             write_json(Path(args.output), rows, pretty=True)
         else:
             print(json.dumps(rows, ensure_ascii=False, indent=2))
-        return 0
+        return 3 if rows.get("summary", {}).get("has_errors") else 0
     return 1

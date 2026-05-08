@@ -201,8 +201,75 @@ backup_skills_categorized() {
     local total_count=0
     local cp_errors=0
     
-    # 只备份 memory-suite-v4（12M），跳过 glmv-stock-analyst(272M)、image-process(308M) 等大型目录
-    local SKILLS_TO_BACKUP=("memory-suite-v4")
+    # 需要备份的 Skills（全路径列表，排除空目录和临时文件）
+    local SKILLS_TO_BACKUP=(
+        # 套件类
+        memory-suite-v4
+        multi-agent-suite
+        lobster-home
+        # 核心工具类
+        minimax-multimodal
+        openclaw-coding
+        system-backup
+        tushare-data
+        project-finance-model
+        data-analyst
+        security-scanner
+        time-toolkit
+        # 平台类
+        zero-carbon-park
+        # 其他工具
+        ai-coder
+        android-native-dev
+        apple-notes
+        apple-reminders
+        cad-generator
+        china-enterprise-tax
+        cron-manager
+        dashboard
+        dc-cable-calc
+        doc-automation
+        electrical-cad
+        electricity-price-crawler
+        file-sender
+        find-skills
+        frontend-dev
+        fullstack-dev
+        gif-sticker-maker
+        github
+        huashu-nuwa
+        image-understand
+        ios-application-dev
+        markdown-proxy
+        minimax-docx
+        minimax-pdf
+        minimax-understand-image
+        minimax-web-search
+        minimax-xlsx
+        mx_data
+        mx_search
+        mx_select_stock
+        mx_selfselect
+        obsidian
+        obsidian-daily
+        obsidian-task
+        ontology
+        openai-whisper
+        para-second-brain
+        pptx-generator
+        project-tracker
+        references
+        shader-dev
+        skill-version-control
+        skillhub-preference
+        skills
+        suites
+        tesseract-ocr
+        video-frames
+        weather
+    )
+    # 主动排除（不备份）：glmv-stock-analyst、image-process、以及磁盘上已是0字节的空目录
+    local SKIP_DIRS=("glmv-stock-analyst" "image-process")
     
     for skill_name in "${SKILLS_TO_BACKUP[@]}"; do
         local skill_dir="$skills_src/$skill_name"
@@ -236,7 +303,7 @@ backup_skills_categorized() {
     if [ "$cp_errors" -gt 0 ]; then
         log "⚠️ Skills 备份完成但有 $cp_errors 个错误"
     else
-        log "✅ Skills 备份完成: $total_count 个文件（仅 memory-suite-v4）"
+        log "✅ Skills 备份完成: $total_count 个文件（不含 glmv-stock-analyst、image-process）"
     fi
     echo "$total_count"
 }

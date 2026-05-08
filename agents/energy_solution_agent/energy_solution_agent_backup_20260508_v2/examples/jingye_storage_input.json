@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_name": "敬业钢铁用户侧储能项目",
+    "scenario_type": "user_side_storage",
+    "province": "河北",
+    "city": "石家庄",
+    "grid_operator": "国网",
+    "voltage_level_kv": 35,
+    "grid_connection_mode": "user_side",
+    "target_priority": "economic_first",
+    "storage_strategy_mode": "peak_shaving"
+  },
+  "load_data": {
+    "annual_consumption_mwh": 980000,
+    "peak_load_kw": 210000,
+    "monthly_load_factors": [0.96, 0.95, 0.98, 1.00, 1.02, 1.04, 1.06, 1.07, 1.03, 1.01, 0.99, 0.97]
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "province_policy_profile": "河北",
+    "tou_tariff": [
+      {"period": "peak", "price": 0.98},
+      {"period": "flat", "price": 0.68},
+      {"period": "valley", "price": 0.34}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_mode": "max_demand",
+    "demand_charge_rate_per_kw_month": 28
+  },
+  "network_and_design": {
+    "point_of_connection": "厂区35kV母线"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [75000, 125000, 200000],
+      "energy_candidate_kwh": [150000, 250000, 400000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.5,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 820,
+      "storage_replacement_cost_ratio": 0.5
+    },
+    "opex": {
+      "annual_om_ratio": 0.015,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022
+    }
+  }
+}

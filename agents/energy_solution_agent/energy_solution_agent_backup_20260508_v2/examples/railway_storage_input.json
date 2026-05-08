@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_name": "铁路柔性供电储能项目",
+    "scenario_type": "user_side_storage",
+    "province": "重庆",
+    "city": "Railway Demo",
+    "grid_operator": "国网",
+    "voltage_level_kv": 27.5,
+    "grid_connection_mode": "special_supply",
+    "target_priority": "reliability_first",
+    "storage_strategy_mode": "peak_shaving"
+  },
+  "load_data": {
+    "annual_consumption_mwh": 32000,
+    "peak_load_kw": 9000,
+    "critical_load_kw": 6500
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "province_policy_profile": "重庆",
+    "tou_tariff": [
+      {"period": "peak", "price": 0.96},
+      {"period": "flat", "price": 0.69},
+      {"period": "valley", "price": 0.35}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_rate_per_kw_month": 27
+  },
+  "network_and_design": {
+    "point_of_connection": "牵引站共直流母线侧"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [2000, 4000, 6000],
+      "energy_candidate_kwh": [4000, 8000, 12000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.5,
+      "soc_reserve_ratio": 0.10,
+      "backup_soc_ratio": 0.10,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 860,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.017,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022
+    }
+  }
+}

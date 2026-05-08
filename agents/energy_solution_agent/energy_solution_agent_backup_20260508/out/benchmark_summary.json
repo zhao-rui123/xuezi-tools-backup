@@ -1,0 +1,158 @@
+{
+  "summary": {
+    "total_cases": 9,
+    "by_scenario": {
+      "charging_station": 1,
+      "zero_carbon_factory": 3,
+      "user_side_storage": 4,
+      "microgrid": 1
+    },
+    "by_confidence": {
+      "medium": 7,
+      "high": 2
+    },
+    "by_province": {
+      "广东": 1,
+      "浙江": 1,
+      "河北": 2,
+      "山东": 1,
+      "Overseas": 1,
+      "重庆": 1,
+      "湖北": 1,
+      "江苏": 1
+    },
+    "average_annual_revenue": 20332252.63,
+    "average_irr": 0.1503,
+    "max_data_gaps": 1,
+    "max_risks": 5,
+    "quality_gate_pass_rate": 1.0
+  },
+  "benchmarks": [
+    {
+      "file": "charging_station_input.json",
+      "scenario": "charging_station",
+      "province": "广东",
+      "confidence": "medium",
+      "annual_revenue": 499184.58,
+      "irr": null,
+      "data_gaps": 1,
+      "risks": 3,
+      "completeness": "A",
+      "market_profile_status": "partial",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "data_center_input.json",
+      "scenario": "zero_carbon_factory",
+      "province": "浙江",
+      "confidence": "medium",
+      "annual_revenue": 641751.77,
+      "irr": null,
+      "data_gaps": 0,
+      "risks": 4,
+      "completeness": "A",
+      "market_profile_status": "partial",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "jingye_storage_input.json",
+      "scenario": "user_side_storage",
+      "province": "河北",
+      "confidence": "medium",
+      "annual_revenue": 974608.97,
+      "irr": null,
+      "data_gaps": 1,
+      "risks": 2,
+      "completeness": "A",
+      "market_profile_status": "partial",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "market_storage_input.json",
+      "scenario": "user_side_storage",
+      "province": "山东",
+      "confidence": "medium",
+      "annual_revenue": 271370.0,
+      "irr": null,
+      "data_gaps": 0,
+      "risks": 1,
+      "completeness": "A",
+      "market_profile_status": "verified",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "mauritania_mine_input.json",
+      "scenario": "microgrid",
+      "province": "Overseas",
+      "confidence": "medium",
+      "annual_revenue": 152102546.97,
+      "irr": 0.125,
+      "data_gaps": 1,
+      "risks": 2,
+      "completeness": "A",
+      "market_profile_status": "missing",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "railway_storage_input.json",
+      "scenario": "user_side_storage",
+      "province": "重庆",
+      "confidence": "medium",
+      "annual_revenue": 924987.3,
+      "irr": null,
+      "data_gaps": 1,
+      "risks": 2,
+      "completeness": "A",
+      "market_profile_status": "partial",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "series_ingest_input.json",
+      "scenario": "user_side_storage",
+      "province": "湖北",
+      "confidence": "high",
+      "annual_revenue": 2125230.7,
+      "irr": 0.1429,
+      "data_gaps": 0,
+      "risks": 0,
+      "completeness": "A",
+      "market_profile_status": "verified",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "steel_factory_input.json",
+      "scenario": "zero_carbon_factory",
+      "province": "河北",
+      "confidence": "medium",
+      "annual_revenue": 20323361.04,
+      "irr": 0.1667,
+      "data_gaps": 0,
+      "risks": 5,
+      "completeness": "A",
+      "market_profile_status": "partial",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    },
+    {
+      "file": "zero_carbon_factory_input.json",
+      "scenario": "zero_carbon_factory",
+      "province": "江苏",
+      "confidence": "high",
+      "annual_revenue": 5127232.37,
+      "irr": 0.1667,
+      "data_gaps": 0,
+      "risks": 3,
+      "completeness": "A",
+      "market_profile_status": "verified",
+      "data_quality_level": "high",
+      "quality_gate_passed": true
+    }
+  ]
+}

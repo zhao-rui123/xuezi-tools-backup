@@ -1,0 +1,95 @@
+{
+  "project_info": {
+    "project_name": "项目名称",
+    "scenario_type": "microgrid",
+    "province": "Overseas",
+    "city": "项目所在区域",
+    "country": "Mauritania",
+    "latitude": 23.196941,
+    "longitude": -11.959593,
+    "grid_operator": "Offgrid",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "microgrid",
+    "target_priority": "reliability_first",
+    "storage_strategy_mode": "renewable_priority"
+  },
+  "resource_data": {
+    "public_resource_year": 2025,
+    "solar": {
+      "installed_capacity_mwp": 0,
+      "hourly_generation_profile_kw_path": "D:/Codex/应用/你的项目/光伏8760出力.csv",
+      "hourly_irradiance_kwh_per_m2_path": "D:/Codex/应用/你的项目/光伏8760辐照.csv",
+      "annual_irradiation_kwh_per_m2": 0,
+      "tilt_deg": null,
+      "azimuth_deg": 180,
+      "tracking_mode": "fixed_tilt",
+      "performance_ratio": 0.82,
+      "available_area_m2": 0,
+      "p50_factor": 1.0,
+      "p90_factor": 0.92
+    },
+    "wind": {
+      "installed_capacity_mw": 0,
+      "wind_speed_series_mps_path": "D:/Codex/应用/你的项目/风速8760.csv",
+      "hourly_generation_profile_kw_path": "D:/Codex/应用/你的项目/风电8760出力.csv",
+      "annual_avg_speed_mps": 0,
+      "capacity_factor_assumption": 0,
+      "power_curve": [],
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "load_series_kw_path": "D:/Codex/应用/你的项目/原始15min负荷曲线.json",
+    "annual_consumption_mwh": 0,
+    "peak_load_kw": 0,
+    "critical_load_kw": 0,
+    "backup_hours_required": 0
+  },
+  "market_data": {
+    "market_mode": "offgrid_internal"
+  },
+  "network_and_design": {
+    "point_of_connection": "站内10kV系统"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [],
+      "energy_candidate_kwh": [],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.55,
+      "soc_reserve_ratio": 0.10,
+      "backup_soc_ratio": 0.18,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    },
+    "conventional_backup": {
+      "enabled": true,
+      "minimum_output_kw": 0,
+      "fuel_cost_per_kwh": 0.32
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 0,
+      "pv_cost_per_w": 0,
+      "wind_cost_per_w": 0,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    }
+  }
+}

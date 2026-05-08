@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_name": "毛里塔尼亚矿区光储微电网项目 (最终版)",
+    "scenario_type": "zero_carbon_factory",
+    "province": "Overseas",
+    "city": "Mauritania Mine",
+    "grid_operator": "Offgrid",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "microgrid",
+    "target_priority": "reliability_first",
+    "storage_strategy_mode": "microgrid"
+  },
+  "resource_data": {
+    "solar": {
+      "annual_irradiation_kwh_per_m2": 2263,
+      "site_latitude_deg": 23.2,
+      "tilt_deg": 20,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.82,
+      "available_area_m2": 330000,
+      "p50_factor": 1.0,
+      "p90_factor": 0.92
+    },
+    "wind": {
+      "hourly_generation_profile_kw": [
+        30000, 28000, 26000, 25000, 26000, 30000, 36000, 44000,
+        53000, 62000, 70000, 72000, 72000, 71000, 68000, 63000,
+        57000, 51000, 46000, 42000, 39000, 36000, 33000, 31000
+      ],
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "annual_consumption_mwh": 521870,
+    "peak_load_kw": 62460,
+    "critical_load_kw": 52000,
+    "backup_hours_required": 6
+  },
+  "market_data": {
+    "market_mode": "offgrid_internal",
+    "fuel_cost_per_kwh": 0.15
+  },
+  "network_and_design": {
+    "point_of_connection": "矿区10kV系统"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [25000, 38000, 51000],
+      "energy_candidate_kwh": [50000, 76000, 102000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.50,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.10,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    },
+    "conventional_backup": {
+      "enabled": true,
+      "minimum_output_kw": 15000,
+      "fuel_cost_per_kwh": 0.15
+    }
+  },
+  "financial": {
+    "project_years": 20,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 850,
+      "pv_cost_per_w": 3.1,
+      "wind_cost_per_w": 6.4,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.018,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005,
+      "wind_degradation_per_year": 0.003
+    }
+  }
+}

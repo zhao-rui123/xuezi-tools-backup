@@ -1,0 +1,80 @@
+{
+  "project_info": {
+    "project_name": "示例市场响应型储能项目",
+    "scenario_type": "user_side_storage",
+    "province": "山东",
+    "city": "济南",
+    "grid_operator": "国网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "economic_first",
+    "storage_strategy_mode": "market_responding"
+  },
+  "resource_data": {
+    "solar": {
+      "available_area_m2": 12000,
+      "monthly_irradiation_kwh_per_m2": [76, 92, 118, 136, 150, 160, 166, 154, 132, 112, 86, 72],
+      "site_latitude_deg": 36.6,
+      "tilt_deg": 32,
+      "azimuth_deg": 180,
+      "performance_ratio": 0.83,
+      "p50_factor": 1.0,
+      "p90_factor": 0.94
+    },
+    "wind": {}
+  },
+  "load_data": {
+    "annual_consumption_mwh": 18000,
+    "peak_load_kw": 6500,
+    "monthly_load_factors": [0.95, 0.92, 0.96, 1.00, 1.02, 1.05, 1.08, 1.06, 1.01, 0.99, 0.97, 0.95]
+  },
+  "market_data": {
+    "market_mode": "market_price_series",
+    "market_price_series": [0.28, 0.27, 0.26, 0.25, 0.26, 0.32, 0.45, 0.58, 0.66, 0.72, 0.85, 0.91, 0.88, 0.82, 0.79, 0.83, 0.95, 1.08, 1.15, 1.10, 0.86, 0.68, 0.50, 0.36],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_mode": "contract_capacity",
+    "contract_capacity_kw": 7000,
+    "demand_charge_rate_per_kw_month": 30,
+    "ancillary_service_mode": "energy_called",
+    "ancillary_service_rate_per_mw_year": 180,
+    "ancillary_service_called_hours": 160,
+    "demand_response_rate_per_kw_year": 0.45,
+    "demand_response_events_per_year": 8
+  },
+  "network_and_design": {
+    "point_of_connection": "厂区10kV母线"
+  },
+  "equipment": {
+    "storage": {
+      "power_candidate_kw": [1500, 2500, 3500],
+      "energy_candidate_kwh": [3000, 5000, 7000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.45,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.022
+    }
+  },
+  "financial": {
+    "project_years": 12,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 830,
+      "pv_cost_per_w": 3.1,
+      "storage_replacement_cost_ratio": 0.5
+    },
+    "opex": {
+      "annual_om_ratio": 0.016,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.022,
+      "pv_degradation_per_year": 0.005
+    }
+  }
+}

@@ -1,0 +1,21 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+
+PACKAGE_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = PACKAGE_ROOT.parent.parent.parent
+SPEC_BUNDLE = Path(r"D:\Codex\文档\新能源电力解决方案_agent_spec_20260503")
+
+DEFAULT_GRID_EMISSION_FACTOR = 0.55
+DEFAULT_GAS_EMISSION_FACTOR = 0.20
+DEFAULT_DIESEL_EMISSION_FACTOR = 0.27
+DEFAULT_THERMAL_COP = 3.5
+DEFAULT_HEAT_PUMP_COP = 3.0
+DEFAULT_BOILER_EFFICIENCY = 0.92
+DEFAULT_PV_FULL_LOAD_HOURS = 1100
+DEFAULT_WIND_CAPACITY_FACTOR = 0.26
+
+REPORT_TITLE = "新能源电力解决方案分析报告"
+
+MONTH_HOURS = [31 * 24, 28 * 24, 31 * 24, 30 * 24, 31 * 24, 30 * 24, 31 * 24, 31 * 24, 30 * 24, 31 * 24, 30 * 24, 31 * 24]

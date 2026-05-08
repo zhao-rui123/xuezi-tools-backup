@@ -1,0 +1,123 @@
+{
+  "project_info": {
+    "project_name": "示例零碳工厂项目",
+    "scenario_type": "zero_carbon_factory",
+    "province": "江苏",
+    "city": "苏州",
+    "grid_operator": "国网",
+    "voltage_level_kv": 10,
+    "grid_connection_mode": "user_side",
+    "target_priority": "balanced",
+    "storage_strategy_mode": "renewable_priority"
+  },
+  "resource_data": {
+    "solar": {
+      "available_area_m2": 28000,
+      "annual_irradiation_kwh_per_m2": 1550,
+      "site_latitude_deg": 31.3,
+      "tilt_deg": 28,
+      "azimuth_deg": 185,
+      "temperature_profile_c": [12, 12, 11, 11, 13, 16, 20, 24, 28, 31, 33, 35, 36, 35, 32, 29, 25, 21, 18, 16, 15, 14, 13, 12],
+      "temp_coefficient_pct_per_c": -0.35,
+      "pr_breakdown": {
+        "soiling": 0.98,
+        "mismatch": 0.99,
+        "dc_wiring": 0.99,
+        "inverter": 0.97,
+        "availability": 0.995
+      },
+      "p50_factor": 1.0,
+      "p90_factor": 0.93
+    },
+    "wind": {
+      "wind_speed_series_mps": [4.5, 4.3, 4.2, 4.0, 4.1, 4.4, 4.8, 5.2, 5.6, 5.9, 6.1, 6.3, 6.2, 6.0, 5.8, 5.5, 5.3, 5.1, 4.9, 4.8, 4.7, 4.6, 4.5, 4.4],
+      "power_curve": [
+        {"speed_mps": 0, "power_kw": 0},
+        {"speed_mps": 3, "power_kw": 0},
+        {"speed_mps": 4, "power_kw": 120},
+        {"speed_mps": 5, "power_kw": 300},
+        {"speed_mps": 6, "power_kw": 520},
+        {"speed_mps": 7, "power_kw": 760},
+        {"speed_mps": 8, "power_kw": 980},
+        {"speed_mps": 9, "power_kw": 1100},
+        {"speed_mps": 10, "power_kw": 1200}
+      ],
+      "p50_factor": 1.0,
+      "p90_factor": 0.9
+    }
+  },
+  "load_data": {
+    "annual_consumption_mwh": 42000,
+    "peak_load_kw": 12000,
+    "monthly_load_factors": [0.92, 0.90, 0.95, 0.98, 1.02, 1.06, 1.10, 1.08, 1.03, 1.00, 0.98, 0.96],
+    "cooling_load_series_kw": [0, 0, 0, 0, 100, 120, 180, 240, 320, 420, 480, 520, 540, 520, 470, 420, 360, 300, 200, 120, 60, 0, 0, 0],
+    "heating_load_series_kw": [160, 160, 150, 140, 130, 120, 120, 110, 90, 70, 50, 30, 20, 20, 30, 50, 80, 110, 130, 150, 160, 170, 170, 160]
+  },
+  "market_data": {
+    "market_mode": "tou_tariff",
+    "tou_tariff": [
+      {"period": "peak", "price": 1.05},
+      {"period": "flat", "price": 0.72},
+      {"period": "valley", "price": 0.38}
+    ],
+    "demand_charge_rule": "按月最大需量计费",
+    "demand_charge_rate_per_kw_month": 30
+  },
+  "network_and_design": {
+    "point_of_connection": "厂区10kV母线"
+  },
+  "equipment": {
+    "storage": {
+      "round_trip_efficiency": 0.88,
+      "power_candidate_kw": [2000, 3000, 4000],
+      "energy_candidate_kwh": [4000, 6000, 8000],
+      "pcs_efficiency": 0.985,
+      "transformer_efficiency": 0.99,
+      "battery_charge_efficiency": 0.965,
+      "battery_discharge_efficiency": 0.965,
+      "initial_soc": 0.50,
+      "soc_reserve_ratio": 0.08,
+      "backup_soc_ratio": 0.05,
+      "soc_max": 0.92,
+      "cycle_life": 7000,
+      "annual_degradation_rate": 0.024
+    },
+    "thermal": {
+      "chiller_cop": 4.2,
+      "heat_pump_cop": 3.1,
+      "cooling_storage_capacity_kwh": 1200,
+      "heating_storage_capacity_kwh": 800,
+      "heating_source_priority": "boiler_first"
+    }
+  },
+  "financial": {
+    "project_years": 15,
+    "discount_rate": 0.08,
+    "capex": {
+      "storage_system_cost_per_kwh": 850,
+      "pv_cost_per_w": 3.1,
+      "thermal_system_total": 3200000,
+      "storage_replacement_cost_ratio": 0.52
+    },
+    "opex": {
+      "annual_om_ratio": 0.017,
+      "annual_opex_escalation_rate": 0.02
+    },
+    "degradation": {
+      "storage_capacity_fade_per_year": 0.024,
+      "pv_degradation_per_year": 0.005
+    },
+    "carbon_price_assumption": 75
+  },
+  "carbon_data": {
+    "industry_type": "电子制造",
+    "major_processes": ["SMT", "组装", "测试"],
+    "boundary_definition": "factory_scope1_scope2",
+    "scope1_sources": ["燃气锅炉"],
+    "scope2_sources": ["电网购电"],
+    "scope3_considered": false,
+    "baseline_emissions_tco2e": 21000,
+    "carbon_attribute_tools_allowed": ["绿电", "绿证"],
+    "carbon_claim_target": "近零碳工厂"
+  }
+}
